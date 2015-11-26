@@ -8,13 +8,15 @@ def run(text=False):
 
 	theta = math.fabs(random.gauss(0,0.05))
 
-	zenith = random.random()*44
+	#zenith = random.random()*44
 
-	phi = math.radians(68+zenith)
+	#phi = math.radians(68+zenith)
+
+	phi = math.radians(random.gauss(90,20))
 
 	epsilon = math.pi*random.random()*2
-
-    	angle = math.radians(theta+0.15)
+	
+	angle = math.radians(theta+0.15)
 
 	radius = height*math.tan(angle)/math.sin(phi)
 
@@ -48,6 +50,6 @@ def run(text=False):
 	
 	print "Total Energy is", Energy, "TeV"
     	
-	return xpos, ypos, epsilon, radius, Energy, major, e, Z
+	return xpos, ypos, epsilon, radius, Energy, major, minor, e, Z
 	
 
