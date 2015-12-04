@@ -30,7 +30,7 @@ def min(a):
     
     #Runs Minimisation and outputs results
     
-    m = Minuit(f,Z = 26, limit_Z = (20, 26), error_Z=1, x=0, limit_x = (-300, 300), error_x = 0, y=0, limit_y = (-300, 300), error_y = 1, E = 10, limit_E = (1, 150), error_E = 1, errordef = 10**-3)
+    m = Minuit(f,Z = 26, fix_Z=True, x=0, limit_x = (-300, 300), error_x = 0, y=0, limit_y = (-300, 300), error_y = 1, E = 10, limit_E = (1, 150), error_E = 1, errordef = 10**-3)
     
     m.migrad()
 
