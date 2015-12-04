@@ -40,9 +40,9 @@ with open("output/" + cfg.output + ".csv", 'wb') as csvout:
 			fullrange = np.linspace(0, 2*math.pi, 100)
 			fig.gca().plot(rayxpos,rayypos, 'ro')
 			fig.gca().plot(xcentre,ycentre, 'wo')
-			for i in fullrange:
-				x = rayxpos + (math.sin(i)*frad(i))
-				y = rayypos - (math.cos(i)*frad(i))
+			for j in fullrange:
+				x = rayxpos + (math.sin(j)*frad(j))
+				y = rayypos - (math.cos(j)*frad(j))
 				fig.gca().plot(x,y, 'ro')
 
 		if cfg.text:
@@ -124,10 +124,10 @@ with open("output/" + cfg.output + ".csv", 'wb') as csvout:
 						print "Radius of ring at this angle is", r, "Distance = " + str(distance), "Angle of location", math.degrees(dangle)
 						circle=plt.Circle((xpos,ypos),radius,color="black")
 						fig.gca().add_artist(circle)
-						
-				writer.writerow([i+1, category, xpos, ypos, count, litarea])					
+					
+				writer.writerow([int(i+1), category, xpos, ypos, count, litarea])					
 			    
 			if cfg.graph:
-				plt.xlim(-300, 300)
-				plt.ylim(-300, 300)
+				plt.xlim(-200, 200)
+				plt.ylim(-200, 200)
 				plt.show()

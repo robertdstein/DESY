@@ -1,48 +1,28 @@
-import array, math
-
-import time
+import argparse, math, random
+import csv
 import numpy as np
-from iminuit import Minuit
+import batchprocessing as bp
+import batchreconstruction as br
 
-def min(a):
-    
-    print "a", a
-    
-    argument = "Z = 26, limit_Z = (20, 26), error_Z=1, x=0, limit_x = (-300, 300), error_x = 0, y=0, limit_y = (-300, 300), error_y = 1, E = 10, limit_E = (1, 150), error_E = 1, a = " + str(a) +", fix_a=True, errordef = 10**-3"
-    
-    print argument
-    
-    def run(x,y,E,Z,x0,y0, count):
-	r = math.sqrt(((x-x0)**2)+((y-y0)**2))
-	expectedcount = ((Z**2)*((0.62*(math.e**(0.014*(r-100))))-0.173)+(50*E))
-	diff = (expectedcount-count)**2
-	return diff
+parser = argparse.ArgumentParser(description='Create a canvas for positions of telescopes')
+parser.add_argument("-o", "--orientation", default="five")
+parser.add_argument("-sd", "--sourcedata", default="default")
+parser.add_argument("-pd", "--processdata", default="process")
+parser.add_argument("-rd", "--reconstructdata", default="reconstructed")
+parser.add_argument("-mc", "--mincount", default=3)
+parser.add_argument("-bp", "--batchprocessing", action="store_true")
+parser.add_argument("-br", "--batchreconstruction", action="store_true")
+parser.add_argument("-g", "--graph", action="store_true")
+cfg = parser.parse_args()
 
-    def f(x, y, E, Z):
-	sum = 0
-	print "a", a
-	for detection in a:
-		x0 = detection[2]
-		y0 = detection[3]
-		count = detection[4]
-		sum +=run(x,y,E,Z,x0,y0, count)
-	return sum
-    
-    #Runs Minimisation and outputs results
-    
-    m = Minuit(f,Z = 26, fix_Z=True, x=0, limit_x = (-300, 300), error_x = 0, y=0, limit_y = (-300, 300), error_y = 1, E = 10, limit_E = (1, 150), error_E = 1, errordef = 10**-3)
-    
-    m.migrad()
+with open("orientations/"+ cfg.orientation +".csv", 'rb') as csvfile:
+	reader = csv.reader(csvfile, delimiter=',', quotechar='|')
+	rowcount = 0
+	for row in reader:
+		rowcount +=1
 
-    print m.print_param()
-    print('fval', m.fval)
-    
-    message = str(time.asctime(time.localtime())) + " Finished minimisation with output "  + str(m.print_param())
-    print message
-    
-a=[[7.2831853072,"lst",0,0,380815],[7.2831853072,"lst",60,60,346688],[7.2831853072,"lst",60,-60,403627],[7.2831853072,"lst",-60,60,323913]]
-
-min(a)
-
-
-
+if cfg.batchprocessing:
+	bp.run(cfg.sourcedata, cfg.processdata, cfg.mincount, rowcount)
+	
+if cfg.batchreconstruction:
+	br.run(cfg.processdata, cfg.reconstructdata)
