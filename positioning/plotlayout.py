@@ -12,7 +12,7 @@ parser.add_argument("-s", "--source", default="five")
 parser.add_argument("-o", "--output", default="default")
 parser.add_argument("-t", "--text", action="store_true")
 parser.add_argument("-g", "--graph", action="store_true")
-parser.add_argument("-n", "--number", default=1)
+parser.add_argument("-n", "--number", default=int(1))
 cfg = parser.parse_args()
 
 #Set Efficiency
