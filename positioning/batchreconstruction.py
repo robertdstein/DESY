@@ -3,7 +3,7 @@ import csv
 import numpy as np
 import minimise as m
 
-def run(source, outputfile):
+def run(source, outputfile, rgw):
 	with open("data/"+ str(source) +".csv", 'rb') as csvfile:
 		reader = csv.reader(csvfile, delimiter=',', quotechar='|')
 		i = 0
@@ -11,5 +11,4 @@ def run(source, outputfile):
 			if i == 0:
 				i = 1
 			else:
-				print row
-				m.min(row)
+				m.min(row, rgw)

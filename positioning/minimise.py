@@ -3,22 +3,20 @@ import array, math
 import time
 import numpy as np
 from iminuit import Minuit
+import lightdensity as ld
+import scipy.optimize
 
-def min(a):
-	argument = "Z = 26, limit_Z = (20, 26), error_Z=1, x=0, limit_x = (-300, 300), error_x = 0, y=0, limit_y = (-300, 300), error_y = 1, E = 10, limit_E = (1, 150), error_E = 1, a = " + str(a) +", fix_a=True, errordef = 10**-3"
-	print argument
+def min(a, gridwidth):
 	
-	def run(x,y,E,Z,x0,y0, count, area):
+	def calculatedifference(x,y,E,Z,x0,y0, sigcount, bkgcount, area):
 		r = math.sqrt(((x-x0)**2)+((y-y0)**2))
-		if 10 < r < 100:
-			expectedcount = ((Z**2)*((0.62*(math.e**(0.014*(r-100))))-0.173)+(50*E))*area
-		else:
-			expectedcount = 0
-		diff = (expectedcount-count)**2
-		print expectedcount, count, diff
+		sigdensity, bkgd = ld.run(r,E,Z)
+		expectedsig=sigdensity*area
+		expectedbkg = bkgd*area
+		diff = (expectedsig-sigcount)**2 + (expectedbkg-bkgcount)**2
 		return diff
 		
-	def f(x, y, E, Z):
+	def f(x,y,Z,E):
 		sum = 0
 		i = 0
 		for entry in a:
@@ -28,24 +26,69 @@ def min(a):
 				detection = eval(entry)
 				x0 = float(detection[0])
 				y0 = float(detection[1])
-				count = float(detection[2])
-				area = float(detection[3])
-				sum +=run(x,y,E,Z,x0,y0, count, area)
+				sigcount = float(detection[2])
+				bkgcount = float(detection[3])
+				area=float(detection[4])
+				sum += calculatedifference(x,y,E,Z,x0,y0, sigcount, bkgcount, area)
 		return sum
 	
 	#Runs Minimisation and outputs results
-    
-	m = Minuit(f,Z = 26, fix_Z=True, x=-30, limit_x = (-300, 300), error_x = 1000, y=-50, limit_y = (-300, 300), error_y = 1000, E = 42, limit_E=(1,150), error_E=1, errordef = 1000000)
-    
+	
+	startpos=[0,0]
+	argumentx = "limit_x = (-300, 300), error_x = 100000, "
+	argumenty = "limit_y = (-300, 300), error_y = 100000, "
+	argumentZ = "Z = 26, limit_Z=(20,26.5), error_Z=100, "
+	argumentE = "E = 42, limit_E=(1,250), error_E=1, "
+	argumenterror = "print_level=0, errordef = 100"
+
+	m = eval("Minuit(f, x="+ str(startpos[0]) + ", " + argumentx + "y="+ str(startpos[1]) + ", " + argumenty+ argumentZ + argumentE + argumenterror + ")")
 	m.migrad()
+	params = m.values
+	guess = [params['x'], params['y'], params['E'], params['Z']]
+	guessfval = m.fval
 
-	print m.print_param()
-	print('fval', m.fval)
-	print(m.values)
-	print(m.errors)
-    
-	message = str(time.asctime(time.localtime())) + " Finished minimisation with output "  + str(m.print_param())
-	print message
-
-
-
+	xsites = np.linspace(-200, 200, int(gridwidth))
+	ysites = np.linspace(-200, 200, int(gridwidth))
+	
+	for x in xsites:
+		for y in ysites:
+			m = eval("Minuit(f, x="+ str(x) + ", " + argumentx + "y="+ str(y) + ", " + argumenty+ argumentZ + argumentE + argumenterror + ")")
+			m.migrad()
+			params = m.values
+			fval = m.fval
+			values = m.get_fmin()
+			if values.is_valid:
+				if fval < guessfval:
+					guess = [params['x'], params['y'], params['E'], params['Z']]
+					guessfval = fval
+	
+	Zval = int(guess[3]) + int(2*(guess[3]-int(guess[3])))
+	print Zval, guess[3]
+	argumentE = "E = " + str(params['E']) +", fix_E=True, " 
+	argumentZ = "Z = " + str(Zval) +", fix_Z=True, " 
+	
+	m = eval("Minuit(f, x="+ str(startpos[0]) + ", " + argumentx + "y="+ str(startpos[1]) + ", " + argumenty+ argumentZ + argumentE + argumenterror + ")")
+	m.migrad()
+	params = m.values
+	guess = [params['x'], params['y'], params['E'], params['Z']]
+	guessfval = m.fval
+	
+	for x in xsites:
+		for y in ysites:
+			m = eval("Minuit(f, x="+ str(x) + ", " + argumentx + "y="+ str(y) + ", " + argumenty+ argumentZ + argumentE + argumenterror + ")")
+			m.migrad()
+			params = m.values
+			fval = m.fval
+			values = m.get_fmin()
+			if values.is_valid:
+				if fval < guessfval:
+					guess = [params['x'], params['y'], params['E'], params['Z']]
+					guessfval = fval
+	
+	print "Final guess is", guess
+	
+	#~ guess=[0,0,15,26]
+	#~ 
+	#~ res = scipy.optimize.minimize(f, guess, options={'disp': True}, method="Powell")
+	#~ 
+	#~ print res.x

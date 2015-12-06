@@ -11,6 +11,7 @@ def run(source, outputfile, mincount, detectorcount):
 			reader = csv.reader(csvfile, delimiter=',', quotechar='|')
 			i = 0
 			j = 1
+			detections = 0
 			a=[]
 			for row in reader:
 				if i > 0:
@@ -18,17 +19,22 @@ def run(source, outputfile, mincount, detectorcount):
 					category = row[1]
 					xpos = float(row[2])
 					ypos = float(row[3])
-					count = row[4]
-					area = row[5]
+					sigcount = row[4]
+					bkgcount = row[5]
+					area = row[6]
 					
 					j+=1
 				
 					if (int(event) == int(i)):
-						if int(count) != int(0):
-							a += [[xpos, ypos, count, area]]
+							a += [[xpos, ypos, sigcount, bkgcount, area]]
+							if ((int(sigcount) == int(0)) & (int(bkgcount) == int(0))):
+								pass
+							else:
+								detections += 1
 						
 					if j == detectorcount:
-						if len(a) >= float(mincount):
+						print "Detections:", detections
+						if detections >= float(mincount):
 							writer.writerow(a)
 						j = 1
 						i +=1			
