@@ -10,7 +10,7 @@ def run(source, outputfile, mincount, detectorcount):
 		with open("output/"+ str(source) +".csv", 'rb') as csvfile:
 			reader = csv.reader(csvfile, delimiter=',', quotechar='|')
 			i = 0
-			j = 1
+			j = 0
 			detections = 0
 			a=[]
 			for row in reader:
@@ -21,22 +21,25 @@ def run(source, outputfile, mincount, detectorcount):
 					ypos = float(row[3])
 					sigcount = row[4]
 					bkgcount = row[5]
-					area = row[6]
+					siglitarea = row[6]
+					bkglitarea=row[7]
 					
 					j+=1
 				
 					if (int(event) == int(i)):
-							a += [[xpos, ypos, sigcount, bkgcount, area]]
-							if ((int(sigcount) == int(0)) & (int(bkgcount) == int(0))):
-								pass
-							else:
-								detections += 1
+						a += [[xpos, ypos, sigcount, bkgcount, siglitarea, bkglitarea]]
+						if ((int(sigcount) == int(0)) & (int(bkgcount) == int(0))):
+							pass
+						else:
+							detections += 1
 						
 					if j == detectorcount:
-						print "Detections:", detections
+						print "Total detections:", detections
 						if detections >= float(mincount):
 							writer.writerow(a)
-						j = 1
+						a=[]
+						detections=0
+						j = 0
 						i +=1			
 				else:
 					i +=1
