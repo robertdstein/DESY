@@ -20,7 +20,7 @@ parser.add_argument("-n", "--number", default=int(1))
 parser.add_argument("-rgw", "--reconstructiongridwidth", default=25)
 cfg = parser.parse_args()
 
-eff = 1.0
+eff = 0.08
 
 with open("orientations/"+ cfg.orientation +".csv", 'rb') as csvfile:
 	reader = csv.reader(csvfile, delimiter=',', quotechar='|')
@@ -32,7 +32,7 @@ if cfg.simulate:
 	s.run(eff, text=cfg.text, graph=cfg.graph, output=cfg.sourcedata, layout=cfg.orientation, number = int(cfg.number))
 
 if cfg.batchprocessing:
-	bp.run(cfg.sourcedata, cfg.processdata, cfg.mincount, rowcount)
+	bp.run(cfg.sourcedata, cfg.processdata, cfg.mincount, rowcount, text=cfg.text)
 	
 if cfg.batchreconstruction:
-	br.run(cfg.processdata, cfg.reconstructdata, cfg.reconstructiongridwidth)
+	br.run(cfg.processdata, cfg.reconstructdata, rowcount, cfg.reconstructiongridwidth, eff)

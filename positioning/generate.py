@@ -1,4 +1,5 @@
 import random, math
+import cherenkovradius as cr
 
 def run(text=False):
     	xpos = (random.random()*300)-150
@@ -7,23 +8,12 @@ def run(text=False):
 	R = random.random()*0.0178
 	Epn = ((1.7*R/321)+(3571**-1.7))**(-1/1.7)
 
-	nucleonmass= 0.93827 
-	gamma = (Epn/nucleonmass) + 1
-	
-	beta = math.sqrt(1 - (1/gamma**2))
-
 	Z=26
 	N=56
 	
+	height = 30000
+	
 	Energy = Epn*N/1000
-	
-	refractiveindex = 1.000292
-	
-	height = random.gauss(30,3)*1000
-
-	costheta = 1/(beta*refractiveindex)
-	
-	theta=math.acos(costheta)
 	
 	scale=1.2
 
@@ -33,12 +23,10 @@ def run(text=False):
 
 	epsilon = math.pi*random.random()*2
 	
-	angle = math.radians(theta+0.15)
+	radius, theta = cr.run(Epn, height, math.sin(phi), text=text)
 
-	radius = height*math.tan(angle)/math.sin(phi)
-
-	ra = radius * costheta/math.sin(phi-theta)
-	rp = radius * math.sin(phi+theta)/costheta
+	ra = radius * math.cos(theta)/math.sin(phi-theta)
+	rp = radius * math.sin(phi+theta)/math.cos(theta)
 
 	major = 0.5*(ra+rp)
 	minor = math.sqrt(ra*rp)
@@ -46,9 +34,6 @@ def run(text=False):
 	e = math.sqrt(1-((minor/major)**2))
 	
 	if text:
-		print "gamma", gamma
-		print "Cos theta", costheta
-		print "Beta is", beta
 		print "Height is", height
 		print "Theta is", math.degrees(theta)
 		print "Phi is", math.degrees(phi)
@@ -59,9 +44,8 @@ def run(text=False):
 		print "Major is", major
 		print "Minor is", minor
 		print "Eccentrity is", e
-	
-	print "Total Energy is", Energy, "TeV"
+		print "Total Energy is", Energy, "TeV"
     	
-	return xpos, ypos, epsilon, radius, Energy, major, minor, ra, rp, e, Z, scale
+	return xpos, ypos, epsilon, radius, Energy, Epn, major, minor, ra, rp, e, Z, scale, height
 	
 
