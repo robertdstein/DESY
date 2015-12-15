@@ -22,4 +22,4 @@ def run(source, outputfile, detectorcount, rgw, eff):
 					lim = 5*detectorcount
 					true = [row[lim], row[lim+1], row[lim+2], row[lim+3], row[lim+4]]
 					print "True Values are", true
-					writer.writerow([row[lim+5], guess, row[lim], row[lim+1], row[lim+2], row[lim+3], row[lim+4]])
+					writer.writerow([row[lim+5], guess[0], guess[1], guess[2], guess[3], guess[4], row[lim], row[lim+1], row[lim+2], row[lim+3], row[lim+4]])

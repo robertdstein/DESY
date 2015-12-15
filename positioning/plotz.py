@@ -1,11 +1,10 @@
 import argparse, math, random
 import csv
 import numpy as np
-import minimise as m
 import matplotlib.pyplot as plt
 
-def run(source, outputfile, detectorcount, variable, mindetections, detectorcount):
-	with open("data/"+ str(source) +".csv", 'rb') as csvfile:
+def run(source, detectorcount, mindetections):
+	with open("reconstructeddata/"+ str(source) +".csv", 'rb') as csvfile:
 		reader = csv.reader(csvfile, delimiter=',', quotechar='|')
 		
 		zvalues = np.arange(1,9)
@@ -27,8 +26,7 @@ def run(source, outputfile, detectorcount, variable, mindetections, detectorcoun
 				specificcount = []
 				
 				i = 0
-				
-				plt.subplot(
+
 				for row in reader:
 					if i == 0:
 						i = 1
@@ -56,7 +54,4 @@ def run(source, outputfile, detectorcount, variable, mindetections, detectorcoun
 					
 			plt.hist(fullcount, bins=bincount, normed=true, histtype='stepfiled', label="All")
 			
-		plt.show()
-					
-								
-				
+		plt.show()		
