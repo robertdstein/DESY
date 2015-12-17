@@ -3,8 +3,11 @@ import csv
 import numpy as np
 import simulate as s
 import batchprocessing as bp
-#import batchreconstruction as br
+import batchreconstruction as br
 import plotz as pz
+import plotx as px
+import ploty as py
+import plotepn as pe
 
 parser = argparse.ArgumentParser(description='Create a canvas for positions of telescopes')
 parser.add_argument("-o", "--orientation", default="five")
@@ -18,6 +21,10 @@ parser.add_argument("-g", "--graph", action="store_true")
 parser.add_argument("-s", "--simulate", action="store_true")
 parser.add_argument("-t", "--text", action="store_true")
 parser.add_argument("-pz", "--plotz", action="store_true")
+parser.add_argument("-px", "--plotx", action="store_true")
+parser.add_argument("-py", "--ploty", action="store_true")
+parser.add_argument("-pe", "--plotepn", action="store_true")
+parser.add_argument("-ph", "--ploth", action="store_true")
 parser.add_argument("-n", "--number", default=int(1))
 parser.add_argument("-rgw", "--reconstructiongridwidth", default=25)
 cfg = parser.parse_args()
@@ -40,4 +47,13 @@ if cfg.batchreconstruction:
 	br.run(cfg.processdata, cfg.reconstructdata, rowcount, cfg.reconstructiongridwidth, eff)
 	
 if cfg.plotz:
-	pz.run(cfg.reconstructdata, rowcount, cfg.mincount)
+	pz.run(cfg.reconstructdata, rowcount, cfg.mincount, cfg.graph)
+	
+if cfg.plotx:
+	px.run(cfg.reconstructdata, rowcount, cfg.mincount, cfg.graph)
+
+if cfg.ploty:
+	py.run(cfg.reconstructdata, rowcount, cfg.mincount, cfg.graph)
+	
+if cfg.plotepn:
+	pe.run(cfg.reconstructdata, rowcount, cfg.mincount, cfg.graph)

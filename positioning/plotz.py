@@ -3,26 +3,24 @@ import csv
 import numpy as np
 import matplotlib.pyplot as plt
 
-def run(source, detectorcount, mindetections):
-	with open("reconstructeddata/"+ str(source) +".csv", 'rb') as csvfile:
-		reader = csv.reader(csvfile, delimiter=',', quotechar='|')
+def run(source, detectorcount, mindetections, graph):
+
+	zvalues = np.arange(1,9)
+	bincount = len(zvalues)
+	
+	for val in zvalues:
 		
-		zvalues = np.arange(1,9)
-		bincount = len(zvalues)
+		z = float(val + 20)
 		
+		plt.subplot(4, 2, val)
 		fullcount = []
+		labels=[]
 		
-		plt.show()
+		title = "Z is " + str(z)
 		
-		for val in zvalues:
-			
-			z = val + 20
-			
-			plt.subplot(4, 2, val)
-			fullcount = []
-			
-			for i in range (mindetections, detectorcount):
-				
+		for j in range (mindetections, detectorcount +1):
+			with open("reconstructeddata/"+ str(source) +".csv", 'rb') as csvfile:
+				reader = csv.reader(csvfile, delimiter=',', quotechar='|')
 				specificcount = []
 				
 				i = 0
@@ -43,15 +41,23 @@ def run(source, detectorcount, mindetections):
 						trueZ = row[9]
 						trueHeight = row[10]
 						
-						if detections == i:
-							if z == trueZ:
-								specificcount.append(reconZ)
-								fullcount.append(reconZ)
+						if int(detections) == int(j):
+							if int(z) == int(trueZ):
+								specificcount.append(float(reconZ))
 								
-				label = str(i) + "detections"
+								
+				label = str(j) + " detections"
 					
-				plt.hist(specificcount, bins=bincount, normed=true, histtype='stepfilled', label=label)
-					
-			plt.hist(fullcount, bins=bincount, normed=true, histtype='stepfiled', label="All")
+				fullcount.append(specificcount)
+				labels.append(label)
 			
-		plt.show()		
+		if fullcount != []:
+			plt.hist(fullcount, bins=bincount, histtype='bar', range=[20.5, 28.5], label=labels, stacked=True)
+		
+		
+		plt.title(title)	
+		plt.legend()		
+	plt.savefig('graphs/Z.pdf')
+		
+	if graph:
+		plt.show()

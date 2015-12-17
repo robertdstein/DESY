@@ -18,8 +18,8 @@ def run(source, outputfile, detectorcount, rgw, eff):
 					for j in range (0, detectorcount):
 						base = 5*j
 						a += [[row[base], row[base+1], row[base+2], row[base+3], row[base+4]]]
-					guess=m.min(a, rgw, eff)
+					guessx, guessy, guessEpn, guessZ, guessHeight =m.min(a, rgw, eff)
 					lim = 5*detectorcount
 					true = [row[lim], row[lim+1], row[lim+2], row[lim+3], row[lim+4]]
 					print "True Values are", true
-					writer.writerow([row[lim+5], guess[0], guess[1], guess[2], guess[3], guess[4], row[lim], row[lim+1], row[lim+2], row[lim+3], row[lim+4]])
+					writer.writerow([row[lim+5], guessx, guessy, guessEpn, guessZ, guessHeight, row[lim], row[lim+1], row[lim+2], row[lim+3], row[lim+4]])

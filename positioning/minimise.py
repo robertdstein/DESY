@@ -79,4 +79,4 @@ def min(a, gridwidth, eff):
 		print "for Z=", z, guess
 	
 	print "Final guess is", guess
-	return guess
+	return guess[0], guess[1], guess[2], guess[3], guess[4]

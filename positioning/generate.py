@@ -8,8 +8,10 @@ def run(text=False):
 	R = random.random()*0.0178
 	Epn = ((1.7*R/321)+(3571**-1.7))**(-1/1.7)
 
-	Z=26
-	N=56
+	extra = int(random.random()*8)
+
+	Z= 26
+	N= Z + 30
 	
 	height = 30000
 	
@@ -20,6 +22,7 @@ def run(text=False):
 	zenith = random.random()*44
 
 	phi = math.radians(68+zenith)
+	phi=math.radians(90)
 
 	epsilon = math.pi*random.random()*2
 	
