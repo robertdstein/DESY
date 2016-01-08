@@ -5,20 +5,28 @@ import matplotlib.pyplot as plt
 
 def run(source, detectorcount, mindetections, graph):
 
-	zvalues = np.arange(1,9)
-	bincount = len(zvalues)
+	zvalues = [26]
+	nplots = len(zvalues)
+	bincount = 13
+	i=1
+	
+	zrange = [19.5, 32.5]
 	
 	for val in zvalues:
 		
-		z = float(val + 20)
+		z = val
 		
-		plt.subplot(4, 2, val)
+		plt.subplot(nplots, 1, i)
+		
+		i+=1
+		
+		plt.subplots_adjust(hspace = 0.5)
 		fullcount = []
 		labels=[]
 		
-		title = "Z is " + str(z)
+		title = "Z is " + str(int(z))
 		
-		for j in range (mindetections, detectorcount +1):
+		for j in range (detectorcount, mindetections -1, -1):
 			with open("reconstructeddata/"+ str(source) +".csv", 'rb') as csvfile:
 				reader = csv.reader(csvfile, delimiter=',', quotechar='|')
 				specificcount = []
@@ -52,11 +60,14 @@ def run(source, detectorcount, mindetections, graph):
 				labels.append(label)
 			
 		if fullcount != []:
-			plt.hist(fullcount, bins=bincount, histtype='bar', range=[20.5, 28.5], label=labels, stacked=True)
+			plt.hist(fullcount, bins=bincount, histtype='bar', range=zrange, label=labels, stacked=True)
 		
-		
-		plt.title(title)	
-		plt.legend()		
+		plt.xlim(zrange)
+		plt.xlabel('Reconstructed Z', labelpad=0)
+		plt.title(title)
+		handles, labels = plt.subplot(nplots, 1, i).get_legend_handles_labels()	
+	plt.suptitle('True Z reconstruction', fontsize=20)
+	plt.figlegend(handles, labels, 'upper right')
 	plt.savefig('graphs/Z.pdf')
 		
 	if graph:

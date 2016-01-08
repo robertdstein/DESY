@@ -24,16 +24,16 @@ def run(source, detectorcount, mindetections, graph):
 				trueZ = row[9]
 				trueHeight = row[10]
 				
-				if int(detections) == int(mindetections):
+				if int(detections) == int(detectorcount):
 					colour = 'b'
-				elif int(detections)==int(detectorcount):
+				elif int(detections)==int(mindetections):
 					colour = 'r'
 				else:
 					colour = 'g'
 				
 				plt.scatter(trueEPN,reconEPN, color=colour)
 
-		e=np.linspace(300,2800,1000)
+		e=np.linspace(250,3500,1000)
 		plt.plot(e,e,color='black')
 
 		plt.xlabel("True Epn")

@@ -24,9 +24,9 @@ def run(source, detectorcount, mindetections, graph):
 				trueZ = row[9]
 				trueHeight = row[10]
 				
-				if int(detections) == int(mindetections):
+				if int(detections) == int(detectorcount):
 					colour = 'b'
-				elif int(detections)==int(detectorcount):
+				elif int(detections)==int(mindetections):
 					colour = 'r'
 				else:
 					colour = 'g'

@@ -7,40 +7,22 @@ import lightdensity as ld
 import calculatearea as ca
 import cherenkovradius as cr
 import telescoperadius as tr
+import loglikelihood as ll
 import scipy.optimize
 
 def min(a, gridwidth, eff):
-	def calculatedifference(x,y,Epn,Z, height, x0,y0, sigcount, bkgcount, category, scale):
-		Nucleons= Z+30
-		E=Epn*Nucleons/1000
-		
-		rmax, theta = cr.run(Epn, height, 1)
-		
-		distance = math.sqrt(((x-x0)**2)+((y-y0)**2))
-		
-		sigdensity, bkgd = ld.run(distance, E, Z, rmax, scale, eff)
-		
-		tradius = tr.run(category)
-		
-		siglitarea, bkglitarea = ca.run(tradius, rmax, distance, scale)
-		
-		expectedsig=sigdensity*siglitarea
-		expectedbkg = bkgd*bkglitarea
-		
-		diff = (((sigcount- expectedsig)**2)/(sigcount+1)) + (((expectedbkg - bkgcount)**2)/(bkgcount+1))
-		return diff
 		
 	def f(x,y,Z,Epn, height, scale):
 		sum = 0
-		i = 0
 		for detection in a:
 			x0 = float(detection[0])
 			y0 = float(detection[1])
 			sigcount = float(detection[2])
 			bkgcount = float(detection[3])
 			category = detection[4]
-			sum += calculatedifference(x,y,Epn,Z, height, x0,y0, sigcount, bkgcount, category, scale)
+			sum += ll.run(x,y,Epn,Z, height, x0,y0, sigcount, bkgcount, category, scale, eff)
 		return sum
+
 	
 	#Runs Minimisation and outputs results
 	
@@ -62,7 +44,7 @@ def min(a, gridwidth, eff):
 	xsites = np.linspace(-200, 200, int(gridwidth))
 	ysites = np.linspace(-200, 200, int(gridwidth))
 	
-	zvalues = np.arange(21.,29.)
+	zvalues = np.arange(20.,33.)
 	
 	for z in zvalues:
 		for x in xsites:

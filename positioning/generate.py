@@ -8,8 +8,6 @@ def run(text=False):
 	R = random.random()*0.0178
 	Epn = ((1.7*R/321)+(3571**-1.7))**(-1/1.7)
 
-	extra = int(random.random()*8)
-
 	Z= 26
 	N= Z + 30
 	
