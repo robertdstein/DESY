@@ -2,6 +2,7 @@ import argparse, math, random
 import csv
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy.optimize import curve_fit
 
 def run(source, detectorcount, mindetections, graph):
 
@@ -9,8 +10,8 @@ def run(source, detectorcount, mindetections, graph):
 	nplots = len(zvalues)
 	bincount = 13
 	i=1
-	
 	zrange = [19.5, 32.5]
+	reconvalues = np.linspace(zrange[0]+0.5, zrange[1]-0.5, bincount)
 	
 	for val in zvalues:
 		
@@ -23,8 +24,11 @@ def run(source, detectorcount, mindetections, graph):
 		plt.subplots_adjust(hspace = 0.5)
 		fullcount = []
 		labels=[]
+		info=""
 		
 		title = "Z is " + str(int(z))
+		
+		hist_fit = 0
 		
 		for j in range (detectorcount, mindetections -1, -1):
 			with open("reconstructeddata/"+ str(source) +".csv", 'rb') as csvfile:
@@ -58,9 +62,36 @@ def run(source, detectorcount, mindetections, graph):
 					
 				fullcount.append(specificcount)
 				labels.append(label)
+				
+				hist, bin_edges = np.histogram(specificcount, bins=bincount, range=zrange)
+				bin_centres = (bin_edges[:-1] + bin_edges[1:])/2
+				
+				def gauss(x, A, mu, sigma):
+				    return A*np.exp(-(x-mu)**2/(2.*sigma**2))
+				
+				# p0 is the initial guess for the fitting coefficients (A, mu and sigma above)
+				p0 = [1., 26., 1.]
+				
+				coeff, var_matrix = curve_fit(gauss, reconvalues, hist, p0=p0)
+				
+				# Get the fitted curve
+				hist_fit += gauss(bin_centres, *coeff)
+				
+				plt.plot(bin_centres, hist_fit, color='k')
+				
+				# Finally, lets get the fitting parameters, i.e. the mean and standard deviation:
+				
+				info += str("For N = " + str(j) + " \n ")
+				info += str("Count = " + str(coeff[0])+ " \n ")
+				info += str('Mean = ' + str(coeff[1])+ " \n ")
+				info += str('Sigma = ' + str(coeff[2])+ " \n \n")
+			
+		plt.annotate(info, (30, 8),  fontsize=10)
+		print str(info)
 			
 		if fullcount != []:
 			plt.hist(fullcount, bins=bincount, histtype='bar', range=zrange, label=labels, stacked=True)
+			
 		
 		plt.xlim(zrange)
 		plt.xlabel('Reconstructed Z', labelpad=0)
@@ -68,6 +99,7 @@ def run(source, detectorcount, mindetections, graph):
 		handles, labels = plt.subplot(nplots, 1, i).get_legend_handles_labels()	
 	plt.suptitle('True Z reconstruction', fontsize=20)
 	plt.figlegend(handles, labels, 'upper right')
+	
 	plt.savefig('graphs/Z.pdf')
 		
 	if graph:

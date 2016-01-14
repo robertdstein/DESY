@@ -20,30 +20,31 @@ def run(source, detectorcount, mindetections, graph):
 					detections = row[0]
 					reconx = float(row[1])
 					recony = float(row[2])
-					reconEPN = float(row[3])
+					reconEPN = row[3]
 					reconZ = row[4]
 					reconHeight = row[5]
 					truex = float(row[6])
 					truey = float(row[7])
-					trueEPN = float(row[8])
+					trueEPN = row[8]
 					trueZ = row[9]
 					trueHeight = row[10]
 					
 					if int(detections) == int(j):
-						difference = (reconEPN-trueEPN)/trueEPN
-						specificcount.append(difference)
+						distance = math.sqrt(((reconx-truex)**2)+(recony-truey)**2)
+						specificcount.append(distance)
 
 		fullcount.append(specificcount)
 		label = str(j) + " detections"
 		labels.append(label)
 			
-	plt.hist(fullcount, bins=50, range=[-2,2], label=labels, histtype='bar', stacked=True)
+	plt.hist(fullcount, bins=70, range=[0,300], label=labels, histtype='bar', stacked=True)
 
+	plt.xlabel("Distance from True Position")
 	plt.ylabel("Count")
-	plt.xlabel("Fractional diference from True EPN")
-	plt.title("Reconstruction of Energy per Nucleon")
-	plt.savefig('graphs/epn.pdf')
+	plt.title("Distance Reconstruction")
 	plt.legend()
 	
+	plt.savefig('graphs/position.pdf')
+	
 	if graph:
-		plt.show()
+		plt.show()	

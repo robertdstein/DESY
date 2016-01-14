@@ -29,14 +29,18 @@ def expected(x,y,Epn,Z, height, x0,y0, category, scale, eff):
 	expectedcount = int(expectedsig + expectedbkg)
 	return expectedcount
 	
+def stirling(N):
+	lognfactorial = ((N*math.log(N))-N + (0.5*math.log(2*N*math.pi)))
+	return lognfactorial
+	
 def run(x,y,Epn,Z, height, x0,y0, sigcount, bkgcount, category, scale, eff):
 	N = int(sigcount + bkgcount)
 	expectedcount = expected(x,y,Epn,Z, height, x0,y0, category, scale, eff)
+	lognfactorial = stirling(N)
 	
 	if N == 0:
 		minusll = expectedcount
 	elif  expectedcount == 0:
 		minusll = 10**10
 	else:
-		minusll = expectedcount - (N*math.log(float(expectedcount))) + (N*(math.log(N)-1))
-	return minusll
+		minusll = expectedcount - (N*math.log(float(expectedcount))) + lognfactiorial
