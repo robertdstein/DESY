@@ -7,6 +7,7 @@ import batchreconstruction as br
 import plotz as pz
 import plotposition as pp
 import plotepn as pe
+import plotangle as pa
 import plotloglikelihood as pl
 
 parser = argparse.ArgumentParser(description='Create a canvas for positions of telescopes')
@@ -21,6 +22,7 @@ parser.add_argument("-t", "--text", action="store_true")
 parser.add_argument("-pz", "--plotz", action="store_true")
 parser.add_argument("-pp", "--plotposition", action="store_true")
 parser.add_argument("-pe", "--plotepn", action="store_true")
+parser.add_argument("-pa", "--plotangle", action="store_true")
 parser.add_argument("-pll", "--plotll", action="store_true")
 parser.add_argument("-n", "--number", default=int(1))
 parser.add_argument("-rgw", "--reconstructiongridwidth", default=25)
@@ -47,6 +49,9 @@ if cfg.plotposition:
 	
 if cfg.plotepn:
 	pe.run(cfg.reconstructdata, rowcount, cfg.mincount, cfg.graph)
+	
+if cfg.plotangle:
+	pa.run(cfg.reconstructdata, rowcount, cfg.mincount, cfg.graph)
 	
 if cfg.plotll:
 	s.run(eff, text=cfg.text, graph=cfg.graph, output=cfg.sourcedata, layout=cfg.orientation, number = int(cfg.number))

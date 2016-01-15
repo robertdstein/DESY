@@ -42,8 +42,9 @@ def run(source, detectorcount, mindetections, graph):
 	plt.ylabel("Count")
 	plt.xlabel("Fractional diference from True EPN")
 	plt.title("Reconstruction of Energy per Nucleon")
-	plt.savefig('graphs/epn.pdf')
 	plt.legend()
+	plt.savefig('graphs/epn.pdf')
+	
 	
 	if graph:
 		plt.show()

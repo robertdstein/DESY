@@ -20,14 +20,18 @@ def run(tradius, rayradius, distance, scale, x0=0, y0=0, fig=None, graph=False):
 		
 		area = math.pi*(tradius**2)
 		
-		if distance < (rayradius- tradius):
+		if distance < math.fabs(rayradius- tradius):
+			siglitarea=area
+		elif distance == 0:
 			siglitarea=area
 		elif distance < (rayradius+ tradius):
 			siglitarea = circleoverlap(tradius, rayradius, distance)
 		else:
 			siglitarea=0
 				
-		if distance < ((rayradius*scale)- tradius):
+		if distance < math.fabs(((rayradius*scale)- tradius)):
+			bkglitarea=area
+		elif distance == 0:
 			bkglitarea=area
 		else:
 			bkglitarea = circleoverlap(tradius, (rayradius*scale), distance)

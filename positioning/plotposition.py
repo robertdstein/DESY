@@ -37,7 +37,7 @@ def run(source, detectorcount, mindetections, graph):
 		label = str(j) + " detections"
 		labels.append(label)
 			
-	plt.hist(fullcount, bins=70, range=[0,300], label=labels, histtype='bar', stacked=True)
+	plt.hist(fullcount, bins=300, range=[0,300], label=labels, histtype='bar', stacked=True)
 
 	plt.xlabel("Distance from True Position")
 	plt.ylabel("Count")

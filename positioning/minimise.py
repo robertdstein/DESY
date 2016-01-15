@@ -58,7 +58,7 @@ def min(a, gridwidth, eff):
 					if fval < guessfval:
 						guess = guess = [params['x'], params['y'], params['Epn'], params['Z'], params['height']]
 						guessfval = fval
-		print "for Z=", z, guess
+		print guess
 	
 	print "Final guess is", guess
 	return guess[0], guess[1], guess[2], guess[3], guess[4]

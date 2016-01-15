@@ -5,13 +5,14 @@ import matplotlib.pyplot as plt
 import generate as g
 import lightdensity as ld
 import calculatearea as ca
+import countsimulation as cs
 import telescoperadius as tr
 from matplotlib.patches import Ellipse
 
 def run(eff, text=False, graph=False, output="default", layout="five", number=1):
 	with open("output/" + output + ".csv", 'wb') as csvout:
 		writer = csv.writer(csvout, delimiter=',', quotechar='|')
-		writer.writerow(["Event Number", "Category", "Xpos", "Ypos", "Sig Count", "Background Count", "True X", "True Y", "True Energy per Nucleon", "True Z", "True Height"])
+		writer.writerow(["Event Number", "Category", "Xpos", "Ypos", "Sig Count", "Background Count", "True X", "True Y", "True Energy per Nucleon", "True Z", "True Height", "Phi"])
 		
 		for i in range (0, int(number)):
 			
@@ -21,7 +22,7 @@ def run(eff, text=False, graph=False, output="default", layout="five", number=1)
 			else:
 				fig=None
 	
-			rayxpos, rayypos, epsilon, rayradius, Energy, Epn, major, minor, ra, rp, e, Z, scale, height = g.run(text=text)
+			rayxpos, rayypos, epsilon, rayradius, Energy, Epn, major, minor, ra, rp, e, Z, scale, height, phi = g.run(text=text)
 			
 			def frad(angle):
 				return major * (1-(e**2))/(1 + (e*math.cos(epsilon- angle)))
@@ -65,19 +66,9 @@ def run(eff, text=False, graph=False, output="default", layout="five", number=1)
 						dangle = (2*math.pi) - rawangle
 	
 					r = frad(dangle + math.pi)
-	            
-					distance = math.sqrt((rayxpos - xpos)**2 + (rayypos - ypos)**2)
-	            
-					density, bkgd = ld.run(distance, Energy, Z, r, scale, eff)
-
-					area = (radius**2) * math.pi
 					
-					siglitarea, bkglitarea = ca.run(radius, r, distance, scale, x0=xpos, y0=ypos, fig=fig, graph=graph)
+					sigcount, bkgcount= cs.run(radius, r, rayxpos, rayypos, scale, xpos, ypos, Energy, Z, eff)
 					
-					rawsigcount = density*siglitarea
-					sigcount = int(random.gauss(rawsigcount, math.sqrt(rawsigcount)))
-					rawbkgcount = bkgd*bkglitarea
-					bkgcount = int(random.gauss(rawbkgcount, math.sqrt(rawbkgcount)))
 					count = sigcount + bkgcount
 					
 					if text:
@@ -87,7 +78,7 @@ def run(eff, text=False, graph=False, output="default", layout="five", number=1)
 							print "Density is", density, ", Photon Count is", count
 							print "Signal accounts for", rawsigcount, "Smeared to", sigcount, "Background accounts for", bkgcount	
 					
-					writer.writerow([int(i+1), category, xpos, ypos, sigcount, bkgcount, rayxpos, rayypos, Epn, Z, height])					
+					writer.writerow([int(i+1), category, xpos, ypos, sigcount, bkgcount, rayxpos, rayypos, Epn, Z, height, phi])					
 				    
 				if graph:
 					plt.xlim(-200, 200)

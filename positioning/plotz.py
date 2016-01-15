@@ -86,8 +86,7 @@ def run(source, detectorcount, mindetections, graph):
 				info += str('Mean = ' + str(coeff[1])+ " \n ")
 				info += str('Sigma = ' + str(coeff[2])+ " \n \n")
 			
-		plt.annotate(info, (30, 8),  fontsize=10)
-		print str(info)
+		plt.annotate(info, (30, 6),  fontsize=10)
 			
 		if fullcount != []:
 			plt.hist(fullcount, bins=bincount, histtype='bar', range=zrange, label=labels, stacked=True)

@@ -20,7 +20,6 @@ def run(text=False):
 	zenith = random.random()*44
 
 	phi = math.radians(68+zenith)
-	phi=math.radians(90)
 
 	epsilon = math.pi*random.random()*2
 	
@@ -47,6 +46,6 @@ def run(text=False):
 		print "Eccentrity is", e
 		print "Total Energy is", Energy, "TeV"
     	
-	return xpos, ypos, epsilon, radius, Energy, Epn, major, minor, ra, rp, e, Z, scale, height
+	return xpos, ypos, epsilon, radius, Energy, Epn, major, minor, ra, rp, e, Z, scale, height, phi
 	
 

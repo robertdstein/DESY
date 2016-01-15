@@ -18,6 +18,7 @@ def run(source, outputfile, mincount, detectorcount, text=False):
 		header.append("True Z")
 		header.append("True Height")
 		header.append("Detecions")
+		header.append("Phi")
 		writer.writerow(header)
 	
 		with open("output/"+ str(source) +".csv", 'rb') as csvfile:
@@ -39,6 +40,7 @@ def run(source, outputfile, mincount, detectorcount, text=False):
 					trueE = row[8]
 					trueZ = row[9]
 					trueheight = row[10]
+					phi = row[11]
 					
 					j+=1
 				
@@ -63,6 +65,7 @@ def run(source, outputfile, mincount, detectorcount, text=False):
 							a += [trueZ]
 							a += [trueheight]
 							a += [detections]
+							a += [phi]
 							writer.writerow(a)
 						a=[]
 						detections=0
