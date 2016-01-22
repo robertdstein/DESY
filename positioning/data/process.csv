@@ -1,2 +1,2 @@
 x1,y1,sigcount1,bkgcount1,telescope1,x2,y2,sigcount2,bkgcount2,telescope2,x3,y3,sigcount3,bkgcount3,telescope3,x4,y4,sigcount4,bkgcount4,telescope4,x5,y5,sigcount5,bkgcount5,telescope5,True X,True Y,True Energy Per Nucleon,True Z,True Height,Detecions,Phi
-0.0,0.0,0,3093,lst,60.0,60.0,1067,1448,mst,60.0,-60.0,0,0,mst,-60.0,60.0,0,1041,mst,-60.0,-60.0,0,0,mst,59.28280730970016,118.49489329270335,571.7051771710101,26,30000,3,1.462087342047888
+0.0,0.0,1064,5223,lst,60.0,60.0,1979,1553,mst,60.0,-60.0,1079,1553,mst,-60.0,60.0,2844,1553,mst,-60.0,-60.0,2425,1553,mst,22.190105319820617,-14.938228449106049,613.3979927728981,26,30000,5,1.5921174785825751

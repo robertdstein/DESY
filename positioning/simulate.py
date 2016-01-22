@@ -70,13 +70,14 @@ def run(eff, text=False, graph=False, output="default", layout="five", number=1)
 					sigcount, bkgcount= cs.run(radius, r, rayxpos, rayypos, scale, xpos, ypos, Energy, Z, eff)
 					
 					count = sigcount + bkgcount
+					#recorded = math.gauss(count, math.sqrt(count))
 					
 					if text:
 							print "Angle of location", math.degrees(dangle)
-							print "Radius of ring at this angle is", r, "Distance = " + str(distance)
-							print "Position", xpos, ypos,  "Illuminated signal area is", siglitarea,  "Illuminated Background area is", bkglitarea
-							print "Density is", density, ", Photon Count is", count
-							print "Signal accounts for", rawsigcount, "Smeared to", sigcount, "Background accounts for", bkgcount	
+							print "Radius of ring at this angle is", r
+							print "Position", xpos, ypos
+							print "Photon Count is", count, "smeared to", recorded
+							print "Signal accounts for", sigcount, "Background accounts for", bkgcount	
 					
 					writer.writerow([int(i+1), category, xpos, ypos, sigcount, bkgcount, rayxpos, rayypos, Epn, Z, height, phi])					
 				    
