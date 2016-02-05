@@ -6,7 +6,7 @@ import minimise as m
 def run(source, outputfile, detectorcount, rgw, eff):
 	with open("reconstructeddata/" + str(outputfile) + ".csv", 'wb') as csvout:
 		writer = csv.writer(csvout, delimiter=',', quotechar='|')
-		writer.writerow(["Detections","X","Y","Energy Per Nucleon","Z","Height","True X","True Y","True Energy per nucleon","True Z","True Height", "Phi"])
+		writer.writerow(["Detections","X","Y","Energy Per Nucleon","Z","Height","True X","True Y","True Energy per nucleon","True Z","True Height", "Phi", "Epsilon"])
 		with open("data/"+ str(source) +".csv", 'rb') as csvfile:
 			reader = csv.reader(csvfile, delimiter=',', quotechar='|')
 			i = 0
@@ -16,10 +16,17 @@ def run(source, outputfile, detectorcount, rgw, eff):
 				else:
 					a=[]
 					for j in range (0, detectorcount):
-						base = 5*j
-						a += [[row[base], row[base+1], row[base+2], row[base+3], row[base+4]]]
-					guessx, guessy, guessEpn, guessZ, guessHeight =m.min(a, rgw, eff)
-					lim = 5*detectorcount
-					true = [row[lim], row[lim+1], row[lim+2], row[lim+3], row[lim+4], math.degrees(float(row[lim+6]))]
+						base = 4*j
+						a += [[row[base], row[base+1], row[base+2], row[base+3]]]
+					lim = 4*detectorcount
+					
+					phi = float(row[lim+6])
+					smearphi = phi + (math.radians(5)*(random.random()-0.5))
+
+					epsilon = float(row[lim+7])
+					smearepsilon = epsilon + (math.radians(5)*(random.random()-0.5))
+					guessx, guessy, guessEpn, guessZ, guessHeight =m.min(a, rgw, eff, smearphi, smearepsilon)
+					
+					true = [row[lim], row[lim+1], row[lim+2], row[lim+3], row[lim+4], math.degrees(phi), math.degrees(epsilon)]
 					print "True Values are", true
-					writer.writerow([row[lim+5], guessx, guessy, guessEpn, guessZ, guessHeight, row[lim], row[lim+1], row[lim+2], row[lim+3], row[lim+4], row[lim+6]])
+					writer.writerow([row[lim+5], guessx, guessy, guessEpn, guessZ, guessHeight, row[lim], row[lim+1], row[lim+2], row[lim+3], row[lim+4], row[lim+6], row[lim+7]])

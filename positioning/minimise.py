@@ -10,17 +10,16 @@ import telescoperadius as tr
 import loglikelihood as ll
 import scipy.optimize
 
-def min(a, gridwidth, eff):
+def min(a, gridwidth, eff, phi, epsilon):
 		
 	def f(x,y,Z,Epn, height, scale):
 		sum = 0
 		for detection in a:
 			x0 = float(detection[0])
 			y0 = float(detection[1])
-			sigcount = float(detection[2])
-			bkgcount = float(detection[3])
-			category = detection[4]
-			sum += ll.run(x,y,Epn,Z, height, x0,y0, sigcount, bkgcount, category, scale, eff)
+			count = float(detection[2])
+			category = detection[3]
+			sum += ll.run(x,y,Epn,Z, height, x0,y0, count, category, scale, eff, phi, epsilon)
 		return sum
 
 	
@@ -60,5 +59,5 @@ def min(a, gridwidth, eff):
 						guessfval = fval
 		print guess
 	
-	print "Final guess is", guess
+	print "Final guess is", guess, math.degrees(phi), math.degrees(epsilon)
 	return guess[0], guess[1], guess[2], guess[3], guess[4]

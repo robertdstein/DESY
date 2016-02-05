@@ -9,8 +9,7 @@ def run(source, outputfile, mincount, detectorcount, text=False):
 		for i in range (1, detectorcount + 1):
 			header.append("x"+str(i))
 			header.append("y"+str(i))
-			header.append("sigcount"+str(i))
-			header.append("bkgcount"+str(i))
+			header.append("Count"+str(i))
 			header.append("telescope"+str(i))
 		header.append("True X")
 		header.append("True Y")
@@ -19,6 +18,7 @@ def run(source, outputfile, mincount, detectorcount, text=False):
 		header.append("True Height")
 		header.append("Detecions")
 		header.append("Phi")
+		header.append("Epsilon")
 		writer.writerow(header)
 	
 		with open("output/"+ str(source) +".csv", 'rb') as csvfile:
@@ -33,24 +33,23 @@ def run(source, outputfile, mincount, detectorcount, text=False):
 					category = row[1]
 					xpos = float(row[2])
 					ypos = float(row[3])
-					sigcount = row[4]
-					bkgcount = row[5]
-					truex = row[6]
-					truey =row[7]
-					trueE = row[8]
-					trueZ = row[9]
-					trueheight = row[10]
-					phi = row[11]
+					smearcount = float(row[4])
+					truex = row[5]
+					truey =row[6]
+					trueE = row[7]
+					trueZ = row[8]
+					trueheight = row[9]
+					phi = row[10]
+					epsilon=row[11]
 					
 					j+=1
 				
 					if (int(event) == int(i)):
 						a += [xpos]
 						a += [ypos]
-						a += [sigcount]
-						a += [bkgcount]
+						a += [smearcount]
 						a += [category]
-						if ((int(sigcount) == int(0)) & (int(bkgcount) == int(0))):
+						if (int(smearcount) == int(0)):
 							pass
 						else:
 							detections += 1
@@ -66,6 +65,7 @@ def run(source, outputfile, mincount, detectorcount, text=False):
 							a += [trueheight]
 							a += [detections]
 							a += [phi]
+							a += [epsilon]
 							writer.writerow(a)
 						a=[]
 						detections=0

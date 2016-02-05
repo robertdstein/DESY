@@ -6,17 +6,20 @@ from iminuit import Minuit
 import lightdensity as ld
 import countsimulation as cs
 import cherenkovradius as cr
+import calculateellipse as ce
 import telescoperadius as tr
 import scipy.optimize
 
-def expected(x,y,Epn,Z, height, x0,y0, category, scale, eff):
+def expected(x,y,Epn,Z, height, x0,y0, category, scale, eff, phi, epsilon):
 	Nucleons= Z+30
 	E=Epn*Nucleons/1000
 	
-	rmax, theta = cr.run(Epn, height, 1)
+	rayradius, theta = cr.run(Epn, height, math.sin(phi))
 	tradius = tr.run(category)
 	
-	expectedsig, expectedbkg= cs.run(tradius, rmax, x, y, scale, x0, y0, E, Z, eff)
+	r = ce.run(rayradius, theta, phi, epsilon, x0, y0, x, y)
+	
+	expectedsig, expectedbkg= cs.run(tradius, r, x, y, scale, x0, y0, E, Z, eff)
 	
 	expectedcount = int(expectedsig + expectedbkg)
 	return expectedcount
@@ -25,9 +28,9 @@ def stirling(N):
 	lognfactorial = ((N*math.log(N))-N + (0.5*math.log(2*N*math.pi)))
 	return lognfactorial
 	
-def run(x,y,Epn,Z, height, x0,y0, sigcount, bkgcount, category, scale, eff):
-	N = int(sigcount + bkgcount)
-	expectedcount = expected(x,y,Epn,Z, height, x0,y0, category, scale, eff)
+def run(x,y,Epn,Z, height, x0,y0, count, category, scale, eff, phi, epsilon):
+	N = int(count)
+	expectedcount = expected(x,y,Epn,Z, height, x0,y0, category, scale, eff, phi, epsilon)
 	
 	
 	if N == 0:

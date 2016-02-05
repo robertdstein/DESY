@@ -51,6 +51,7 @@ def run(tradius, r, rayxpos, rayypos, scale, xpos, ypos, Energy, Z, eff):
 		rawbkgcount += bkgdensity*areaslice
 		
 		if newarea < oldarea:
+			print "Possible error!"
 			print "N =", i
 			print currentr, previousr, midr, deltar, startr
 			print newarea, oldarea, areaslice, distance, tradius
