@@ -20,44 +20,11 @@ def run(tradius, rayradius, distance):
 	if rayradius == 0:
 		area = 0
 	elif (rayradius > tradius):
-		if distance < (rayradius- tradius):
+		if distance < (rayradius - tradius):
 			area = rawarea
-		elif distance < (rayradius+ tradius):
+		elif distance < (rayradius + tradius):
 			area = circleoverlap(tradius, rayradius, distance)
 	else:
 		area=0
 
 	return area
-
-def oldrun(tradius, rayradius, distance, scale, x0=0, y0=0, fig=None, graph=False):
-	if distance < (tradius + (rayradius*scale)):
-		if graph:
-			circle=plt.Circle((x0,y0),tradius,color='red')
-			fig.gca().add_artist(circle)
-		
-		area = math.pi*(tradius**2)
-		
-		if distance < math.fabs(rayradius- tradius):
-			siglitarea=area
-		elif distance == 0:
-			siglitarea=area
-		elif distance < (rayradius+ tradius):
-			siglitarea = circleoverlap(tradius, rayradius, distance)
-		else:
-			siglitarea=0
-				
-		if distance < math.fabs(((rayradius*scale)- tradius)):
-			bkglitarea=area
-		elif distance == 0:
-			bkglitarea=area
-		else:
-			bkglitarea = circleoverlap(tradius, (rayradius*scale), distance)
-
-	else:
-		siglitarea=0
-		bkglitarea=0
-		if graph:
-			circle=plt.Circle((x0,y0),tradius,color="black")
-			fig.gca().add_artist(circle)
-	
-	return siglitarea, bkglitarea

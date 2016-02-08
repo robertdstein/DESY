@@ -1,4 +1,4 @@
-import argparse, math, random
+import argparse, math, random, time
 import csv
 import numpy as np
 import simulate as s
@@ -24,11 +24,19 @@ parser.add_argument("-pp", "--plotposition", action="store_true")
 parser.add_argument("-pe", "--plotepn", action="store_true")
 parser.add_argument("-pa", "--plotangle", action="store_true")
 parser.add_argument("-pll", "--plotll", action="store_true")
-parser.add_argument("-n", "--number", default=int(1))
+parser.add_argument("-nh", "--numberofhours", default=1)
 parser.add_argument("-rgw", "--reconstructiongridwidth", default=25)
 cfg = parser.parse_args()
 
-eff = 0.08
+eff = 0.06
+flux = 2.5 * (10**-4)
+area = 300**2
+solidangle = math.radians(5)
+detectedflux = flux*area*solidangle
+rateperhour = detectedflux * 60 * 60
+n = int(rateperhour*float(cfg.numberofhours))
+print time.asctime(time.localtime()),"Cosmic Ray Iron Flux is", flux, "Simulated Area is", area, "Field of View is", solidangle, "Detected Flux is", detectedflux
+print time.asctime(time.localtime()),"Rate per hour", rateperhour, "Simulated Hours", cfg.numberofhours, "Simulated Events", n 
 
 with open("orientations/"+ cfg.orientation +".csv", 'rb') as csvfile:
 	reader = csv.reader(csvfile, delimiter=',', quotechar='|')
@@ -37,7 +45,7 @@ with open("orientations/"+ cfg.orientation +".csv", 'rb') as csvfile:
 		rowcount +=1
 		
 if cfg.simulate:
-	s.run(eff, text=cfg.text, graph=cfg.graph, output=cfg.sourcedata, layout=cfg.orientation, number = int(cfg.number))
+	s.run(eff, rowcount, mincount=cfg.mincount, text=cfg.text, graph=cfg.graph, output=cfg.sourcedata, layout=cfg.orientation, number = n)
 	bp.run(cfg.sourcedata, cfg.processdata, cfg.mincount, rowcount, text=cfg.text)
 	br.run(cfg.processdata, cfg.reconstructdata, rowcount, cfg.reconstructiongridwidth, eff)
 	

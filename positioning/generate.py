@@ -1,5 +1,6 @@
 import random, math
 import cherenkovradius as cr
+import atmosphere as atm
 
 def run(text=False):
     	xpos = (random.random()*300)-150
@@ -9,13 +10,9 @@ def run(text=False):
 	Epn = ((1.7*R/321)+(3571**-1.7))**(-1/1.7)
 
 	Z= 26
-	N= Z + 30
 	
-	height = 30000
-	
-	Energy = Epn*N/1000
-	
-	scale=1.2
+	hprob = random.random()
+	height = atm.runheight(hprob, text)
 
 	zenith = random.random()*44
 
@@ -31,8 +28,7 @@ def run(text=False):
 		print "Phi is", math.degrees(phi)
 		print "Epsilon is", math.degrees(epsilon)
 		print "Radius is", radius
-		print "Total Energy is", Energy, "TeV"
     	
-	return xpos, ypos, epsilon, radius, Epn, Energy, Z, scale, height, phi, theta
+	return xpos, ypos, epsilon, radius, Epn, Z, height, phi, theta
 	
 

@@ -21,10 +21,11 @@ def run(source, outputfile, detectorcount, rgw, eff):
 					lim = 4*detectorcount
 					
 					phi = float(row[lim+6])
-					smearphi = phi + (math.radians(5)*(random.random()-0.5))
+					smearphi = phi + (math.radians(0.5)*(random.random()-0.5))
 
 					epsilon = float(row[lim+7])
-					smearepsilon = epsilon + (math.radians(5)*(random.random()-0.5))
+					smearepsilon = epsilon + (math.radians(0.5)*(random.random()-0.5))
+					
 					guessx, guessy, guessEpn, guessZ, guessHeight =m.min(a, rgw, eff, smearphi, smearepsilon)
 					
 					true = [row[lim], row[lim+1], row[lim+2], row[lim+3], row[lim+4], math.degrees(phi), math.degrees(epsilon)]

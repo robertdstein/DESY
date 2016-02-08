@@ -1,6 +1,7 @@
 import argparse, math, random
 import csv
 import numpy as np
+import telescoperadius as tr
 
 def run(source, outputfile, mincount, detectorcount, text=False):
 	with open("data/" + str(outputfile) + ".csv", 'wb') as csvout:
@@ -41,6 +42,7 @@ def run(source, outputfile, mincount, detectorcount, text=False):
 					trueheight = row[9]
 					phi = row[10]
 					epsilon=row[11]
+					Trigger = row[12]
 					
 					j+=1
 				
@@ -49,10 +51,10 @@ def run(source, outputfile, mincount, detectorcount, text=False):
 						a += [ypos]
 						a += [smearcount]
 						a += [category]
-						if (int(smearcount) == int(0)):
-							pass
-						else:
+						if str(Trigger) == str(True):
 							detections += 1
+						else:
+							pass
 						
 					if j == detectorcount:
 						if text:

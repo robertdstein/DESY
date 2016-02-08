@@ -8,18 +8,19 @@ import calculatearea as ca
 import cherenkovradius as cr
 import telescoperadius as tr
 import loglikelihood as ll
+import atmosphere as atm
 import scipy.optimize
 
 def min(a, gridwidth, eff, phi, epsilon):
-		
-	def f(x,y,Z,Epn, height, scale):
+	
+	def f(x,y,Z,Epn, height):
 		sum = 0
 		for detection in a:
 			x0 = float(detection[0])
 			y0 = float(detection[1])
 			count = float(detection[2])
 			category = detection[3]
-			sum += ll.run(x,y,Epn,Z, height, x0,y0, count, category, scale, eff, phi, epsilon)
+			sum += ll.run(x,y,Epn,Z, height, x0,y0, count, category, eff, phi, epsilon)
 		return sum
 
 	
@@ -30,11 +31,10 @@ def min(a, gridwidth, eff, phi, epsilon):
 	argumenty = "limit_y = (-300, 300), error_y = 100000, "
 	argumentZ = "fix_Z=True, "
 	argumentE = "Epn = 300, limit_Epn = (232, 4000), error_Epn=1, "
-	argumentheight = "height=30000, fix_height=True, "
-	argumentscale = "scale=1.2, fix_scale=True, "
+	argumentheight = "height=30000, limit_height= (1000, 100000), error_height=10000, "
 	argumenterror = "print_level=0, errordef = 100"
 
-	m = eval("Minuit(f, x="+ str(startpos[0]) + ", " + argumentx + "y="+ str(startpos[1]) + ", " + argumenty+ argumentE + "Z=" + str(startpos[2]) + "," +argumentZ + argumentheight + argumentscale + argumenterror + ")")
+	m = eval("Minuit(f, x="+ str(startpos[0]) + ", " + argumentx + "y="+ str(startpos[1]) + ", " + argumenty+ argumentE + "Z=" + str(startpos[2]) + "," +argumentZ + argumentheight + argumenterror + ")")
 	m.migrad()
 	params = m.values
 	guess = [params['x'], params['y'], params['Epn'], params['Z'], params['height']]
@@ -48,16 +48,16 @@ def min(a, gridwidth, eff, phi, epsilon):
 	for z in zvalues:
 		for x in xsites:
 			for y in ysites:
-				m = eval("Minuit(f," + argumentE + argumentheight + argumentscale+ "Z=" + str(z) + "," +argumentZ + "x="+ str(x) + ", " + argumentx + "y="+ str(y) + ", " + argumenty+ argumenterror + ")")
+				m = eval("Minuit(f," + argumentE + argumentheight + "Z=" + str(z) + "," +argumentZ + "x="+ str(x) + ", " + argumentx + "y="+ str(y) + ", " + argumenty+ argumenterror + ")")
 				m.migrad()
 				params = m.values
 				fval = m.fval
 				values = m.get_fmin()
 				if values.is_valid:
 					if fval < guessfval:
-						guess = guess = [params['x'], params['y'], params['Epn'], params['Z'], params['height']]
+						guess = [params['x'], params['y'], params['Epn'], params['Z'], params['height']]
 						guessfval = fval
-		print guess
+		print guess[0], guess[1], guess[2], guess[3], guess[4]
 	
 	print "Final guess is", guess, math.degrees(phi), math.degrees(epsilon)
 	return guess[0], guess[1], guess[2], guess[3], guess[4]
