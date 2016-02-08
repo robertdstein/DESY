@@ -9,7 +9,6 @@ def run(source, detectorcount, mindetections, graph):
 	zvalues = [26]
 	nplots = len(zvalues)
 	bincount = 13
-	i=1
 	zrange = [19.5, 32.5]
 	reconvalues = np.linspace(zrange[0]+0.5, zrange[1]-0.5, bincount)
 	
@@ -34,6 +33,7 @@ def run(source, detectorcount, mindetections, graph):
 			with open("reconstructeddata/"+ str(source) +".csv", 'rb') as csvfile:
 				reader = csv.reader(csvfile, delimiter=',', quotechar='|')
 				specificcount = []
+				
 				
 				i = 0
 
@@ -66,27 +66,43 @@ def run(source, detectorcount, mindetections, graph):
 				hist, bin_edges = np.histogram(specificcount, bins=bincount, range=zrange)
 				bin_centres = (bin_edges[:-1] + bin_edges[1:])/2
 				
-				def gauss(x, A, mu, sigma):
-				    return A*np.exp(-(x-mu)**2/(2.*sigma**2))
+				total = len(specificcount)
+				print total
 				
-				# p0 is the initial guess for the fitting coefficients (A, mu and sigma above)
-				p0 = [1., 26., 1.]
+				lower = int(total*0.16)
+				mid = int(total*0.5)
+				upper = int(total*0.84)
 				
-				coeff, var_matrix = curve_fit(gauss, reconvalues, hist, p0=p0)
+				print lower, uppermid
 				
-				# Get the fitted curve
-				hist_fit += gauss(bin_centres, *coeff)
+				lowerz = specificcount[lower]
+				meanz = specificcount[mid]
+				upperz = specificcount[upper]
+				sigma = upperz-lowerz
 				
-				plt.plot(bin_centres, hist_fit, color='k')
+				print lowerz, meanz, upperz, sigma
 				
-				# Finally, lets get the fitting parameters, i.e. the mean and standard deviation:
-				
-				info += str("For N = " + str(j) + " \n ")
-				info += str("Count = " + str(coeff[0])+ " \n ")
-				info += str('Mean = ' + str(coeff[1])+ " \n ")
-				info += str('Sigma = ' + str(coeff[2])+ " \n \n")
-			
-		plt.annotate(info, (30, 6),  fontsize=10)
+				#~ def gauss(x, A, mu, sigma):
+				    #~ return A*np.exp(-(x-mu)**2/(2.*sigma**2))
+				#~ 
+				#~ # p0 is the initial guess for the fitting coefficients (A, mu and sigma above)
+				#~ p0 = [1., 26., 1.]
+				#~ 
+				#~ coeff, var_matrix = curve_fit(gauss, reconvalues, hist, p0=p0)
+				#~ 
+				#~ # Get the fitted curve
+				#~ hist_fit += gauss(bin_centres, *coeff)
+				#~ 
+				#~ plt.plot(bin_centres, hist_fit, color='k')
+				#~ 
+				#~ # Finally, lets get the fitting parameters, i.e. the mean and standard deviation:
+				#~ 
+				#~ info += str("For N = " + str(j) + " \n ")
+				#~ info += str("Count = " + str(coeff[0])+ " \n ")
+				#~ info += str('Mean = ' + str(coeff[1])+ " \n ")
+				#~ info += str('Sigma = ' + str(coeff[2])+ " \n \n")
+			#~ 
+		#~ plt.annotate(info, (30, 6),  fontsize=10)
 			
 		if fullcount != []:
 			plt.hist(fullcount, bins=bincount, histtype='bar', range=zrange, label=labels, stacked=True)

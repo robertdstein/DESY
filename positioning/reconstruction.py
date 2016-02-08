@@ -8,7 +8,6 @@ import plotz as pz
 import plotposition as pp
 import plotepn as pe
 import plotangle as pa
-import plotloglikelihood as pl
 
 parser = argparse.ArgumentParser(description='Create a canvas for positions of telescopes')
 parser.add_argument("-o", "--orientation", default="five")
@@ -23,7 +22,6 @@ parser.add_argument("-pz", "--plotz", action="store_true")
 parser.add_argument("-pp", "--plotposition", action="store_true")
 parser.add_argument("-pe", "--plotepn", action="store_true")
 parser.add_argument("-pa", "--plotangle", action="store_true")
-parser.add_argument("-pll", "--plotll", action="store_true")
 parser.add_argument("-nh", "--numberofhours", default=1)
 parser.add_argument("-rgw", "--reconstructiongridwidth", default=25)
 cfg = parser.parse_args()
@@ -60,8 +58,3 @@ if cfg.plotepn:
 	
 if cfg.plotangle:
 	pa.run(cfg.reconstructdata, rowcount, cfg.mincount, cfg.graph)
-	
-if cfg.plotll:
-	s.run(eff, text=cfg.text, graph=cfg.graph, output=cfg.sourcedata, layout=cfg.orientation, number = int(cfg.number))
-	bp.run(cfg.sourcedata, cfg.processdata, cfg.mincount, rowcount, text=cfg.text)
-	pl.run(cfg.processdata, cfg.reconstructdata, rowcount, cfg.reconstructiongridwidth, eff)
