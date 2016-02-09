@@ -6,6 +6,8 @@ from scipy.optimize import curve_fit
 
 def run(source, detectorcount, mindetections, graph):
 
+	i=1
+
 	zvalues = [26]
 	nplots = len(zvalues)
 	bincount = 13
@@ -69,40 +71,46 @@ def run(source, detectorcount, mindetections, graph):
 				total = len(specificcount)
 				print total
 				
+				specificcount.sort()
+				
 				lower = int(total*0.16)
 				mid = int(total*0.5)
 				upper = int(total*0.84)
 				
-				print lower, uppermid
+				print lower, upper, mid
 				
 				lowerz = specificcount[lower]
 				meanz = specificcount[mid]
 				upperz = specificcount[upper]
-				sigma = upperz-lowerz
+				sigma = (upperz-lowerz) * 0.5
 				
 				print lowerz, meanz, upperz, sigma
 				
-				#~ def gauss(x, A, mu, sigma):
-				    #~ return A*np.exp(-(x-mu)**2/(2.*sigma**2))
-				#~ 
-				#~ # p0 is the initial guess for the fitting coefficients (A, mu and sigma above)
-				#~ p0 = [1., 26., 1.]
-				#~ 
-				#~ coeff, var_matrix = curve_fit(gauss, reconvalues, hist, p0=p0)
-				#~ 
-				#~ # Get the fitted curve
-				#~ hist_fit += gauss(bin_centres, *coeff)
-				#~ 
-				#~ plt.plot(bin_centres, hist_fit, color='k')
-				#~ 
-				#~ # Finally, lets get the fitting parameters, i.e. the mean and standard deviation:
-				#~ 
-				#~ info += str("For N = " + str(j) + " \n ")
-				#~ info += str("Count = " + str(coeff[0])+ " \n ")
-				#~ info += str('Mean = ' + str(coeff[1])+ " \n ")
-				#~ info += str('Sigma = ' + str(coeff[2])+ " \n \n")
-			#~ 
-		#~ plt.annotate(info, (30, 6),  fontsize=10)
+				def gauss(x, A, mu, sigma):
+				    return A*np.exp(-(x-mu)**2/(2.*sigma**2))
+				
+				# p0 is the initial guess for the fitting coefficients (A, mu and sigma above)
+				p0 = [1., 26., 1.]
+				
+				coeff, var_matrix = curve_fit(gauss, reconvalues, hist, p0=p0)
+				
+				# Get the fitted curve
+				hist_fit += gauss(bin_centres, *coeff)
+				
+				plt.plot(bin_centres, hist_fit, color='k')
+				
+				# Finally, lets get the fitting parameters, i.e. the mean and standard deviation:
+				
+				info += str("For N = " + str(j) + " \n ")
+				info += str("Count = " + str(coeff[0])+ " \n ")
+				info += str('Mean = ' + str(coeff[1])+ " \n ")
+				info += str('Sigma = ' + str(coeff[2])+ "\n \n")
+				info += ('Lower bound = ' + str(lowerz) + " \n")
+				info += ('Upper bound = ' + str(upperz) + " \n")
+				info += ('Mean = ' + str(meanz) + " \n")
+				info += ('Sigma = ' + str(sigma) + "\n \n")
+			
+		plt.annotate(info, (30, 6),  fontsize=10)
 			
 		if fullcount != []:
 			plt.hist(fullcount, bins=bincount, histtype='bar', range=zrange, label=labels, stacked=True)

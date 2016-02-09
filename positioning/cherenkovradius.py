@@ -7,6 +7,9 @@ def run(Epn, height, sinphi, text=False):
 	beta = math.sqrt(1 - (1/gamma**2))
 	
 	refractiveindex = atm.runindex(height)
+	
+	#~ print Epn, height, sinphi, refractiveindex
+	
 	costheta = 1/(beta*refractiveindex)
 	
 	if costheta < 1:	
@@ -17,7 +20,7 @@ def run(Epn, height, sinphi, text=False):
 	if height is None:
 		print refractiveindex, height, sinphi, gamma, costheta
 	
-	radius = height*math.tan(theta)/sinphi
+	radius = float(height)*math.tan(theta)/float(sinphi)
 	
 	if text:
 		print "Gamma", gamma

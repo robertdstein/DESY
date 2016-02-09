@@ -23,7 +23,7 @@ def expected(x,y,Epn,Z, height, x0,y0, category, eff, phi, epsilon):
 		expectedcount = int(expectedsig + expectedbkg)
 	
 	else:
-		expectedcount = 0.0
+		expectedcount = math.pi*(tradius**2)*ld.base(eff)
 	
 	return expectedcount
 	

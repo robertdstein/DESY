@@ -40,4 +40,4 @@ def run(eff, rowcount, mincount=4, text=False, graph=False, output="default", la
 				print "ERROR OVER HERE!!!!"
 		
 		print time.asctime(time.localtime()),"In total there were", number, "Simulated Events. Of these", nonDC, "did not produce Cherenkov Light." 
-		print time.asctime(time.localtime()),"A further", belowThreshold, "Events produced Cherenkov Light below Threshold, and", metThreshold, "accepted events."
+		print time.asctime(time.localtime()),"A further", belowThreshold, "Events produced Cherenkov Light below Threshold, leaving", metThreshold, "accepted events."

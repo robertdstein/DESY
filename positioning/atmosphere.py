@@ -10,6 +10,7 @@ def runindex(height, text=False):
 			
 			if height is None:
 				print row
+				print height
 			
 			if i > 4:
 				if float(row[0])*1000 < height:
@@ -26,24 +27,41 @@ def runheight(prob, text=False):
 		reader = csv.reader(csvfile, delimiter=',', quotechar='|')
 		i=0
 		h=30000
+		currenth=0
+		currentt=0
 		
 		for row in reader:
 			i +=1
-			t = - 6 * math.log(1 - (prob))
+			t = - 12 * math.log(1 - (prob))
 			
 			if i > 3:
+				previoust = currentt
+				currentt = float(row[2])
+				previoush = currenth
+				currenth = float(row[0])*1000
 				if float(row[2]) > t:
 					pass
 				else:
-					h = float(row[0])*1000
+					gradient = (float(currenth)-float(previoush))/(float(currentt)-float(previoust))
+					deltat = t - previoust
+					
+					h = previoush + (deltat*gradient)
+					
+					if float(previoush) == float(1736):
+						print h, previoush, currenth, previoust, currentt, deltat, float(h)
 					
 					if text:
-						print 
-						
-					if h > 2000:
-						pass
-					else:
-						print row, h, t
+						print row, h, t, prob, float(h)
 					
 					return h
+		return h
+
+#~ print runheight(0.001)
+#~ print runheight(0.01)
+#~ print runheight(0.1)
+#~ print runheight(0.5)
+#~ print runheight(0.9)
+#~ print runheight(0.99)
+#~ print runheight(0.999)
+
 	

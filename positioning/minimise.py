@@ -30,8 +30,8 @@ def min(a, gridwidth, eff, phi, epsilon):
 	argumentx = "limit_x = (-300, 300), error_x = 100000, "
 	argumenty = "limit_y = (-300, 300), error_y = 100000, "
 	argumentZ = "fix_Z=True, "
-	argumentE = "Epn = 300, limit_Epn = (232, 4000), error_Epn=1, "
-	argumentheight = "height=30000, limit_height= (1000, 100000), error_height=10000, "
+	argumentE = "Epn = 3000, limit_Epn = (232, 4000), error_Epn=1, "
+	argumentheight = "height=30000, limit_height = (20000, 65000), error_height=(10000), "
 	argumenterror = "print_level=0, errordef = 100"
 
 	m = eval("Minuit(f, x="+ str(startpos[0]) + ", " + argumentx + "y="+ str(startpos[1]) + ", " + argumenty+ argumentE + "Z=" + str(startpos[2]) + "," +argumentZ + argumentheight + argumenterror + ")")
@@ -57,7 +57,7 @@ def min(a, gridwidth, eff, phi, epsilon):
 					if fval < guessfval:
 						guess = [params['x'], params['y'], params['Epn'], params['Z'], params['height']]
 						guessfval = fval
-		print guess[0], guess[1], guess[2], guess[3], guess[4]
+		print guess, "(", guessfval, ")"
 	
 	print "Final guess is", guess, math.degrees(phi), math.degrees(epsilon)
 	return guess[0], guess[1], guess[2], guess[3], guess[4]
