@@ -10,6 +10,7 @@ import plotepn as pe
 import plotangle as pa
 import plotheight as ph
 import plotstatistics as ps
+import plotradius as pr
 
 parser = argparse.ArgumentParser(description='Create a canvas for positions of telescopes')
 parser.add_argument("-o", "--orientation", default="five")
@@ -27,8 +28,9 @@ parser.add_argument("-pe", "--plotepn", action="store_true")
 parser.add_argument("-ph", "--plotheight", action="store_true")
 parser.add_argument("-pa", "--plotangle", action="store_true")
 parser.add_argument("-ps", "--plotstatistics", action="store_true")
+parser.add_argument("-pr", "--plotradius", action="store_true")
 parser.add_argument("-nh", "--numberofhours", default=1)
-parser.add_argument("-rgw", "--reconstructiongridwidth", default=25)
+parser.add_argument("-rgw", "--reconstructiongridwidth", default=13)
 cfg = parser.parse_args()
 
 eff = 0.06
@@ -66,6 +68,9 @@ if cfg.plotangle:
 	
 if cfg.plotheight:
 	ph.run(cfg.reconstructdata, rowcount, int(cfg.mincount), cfg.graph)
+	
+if cfg.plotradius:
+	pr.run(cfg.graph)
 	
 if cfg.plotstatistics:
 	ps.run(eff, rowcount, mincount=cfg.mincount, text=cfg.text, graph=cfg.graph, output=cfg.sourcedata, layout=cfg.orientation, number = n)

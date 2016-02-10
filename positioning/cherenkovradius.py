@@ -8,8 +8,6 @@ def run(Epn, height, sinphi, text=False):
 	
 	refractiveindex = atm.runindex(height)
 	
-	#~ print Epn, height, sinphi, refractiveindex
-	
 	costheta = 1/(beta*refractiveindex)
 	
 	if costheta < 1:	

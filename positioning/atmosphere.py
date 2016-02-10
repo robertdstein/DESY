@@ -5,18 +5,25 @@ def runindex(height, text=False):
 	with open('atmospheredata/atmprofile.csv', 'rb') as csvfile:
 		reader = csv.reader(csvfile, delimiter=',', quotechar='|')
 		i=0
+		
+		currenth=0
+		currentri=0
+		
 		for row in reader:
-			i +=1		
-			
-			if height is None:
-				print row
-				print height
-			
-			if i > 4:
-				if float(row[0])*1000 < height:
+			i +=1
+			if i > 3:
+				previousri = currentri
+				currentri = float(row[3])
+				previoush = currenth
+				currenth = float(row[0])*1000
+				if currenth < height:
 					pass
 				else:
-					ri = float(row[3])+1
+					gradient = (float(currentri)-float(previousri))/(float(currenth)-float(previoush))
+					deltah = height - currenth
+					
+					ri = currentri + (deltah*gradient) + 1
+					
 					if text:
 						print float(row[0])*1000, row[3]
 						print ri
@@ -45,10 +52,7 @@ def runheight(prob, text=False):
 					gradient = (float(currenth)-float(previoush))/(float(currentt)-float(previoust))
 					deltat = t - previoust
 					
-					h = previoush + (deltat*gradient)
-					
-					if float(previoush) == float(1736):
-						print h, previoush, currenth, previoust, currentt, deltat, float(h)
+					h = currenth + (deltat*gradient)
 					
 					if text:
 						print row, h, t, prob, float(h)
