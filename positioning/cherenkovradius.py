@@ -1,8 +1,26 @@
 import math
 import atmosphere as atm
 
+nucleonmass= 0.93827 
+
 def run(Epn, height, sinphi, text=False):
-	nucleonmass= 0.93827 
+	
+	theta = runtheta(Epn, height)
+
+	if height is None:
+		print refractiveindex, height, sinphi, gamma, costheta
+	
+	radius = float(height)*math.tan(theta)/float(sinphi)
+	
+	if text:
+		print "Gamma", gamma
+		print "Beta is", beta
+		print "Cos Theta is", costheta
+	
+	return radius, theta
+
+def runtheta(Epn, height):
+	
 	gamma = (Epn/nucleonmass) + 1
 	beta = math.sqrt(1 - (1/gamma**2))
 	
@@ -15,14 +33,19 @@ def run(Epn, height, sinphi, text=False):
 	else:
 		theta=0
 		
-	if height is None:
-		print refractiveindex, height, sinphi, gamma, costheta
+	return theta
+
+
+def runemin(ri):
 	
-	radius = float(height)*math.tan(theta)/float(sinphi)
+	costheta = 1
 	
-	if text:
-		print "Gamma", gamma
-		print "Beta is", beta
-		print "Cos Theta is", costheta
+	beta = costheta/ri
+	gamma = math.sqrt(1/(1 - (beta**2)))
 	
-	return radius, theta
+	Epn = nucleonmass*(gamma-1)
+	
+	return Epn
+	
+	
+	

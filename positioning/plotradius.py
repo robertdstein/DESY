@@ -42,10 +42,6 @@ def run(graph=False):
 			
 			radius, theta = cr.run(Epn, height, math.sin(phi), text=False)
 			
-			#~ ax1.scatter(radius, p)
-			#~ 
-			#~ ax2.scatter(radius, height)
-			
 			r.append(radius)
 			h.append(height)
 			

@@ -16,7 +16,7 @@ def expected(x,y,Epn,Z, height, x0,y0, category, eff, phi, epsilon):
 	tradius = tr.run(category)
 	
 	if rayradius > 0:
-		r = ce.run(rayradius, theta, phi, epsilon, x0, y0, x, y)
+		r, dangle = ce.run(rayradius, theta, phi, epsilon, x0, y0, x, y)
 		
 		expectedsig, expectedbkg= cs.run(tradius, r, x, y, x0, y0, Epn, Z, eff)
 		

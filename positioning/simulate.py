@@ -14,7 +14,7 @@ from matplotlib.patches import Ellipse
 def run(eff, rowcount, mincount=4, text=False, graph=False, output="default", layout="five", number=1):
 	with open("output/" + output + ".csv", 'wb') as csvout:
 		writer = csv.writer(csvout, delimiter=',', quotechar='|')
-		writer.writerow(["Event Number", "Category", "Xpos", "Ypos", "Smeared Count", "True X", "True Y", "True Energy per Nucleon", "True Z", "True Height", "Phi", "Epsilon"])
+		writer.writerow(["Event Number", "Category", "Xpos", "Ypos", "Smeared Count", "True X", "True Y", "True Energy per Nucleon", "True Z", "True Height", "Phi", "Epsilon", "Trigger", "Dangle", "Theta", "Background"])
 		
 		nonDC = 0
 		belowThreshold = 0

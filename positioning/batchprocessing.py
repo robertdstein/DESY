@@ -12,6 +12,7 @@ def run(source, outputfile, mincount, detectorcount, text=False):
 			header.append("y"+str(i))
 			header.append("Count"+str(i))
 			header.append("telescope"+str(i))
+			header.append("Dangle"+str(i))
 		header.append("True X")
 		header.append("True Y")
 		header.append("True Energy Per Nucleon")
@@ -20,6 +21,8 @@ def run(source, outputfile, mincount, detectorcount, text=False):
 		header.append("Detecions")
 		header.append("Phi")
 		header.append("Epsilon")
+		
+		header.append("Theta")
 		writer.writerow(header)
 	
 		with open("output/"+ str(source) +".csv", 'rb') as csvfile:
@@ -43,6 +46,8 @@ def run(source, outputfile, mincount, detectorcount, text=False):
 					phi = row[10]
 					epsilon=row[11]
 					Trigger = row[12]
+					smeardangle = row[13]
+					smearamplitude = row[14]
 					
 					j+=1
 				
@@ -51,6 +56,8 @@ def run(source, outputfile, mincount, detectorcount, text=False):
 						a += [ypos]
 						a += [smearcount]
 						a += [category]
+						a += [smeardangle]
+						a += [smearamplitude]
 						if str(Trigger) == str(True):
 							detections += 1
 						else:
@@ -68,6 +75,7 @@ def run(source, outputfile, mincount, detectorcount, text=False):
 							a += [detections]
 							a += [phi]
 							a += [epsilon]
+							
 							writer.writerow(a)
 						a=[]
 						detections=0

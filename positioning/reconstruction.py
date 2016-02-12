@@ -11,6 +11,7 @@ import plotangle as pa
 import plotheight as ph
 import plotstatistics as ps
 import plotradius as pr
+import heightstatistics as hs
 
 parser = argparse.ArgumentParser(description='Create a canvas for positions of telescopes')
 parser.add_argument("-o", "--orientation", default="five")
@@ -22,13 +23,11 @@ parser.add_argument("-g", "--graph", action="store_true")
 parser.add_argument("-s", "--simulate", action="store_true")
 parser.add_argument("-t", "--text", action="store_true")
 parser.add_argument("-e", "--email", action="store_true")
-parser.add_argument("-pz", "--plotz", action="store_true")
-parser.add_argument("-pp", "--plotposition", action="store_true")
-parser.add_argument("-pe", "--plotepn", action="store_true")
-parser.add_argument("-ph", "--plotheight", action="store_true")
+parser.add_argument("-p", "--plot", action="store_true")
 parser.add_argument("-pa", "--plotangle", action="store_true")
 parser.add_argument("-ps", "--plotstatistics", action="store_true")
 parser.add_argument("-pr", "--plotradius", action="store_true")
+parser.add_argument("-hs", "--plotheightstatistics", action="store_true")
 parser.add_argument("-nh", "--numberofhours", default=1)
 parser.add_argument("-rgw", "--reconstructiongridwidth", default=13)
 cfg = parser.parse_args()
@@ -54,26 +53,23 @@ if cfg.simulate:
 	bp.run(cfg.sourcedata, cfg.processdata, int(cfg.mincount), rowcount, text=cfg.text)
 	br.run(cfg.processdata, cfg.reconstructdata, rowcount, cfg.reconstructiongridwidth, eff)
 	
-if cfg.plotz:
+if cfg.plot:
 	pz.run(cfg.reconstructdata, rowcount, int(cfg.mincount), cfg.graph)
-	
-if cfg.plotposition:
 	pp.run(cfg.reconstructdata, rowcount, int(cfg.mincount), cfg.graph)
-	
-if cfg.plotepn:
 	pe.run(cfg.reconstructdata, rowcount, int(cfg.mincount), cfg.graph)
-	
-if cfg.plotangle:
-	pa.run(cfg.reconstructdata, rowcount, int(cfg.mincount), cfg.graph)
-	
-if cfg.plotheight:
 	ph.run(cfg.reconstructdata, rowcount, int(cfg.mincount), cfg.graph)
-	
+
+if cfg.plotangle:
+	pa.run(cfg.reconstructdata, rowcount, int(cfg.mincount), cfg.graph)	
+
 if cfg.plotradius:
 	pr.run(cfg.graph)
 	
 if cfg.plotstatistics:
-	ps.run(eff, rowcount, mincount=cfg.mincount, text=cfg.text, graph=cfg.graph, output=cfg.sourcedata, layout=cfg.orientation, number = n)
+	ps.run(eff, rowcount, mincount=cfg.mincount, text=cfg.text, graph=cfg.graph, output=cfg.sourcedata, layout=cfg.orientation, number = n, nh=cfg.numberofhours)
+	
+if cfg.plotheightstatistics:
+	hs.run(eff, rowcount, mincount=cfg.mincount, text=cfg.text, graph=cfg.graph, output=cfg.sourcedata, layout=cfg.orientation, number = n, nh=cfg.numberofhours)
 
 if cfg.email:
 	message = str(time.asctime(time.localtime())) + " Completed simulation of " + str(n) + " events!"

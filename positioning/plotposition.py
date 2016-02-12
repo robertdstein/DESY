@@ -39,30 +39,52 @@ def run(source, detectorcount, mindetections, graph):
 		label = str(j) + " detections"
 		labels.append(label)
 		
-		specificcount.sort()
+		total = len(specificcount)
+
 		
-		lower = int(total*0.16)
-		mid = int(total*0.5)
-		upper = int(total*0.84)
+		if float(total) > float(0):
 		
-		print lower, upper, mid
+			specificcount.sort()
 		
-		lowerz = specificcount[lower]
-		meanz = specificcount[mid]
-		upperz = specificcount[upper]
-		sigma = (upperz-lowerz) * 0.5
-		
-		print lowerz, meanz, upperz, sigma
-		
-		info += str("For N = " + str(j) + " \n ")
-		info += ('Lower bound = ' + str(lowerz) + " \n")
-		info += ('Upper bound = ' + str(upperz) + " \n")
-		info += ('Mean = ' + str(meanz) + " \n")
-		info += ('Sigma = ' + str(sigma) + "\n \n")
-	
-	plt.annotate(info, (30, 6),  fontsize=10)	
+			lower = int(total*0.16)
+			mid = int(total*0.5)
+			upper = int(total*0.84)
 			
-	plt.hist(fullcount, bins=300, range=[0,300], label=labels, histtype='bar', stacked=True)
+			lowerz = specificcount[lower]
+			meanz = specificcount[mid]
+			upperz = specificcount[upper]
+			sigma = (upperz-lowerz) * 0.5
+			
+			info += str("For N = " + str(j) + " \n ")
+			info += ('Lower bound = ' + str(lowerz) + " \n")
+			info += ('Upper bound = ' + str(upperz) + " \n")
+			info += ('Mean = ' + str(meanz) + " \n")
+			info += ('Sigma = ' + str(sigma) + "\n \n")
+	
+	plt.annotate(info, xy=(0.75, 0.6), xycoords="axes fraction",  fontsize=10)
+	
+	n, bins, _ = plt.hist(fullcount, bins=300, range=[0,300], label=labels, histtype='bar', stacked=True)
+
+	mid = (bins[1:] + bins[:-1])*0.5
+	errors = np.zeros(len(n[0]))
+	if len(n[0])>1:
+		for i in range(0, len(n)):
+			array = n[i]
+			old = errors
+			errors = []
+			for j in range(0, len(array)):
+				count = array[j]
+				oldcount = old[j]
+				delta = count-oldcount
+				errors.append(math.sqrt(delta))
+			
+			plt.errorbar(mid, n[i], yerr=errors, fmt='kx')
+	
+	nmax = np.amax(n)
+	
+	uplim = nmax + (math.sqrt(nmax))
+	
+	plt.ylim(0, uplim)
 
 	plt.xlabel("Distance from True Position")
 	plt.ylabel("Count")

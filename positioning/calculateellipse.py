@@ -1,26 +1,6 @@
 import math
 
-def frad(angle, major, e, epsilon):
-	return major * (1-(e**2))/(1 + (e*math.cos(epsilon- angle)))
-	
-def coeff(radius, theta, phi, epsilon):
-	ra = radius * math.cos(theta)/math.sin(phi-theta)
-	rp = radius * math.sin(phi+theta)/math.cos(theta)
-
-	major = 0.5*(ra+rp)
-	minor = math.sqrt(ra*rp)
-
-	if major < minor:
-		e = 0
-	
-	else:
-		e = math.sqrt(1-((minor/major)**2))
-	
-	return ra, rp, major, minor, e
-
-def run(radius, theta, phi, epsilon, xpos, ypos, rayxpos, rayypos):
-	
-	ra, rp, major, minor, e = coeff(radius, theta, phi, epsilon)
+def dangle(xpos, ypos, rayxpos, rayypos):
 	
 	deltax = math.fabs(xpos-rayxpos)
 	deltay = math.fabs(ypos-rayypos)
@@ -43,8 +23,34 @@ def run(radius, theta, phi, epsilon, xpos, ypos, rayxpos, rayypos):
 		dangle = math.pi + rawangle				
 	elif ((xpos-rayxpos) > 0) & ((ypos-rayypos) > 0):
 		dangle = (2*math.pi) - rawangle
+		
+	return dangle
 
-	r = frad(dangle + math.pi, major, e, epsilon)
+def frad(angle, major, e, epsilon):
+	return major * (1-(e**2))/(1 + (e*math.cos(epsilon- angle)))
 	
-	return r
+def coeff(radius, theta, phi, epsilon):
+	ra = radius * math.cos(theta)/math.sin(phi-theta)
+	rp = radius * math.sin(phi+theta)/math.cos(theta)
+
+	major = 0.5*(ra+rp)
+	minor = math.sqrt(ra*rp)
+
+	if major < minor:
+		e = 0
+	
+	else:
+		e = math.sqrt(1-((minor/major)**2))
+	
+	return ra, rp, major, minor, e
+
+def run(radius, theta, phi, epsilon, xpos, ypos, rayxpos, rayypos):
+	
+	ra, rp, major, minor, e = coeff(radius, theta, phi, epsilon)
+	
+	newdangle=dangle(xpos, ypos, rayxpos, rayypos)
+
+	r = frad(newdangle + math.pi, major, e, epsilon)
+	
+	return r, newdangle
 	

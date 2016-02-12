@@ -9,6 +9,8 @@ def runindex(height, text=False):
 		currenth=0
 		currentri=0
 		
+		ri = 1 + (4.12908*(10**-6))
+		
 		for row in reader:
 			i +=1
 			if i > 3:
@@ -28,6 +30,7 @@ def runindex(height, text=False):
 						print float(row[0])*1000, row[3]
 						print ri
 					return ri
+		return ri
 
 def runheight(prob, text=False):
 	with open('atmospheredata/atmprofile.csv', 'rb') as csvfile:
@@ -39,7 +42,8 @@ def runheight(prob, text=False):
 		
 		for row in reader:
 			i +=1
-			t = - 12 * math.log(1 - (prob))
+			
+			t = runlengths(prob)
 			
 			if i > 3:
 				previoust = currentt
@@ -59,13 +63,10 @@ def runheight(prob, text=False):
 					
 					return h
 		return h
-
-#~ print runheight(0.001)
-#~ print runheight(0.01)
-#~ print runheight(0.1)
-#~ print runheight(0.5)
-#~ print runheight(0.9)
-#~ print runheight(0.99)
-#~ print runheight(0.999)
-
+		
+def runlengths(prob):
+	scale = 8
+	
+	lengths = -scale*(math.log(1-prob))
+	return lengths
 	

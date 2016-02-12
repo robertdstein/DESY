@@ -69,57 +69,76 @@ def run(source, detectorcount, mindetections, graph):
 				bin_centres = (bin_edges[:-1] + bin_edges[1:])/2
 				
 				total = len(specificcount)
-				print total
+
 				
-				specificcount.sort()
+				if float(total) > float(0):
 				
-				lower = int(total*0.16)
-				mid = int(total*0.5)
-				upper = int(total*0.84)
-				
-				print lower, upper, mid
-				
-				lowerz = specificcount[lower]
-				meanz = specificcount[mid]
-				upperz = specificcount[upper]
-				sigma = (upperz-lowerz) * 0.5
-				
-				print lowerz, meanz, upperz, sigma
-				
-				def gauss(x, A, mu, sigma):
-				    return A*np.exp(-(x-mu)**2/(2.*sigma**2))
-				
-				# p0 is the initial guess for the fitting coefficients (A, mu and sigma above)
-				p0 = [1., 26., 1.]
-				
-				coeff, var_matrix = curve_fit(gauss, reconvalues, hist, p0=p0)
-				
-				# Get the fitted curve
-				hist_fit += gauss(bin_centres, *coeff)
-				
-				plt.plot(bin_centres, hist_fit, color='k')
-				
-				# Finally, lets get the fitting parameters, i.e. the mean and standard deviation:
-				
-				info += str("For N = " + str(j) + " \n ")
-				info += str("Count = " + str(coeff[0])+ " \n ")
-				info += str('Mean = ' + str(coeff[1])+ " \n ")
-				info += str('Sigma = ' + str(coeff[2])+ "\n \n")
-				info += ('Lower bound = ' + str(lowerz) + " \n")
-				info += ('Upper bound = ' + str(upperz) + " \n")
-				info += ('Mean = ' + str(meanz) + " \n")
-				info += ('Sigma = ' + str(sigma) + "\n \n")
-			
-		plt.annotate(info, (30, 6),  fontsize=10)
+					specificcount.sort()
+					
+					lower = int(total*0.16)
+					mid = int(total*0.5)
+					upper = int(total*0.84)
+					
+					lowerz = specificcount[lower]
+					meanz = specificcount[mid]
+					upperz = specificcount[upper]
+					sigma = (upperz-lowerz) * 0.5
+					
+					def gauss(x, A, mu, sigma):
+					    return A*np.exp(-(x-mu)**2/(2.*sigma**2))
+					
+					# p0 is the initial guess for the fitting coefficients (A, mu and sigma above)
+					p0 = [1., 26., 1.]
+					
+					coeff, var_matrix = curve_fit(gauss, reconvalues, hist, p0=p0)
+					
+					# Get the fitted curve
+					hist_fit += gauss(bin_centres, *coeff)
+					
+					plt.plot(bin_centres, hist_fit, color='k')
+					
+					# Finally, lets get the fitting parameters, i.e. the mean and standard deviation:
+					
+					info += str("For N = " + str(j) + " \n ")
+					info += str("Count = " + str(coeff[0])+ " \n ")
+					info += str('Mean = ' + str(coeff[1])+ " \n ")
+					info += str('Sigma = ' + str(coeff[2])+ "\n \n")
+					info += ('Lower bound = ' + str(lowerz) + " \n")
+					info += ('Upper bound = ' + str(upperz) + " \n")
+					info += ('Mean = ' + str(meanz) + " \n")
+					info += ('Sigma = ' + str(sigma) + "\n \n")
 			
 		if fullcount != []:
-			plt.hist(fullcount, bins=bincount, histtype='bar', range=zrange, label=labels, stacked=True)
 			
+			n, bins, _ = plt.hist(fullcount, bins=bincount, histtype='bar', range=zrange, label=labels, stacked=True)
+	
+			mid = (bins[1:] + bins[:-1])*0.5
+			errors = np.zeros(len(n[0]))
+			if len(n[0])>1:
+				for i in range(0, len(n)):
+					array = n[i]
+					old = errors
+					errors = []
+					for j in range(0, len(array)):
+						count = array[j]
+						oldcount = old[j]
+						delta = count-oldcount
+						errors.append(math.sqrt(delta))
+					
+					plt.errorbar(mid, n[i], yerr=errors, fmt='kx')
+			
+			nmax = np.amax(n)
+			
+			uplim = nmax + (math.sqrt(nmax))
+			
+			plt.ylim(0, uplim)
 		
 		plt.xlim(zrange)
 		plt.xlabel('Reconstructed Z', labelpad=0)
 		plt.title(title)
-		handles, labels = plt.subplot(nplots, 1, i).get_legend_handles_labels()	
+		handles, labels = plt.subplot(nplots, 1, i).get_legend_handles_labels()
+	
+	plt.annotate(info, (30, 2),  fontsize=10)
 	plt.suptitle('True Z reconstruction', fontsize=20)
 	plt.figlegend(handles, labels, 'upper right')
 	

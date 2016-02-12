@@ -13,11 +13,11 @@ import atmosphere as atm
 import cherenkovradius as cr
 from matplotlib.patches import Ellipse
 
-def run(eff, rowcount, mincount=4, text=False, graph=False, output="default", layout="five", number=1):
+def run(eff, rowcount, mincount=4, text=False, graph=False, output="default", layout="five", number=1, nh=1):
 	
 	#Create a subplot for the fractional abundance
 
-	ax1 = plt.subplot(211)
+	ax1 = plt.subplot(221)
 	
 	#Define number of bins, maximum Epn
 	
@@ -46,7 +46,7 @@ def run(eff, rowcount, mincount=4, text=False, graph=False, output="default", la
 		
 		Erange.append(Epn)
 		
-		weight = Epn ** (-1.7)
+		weight = Epn ** (-2.7)
 		
 		#For a given Energy, iterate over n randomly simulated events
 
@@ -102,32 +102,72 @@ def run(eff, rowcount, mincount=4, text=False, graph=False, output="default", la
 	
 	limits = [Erange[0], Erange[bincount]]
 	
-	print limits
+	mweights = np.ones_like(mT)/len(mT)
+	bweights=np.ones_like(bT)/len(bT)
+	nDCweights=np.ones_like(nDC)/len(nDC)
 	
-	#Plot the unscaled histogram
+	#Plot the histogram
 
-	plt.hist([mT, bT, nDC], bins=Erange, histtype='bar',range=limits, label=labels, stacked=True)
+	plt.hist([mT, bT, nDC], bins=Erange, log=True, histtype='bar',range=limits, label=labels)
 
 	plt.xlim(limits)
 	plt.xscale('log')
-	plt.setp(ax2.get_xticklabels(), visible=False)
-	plt.ylabel('Fractional Abundance')
-	plt.legend()
+	plt.setp(ax1.get_xticklabels(), visible=False)
+	plt.ylabel('Abundance')
 	
-	#plot the histogram scaled with E^-1.7 distribution to the second subplot
+	#plot the histogram scaled with E^-2.7 distribution to the second subplot
 	
-	ax1 = plt.subplot(212, sharex=ax2)
+	ax2 = plt.subplot(222, sharex=ax1)
 		
-	plt.hist([mT], weights=[wmT], bins=Erange, histtype='bar',range=limits, label=labels, stacked=True)
+	plt.hist([mT, bT, nDC], weights=[wmT, wbT, wnDC], log=True, bins=Erange, histtype='bar',range=limits, label=labels)
 
 	plt.xlim(limits)
 	plt.xscale('log')
 	plt.xticks(bin_centers, xlabels, rotation=90)
 	plt.xlabel('Epn', labelpad=0)
-	plt.ylabel('Normalised Adunbance')
+	plt.ylabel('Scaled Count')
 	plt.legend()
 	
-	plt.suptitle('Epn Statistics', fontsize=20)
+	ax3 = plt.subplot(212)
+	
+	rawheights=[]
+	thetamax = []
+	emin=[]
+	rmax = []
+	refractiveindex = []
+	
+	with open('atmospheredata/atmprofile.csv', 'rb') as csvfile:
+		reader = csv.reader(csvfile, delimiter=',', quotechar='|')
+		i=0
+		for row in reader:
+			i +=1
+			if i > 3:
+				height = float(row[0])*1000
+				ri = float(row[3]) + float(1)
+				theta = math.acos(float(1)/float(ri))
+				Ethreshold = cr.runemin(ri)
+				r = theta*height
+				rawheights.append(height)
+				thetamax.append(theta)
+				emin.append(Ethreshold)
+				rmax.append(r)
+				refractiveindex.append(float(row[3]))
+	
+	ax3.plot(rawheights, thetamax, label="Maximum Theta")
+	ax3.plot(rawheights, emin, label="Threshold Energy (GeV per Nucleon)")
+	ax3.plot(rawheights, rmax, label="Maximum Radius (m)")
+	ax3.plot(rawheights, refractiveindex, label="Refractive Index - 1")
+	plt.yscale('log')
+	
+	plt.xlabel('Height', labelpad=0)
+	plt.legend(loc=4)
+	
+	ax3.invert_xaxis()
+	
+	figure = plt.gcf() # get current figure
+	figure.set_size_inches(20, 15)
+	title = 'Epn Statistics for ' + str(float(nh)*float(bincount)) + " hours"
+	plt.suptitle(title, fontsize=20)
 	
 	plt.savefig('graphs/EnergyStats.pdf')
 		
