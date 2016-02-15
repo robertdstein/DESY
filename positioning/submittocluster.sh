@@ -10,7 +10,7 @@
 #          Mit "qdel job-id" kann ein Job gekillt werden.
 
 # Name of the job
-#$ -N testname 
+#$ -N testjob
 
 # runtime/ Maximale Laufzeit, hat einfluss auf die Priorität. Die Schwellen sind 2:59:59, 23:59:59, 2:59:59, 167:59:59
 #$ -l h_rt=2:59:59 
@@ -37,11 +37,11 @@
 #$ -m base
 
 # E-Mail
-#$ -M name@desy.de
+#$ -M robert.stein@desy.de
 
 # Path for/ Pfade für   stdout und stderr
-#$ -o /nfs/astrop/d1/name/cluste[[:Troubleshooting|Troubleshooting]]r_output/
-#$ -e /nfs/astrop/d1/name/cluster_output/
+#$ -o /nfs/astrop/d4/rstein/cluste[[:Troubleshooting|Troubleshooting]]r_output/
+#$ -e /nfs/astrop/d4/rstein/cluster_output/
 #
 #
 
@@ -51,9 +51,9 @@ echo "Shell Script Start"
 echo Wenn das hier ein Array-Job ist, dann ist dies die Nummer $SGE_TASK_ID
 
 echo Wenn sehr viel mit Dateien gearbeitet wird, ist es sinnvoll, sie vorher auf die Festplatte des Hosts zu kopieren (TMPDIR).
-cp /meine/daten.dat $TMPDIR
+#cp /meine/daten.dat $TMPDIR
 ./bearbeite_große_datei.py
-cp $TMPDIR/ergebnis.dat /meine/
+cp $TMPDIR/* /nfs/astrop/d4/rstein/cluster_output/
 
 export UMGEBUNGSVARIABLE='Hallo'
 #
