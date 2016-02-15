@@ -67,7 +67,7 @@ def run(graph=False):
 	
 	plt.suptitle('Radius with Height')
 	
-	plt.savefig('graphs/plotradius.pdf')
+	plt.savefig('graphs/stats/radius.pdf')
 		
 	if graph:
 		plt.show()

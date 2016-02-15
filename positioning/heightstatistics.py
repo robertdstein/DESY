@@ -45,7 +45,7 @@ def run(eff, rowcount, mincount=4, text=False, graph=False, output="default", la
 	ax1.plot(survivallengths, Rrange, label="survived")
 	ax1.plot(decaylengths, Rrange, label = "decayed")
 	plt.ylabel('Fraction')
-	plt.xlabel('Optical Length', labelpad=0)
+	plt.xlabel('Decay Length', labelpad=0)
 	plt.legend()
 	
 	ax2 = plt.subplot(322)
@@ -64,7 +64,7 @@ def run(eff, rowcount, mincount=4, text=False, graph=False, output="default", la
 				rawheights.append(float(row[0])*1000)
 	
 	ax2.plot(rawheights, opticallengths, 'r', label="Sum")
-	plt.ylabel('Optical Lengths')
+	plt.ylabel('Integrated Decay Lengths')
 	plt.yscale('log')
 	plt.xlabel('Height', labelpad=0)
 	ax2.invert_xaxis()
@@ -206,7 +206,7 @@ def run(eff, rowcount, mincount=4, text=False, graph=False, output="default", la
 	figure = plt.gcf() # get current figure
 	figure.set_size_inches(20, 15)
 	
-	plt.savefig('graphs/HeightStats.pdf')
+	plt.savefig('graphs/stats/Height.pdf')
 		
 	if graph:
 		plt.show()

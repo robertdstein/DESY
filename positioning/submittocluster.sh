@@ -1,0 +1,63 @@
+#!/bin/zsh
+# 
+
+#        This is how to submit a job to the cluster:
+#          login to a submit node, e.g. astro-wgs01.desy.de
+#          Initialize by sourcing init script: . /usr/sge/default/common/settings.sh
+#          Start using "qsub empty.sh".
+#          Als Arrawy-Job mit "qsub -t 10-100:2 empty.sh" (10 bis 100 mit Schrittweite 2)
+#          Mit "qstat" wird der Status der Jobs ausgegeben.
+#          Mit "qdel job-id" kann ein Job gekillt werden.
+
+# Name of the job
+#$ -N testname 
+
+# runtime/ Maximale Laufzeit, hat einfluss auf die Priorität. Die Schwellen sind 2:59:59, 23:59:59, 2:59:59, 167:59:59
+#$ -l h_rt=2:59:59 
+
+# Hosts/  host die benutzt werden sollen
+#$ -l hostname="!bird001.desy.de&!bird002.desy.de&!bird003.desy.de&!bird004.desy.de&!bird009.desy.de"
+
+# 32 oder 64 Bit (x86 oder amd6[[:Troubleshooting|Troubleshooting]]4) ? Es gibt mehr Hosts mit 64 Bit.
+#$ -l arch="amd64"
+
+# Stacksize/  Größe des Stacks
+#$ -l h_stack=10M 
+
+# needed memory/  Benötigter Speicher. Vorsicht: bei mehr als 2G kommt der Job in die long queue.
+#$ -l h_vmem=512M
+
+# Disk space/  Benötigter temporärer Festplattenspeicher auf dem Host .
+#$ -l h_fsize=2G
+
+# group resource for astroparticle group/ unsere Gruppe, damit haben wir Priorität auf den ASTRO-WGS-Hosts.
+#$ -P astrop
+
+# cluster sends email when:/Festlegen, wann eine E-Mail gesendet werden soll:( b bei Beginn, e bei Ende, a bei Abbruch, s bei Suspend)
+#$ -m base
+
+# E-Mail
+#$ -M name@desy.de
+
+# Path for/ Pfade für   stdout und stderr
+#$ -o /nfs/astrop/d1/name/cluste[[:Troubleshooting|Troubleshooting]]r_output/
+#$ -e /nfs/astrop/d1/name/cluster_output/
+#
+#
+
+# Ab hier beginnt das Script
+
+echo "Shell Script Start"
+echo Wenn das hier ein Array-Job ist, dann ist dies die Nummer $SGE_TASK_ID
+
+echo Wenn sehr viel mit Dateien gearbeitet wird, ist es sinnvoll, sie vorher auf die Festplatte des Hosts zu kopieren (TMPDIR).
+cp /meine/daten.dat $TMPDIR
+./bearbeite_große_datei.py
+cp $TMPDIR/ergebnis.dat /meine/
+
+export UMGEBUNGSVARIABLE='Hallo'
+#
+cd /der/Pfad/wo/der/job/arbeiten/soll
+./rechne.py
+
+echo "Shell Script End"

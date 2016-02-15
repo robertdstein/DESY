@@ -9,9 +9,10 @@ import plotposition as pp
 import plotepn as pe
 import plotangle as pa
 import plotheight as ph
-import plotstatistics as ps
-import plotradius as pr
+import epnstatistics as es
+import radiusstatistics as rs
 import heightstatistics as hs
+import lightstatistics as ls
 
 parser = argparse.ArgumentParser(description='Create a canvas for positions of telescopes')
 parser.add_argument("-o", "--orientation", default="five")
@@ -25,9 +26,10 @@ parser.add_argument("-t", "--text", action="store_true")
 parser.add_argument("-e", "--email", action="store_true")
 parser.add_argument("-p", "--plot", action="store_true")
 parser.add_argument("-pa", "--plotangle", action="store_true")
-parser.add_argument("-ps", "--plotstatistics", action="store_true")
-parser.add_argument("-pr", "--plotradius", action="store_true")
-parser.add_argument("-hs", "--plotheightstatistics", action="store_true")
+parser.add_argument("-es", "--epnstatistics", action="store_true")
+parser.add_argument("-rs", "--radiusstatistics", action="store_true")
+parser.add_argument("-hs", "--heightstatistics", action="store_true")
+parser.add_argument("-ls", "--lightstatistics", action="store_true")
 parser.add_argument("-nh", "--numberofhours", default=1)
 parser.add_argument("-rgw", "--reconstructiongridwidth", default=13)
 cfg = parser.parse_args()
@@ -62,14 +64,17 @@ if cfg.plot:
 if cfg.plotangle:
 	pa.run(cfg.reconstructdata, rowcount, int(cfg.mincount), cfg.graph)	
 
-if cfg.plotradius:
-	pr.run(cfg.graph)
+if cfg.radiusstatistics:
+	rs.run(cfg.graph)
 	
-if cfg.plotstatistics:
-	ps.run(eff, rowcount, mincount=cfg.mincount, text=cfg.text, graph=cfg.graph, output=cfg.sourcedata, layout=cfg.orientation, number = n, nh=cfg.numberofhours)
+if cfg.epnstatistics:
+	es.run(eff, rowcount, mincount=cfg.mincount, text=cfg.text, graph=cfg.graph, output=cfg.sourcedata, layout=cfg.orientation, number = n, nh=cfg.numberofhours)
 	
-if cfg.plotheightstatistics:
+if cfg.heightstatistics:
 	hs.run(eff, rowcount, mincount=cfg.mincount, text=cfg.text, graph=cfg.graph, output=cfg.sourcedata, layout=cfg.orientation, number = n, nh=cfg.numberofhours)
+	
+if cfg.lightstatistics:
+	ls.run(eff, rowcount, mincount=cfg.mincount, text=cfg.text, graph=cfg.graph, output=cfg.sourcedata, layout=cfg.orientation, number = n, nh=cfg.numberofhours)
 
 if cfg.email:
 	message = str(time.asctime(time.localtime())) + " Completed simulation of " + str(n) + " events!"

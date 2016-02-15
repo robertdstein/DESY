@@ -117,7 +117,7 @@ def run(eff, rowcount, mincount=4, text=False, graph=False, output="default", la
 	
 	#plot the histogram scaled with E^-2.7 distribution to the second subplot
 	
-	ax2 = plt.subplot(222, sharex=ax1)
+	ax2 = plt.subplot(223, sharex=ax1)
 		
 	plt.hist([mT, bT, nDC], weights=[wmT, wbT, wnDC], log=True, bins=Erange, histtype='bar',range=limits, label=labels)
 
@@ -128,13 +128,11 @@ def run(eff, rowcount, mincount=4, text=False, graph=False, output="default", la
 	plt.ylabel('Scaled Count')
 	plt.legend()
 	
-	ax3 = plt.subplot(212)
+	ax3 = plt.subplot(122)
 	
 	rawheights=[]
-	thetamax = []
 	emin=[]
 	rmax = []
-	refractiveindex = []
 	
 	with open('atmospheredata/atmprofile.csv', 'rb') as csvfile:
 		reader = csv.reader(csvfile, delimiter=',', quotechar='|')
@@ -145,31 +143,27 @@ def run(eff, rowcount, mincount=4, text=False, graph=False, output="default", la
 				height = float(row[0])*1000
 				ri = float(row[3]) + float(1)
 				theta = math.acos(float(1)/float(ri))
-				Ethreshold = cr.runemin(ri)
+				Ethreshold = float(cr.runemin(ri))*(10**-3)
 				r = theta*height
 				rawheights.append(height)
-				thetamax.append(theta)
 				emin.append(Ethreshold)
 				rmax.append(r)
-				refractiveindex.append(float(row[3]))
 	
-	ax3.plot(rawheights, thetamax, label="Maximum Theta")
-	ax3.plot(rawheights, emin, label="Threshold Energy (GeV per Nucleon)")
-	ax3.plot(rawheights, rmax, label="Maximum Radius (m)")
-	ax3.plot(rawheights, refractiveindex, label="Refractive Index - 1")
-	plt.yscale('log')
+	ax3.plot(emin,rawheights,  label="Threshold Energy (TeV per Nucleon)")
+	ax3.plot(rmax, rawheights, label="Maximum Radius (m)")
+	plt.xscale('log')
 	
-	plt.xlabel('Height', labelpad=0)
-	plt.legend(loc=4)
+	plt.ylabel('Height', labelpad=0)
+	plt.legend(loc=2)
 	
-	ax3.invert_xaxis()
+	print "Maximum Radius is", max(rmax)
 	
 	figure = plt.gcf() # get current figure
 	figure.set_size_inches(20, 15)
 	title = 'Epn Statistics for ' + str(float(nh)*float(bincount)) + " hours"
 	plt.suptitle(title, fontsize=20)
 	
-	plt.savefig('graphs/EnergyStats.pdf')
+	plt.savefig('graphs/stats/Energy.pdf')
 		
 	if graph:
 		plt.show()
