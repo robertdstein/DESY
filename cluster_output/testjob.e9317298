@@ -1,0 +1,9 @@
+/scratch/sge/default/spool/bird650/job_scripts/9317298:53: no matches found: (TMPDIR).
+Traceback (most recent call last):
+  File "/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/execute.py", line 32, in <module>
+    s.run(eff, rowcount, mincount=mincount, text=False, graph=False, output=sourcedata, layout=orientation, number = n)
+  File "/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/simulate.py", line 25, in run
+    entry, entrytype = lt.run(layout, rayxpos, rayypos, epsilon, rayradius, Epn, Z, height, phi, theta, mincount, eff, metThreshold, graph, text)
+  File "/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/looptelescopes.py", line 39, in run
+    with open("orientations/"+ layout +".csv", 'rb') as csvfile:
+IOError: [Errno 2] No such file or directory: 'orientations/five.csv'

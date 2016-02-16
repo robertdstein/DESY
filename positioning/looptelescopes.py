@@ -36,7 +36,7 @@ def run(layout, rayxpos, rayypos, epsilon, rayradius, Epn, Z, height, phi, theta
 		print "Rayradius is", rayradius
 
 	if rayradius > 0:
-		with open("orientations/"+ layout +".csv", 'rb') as csvfile:
+		with open("/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/orientations/"+ layout +".csv", 'rb') as csvfile:
 			reader = csv.reader(csvfile, delimiter=',', quotechar='|')
 
 			for row in reader:
