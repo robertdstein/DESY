@@ -1,0 +1,7 @@
+Shell Script Start
+Wenn das hier ein Array-Job ist, dann ist dies die Nummer undefined
+Tue Feb 16 13:06:44 2016 Cosmic Ray Iron Flux is 0.00025 Simulated Area is 90000 Field of View is 0.0872664625997 Detected Flux is 1.96349540849
+Tue Feb 16 13:06:44 2016 Rate per hour 7068.58347058 Simulated Hours 0.01 Simulated Events 70
+Tue Feb 16 13:06:44 2016 In total there were 70 Simulated Events. Of these 51 did not produce Cherenkov Light.
+Tue Feb 16 13:06:44 2016 A further 18 Events produced Cherenkov Light below Threshold, leaving 1 accepted events.
+[0.0, 0.0, 1219.1000784400001, 'lst', '2.79169911152', '1.7629007062', 60.0, 60.0, 760.30762588200002, 'mst', '4.61100538863', '0.927471277627', 60.0, -60.0, 92.1866939035, 'mst', '3.42297144914', 'None', -60.0, 60.0, 264.606518687, 'mst', '1.63133806703', 'None', -60.0, -60.0, 62.935010976999997, 'mst', '2.54137287602', 'None', '23.4025772087', '64.0615350848', '847.200923085', '26', '34291.9034729', 4, '1.71459717658', '5.14382548308']
