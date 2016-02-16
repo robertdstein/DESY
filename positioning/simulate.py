@@ -28,7 +28,7 @@ def run(eff, rowcount, mincount=4, text=False, graph=False, output="default", la
 				metThreshold += 1
 				for i in range(0, rowcount):
 					if text:
-						print i, entry[i]
+						print entry[i]
 					writer.writerow(entry[i])
 			elif entrytype == "belowThreshold":
 				belowThreshold += 1

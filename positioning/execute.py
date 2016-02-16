@@ -5,7 +5,7 @@ import simulate as s
 import batchprocessing as bp
 #~ import batchreconstruction as br
 
-numberofhours = 0.01
+numberofhours = 1
 orientation="five"
 sourcedata="default"
 processdata="process"
@@ -29,8 +29,8 @@ with open("/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/orientations/
 	for row in reader:
 		rowcount +=1
 
-s.run(eff, rowcount, mincount=mincount, text=False, graph=False, output=sourcedata, layout=orientation, number = n)
-bp.run(sourcedata, processdata, int(mincount), rowcount, text=False)
+s.run(eff, rowcount, mincount=mincount, text=True, graph=False, output=sourcedata, layout=orientation, number = n)
+bp.run(sourcedata, processdata, int(mincount), rowcount, text=True)
 #~ br.run(processdata, reconstructdata, rowcount, reconstructiongridwidth, eff)
 
 message = str(time.asctime(time.localtime())) + " Completed simulation of " + str(n) + " events!"

@@ -34,7 +34,7 @@
 #$ -P astrop
 
 # cluster sends email when:/Festlegen, wann eine E-Mail gesendet werden soll:( b bei Beginn, e bei Ende, a bei Abbruch, s bei Suspend)
-#$ -m base
+#$ -m as
 
 # E-Mail
 #$ -M robert.stein@desy.de

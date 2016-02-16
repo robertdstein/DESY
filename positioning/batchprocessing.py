@@ -8,11 +8,12 @@ def run(source, outputfile, mincount, detectorcount, text=False):
 		writer = csv.writer(csvout, delimiter=',', quotechar='|')
 		header = []
 		for i in range (1, detectorcount + 1):
-			header.append("x"+str(i))
-			header.append("y"+str(i))
-			header.append("Count"+str(i))
-			header.append("telescope"+str(i))
-			header.append("Dangle"+str(i))
+			header.append("x "+str(i))
+			header.append("y "+str(i))
+			header.append("Count "+str(i))
+			header.append("Telescope "+str(i))
+			header.append("Dangle "+str(i))
+			header.append("Altitude "+str(i))
 		header.append("True X")
 		header.append("True Y")
 		header.append("True Energy Per Nucleon")
@@ -64,8 +65,7 @@ def run(source, outputfile, mincount, detectorcount, text=False):
 							pass
 						
 					if j == detectorcount:
-						if text:
-							print "Total detections:", detections
+						
 						if detections >= float(mincount):
 							a += [truex]
 							a += [truey]
@@ -77,6 +77,8 @@ def run(source, outputfile, mincount, detectorcount, text=False):
 							a += [epsilon]
 							
 							writer.writerow(a)
+							if text:
+								print a
 						a=[]
 						detections=0
 						j = 0
