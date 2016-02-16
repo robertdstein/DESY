@@ -2,7 +2,7 @@ import numpy as np
 import csv, math
 
 def runindex(height, text=False):
-	with open('atmospheredata/atmprofile.csv', 'rb') as csvfile:
+	with open('/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/atmospheredata/atmprofile.csv', 'rb') as csvfile:
 		reader = csv.reader(csvfile, delimiter=',', quotechar='|')
 		i=0
 		
@@ -33,7 +33,7 @@ def runindex(height, text=False):
 		return ri
 
 def runheight(prob, text=False):
-	with open('atmospheredata/atmprofile.csv', 'rb') as csvfile:
+	with open('/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/atmospheredata/atmprofile.csv', 'rb') as csvfile:
 		reader = csv.reader(csvfile, delimiter=',', quotechar='|')
 		i=0
 		h=30000
