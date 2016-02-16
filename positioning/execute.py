@@ -1,10 +1,3 @@
-import argparse, math, random, time
-import csv
-import numpy as np
-import simulate as s
-import batchprocessing as bp
-import batchreconstruction as br
-
 numberofhours = 0.01
 orientation="five"
 sourcedata="default"
@@ -22,6 +15,13 @@ rateperhour = detectedflux * 60 * 60
 n = int(rateperhour*float(numberofhours))
 print time.asctime(time.localtime()),"Cosmic Ray Iron Flux is", flux, "Simulated Area is", area, "Field of View is", solidangle, "Detected Flux is", detectedflux
 print time.asctime(time.localtime()),"Rate per hour", rateperhour, "Simulated Hours", numberofhours, "Simulated Events", n 
+
+import argparse, math, random, time
+import csv
+import numpy as np
+import simulate as s
+import batchprocessing as bp
+import batchreconstruction as br
 
 with open("orientations/"+ cfg.orientation +".csv", 'rb') as csvfile:
 	reader = csv.reader(csvfile, delimiter=',', quotechar='|')
