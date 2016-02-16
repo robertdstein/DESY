@@ -1,5 +1,0 @@
-/scratch/sge/default/spool/bird643/job_scripts/9316302:53: no matches found: (TMPDIR).
-Traceback (most recent call last):
-  File "/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/execute.py", line 12, in <module>
-    solidangle = math.radians(5)
-NameError: name 'math' is not defined

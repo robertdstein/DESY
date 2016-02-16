@@ -1,5 +1,0 @@
-/scratch/sge/default/spool/bird643/job_scripts/9316448:53: no matches found: (TMPDIR).
-Traceback (most recent call last):
-  File "/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/execute.py", line 26, in <module>
-    with open("orientations/"+ cfg.orientation +".csv", 'rb') as csvfile:
-NameError: name 'cfg' is not defined

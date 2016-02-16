@@ -10,7 +10,7 @@ import telescoperadius as tr
 import looptelescopes as lt
 
 def run(eff, rowcount, mincount=4, text=False, graph=False, output="default", layout="five", number=1):
-	with open("output/" + output + ".csv", 'wb') as csvout:
+	with open("/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/output/" + output + ".csv", 'wb') as csvout:
 		writer = csv.writer(csvout, delimiter=',', quotechar='|')
 		writer.writerow(["Event Number", "Category", "Xpos", "Ypos", "Smeared Count", "True X", "True Y", "True Energy per Nucleon", "True Z", "True Height", "Phi", "Epsilon", "Trigger", "Dangle", "Theta", "Background"])
 		
