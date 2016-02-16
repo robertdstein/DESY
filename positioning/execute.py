@@ -1,3 +1,5 @@
+#!/bin/env python
+
 import argparse, math, random, time
 import csv
 import numpy as np

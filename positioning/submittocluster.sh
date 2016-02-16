@@ -50,5 +50,5 @@
 echo "Shell Script Start"
 echo Wenn das hier ein Array-Job ist, dann ist dies die Nummer $SGE_TASK_ID
 
-python /afs/desy.de/user/s/steinrob/Documents/DESY/positioning/execute.py
+./afs/desy.de/user/s/steinrob/Documents/DESY/positioning/execute.py
 #cp $TMPDIR/* /afs/desy.de/user/s/steinrob/Documents/DESY/cluster_output
