@@ -1,7 +1,0 @@
-/scratch/sge/default/spool/bird650/job_scripts/9317573:53: no matches found: (TMPDIR).
-Traceback (most recent call last):
-  File "/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/execute.py", line 33, in <module>
-    bp.run(sourcedata, processdata, int(mincount), rowcount, text=False)
-  File "/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/batchprocessing.py", line 7, in run
-    with open("data/" + str(outputfile) + ".csv", 'wb') as csvout:
-IOError: [Errno 2] No such file or directory: 'data/process.csv'
