@@ -1,4 +1,4 @@
-#!/bin/env python
+#!/bin/env pythonw
 
 import argparse, math, random, time
 import csv
