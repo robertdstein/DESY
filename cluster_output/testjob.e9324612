@@ -1,0 +1,11 @@
+/scratch/sge/default/spool/bird620/job_scripts/9324612:53: no matches found: (TMPDIR).
+Traceback (most recent call last):
+  File "/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/execute.py", line 6, in <module>
+    import batchreconstruction as br
+  File "/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/batchreconstruction.py", line 4, in <module>
+    import minimise as m
+  File "/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/minimise.py", line 11, in <module>
+    import loglikelihood as ll
+  File "/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/loglikelihood.py", line 5, in <module>
+    from iminuit import Minuit
+ImportError: No module named iminuit

@@ -2,13 +2,11 @@ import array, math
 
 import time
 import numpy as np
-from iminuit import Minuit
 import lightdensity as ld
 import countsimulation as cs
 import cherenkovradius as cr
 import calculateellipse as ce
 import telescoperadius as tr
-import scipy.optimize
 
 def expected(x,y,Epn,Z, height, x0,y0, category, eff, phi, epsilon):
 	
