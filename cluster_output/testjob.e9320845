@@ -1,0 +1,11 @@
+/scratch/sge/default/spool/bird650/job_scripts/9320845:53: no matches found: (TMPDIR).
+Traceback (most recent call last):
+  File "/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/execute.py", line 32, in <module>
+    s.run(eff, rowcount, mincount=mincount, text=True, graph=False, output=sourcedata, layout=orientation, number = n)
+  File "/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/simulate.py", line 23, in run
+    rayxpos, rayypos, epsilon, rayradius, Epn, Z, height, phi, theta = g.run(text=text)
+  File "/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/generate.py", line 39, in run
+    radius, theta = cr.run(Epn, height, math.sin(phi), text=text)
+  File "/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/cherenkovradius.py", line 16, in run
+    print "Gamma", gamma
+NameError: global name 'gamma' is not defined
