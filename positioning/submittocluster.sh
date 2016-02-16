@@ -52,7 +52,7 @@ echo Wenn das hier ein Array-Job ist, dann ist dies die Nummer $SGE_TASK_ID
 
 echo Wenn sehr viel mit Dateien gearbeitet wird, ist es sinnvoll, sie vorher auf die Festplatte des Hosts zu kopieren (TMPDIR).
 
-/afs/desy.de/user/s/steinrob/Documents/DESY/execute.py
+/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/execute.py
 #cp $TMPDIR/* /afs/desy.de/user/s/steinrob/Documents/DESY/cluster_output
 
 echo "Shell Script End"
