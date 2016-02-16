@@ -1,7 +1,6 @@
 import argparse, math, random, time
 import csv
 import numpy as np
-import matplotlib.pyplot as plt
 import generate as g
 import lightdensity as ld
 import calculatearea as ca
@@ -9,7 +8,6 @@ import calculateellipse as ce
 import countsimulation as cs
 import telescoperadius as tr
 import looptelescopes as lt
-from matplotlib.patches import Ellipse
 
 def run(eff, rowcount, mincount=4, text=False, graph=False, output="default", layout="five", number=1):
 	with open("output/" + output + ".csv", 'wb') as csvout:

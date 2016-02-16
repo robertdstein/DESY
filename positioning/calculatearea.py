@@ -1,5 +1,4 @@
 import math
-import matplotlib.pyplot as plt
 
 def circleoverlap(tradius, rayradius, distance):
 	d=distance

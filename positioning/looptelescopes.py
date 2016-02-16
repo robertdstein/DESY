@@ -1,14 +1,12 @@
 import argparse, math, random, time
 import csv
 import numpy as np
-import matplotlib.pyplot as plt
 import generate as g
 import lightdensity as ld
 import calculatearea as ca
 import calculateellipse as ce
 import countsimulation as cs
 import telescoperadius as tr
-from matplotlib.patches import Ellipse		
 				
 def run(layout, rayxpos, rayypos, epsilon, rayradius, Epn, Z, height, phi, theta, mincount, eff, metThreshold=0, graph=False, text=False):
 	
@@ -16,14 +14,11 @@ def run(layout, rayxpos, rayypos, epsilon, rayradius, Epn, Z, height, phi, theta
 	
 	entry = []
 	entrytype = ""
-	
-	if graph:
-		fig = plt.figure()
-	
-	else:
-		fig=None
 
 	if graph:
+		import matplotlib.pyplot as plt
+		from matplotlib.patches import Ellipse		
+		fig = plt.figure()
 		ra, rp, major, minor, e = ce.coeff(rayradius, theta, phi, epsilon)
 		distance = 0.5*(ra - rp)
 		xcentre = rayxpos - (distance*math.sin(epsilon))
@@ -33,6 +28,8 @@ def run(layout, rayxpos, rayypos, epsilon, rayradius, Epn, Z, height, phi, theta
 		fig.gca().add_artist(ring)
 		fig.gca().plot(rayxpos,rayypos, 'wx')
 		fig.gca().plot(xcentre,ycentre, 'rx')
+	else:
+		fig=None
 	
 	if text:
 		print "Cosmic Ray centre at", rayxpos, rayypos

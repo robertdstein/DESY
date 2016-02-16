@@ -4,15 +4,6 @@ import numpy as np
 import simulate as s
 import batchprocessing as bp
 import batchreconstruction as br
-import plotz as pz
-import plotposition as pp
-import plotepn as pe
-import plotangle as pa
-import plotheight as ph
-import epnstatistics as es
-import radiusstatistics as rs
-import heightstatistics as hs
-import lightstatistics as ls
 
 numberofhours = 0.01
 orientation="five"
