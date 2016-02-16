@@ -40,8 +40,8 @@
 #$ -M robert.stein@desy.de
 
 # Path for/ Pfade für   stdout und stderr
-#$ -o /nfs/astrop/d4/rstein/cluste[[:Troubleshooting|Troubleshooting]]r_output/
-#$ -e /nfs/astrop/d4/rstein/cluster_output/
+#$ -o /afs/desy.de/user/s/steinrob/Documents/DESY/cluster_output
+#$ -e /afs/desy.de/user/s/steinrob/Documents/DESY/cluster_output
 #
 #
 
@@ -51,13 +51,8 @@ echo "Shell Script Start"
 echo Wenn das hier ein Array-Job ist, dann ist dies die Nummer $SGE_TASK_ID
 
 echo Wenn sehr viel mit Dateien gearbeitet wird, ist es sinnvoll, sie vorher auf die Festplatte des Hosts zu kopieren (TMPDIR).
-#cp /meine/daten.dat $TMPDIR
-./bearbeite_große_datei.py
-cp $TMPDIR/* /nfs/astrop/d4/rstein/cluster_output/
 
-export UMGEBUNGSVARIABLE='Hallo'
-#
-cd /der/Pfad/wo/der/job/arbeiten/soll
-./rechne.py
+/d4/rstein/DESY/positioning/execute.py
+#cp $TMPDIR/* /afs/desy.de/user/s/steinrob/Documents/DESY/cluster_output
 
 echo "Shell Script End"

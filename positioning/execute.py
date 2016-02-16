@@ -14,15 +14,23 @@ import radiusstatistics as rs
 import heightstatistics as hs
 import lightstatistics as ls
 
+numberofhours = 0.01
+orientation="five")
+sourcedata="default"
+processdata="process"
+reconstructdata="reconstructed"
+mincount=4
+reconstructiongridwidth=13
+
 eff = 0.06
 flux = 2.5 * (10**-4)
 area = 300**2
 solidangle = math.radians(5)
 detectedflux = flux*area*solidangle
 rateperhour = detectedflux * 60 * 60
-n = int(rateperhour*float(cfg.numberofhours))
+n = int(rateperhour*float(numberofhours))
 print time.asctime(time.localtime()),"Cosmic Ray Iron Flux is", flux, "Simulated Area is", area, "Field of View is", solidangle, "Detected Flux is", detectedflux
-print time.asctime(time.localtime()),"Rate per hour", rateperhour, "Simulated Hours", cfg.numberofhours, "Simulated Events", n 
+print time.asctime(time.localtime()),"Rate per hour", rateperhour, "Simulated Hours", numberofhours, "Simulated Events", n 
 
 with open("orientations/"+ cfg.orientation +".csv", 'rb') as csvfile:
 	reader = csv.reader(csvfile, delimiter=',', quotechar='|')
@@ -30,9 +38,9 @@ with open("orientations/"+ cfg.orientation +".csv", 'rb') as csvfile:
 	for row in reader:
 		rowcount +=1
 
-s.run(eff, rowcount, mincount=cfg.mincount, text=cfg.text, graph=cfg.graph, output=cfg.sourcedata, layout=cfg.orientation, number = n)
-bp.run(cfg.sourcedata, cfg.processdata, int(cfg.mincount), rowcount, text=cfg.text)
-br.run(cfg.processdata, cfg.reconstructdata, rowcount, cfg.reconstructiongridwidth, eff)
+s.run(eff, rowcount, mincount=mincount, text=False, graph=False, output=sourcedata, layout=orientation, number = n)
+bp.run(sourcedata, processdata, int(mincount), rowcount, text=False)
+br.run(processdata, reconstructdata, rowcount, reconstructiongridwidth, eff)
 
 message = str(time.asctime(time.localtime())) + " Completed simulation of " + str(n) + " events!"
 print message
