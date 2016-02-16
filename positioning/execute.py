@@ -15,7 +15,7 @@ import heightstatistics as hs
 import lightstatistics as ls
 
 numberofhours = 0.01
-orientation="five")
+orientation="five"
 sourcedata="default"
 processdata="process"
 reconstructdata="reconstructed"
