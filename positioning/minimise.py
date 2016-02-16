@@ -2,7 +2,7 @@ import array, math
 
 import time
 import numpy as np
-import minuit
+#~ from iminuit import Minuit
 import lightdensity as ld
 import calculatearea as ca
 import cherenkovradius as cr
