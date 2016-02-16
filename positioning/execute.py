@@ -3,7 +3,7 @@ import csv
 import numpy as np
 import simulate as s
 import batchprocessing as bp
-#~ import batchreconstruction as br
+import batchreconstruction as br
 
 numberofhours = 1
 orientation="five"
