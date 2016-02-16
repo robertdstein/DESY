@@ -1,3 +1,10 @@
+import argparse, math, random, time
+import csv
+import numpy as np
+import simulate as s
+import batchprocessing as bp
+#~ import batchreconstruction as br
+
 numberofhours = 0.01
 orientation="five"
 sourcedata="default"
@@ -16,13 +23,6 @@ n = int(rateperhour*float(numberofhours))
 print time.asctime(time.localtime()),"Cosmic Ray Iron Flux is", flux, "Simulated Area is", area, "Field of View is", solidangle, "Detected Flux is", detectedflux
 print time.asctime(time.localtime()),"Rate per hour", rateperhour, "Simulated Hours", numberofhours, "Simulated Events", n 
 
-import argparse, math, random, time
-import csv
-import numpy as np
-import simulate as s
-import batchprocessing as bp
-import batchreconstruction as br
-
 with open("orientations/"+ cfg.orientation +".csv", 'rb') as csvfile:
 	reader = csv.reader(csvfile, delimiter=',', quotechar='|')
 	rowcount = 0
@@ -31,7 +31,7 @@ with open("orientations/"+ cfg.orientation +".csv", 'rb') as csvfile:
 
 s.run(eff, rowcount, mincount=mincount, text=False, graph=False, output=sourcedata, layout=orientation, number = n)
 bp.run(sourcedata, processdata, int(mincount), rowcount, text=False)
-br.run(processdata, reconstructdata, rowcount, reconstructiongridwidth, eff)
+#~ br.run(processdata, reconstructdata, rowcount, reconstructiongridwidth, eff)
 
 message = str(time.asctime(time.localtime())) + " Completed simulation of " + str(n) + " events!"
 print message
