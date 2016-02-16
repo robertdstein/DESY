@@ -37,4 +37,4 @@ message = str(time.asctime(time.localtime())) + " Completed simulation of " + st
 import os, sys
 import sendemail as se
 name = os.path.basename(__file__)
-se.send(name, message, text=False)
+se.send(name, message, False)
