@@ -7,7 +7,7 @@ import simulate as s
 import batchprocessing as bp
 import batchreconstruction as br
 
-numberofhours = 1
+numberofhours = 0.01
 orientation="five"
 sourcedata="default"
 processdata="process"
