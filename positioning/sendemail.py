@@ -9,7 +9,7 @@ me = "rsteinpython@gmail.com"
 you = "rstein_codealerts@outlook.com"
 you = me
 
-def send(codename, trace=None):
+def send(codename, message=None, text=True):
     # Create message container - the correct MIME type is multipart/alternative.
     msg = MIMEMultipart('alternative')
     msg['Subject'] = "Python Code Update - " + codename
@@ -27,7 +27,7 @@ def send(codename, trace=None):
             Now go and do somthing else.
             </p>
             <p> Additional Information...<br>
-            """ + str(trace) + """</p>
+            """ + str(message) + """</p>
         </body>
     </html>
     """
@@ -51,8 +51,9 @@ def send(codename, trace=None):
     mail.login('rsteinpython@gmail.com', 'pythonscripts')
     mail.sendmail(me, you, msg.as_string())
     mail.quit()
-
-    print time.asctime(time.localtime()), "Email notification sent to", you
+    
+    if text:
+		print time.asctime(time.localtime()), "Email notification sent to", you
 
 
 #INCLUDE AT THE END OF A SCRIPT WITH CUSTOMISED MESSAGE 

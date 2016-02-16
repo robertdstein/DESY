@@ -34,8 +34,7 @@ bp.run(sourcedata, processdata, int(mincount), rowcount, text=True)
 #~ br.run(processdata, reconstructdata, rowcount, reconstructiongridwidth, eff)
 
 message = str(time.asctime(time.localtime())) + " Completed simulation of " + str(n) + " events!"
-print message
 import os, sys
 import sendemail as se
 name = os.path.basename(__file__)
-se.send(name, message)
+se.send(name, message, text=False)
