@@ -8,8 +8,9 @@ import calculateellipse as ce
 import countsimulation as cs
 import telescoperadius as tr
 import looptelescopes as lt
+import atmosphere as atm
 
-def run(eff, rowcount, mincount=4, text=False, graph=False, output="default", layout="five", number=1):
+def run(raweff, rowcount, mincount=4, text=False, graph=False, output="default", layout="five", number=1):
 	with open("/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/output/" + output + ".csv", 'wb') as csvout:
 		writer = csv.writer(csvout, delimiter=',', quotechar='|')
 		writer.writerow(["Event Number", "Category", "Xpos", "Ypos", "Smeared Count", "True X", "True Y", "True Energy per Nucleon", "True Z", "True Height", "Phi", "Epsilon", "Trigger", "Dangle", "Theta", "Background"])
@@ -21,6 +22,10 @@ def run(eff, rowcount, mincount=4, text=False, graph=False, output="default", la
 		for i in range (0, int(number)):
 			
 			rayxpos, rayypos, epsilon, rayradius, Epn, Z, height, phi, theta = g.run(text=text)
+			
+			frac = atm.runabsorption(height)
+	
+			eff = raweff*frac/math.sin(phi)
 			
 			entry, entrytype = lt.run(layout, rayxpos, rayypos, epsilon, rayradius, Epn, Z, height, phi, theta, mincount, eff, metThreshold, graph, text)
 					

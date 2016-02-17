@@ -70,3 +70,34 @@ def runlengths(prob):
 	lengths = -scale*(math.log(1-prob))
 	return lengths
 	
+def runabsorption(height, text=False):
+	with open('/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/atmospheredata/atmprofile.csv', 'rb') as csvfile:
+		reader = csv.reader(csvfile, delimiter=',', quotechar='|')
+		i=0
+		
+		currenth=0
+		currentb=0
+		
+		b = 0
+		frac = 1
+		
+		for row in reader:
+			i +=1
+			if i > 3:
+				previousb = currentb
+				currentb = float(row[7])
+				previoush = currenth
+				currenth = float(row[0])*1000
+				if currenth < height:
+					pass
+				else:
+					gradient = (float(currentb)-float(previousb))/(float(currenth)-float(previoush))
+					deltah = height - currenth
+					
+					b = currentb + (deltah*gradient)
+					
+					frac = math.e**-b
+					
+					return frac
+		return frac
+	

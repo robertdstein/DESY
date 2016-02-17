@@ -199,13 +199,27 @@ def run(eff, rowcount, mincount=4, text=False, graph=False, output="default", la
 	
 	ax6.invert_xaxis()
 	
-	title = 'Height Statistics for ' + str(nh) + " hours"
-	
-	plt.suptitle(title, fontsize=20)
-	
 	figure = plt.gcf() # get current figure
 	figure.set_size_inches(20, 15)
 	
+	#~ extent = ax1.get_window_extent().transformed(figure.dpi_scale_trans.inverted())
+	#~ plt.savefig('decay.png', bbox_inches=extent.expanded(1.2, 1.2))
+	#~ 
+	#~ extent = ax2.get_window_extent().transformed(figure.dpi_scale_trans.inverted())
+	#~ plt.savefig('Decay Lengths.pdf', bbox_inches=extent.expanded(1.2, 1.2))
+	#~ 
+	#~ extent = ax3.get_window_extent().transformed(figure.dpi_scale_trans.inverted())
+	#~ plt.savefig('Fraction with Height.pdf', bbox_inches=extent.expanded(1.2, 1.2))
+	#~ 
+	#~ extent = ax4.get_window_extent().transformed(figure.dpi_scale_trans.inverted())
+	#~ plt.savefig('first interaction height.pdf', bbox_inches=extent.expanded(1.2, 1.2))
+	#~ 
+	#~ extent = ax5.get_window_extent().transformed(figure.dpi_scale_trans.inverted())
+	#~ plt.savefig('interaction category.pdf', bbox_inches=extent.expanded(1.2, 1.2))
+	
+	title = 'Height Statistics for ' + str(nh) + " hours"
+	
+	plt.suptitle(title, fontsize=20)
 	plt.savefig('graphs/stats/Height.pdf')
 		
 	if graph:

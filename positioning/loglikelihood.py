@@ -7,11 +7,16 @@ import countsimulation as cs
 import cherenkovradius as cr
 import calculateellipse as ce
 import telescoperadius as tr
+import atmosphere as atm
 
-def expected(x,y,Epn,Z, height, x0,y0, category, eff, phi, epsilon):
+def expected(x,y,Epn,Z, height, x0,y0, category, raweff, phi, epsilon):
 	
 	rayradius, theta = cr.run(Epn, height, math.sin(phi))
 	tradius = tr.run(category)
+	
+	frac = atm.runabsorption(height)
+	
+	eff = raweff*frac/math.sin(phi)
 	
 	if rayradius > 0:
 		r, dangle = ce.run(rayradius, theta, phi, epsilon, x0, y0, x, y)

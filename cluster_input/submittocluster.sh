@@ -50,8 +50,8 @@
 echo "Shell Script Start"
 
 echo $PATH
-echo PYTHONPATH
-echo Wenn das hier ein Array-Job ist, dann ist dies die Nummer $SGE_TASK_ID
+echo $PYTHONPATH
+echo Wenn das hier ein Array-Job ist, dann ist dies die Nummer 
 
-python /afs/desy.de/user/s/steinrob/Documents/DESY/positioning/execute.py
+python /afs/desy.de/user/s/steinrob/Documents/DESY/cluster_input/execute$SGE_TASK_ID.py
 #cp $TMPDIR/* /afs/desy.de/user/s/steinrob/Documents/DESY/cluster_output

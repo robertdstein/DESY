@@ -80,7 +80,7 @@ def run(layout, rayxpos, rayypos, epsilon, rayradius, Epn, Z, height, phi, theta
 						print "Photon Count is", count, "smeared to", recorded
 						print "Signal accounts for", sigcount, "Background accounts for", bkgcount	
 				
-				if float(recondensity) > float(threshold):
+				if float(sigcount) > 0:
 					j+=1
 					Trigger=True
 					if text:

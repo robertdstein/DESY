@@ -1,4 +1,13 @@
-#!/bin/env pythonw
+#!/bin/env python
+
+n = 0
+
+import initialise as i
+numberofhours, mincount, reconstructiongridwidth, orientation, eff, flux, area, solidangle = i.run()
+
+import sys
+
+sys.path.append('/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/')
 
 import argparse, math, random, time
 import csv
@@ -7,19 +16,12 @@ import simulate as s
 import batchprocessing as bp
 import batchreconstruction as br
 
-numberofhours = 0.01
-orientation="five"
-sourcedata="default"
-processdata="process"
-reconstructdata="reconstructed"
-mincount=4
-reconstructiongridwidth=13
+sourcedata="executedefault" + str(n)
+processdata="executeprocess" + str(n)
+reconstructdata="executereconstructed" + str(n)
 
-eff = 0.06
-flux = 2.5 * (10**-4)
-area = 300**2
-solidangle = math.radians(5)
-detectedflux = flux*area*solidangle
+
+detectedflux = float(flux)*float(area)*float(solidangle)
 rateperhour = detectedflux * 60 * 60
 n = int(rateperhour*float(numberofhours))
 print time.asctime(time.localtime()),"Cosmic Ray Iron Flux is", flux, "Simulated Area is", area, "Field of View is", solidangle, "Detected Flux is", detectedflux

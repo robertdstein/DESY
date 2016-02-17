@@ -3,16 +3,33 @@ import csv
 
 i=0
 
-with open('atmospheredata/atmprofile.csv','wb') as csvout:
+setwavelength = 400
+
+with open('atmospheredata/atmabs.csv','wb') as csvout:
 	writer = csv.writer(csvout, delimiter=',', quotechar='|')
-	with open('atmospheredata/atmprof10.csv', 'rb') as csvfile:
+	with open('atmospheredata/atmabs.dat', 'rb') as csvfile:
 		reader = csv.reader(csvfile, delimiter=' ', quotechar='|')
+		j = -1
+		newrow=[]
+		wavelength = 0
+		
 		for row in reader:
-			newrow=[]
-			for i in range(0, len(row)):
-				if row[i] != '':
-					newrow.append(row[i])
-			print row
-			print newrow
-			writer.writerow(newrow)
+			j +=1
+			
+			if j == 0:
+				pass
+			
+			else:
+				for i in range(0, len(row)):
+					if row[i] != '':
+						newentry = row[i]
+						if float(wavelength) == float(setwavelength):
+							print newentry
+							writer.writerow([newentry])
+							
+				if j == 1:
+					wavelength = newentry
+				
+				if j > 6:
+					j=0
 	

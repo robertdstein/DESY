@@ -160,8 +160,21 @@ def run(eff, rowcount, mincount=4, text=False, graph=False, output="default", la
 	
 	figure = plt.gcf() # get current figure
 	figure.set_size_inches(20, 15)
-	title = 'Epn Statistics for ' + str(float(nh)*float(bincount)) + " hours"
-	plt.suptitle(title, fontsize=20)
+	
+	#~ ax3 = plt.subplot(111)
+	#~ 
+	#~ ax3.plot(emin,rawheights,  label="Threshold Energy (TeV per Nucleon)")
+	#~ ax3.plot(rmax, rawheights, label="Maximum Radius (m)")
+	#~ plt.xscale('log')
+	#~ 
+	#~ plt.ylabel('Height', labelpad=0)
+	#~ plt.legend(loc=2)
+	#~ 
+	#~ extent = ax3.get_window_extent().transformed(figure.dpi_scale_trans.inverted())
+	#~ plt.savefig('heightenergyradius.png', bbox_inches=extent.expanded(1.3, 1.1))
+	#~ 
+	#~ title = 'Epn Statistics for ' + str(float(nh)*float(bincount)) + " hours"
+	#~ plt.suptitle(title, fontsize=20)
 	
 	plt.savefig('graphs/stats/Energy.pdf')
 		

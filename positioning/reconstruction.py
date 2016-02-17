@@ -76,10 +76,10 @@ if cfg.heightstatistics:
 if cfg.lightstatistics:
 	ls.run(eff, rowcount, mincount=cfg.mincount, text=cfg.text, graph=cfg.graph, output=cfg.sourcedata, layout=cfg.orientation, number = n, nh=cfg.numberofhours)
 
-if cfg.email:
-	message = str(time.asctime(time.localtime())) + " Completed simulation of " + str(n) + " events!"
-	print message
-	import os, sys
-	import sendemail as se
-	name = os.path.basename(__file__)
-	se.send(name, message)
+#~ if cfg.email:
+message = str(time.asctime(time.localtime())) + " Completed simulation of " + str(n) + " events!"
+print message
+import os, sys
+import sendemail as se
+name = os.path.basename(__file__)
+se.send(name, message)

@@ -19,7 +19,7 @@ def run(distance, Epn, Z, rmax, eff):
    	return density, bkgd
    	
 def trigger(eff):
-	return 1.5 * nsbkg * eff
+	return 5 * nsbkg * eff
 	
 def base(eff):
 	return nsbkg * eff
