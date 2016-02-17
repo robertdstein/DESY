@@ -1,6 +1,6 @@
 #!/bin/env python
 
-n = "X"
+n = 8
 
 import initialise as i
 numberofhours, mincount, reconstructiongridwidth, orientation, eff, flux, area, solidangle = i.run()

@@ -10,7 +10,7 @@ import argparse, math, random, time
 import csv
 import numpy as np
 
-nparrallel = 3
+nparrallel = 10
 
 targetfolder = "data/"
 
@@ -24,7 +24,7 @@ with open(afspath + targetfolder + batchname + "_combined.csv", 'wb') as csvout:
 	
 	j=-1
 	
-	for i in range (0, int(nparrallel)):
+	for i in range (1, int(nparrallel)+1):
 		filename= batchname + str(i)
 		path = afspath + targetfolder + filename + ".csv"
 		

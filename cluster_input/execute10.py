@@ -1,6 +1,6 @@
 #!/bin/env python
 
-n = "X"
+n = 10
 
 import initialise as i
 numberofhours, mincount, reconstructiongridwidth, orientation, eff, flux, area, solidangle = i.run()
