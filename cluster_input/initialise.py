@@ -1,6 +1,6 @@
 import math
 
-numberofhours = 0.1
+numberofhours = 1
 mincount=4
 reconstructiongridwidth=13
 orientation="five"
