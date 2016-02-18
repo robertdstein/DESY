@@ -3,17 +3,17 @@ import csv
 import numpy as np
 import matplotlib.pyplot as plt
 
-def run(source, detectorcount, mindetections, graph):
+def run(source, detectorcount, mindetections, graph, llcuts):
 	fullcount=[]
 	labels=[]
 	info = ""
+	k=0
 	for j in range (detectorcount, mindetections -1, -1):
 		specificcount=[]
-		
-		
 		with open("reconstructeddata/"+ str(source) +".csv", 'rb') as csvfile:
 			reader = csv.reader(csvfile, delimiter=',', quotechar='|')
 			i = 0
+			upperll=llcuts[k]
 			for row in reader:
 				if i == 0:
 					i = 1
@@ -29,10 +29,12 @@ def run(source, detectorcount, mindetections, graph):
 					trueEPN = row[8]
 					trueZ = row[9]
 					trueHeight = row[10]
-					
+					likelihood = row[13]
+						
 					if int(detections) == int(j):
-						difference= float(reconHeight) - float(trueHeight)
-						specificcount.append(difference)
+							if float(likelihood) < float(upperll):
+								difference= float(reconHeight) - float(trueHeight)
+								specificcount.append(difference)
 
 		fullcount.append(specificcount)
 		label = str(j) + " detections"
@@ -60,13 +62,13 @@ def run(source, detectorcount, mindetections, graph):
 			info += ('Mean = ' + str(meanz) + " \n")
 			info += ('Sigma = ' + str(sigma) + "\n \n")
 	
-	plt.annotate(info, xy=(0.75, 0.6), xycoords="axes fraction", fontsize=10)
+	plt.annotate(info, xy=(0.1, 0.4), xycoords="axes fraction",  fontsize=10)
 	
-	n, bins, _ = plt.hist(fullcount, bins=30, range=[-30000,20000], label=labels, histtype='bar', stacked=True)
+	n, bins, _ = plt.hist(fullcount, bins=15, range=[-12000,3000], label=labels, histtype='bar', stacked=True)
 	
 	mid = (bins[1:] + bins[:-1])*0.5
-	errors = np.zeros(len(n[0]))
-	if len(n[0])>1:
+	if isinstance(n[0], np.ndarray):
+		errors = np.zeros(len(n[0]))
 		for i in range(0, len(n)):
 			array = n[i]
 			old = errors
@@ -93,4 +95,7 @@ def run(source, detectorcount, mindetections, graph):
 	plt.savefig('graphs/height.pdf')
 	
 	if graph:
-		plt.show()	
+		plt.show()
+		
+	else:
+		plt.close()

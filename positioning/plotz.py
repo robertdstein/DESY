@@ -3,8 +3,9 @@ import csv
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
+import scipy.stats
 
-def run(source, detectorcount, mindetections, graph):
+def run(source, detectorcount, mindetections, graph, llcuts):
 
 	i=1
 
@@ -30,14 +31,20 @@ def run(source, detectorcount, mindetections, graph):
 		title = "Z is " + str(int(z))
 		
 		hist_fit = 0
+		k=0
 		
 		for j in range (detectorcount, mindetections -1, -1):
+			
 			with open("reconstructeddata/"+ str(source) +".csv", 'rb') as csvfile:
 				reader = csv.reader(csvfile, delimiter=',', quotechar='|')
 				specificcount = []
 				
+				full=0
+				passing=0
 				
 				i = 0
+				
+				upperll=llcuts[k]
 
 				for row in reader:
 					if i == 0:
@@ -54,10 +61,15 @@ def run(source, detectorcount, mindetections, graph):
 						trueEPN = row[8]
 						trueZ = row[9]
 						trueHeight = row[10]
+						likelihood = row[13]
+						
 						
 						if int(detections) == int(j):
 							if int(z) == int(trueZ):
-								specificcount.append(float(reconZ))
+								full += 1
+								if float(likelihood) < float(upperll):
+									passing += 1
+									specificcount.append(float(reconZ))
 								
 								
 				label = str(j) + " detections"
@@ -69,52 +81,46 @@ def run(source, detectorcount, mindetections, graph):
 				bin_centres = (bin_edges[:-1] + bin_edges[1:])/2
 				
 				total = len(specificcount)
-
+				
+				fraction = float(passing)/float(full)
+				info += str("For N = " + str(j) + " we require LL < " + str(upperll) + "\n ")
+				info += str("Fraction passing is " + str(fraction) + "\n")
 				
 				if float(total) > float(0):
 				
 					specificcount.sort()
 					
-					lower = int(total*0.16)
-					mid = int(total*0.5)
-					upper = int(total*0.84)
+					interval = (float(0.5)/float(total))
+					probinside = 1-interval
+					sigmas = scipy.stats.norm(0, 1).ppf(probinside)
 					
-					lowerz = specificcount[lower]
-					meanz = specificcount[mid]
-					upperz = specificcount[upper]
-					sigma = (upperz-lowerz) * 0.5
+					lowerz = specificcount[0]
+					meanz = specificcount[int(total*0.5)]
+					upperz = specificcount[total-1]
+					meansigma = (float(upperz)-float(lowerz))/(2*sigmas)
 					
-					def gauss(x, A, mu, sigma):
-					    return A*np.exp(-(x-mu)**2/(2.*sigma**2))
-					
-					# p0 is the initial guess for the fitting coefficients (A, mu and sigma above)
-					p0 = [1., 26., 1.]
-					
-					coeff, var_matrix = curve_fit(gauss, reconvalues, hist, p0=p0)
-					
-					# Get the fitted curve
-					hist_fit += gauss(bin_centres, *coeff)
-					
-					plt.plot(bin_centres, hist_fit, color='k')
-					
-					# Finally, lets get the fitting parameters, i.e. the mean and standard deviation:
-					
-					info += str("For N = " + str(j) + " \n ")
-					info += str("Count = " + str(coeff[0])+ " \n ")
-					info += str('Mean = ' + str(coeff[1])+ " \n ")
-					info += str('Sigma = ' + str(coeff[2])+ "\n \n")
 					info += ('Lower bound = ' + str(lowerz) + " \n")
 					info += ('Upper bound = ' + str(upperz) + " \n")
 					info += ('Mean = ' + str(meanz) + " \n")
-					info += ('Sigma = ' + str(sigma) + "\n \n")
-			
+					
+					if float(meansigma) == float(0):
+						limitsigma = float(1)/(2*sigmas)
+						info += ('Sigma < ' + str(limitsigma) + "\n")
+
+					else:
+						info += ('Sigma = ' + str(meansigma) + "\n")
+				
+				info += "\n"
+				
+			k +=1
+					
 		if fullcount != []:
 			
 			n, bins, _ = plt.hist(fullcount, bins=bincount, histtype='bar', range=zrange, label=labels, stacked=True)
 	
 			mid = (bins[1:] + bins[:-1])*0.5
-			errors = np.zeros(len(n[0]))
-			if len(n[0])>1:
+			if isinstance(n[0], np.ndarray):
+				errors = np.zeros(len(n[0]))
 				for i in range(0, len(n)):
 					array = n[i]
 					old = errors
@@ -136,13 +142,15 @@ def run(source, detectorcount, mindetections, graph):
 		plt.xlim(zrange)
 		plt.xlabel('Reconstructed Z', labelpad=0)
 		plt.title(title)
-		handles, labels = plt.subplot(nplots, 1, i).get_legend_handles_labels()
 	
-	plt.annotate(info, (30, 2),  fontsize=10)
-	plt.suptitle('True Z reconstruction', fontsize=20)
-	plt.figlegend(handles, labels, 'upper right')
+	plt.annotate(info, xy=(0.6, 0.3), xycoords="axes fraction",  fontsize=10)
+	plt.suptitle("True Z reconstruction", fontsize=20)
+	plt.legend()
 	
 	plt.savefig('graphs/Z.pdf')
 		
 	if graph:
 		plt.show()
+		
+	else:
+		plt.close()

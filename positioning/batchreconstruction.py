@@ -6,10 +6,10 @@ import loglikelihood as ll
 import calculateellipse as ce
 
 def run(source, outputfile, detectorcount, rgw, eff):
-	with open("reconstructeddata/" + str(outputfile) + ".csv", 'wb') as csvout:
+	with open("/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/reconstructeddata/" + str(outputfile) + ".csv", 'wb') as csvout:
 		writer = csv.writer(csvout, delimiter=',', quotechar='|')
 		writer.writerow(["Detections","X","Y","Energy Per Nucleon","Z","Height","True X","True Y","True Energy per nucleon","True Z","True Height", "Phi", "Epsilon", "Theta", "Guess Log Likelihood", "True Log Likelihood"])
-		with open("data/"+ str(source) +".csv", 'rb') as csvfile:
+		with open("/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/data/"+ str(source) +".csv", 'rb') as csvfile:
 			reader = csv.reader(csvfile, delimiter=',', quotechar='|')
 			i = 0
 			for row in reader:

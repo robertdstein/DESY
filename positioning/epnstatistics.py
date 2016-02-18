@@ -112,12 +112,13 @@ def run(eff, rowcount, mincount=4, text=False, graph=False, output="default", la
 
 	plt.xlim(limits)
 	plt.xscale('log')
-	plt.setp(ax1.get_xticklabels(), visible=False)
+	plt.xticks(bin_centers, xlabels, rotation=90)
+	plt.xlabel('Epn', labelpad=0)
 	plt.ylabel('Abundance')
 	
 	#plot the histogram scaled with E^-2.7 distribution to the second subplot
 	
-	ax2 = plt.subplot(223, sharex=ax1)
+	ax2 = plt.subplot(223)
 		
 	plt.hist([mT, bT, nDC], weights=[wmT, wbT, wnDC], log=True, bins=Erange, histtype='bar',range=limits, label=labels)
 
@@ -128,23 +129,42 @@ def run(eff, rowcount, mincount=4, text=False, graph=False, output="default", la
 	plt.ylabel('Scaled Count')
 	plt.legend()
 	
+	#Plot variables Etheshold and Ring Radius againist height
+	
 	ax3 = plt.subplot(122)
 	
 	rawheights=[]
 	emin=[]
 	rmax = []
 	
+	#Look up values from atmprofile10.csv
+	
 	with open('atmospheredata/atmprofile.csv', 'rb') as csvfile:
 		reader = csv.reader(csvfile, delimiter=',', quotechar='|')
 		i=0
 		for row in reader:
 			i +=1
+			
+			#Skip the first three rows
+			
 			if i > 3:
+				
+				#Loads the height and Refractive Index
+				
 				height = float(row[0])*1000
 				ri = float(row[3]) + float(1)
+				
+				#Calculate the maximum Cherenkov Angle as 1/eta
+				
 				theta = math.acos(float(1)/float(ri))
+				
+				#Calculates the Threshold Energy using Refractive Index
+				
 				Ethreshold = float(cr.runemin(ri))*(10**-3)
+				
+				#Calculate the Maximum Ring Size, and appends these values to arrays
 				r = theta*height
+				
 				rawheights.append(height)
 				emin.append(Ethreshold)
 				rmax.append(r)
@@ -161,6 +181,8 @@ def run(eff, rowcount, mincount=4, text=False, graph=False, output="default", la
 	figure = plt.gcf() # get current figure
 	figure.set_size_inches(20, 15)
 	
+	#Option to produce a full size graph, for use in presentations etc.
+	
 	#~ ax3 = plt.subplot(111)
 	#~ 
 	#~ ax3.plot(emin,rawheights,  label="Threshold Energy (TeV per Nucleon)")
@@ -171,10 +193,11 @@ def run(eff, rowcount, mincount=4, text=False, graph=False, output="default", la
 	#~ plt.legend(loc=2)
 	#~ 
 	#~ extent = ax3.get_window_extent().transformed(figure.dpi_scale_trans.inverted())
-	#~ plt.savefig('heightenergyradius.png', bbox_inches=extent.expanded(1.3, 1.1))
+	#~ plt.savefig('heightenergyradius.pdf', bbox_inches=extent.expanded(1.3, 1.1))
 	#~ 
-	#~ title = 'Epn Statistics for ' + str(float(nh)*float(bincount)) + " hours"
-	#~ plt.suptitle(title, fontsize=20)
+	
+	title = 'Epn Statistics for ' + str(float(nh)*float(bincount)) + " hours"
+	plt.suptitle(title, fontsize=20)
 	
 	plt.savefig('graphs/stats/Energy.pdf')
 		

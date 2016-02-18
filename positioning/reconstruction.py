@@ -13,6 +13,8 @@ import epnstatistics as es
 import radiusstatistics as rs
 import heightstatistics as hs
 import lightstatistics as ls
+import plotlikelihood as pl
+import optimisez as oz
 
 parser = argparse.ArgumentParser(description='Create a canvas for positions of telescopes')
 parser.add_argument("-o", "--orientation", default="five")
@@ -25,13 +27,14 @@ parser.add_argument("-s", "--simulate", action="store_true")
 parser.add_argument("-t", "--text", action="store_true")
 parser.add_argument("-e", "--email", action="store_true")
 parser.add_argument("-p", "--plot", action="store_true")
-parser.add_argument("-pa", "--plotangle", action="store_true")
+parser.add_argument("-pc", "--plotcut", action="store_true")
 parser.add_argument("-es", "--epnstatistics", action="store_true")
 parser.add_argument("-rs", "--radiusstatistics", action="store_true")
 parser.add_argument("-hs", "--heightstatistics", action="store_true")
 parser.add_argument("-ls", "--lightstatistics", action="store_true")
 parser.add_argument("-nh", "--numberofhours", default=1)
 parser.add_argument("-rgw", "--reconstructiongridwidth", default=13)
+
 cfg = parser.parse_args()
 
 eff = 0.06
@@ -41,8 +44,8 @@ solidangle = math.radians(5)
 detectedflux = flux*area*solidangle
 rateperhour = detectedflux * 60 * 60
 n = int(rateperhour*float(cfg.numberofhours))
-print time.asctime(time.localtime()),"Cosmic Ray Iron Flux is", flux, "Simulated Area is", area, "Field of View is", solidangle, "Detected Flux is", detectedflux
-print time.asctime(time.localtime()),"Rate per hour", rateperhour, "Simulated Hours", cfg.numberofhours, "Simulated Events", n 
+
+defaultcuts = [500, 500]
 
 with open("orientations/"+ cfg.orientation +".csv", 'rb') as csvfile:
 	reader = csv.reader(csvfile, delimiter=',', quotechar='|')
@@ -51,18 +54,34 @@ with open("orientations/"+ cfg.orientation +".csv", 'rb') as csvfile:
 		rowcount +=1
 		
 if cfg.simulate:
+	print time.asctime(time.localtime()),"Cosmic Ray Iron Flux is", flux, "Simulated Area is", area, "Field of View is", solidangle, "Detected Flux is", detectedflux
+	print time.asctime(time.localtime()),"Rate per hour", rateperhour, "Simulated Hours", cfg.numberofhours, "Simulated Events", n 
 	s.run(eff, rowcount, mincount=cfg.mincount, text=cfg.text, graph=cfg.graph, output=cfg.sourcedata, layout=cfg.orientation, number = n)
 	bp.run(cfg.sourcedata, cfg.processdata, int(cfg.mincount), rowcount, text=cfg.text)
 	br.run(cfg.processdata, cfg.reconstructdata, rowcount, cfg.reconstructiongridwidth, eff)
+	message = str(time.asctime(time.localtime())) + " Completed simulation of " + str(n) + " events!"
+	print message
+	import os, sys
+	import sendemail as se
+	name = os.path.basename(__file__)
+	se.send(name, message)
+	
+if cfg.plotcut:
+	llcuts = oz.run(cfg.reconstructdata, rowcount, int(cfg.mincount), cfg.graph)
+	pl.run(cfg.reconstructdata, cfg.graph, llcuts)
+	pz.run(cfg.reconstructdata, rowcount, int(cfg.mincount), cfg.graph, llcuts)
+	pp.run(cfg.reconstructdata, rowcount, int(cfg.mincount), cfg.graph, llcuts)
+	pe.run(cfg.reconstructdata, rowcount, int(cfg.mincount), cfg.graph, llcuts)
+	ph.run(cfg.reconstructdata, rowcount, int(cfg.mincount), cfg.graph, llcuts)
 	
 if cfg.plot:
-	pz.run(cfg.reconstructdata, rowcount, int(cfg.mincount), cfg.graph)
-	pp.run(cfg.reconstructdata, rowcount, int(cfg.mincount), cfg.graph)
-	pe.run(cfg.reconstructdata, rowcount, int(cfg.mincount), cfg.graph)
-	ph.run(cfg.reconstructdata, rowcount, int(cfg.mincount), cfg.graph)
+	pz.run(cfg.reconstructdata, rowcount, int(cfg.mincount), cfg.graph, defaultcuts)
+	pp.run(cfg.reconstructdata, rowcount, int(cfg.mincount), cfg.graph, defaultcuts)
+	pe.run(cfg.reconstructdata, rowcount, int(cfg.mincount), cfg.graph, defaultcuts)
+	ph.run(cfg.reconstructdata, rowcount, int(cfg.mincount), cfg.graph, defaultcuts)
 
-if cfg.plotangle:
-	pa.run(cfg.reconstructdata, rowcount, int(cfg.mincount), cfg.graph)	
+#~ if cfg.plotangle:
+	#~ pa.run(cfg.reconstructdata, rowcount, int(cfg.mincount), cfg.graph)
 
 if cfg.radiusstatistics:
 	rs.run(cfg.graph)
@@ -77,9 +96,4 @@ if cfg.lightstatistics:
 	ls.run(eff, rowcount, mincount=cfg.mincount, text=cfg.text, graph=cfg.graph, output=cfg.sourcedata, layout=cfg.orientation, number = n, nh=cfg.numberofhours)
 
 #~ if cfg.email:
-message = str(time.asctime(time.localtime())) + " Completed simulation of " + str(n) + " events!"
-print message
-import os, sys
-import sendemail as se
-name = os.path.basename(__file__)
-se.send(name, message)
+

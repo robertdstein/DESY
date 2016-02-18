@@ -10,7 +10,7 @@
 #          Mit "qdel job-id" kann ein Job gekillt werden.
 
 # Name of the job
-#$ -N testjob
+#$ -N ChargeReconstruction
 
 # runtime/ Maximale Laufzeit, hat einfluss auf die Priorität. Die Schwellen sind 2:59:59, 23:59:59, 2:59:59, 167:59:59
 #$ -l h_rt=2:59:59 
@@ -46,12 +46,6 @@
 #
 
 # Ab hier beginnt das Script
-
-echo "Shell Script Start"
-
-echo $PATH
-echo $PYTHONPATH
-echo Wenn das hier ein Array-Job ist, dann ist dies die Nummer 
 
 python /afs/desy.de/user/s/steinrob/Documents/DESY/cluster_input/execute$SGE_TASK_ID.py
 #cp $TMPDIR/* /afs/desy.de/user/s/steinrob/Documents/DESY/cluster_output
