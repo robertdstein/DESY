@@ -33,15 +33,16 @@ parser.add_argument("-rs", "--radiusstatistics", action="store_true")
 parser.add_argument("-hs", "--heightstatistics", action="store_true")
 parser.add_argument("-ls", "--lightstatistics", action="store_true")
 parser.add_argument("-nh", "--numberofhours", default=1)
-parser.add_argument("-rgw", "--reconstructiongridwidth", default=13)
+parser.add_argument("-rgw", "--reconstructiongridwidth", default=75)
 
 cfg = parser.parse_args()
 
 eff = 0.06
-flux = 2.5 * (10**-4)
+selectionefficiency = 0.07
+flux = 2.0 * (10**-4)
 area = 300**2
 solidangle = math.radians(5)
-detectedflux = flux*area*solidangle
+detectedflux = flux*area*solidangle*selectionefficiency
 rateperhour = detectedflux * 60 * 60
 n = int(rateperhour*float(cfg.numberofhours))
 

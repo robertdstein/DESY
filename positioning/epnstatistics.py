@@ -163,7 +163,7 @@ def run(eff, rowcount, mincount=4, text=False, graph=False, output="default", la
 				Ethreshold = float(cr.runemin(ri))*(10**-3)
 				
 				#Calculate the Maximum Ring Size, and appends these values to arrays
-				r = theta*height
+				r = theta*(height-1800)
 				
 				rawheights.append(height)
 				emin.append(Ethreshold)

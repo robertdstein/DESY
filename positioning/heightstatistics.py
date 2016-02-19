@@ -45,7 +45,7 @@ def run(eff, rowcount, mincount=4, text=False, graph=False, output="default", la
 	ax1.plot(survivallengths, Rrange, label="survived")
 	ax1.plot(decaylengths, Rrange, label = "decayed")
 	plt.ylabel('Fraction')
-	plt.xlabel('Decay Length', labelpad=0)
+	plt.xlabel('Interaction Lengths', labelpad=0)
 	plt.legend()
 	
 	ax2 = plt.subplot(322)
@@ -64,7 +64,7 @@ def run(eff, rowcount, mincount=4, text=False, graph=False, output="default", la
 				rawheights.append(float(row[0])*1000)
 	
 	ax2.plot(rawheights, opticallengths, 'r', label="Sum")
-	plt.ylabel('Integrated Decay Lengths')
+	plt.ylabel('Integrated Interaction Lengths')
 	plt.yscale('log')
 	plt.xlabel('Height', labelpad=0)
 	ax2.invert_xaxis()
@@ -177,14 +177,16 @@ def run(eff, rowcount, mincount=4, text=False, graph=False, output="default", la
 	
 	ax6 = plt.subplot(326)
 	
-	n, bins, _ = plt.hist([mT], label=labels)
+	if len(mT) > 0:
 	
-	mid = (bins[1:] + bins[:-1])*0.5
-	errors = []
-	for count in n:
-		errors.append(math.sqrt(count))
-	
-	plt.errorbar(mid, n, yerr=errors, fmt='kx')
+		n, bins, _ = plt.hist([mT], label=labels)
+		
+		mid = (bins[1:] + bins[:-1])*0.5
+		errors = []
+		for count in n:
+			errors.append(math.sqrt(count))
+		
+		plt.errorbar(mid, n, yerr=errors, fmt='kx')
 	
 	nmax = np.amax(n)
 	

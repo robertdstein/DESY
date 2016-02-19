@@ -10,7 +10,7 @@ def run(Epn, height, sinphi, text=False):
 	if height is None:
 		print refractiveindex, height, sinphi, gamma, costheta
 	
-	radius = float(height)*math.tan(theta)/float(sinphi)
+	radius = (float(height)-1800)*math.tan(theta)/float(sinphi)
 	
 	if text:
 		print "Gamma", gamma

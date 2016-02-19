@@ -59,13 +59,12 @@ def run(layout, rayxpos, rayypos, epsilon, rayradius, Epn, Z, height, phi, theta
 					frac = distance/r
 					altitude = frac*((math.pi/2)-theta)
 					recordedaltitude = random.gauss(altitude, 0.01)
-					
+
 				else:
 					recordedaltitude = "None"
-				
-				area = math.pi*(tradius**2)
-				recondensity=(recorded/area)
-				threshold = ld.trigger(eff)
+
+				thresholdfrac = ld.trigger()
+				threshold = float(bkgcount)*thresholdfrac
 				
 				if graph:
 					if float(recorded) > 0:
@@ -78,9 +77,10 @@ def run(layout, rayxpos, rayypos, epsilon, rayradius, Epn, Z, height, phi, theta
 						print "Radius of ring at this angle is", r
 						print "Position", xpos, ypos
 						print "Photon Count is", count, "smeared to", recorded
-						print "Signal accounts for", sigcount, "Background accounts for", bkgcount	
+						print "Signal accounts for", sigcount, "Background accounts for", bkgcount
 				
-				if float(sigcount) > 0:
+				
+				if float(sigcount) > float(threshold):
 					j+=1
 					Trigger=True
 					if text:
