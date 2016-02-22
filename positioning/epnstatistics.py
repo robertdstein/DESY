@@ -13,7 +13,7 @@ import atmosphere as atm
 import cherenkovradius as cr
 from matplotlib.patches import Ellipse
 
-def run(eff, rowcount, mincount=4, text=False, graph=False, output="default", layout="five", number=1, nh=1):
+def run(eff, rowcount, mincount=4, text=False, graph=False, layout="five", number=1, nh=1):
 	
 	#Create a subplot for the fractional abundance
 
@@ -181,21 +181,24 @@ def run(eff, rowcount, mincount=4, text=False, graph=False, output="default", la
 	figure = plt.gcf() # get current figure
 	figure.set_size_inches(20, 15)
 	
-	#Option to produce a full size graph, for use in presentations etc.
+	#~ #Option to produce a full size graph, for use in presentations etc.
+	#~ 
+	ax3 = plt.subplot(111)
 	
-	#~ ax3 = plt.subplot(111)
-	#~ 
-	#~ ax3.plot(emin,rawheights,  label="Threshold Energy (TeV per Nucleon)")
-	#~ ax3.plot(rmax, rawheights, label="Maximum Radius (m)")
-	#~ plt.xscale('log')
-	#~ 
-	#~ plt.ylabel('Height', labelpad=0)
-	#~ plt.legend(loc=2)
-	#~ 
-	#~ extent = ax3.get_window_extent().transformed(figure.dpi_scale_trans.inverted())
-	#~ plt.savefig('heightenergyradius.pdf', bbox_inches=extent.expanded(1.3, 1.1))
-	#~ 
+	ax3.plot(emin,rawheights,  label="Threshold Energy (TeV per Nucleon)")
+	ax3.plot(rmax, rawheights, label="Maximum Radius (m)")
+	plt.xscale('log')
 	
+	mid = atm.runheight(0.5)
+	plt.axhline(y=mid, color='r', label="50% First Interaction Height")
+	
+	plt.ylabel('Height', labelpad=0)
+	plt.legend(loc=2)
+	
+	extent = ax3.get_window_extent().transformed(figure.dpi_scale_trans.inverted())
+	plt.savefig('heightenergyradius.pdf', bbox_inches=extent.expanded(1.3, 1.1))
+	
+	#~ 
 	title = 'Epn Statistics for ' + str(float(nh)*float(bincount)) + " hours"
 	plt.suptitle(title, fontsize=20)
 	

@@ -51,30 +51,35 @@ def min(a, gridwidth, eff, phi, epsilon):
 	
 	zvalues = np.arange(20.,33.)
 	
-	coordinates = []	
-	j=0
+	minangle = 3
+	j = 0
 	
-	for x in xsites:
-			for y in ysites:
-					n=0
-					
-					for detection in a:
-						x0 = float(detection[0])
-						y0 = float(detection[1])
-						recordeddangle = float(detection[4])
+	while j < 10:
+		coordinates = []
+		j = 0
+		minangle += 0.1
+		for x in xsites:
+				for y in ysites:
+						n=0
 						
-						dangle = ce.dangle(x0, y0, x, y)
-						
-						if math.fabs(dangle - recordeddangle) < math.radians(5):
-							n+=1
+						for detection in a:
+							x0 = float(detection[0])
+							y0 = float(detection[1])
+							recordeddangle = float(detection[4])
 							
-						#~ print dangle, recordeddangle, n
-						
-					if n > (len(a)-1):
-						coordinates.append([x,y])
-						j+=1
-						
-	print j, "valid positions"
+							dangle = ce.dangle(x0, y0, x, y)
+							
+							if math.fabs(dangle - recordeddangle) < math.radians(minangle):
+								n+=1
+								
+							#~ print dangle, recordeddangle, n
+							
+						if n > (len(a)-1):
+							coordinates.append([x,y])
+							j+=1					
+		
+		
+	print j, "valid positions", minangle, "degrees from each shower axis"
 	
 	for z in zvalues:
 		

@@ -15,12 +15,11 @@ import heightstatistics as hs
 import lightstatistics as ls
 import plotlikelihood as pl
 import optimisez as oz
+import optimiselayout as ol
 
 parser = argparse.ArgumentParser(description='Create a canvas for positions of telescopes')
 parser.add_argument("-o", "--orientation", default="five")
-parser.add_argument("-sd", "--sourcedata", default="default")
-parser.add_argument("-pd", "--processdata", default="process")
-parser.add_argument("-rd", "--reconstructdata", default="reconstructed")
+parser.add_argument("-d", "--data", default="default")
 parser.add_argument("-mc", "--mincount", default=4)
 parser.add_argument("-g", "--graph", action="store_true")
 parser.add_argument("-s", "--simulate", action="store_true")
@@ -32,13 +31,14 @@ parser.add_argument("-es", "--epnstatistics", action="store_true")
 parser.add_argument("-rs", "--radiusstatistics", action="store_true")
 parser.add_argument("-hs", "--heightstatistics", action="store_true")
 parser.add_argument("-ls", "--lightstatistics", action="store_true")
+parser.add_argument("-ol", "--optimiselayout", action="store_true")
 parser.add_argument("-nh", "--numberofhours", default=1)
 parser.add_argument("-rgw", "--reconstructiongridwidth", default=75)
 
 cfg = parser.parse_args()
 
 eff = 0.06
-selectionefficiency = 0.07
+selectionefficiency = 0.50
 flux = 2.0 * (10**-4)
 area = 300**2
 solidangle = math.radians(5)
@@ -47,6 +47,16 @@ rateperhour = detectedflux * 60 * 60
 n = int(rateperhour*float(cfg.numberofhours))
 
 defaultcuts = [500, 500]
+
+if cfg.data == "default":
+	sourcedata="simulated" + str(cfg.mincount)
+	processdata = "processed"+ str(cfg.mincount)
+	reconstructdata = "reconstructed"+ str(cfg.mincount)
+	
+else:
+	sourcedata= str(cfg.data) + "simulated" + str(cfg.mincount)
+	processdata = str(cfg.data) + "processed"+ str(cfg.mincount)
+	reconstructdata = str(cfg.data) + "reconstructed"+ str(cfg.mincount)
 
 with open("orientations/"+ cfg.orientation +".csv", 'rb') as csvfile:
 	reader = csv.reader(csvfile, delimiter=',', quotechar='|')
@@ -57,9 +67,9 @@ with open("orientations/"+ cfg.orientation +".csv", 'rb') as csvfile:
 if cfg.simulate:
 	print time.asctime(time.localtime()),"Cosmic Ray Iron Flux is", flux, "Simulated Area is", area, "Field of View is", solidangle, "Detected Flux is", detectedflux
 	print time.asctime(time.localtime()),"Rate per hour", rateperhour, "Simulated Hours", cfg.numberofhours, "Simulated Events", n 
-	s.run(eff, rowcount, mincount=cfg.mincount, text=cfg.text, graph=cfg.graph, output=cfg.sourcedata, layout=cfg.orientation, number = n)
-	bp.run(cfg.sourcedata, cfg.processdata, int(cfg.mincount), rowcount, text=cfg.text)
-	br.run(cfg.processdata, cfg.reconstructdata, rowcount, cfg.reconstructiongridwidth, eff)
+	s.run(eff, rowcount, mincount=cfg.mincount, text=cfg.text, graph=cfg.graph, output=sourcedata, layout=cfg.orientation, number = n)
+	bp.run(sourcedata, processdata, int(cfg.mincount), rowcount, text=cfg.text)
+	br.run(processdata, reconstructdata, rowcount, cfg.reconstructiongridwidth, eff)
 	message = str(time.asctime(time.localtime())) + " Completed simulation of " + str(n) + " events!"
 	print message
 	import os, sys
@@ -68,18 +78,18 @@ if cfg.simulate:
 	se.send(name, message)
 	
 if cfg.plotcut:
-	llcuts = oz.run(cfg.reconstructdata, rowcount, int(cfg.mincount), cfg.graph)
-	pl.run(cfg.reconstructdata, cfg.graph, llcuts)
-	pz.run(cfg.reconstructdata, rowcount, int(cfg.mincount), cfg.graph, llcuts)
-	pp.run(cfg.reconstructdata, rowcount, int(cfg.mincount), cfg.graph, llcuts)
-	pe.run(cfg.reconstructdata, rowcount, int(cfg.mincount), cfg.graph, llcuts)
-	ph.run(cfg.reconstructdata, rowcount, int(cfg.mincount), cfg.graph, llcuts)
+	llcuts = oz.run(reconstructdata, rowcount, int(cfg.mincount), cfg.graph)
+	pl.run(reconstructdata, cfg.graph, llcuts)
+	pz.run(reconstructdata, rowcount, int(cfg.mincount), cfg.graph, llcuts)
+	pp.run(reconstructdata, rowcount, int(cfg.mincount), cfg.graph, llcuts)
+	pe.run(reconstructdata, rowcount, int(cfg.mincount), cfg.graph, llcuts)
+	ph.run(reconstructdata, rowcount, int(cfg.mincount), cfg.graph, llcuts)
 	
 if cfg.plot:
-	pz.run(cfg.reconstructdata, rowcount, int(cfg.mincount), cfg.graph, defaultcuts)
-	pp.run(cfg.reconstructdata, rowcount, int(cfg.mincount), cfg.graph, defaultcuts)
-	pe.run(cfg.reconstructdata, rowcount, int(cfg.mincount), cfg.graph, defaultcuts)
-	ph.run(cfg.reconstructdata, rowcount, int(cfg.mincount), cfg.graph, defaultcuts)
+	pz.run(reconstructdata, rowcount, int(cfg.mincount), cfg.graph, defaultcuts)
+	pp.run(reconstructdata, rowcount, int(cfg.mincount), cfg.graph, defaultcuts)
+	pe.run(reconstructdata, rowcount, int(cfg.mincount), cfg.graph, defaultcuts)
+	ph.run(reconstructdata, rowcount, int(cfg.mincount), cfg.graph, defaultcuts)
 
 #~ if cfg.plotangle:
 	#~ pa.run(cfg.reconstructdata, rowcount, int(cfg.mincount), cfg.graph)
@@ -87,14 +97,14 @@ if cfg.plot:
 if cfg.radiusstatistics:
 	rs.run(cfg.graph)
 	
+if cfg.optimiselayout:
+	ol.run(cfg.numberofhours)
+	
 if cfg.epnstatistics:
-	es.run(eff, rowcount, mincount=cfg.mincount, text=cfg.text, graph=cfg.graph, output=cfg.sourcedata, layout=cfg.orientation, number = n, nh=cfg.numberofhours)
+	es.run(eff, rowcount, mincount=cfg.mincount, text=cfg.text, graph=cfg.graph, layout=cfg.orientation, number = n, nh=cfg.numberofhours)
 	
 if cfg.heightstatistics:
-	hs.run(eff, rowcount, mincount=cfg.mincount, text=cfg.text, graph=cfg.graph, output=cfg.sourcedata, layout=cfg.orientation, number = n, nh=cfg.numberofhours)
+	hs.run(eff, rowcount, mincount=cfg.mincount, text=cfg.text, graph=cfg.graph, layout=cfg.orientation, number = n, nh=cfg.numberofhours)
 	
 if cfg.lightstatistics:
-	ls.run(eff, rowcount, mincount=cfg.mincount, text=cfg.text, graph=cfg.graph, output=cfg.sourcedata, layout=cfg.orientation, number = n, nh=cfg.numberofhours)
-
-#~ if cfg.email:
-
+	ls.run(eff, rowcount, mincount=cfg.mincount, text=cfg.text, graph=cfg.graph, layout=cfg.orientation, number = n, nh=cfg.numberofhours)
