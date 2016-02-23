@@ -42,4 +42,3 @@ import os, sys
 import sendemail as se
 name = os.path.basename(__file__)
 se.send(name, message, False)
-
