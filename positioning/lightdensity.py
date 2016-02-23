@@ -4,7 +4,7 @@ nsbkg = 7
 
 def run(distance, Epn, Z, rmax, eff):
 	
-	scale = (70 * (10**-3)* Epn *eff)*(math.e**-0.5)
+	scale = (50 * (10**-3)* Epn *eff)*(math.e**-0.5)
 	
 	if distance < 100:
 		bkgd = (math.e**(((Epn**0.5)/15)*((100-distance)/100)))*scale + (nsbkg*eff)

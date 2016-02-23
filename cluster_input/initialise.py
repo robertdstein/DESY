@@ -2,7 +2,7 @@ import math
 
 numberofhours = 0.05
 mincount=5
-reconstructiongridwidth=13
+reconstructiongridwidth=301
 orientation="ideal"
 eff = 0.06
 flux = 2.0 * (10**-4)

@@ -2,7 +2,7 @@ import array, math
 
 import time
 import numpy as np
-import minuit
+from iminuit import Minuit
 import lightdensity as ld
 import calculatearea as ca
 import cherenkovradius as cr
@@ -12,7 +12,7 @@ import loglikelihood as ll
 import atmosphere as atm
 import scipy.optimize
 
-def min(a, gridwidth, eff, phi, epsilon):
+def min(a, gridwidth, eff, phi, epsilon, detections):
 	
 	def f(x,y,Z,Epn, height):
 		sum = 0
@@ -41,23 +41,24 @@ def min(a, gridwidth, eff, phi, epsilon):
 	guess = [params['x'], params['y'], params['Epn'], params['Z'], params['height']]
 	guessfval = m.fval
 
-	xsites = np.linspace(-100, 100, int(gridwidth))
-	ysites = np.linspace(-100, 100, int(gridwidth))
+	xsites = np.linspace(-150, 150, int(gridwidth))
+	ysites = np.linspace(-150, 150, int(gridwidth))
 	
-	eraw = np.linspace(0, 1, num=20)
+	eraw = np.linspace(0, 1, num=30)
 	R = eraw*0.0178
 	evals = ((1.7*R/321)+(3571**-1.7))**(-1/1.7)
 	hvals = np.linspace(20000, 30000, num=3)
 	
 	zvalues = np.arange(20.,33.)
+	#~ zvalues=[26]
 	
-	minangle = 3
+	minangle = 0
 	j = 0
 	
-	while j < 10:
+	while j < 1:
 		coordinates = []
 		j = 0
-		minangle += 0.1
+		minangle += 0.5
 		for x in xsites:
 				for y in ysites:
 						n=0
@@ -77,6 +78,8 @@ def min(a, gridwidth, eff, phi, epsilon):
 						if n > (len(a)-1):
 							coordinates.append([x,y])
 							j+=1
+		if minangle > 10:
+			j=10
 							
 	ehvals=[]
 	for height in hvals:
@@ -84,34 +87,46 @@ def min(a, gridwidth, eff, phi, epsilon):
 			ri = atm.runindex(height)
 			Ethreshold = float(cr.runemin(ri))
 			if float(Epn) > float(Ethreshold):
-				ehvals.append([height, Epn])
-					
+				ehvals.append([Epn, height])
+	
+	xycount = len(coordinates)			
 	ehcount = len(ehvals)
 	zcount = len(zvalues)
+	
+	#~ rg = guess
+	#~ rf = guessfval
 		
-	print j, "Valid Core Positions", ehcount, "Valid Height/Epn Combinations", zcount, "Charge Values", j*ehcount*zcount, "Total Minimisations"
+	print detections, "Detections -> ", xycount, "Valid Core Positions (", minangle, "Degrees from recorded axis)", ehcount, "Valid Height/Epn Combinations", zcount, "Charge Values", xycount*ehcount*zcount, "Total Minimisations"
 	
 	for z in zvalues:
 		
 		m = eval("Minuit(f, x="+ str(startpos[0]) + ", " + argumentx + "y="+ str(startpos[1]) + ", " + argumenty+ "Epn = "+ str(startpos[3]) + ", " + argumentE + "Z=" + str(z) + "," +argumentZ + "height = " + str(startpos[4]) + ", " + argumentheight + argumenterror + ")")
-		m.migrad()
+		m.migrad(resume=False)
 		params = m.values
 		zguess = [params['x'], params['y'], params['Epn'], params['Z'], params['height']]
 		zguessfval = m.fval
 		
 		for [x, y] in coordinates:							
 				for [e, h] in ehvals:
-					m = eval("Minuit(f," + "Epn=" + str(e) + ", " + argumentE + "height = " + str(h) + ", " + argumentheight + "Z=" + str(z) + "," +argumentZ + "x="+ str(x) + ", " + argumentx + "y="+ str(y) + ", " + argumenty+ argumenterror + ")")
-					m.migrad()
+					m = eval("Minuit(f,  " + "Epn=" + str(e) + ", " + argumentE + "height = " + str(h) + ", " + argumentheight + "Z=" + str(z) + "," +argumentZ + "x="+ str(x) + ", " + argumentx + "y="+ str(y) + ", " + argumenty+ argumenterror + ")")
+					m.migrad(resume=False)
 					params = m.values
 					fval = m.fval
 					values = m.get_fmin()
-					if values.is_valid:
-						if fval < zguessfval:
+					if fval < zguessfval:
+						if values.is_valid:
 							zguess = [params['x'], params['y'], params['Epn'], params['Z'], params['height']]
 							zguessfval = fval
+							#~ print zguess, "(", zguessfval, ") Valid!" 
+						#~ elif fval < rf:
+							#~ rf = fval
+							#~ rg = [params['x'], params['y'], params['Epn'], params['Z'], params['height']]
+							#~ print rg, "(", rf, ") Rejected!"
+							
+							
 		
-		print zguess, "(", zguessfval, ")"
+		print time.asctime(time.localtime()), zguess, "(", zguessfval, ")"
+		#~ print rg, "(", rf, ") Rejected!"
 
 		if zguessfval < guessfval:
 			guess = zguess
