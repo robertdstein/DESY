@@ -35,7 +35,7 @@ with open("/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/orientations/
 
 s.run(eff, rowcount, mincount=mincount, text=False, graph=False, output=sourcedata, layout=orientation, number = n)
 bp.run(sourcedata, processdata, int(mincount), rowcount, text=True)
-#~ br.run(processdata, reconstructdata, rowcount, reconstructiongridwidth, eff)
+br.run(processdata, reconstructdata, rowcount, reconstructiongridwidth, eff)
 
 message = str(time.asctime(time.localtime())) + " Completed simulation of " + str(n) + " events!"
 import os, sys

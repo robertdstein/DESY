@@ -76,10 +76,20 @@ def min(a, gridwidth, eff, phi, epsilon):
 							
 						if n > (len(a)-1):
 							coordinates.append([x,y])
-							j+=1					
+							j+=1
+							
+	ehvals=[]
+	for height in hvals:
+		for Epn in evals:
+			ri = atm.runindex(height)
+			Ethreshold = float(cr.runemin(ri))
+			if float(Epn) > float(Ethreshold):
+				ehvals.append([height, Epn])
+					
+	ehcount = len(ehvals)
+	zcount = len(zvalues)
 		
-		
-	print j, "valid positions", minangle, "degrees from each shower axis"
+	print j, "Valid Core Positions", ehcount, "Valid Height/Epn Combinations", zcount, "Charge Values", j*ehcount*zcount, "Total Minimisations"
 	
 	for z in zvalues:
 		
@@ -90,17 +100,16 @@ def min(a, gridwidth, eff, phi, epsilon):
 		zguessfval = m.fval
 		
 		for [x, y] in coordinates:							
-				for e in evals:
-					for h in hvals:
-						m = eval("Minuit(f," + "Epn=" + str(e) + ", " + argumentE + "height = " + str(h) + ", " + argumentheight + "Z=" + str(z) + "," +argumentZ + "x="+ str(x) + ", " + argumentx + "y="+ str(y) + ", " + argumenty+ argumenterror + ")")
-						m.migrad()
-						params = m.values
-						fval = m.fval
-						values = m.get_fmin()
-						if values.is_valid:
-							if fval < zguessfval:
-								zguess = [params['x'], params['y'], params['Epn'], params['Z'], params['height']]
-								zguessfval = fval
+				for [e, h] in ehvals:
+					m = eval("Minuit(f," + "Epn=" + str(e) + ", " + argumentE + "height = " + str(h) + ", " + argumentheight + "Z=" + str(z) + "," +argumentZ + "x="+ str(x) + ", " + argumentx + "y="+ str(y) + ", " + argumenty+ argumenterror + ")")
+					m.migrad()
+					params = m.values
+					fval = m.fval
+					values = m.get_fmin()
+					if values.is_valid:
+						if fval < zguessfval:
+							zguess = [params['x'], params['y'], params['Epn'], params['Z'], params['height']]
+							zguessfval = fval
 		
 		print zguess, "(", zguessfval, ")"
 

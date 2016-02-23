@@ -3,7 +3,7 @@
 n = 7
 
 import initialise as i
-numberofhours, mincount, reconstructiongridwidth, orientation, eff, flux, area, solidangle = i.run()
+numberofhours, mincount, reconstructiongridwidth, orientation, eff, flux, area, solidangle, selectionefficiency = i.run()
 
 import sys
 
@@ -21,7 +21,7 @@ processdata="executeprocess" + str(n)
 reconstructdata="executereconstructed" + str(n)
 
 
-detectedflux = float(flux)*float(area)*float(solidangle)
+detectedflux = float(flux)*float(area)*float(solidangle)*float(selectionefficiency)
 rateperhour = detectedflux * 60 * 60
 n = int(rateperhour*float(numberofhours))
 print time.asctime(time.localtime()),"Cosmic Ray Iron Flux is", flux, "Simulated Area is", area, "Field of View is", solidangle, "Detected Flux is", detectedflux
@@ -34,8 +34,8 @@ with open("/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/orientations/
 		rowcount +=1
 
 s.run(eff, rowcount, mincount=mincount, text=False, graph=False, output=sourcedata, layout=orientation, number = n)
-bp.run(sourcedata, processdata, int(mincount), rowcount, text=True)
-#~ br.run(processdata, reconstructdata, rowcount, reconstructiongridwidth, eff)
+bp.run(sourcedata, processdata, int(mincount), rowcount, text=False)
+br.run(processdata, reconstructdata, rowcount, reconstructiongridwidth, eff)
 
 message = str(time.asctime(time.localtime())) + " Completed simulation of " + str(n) + " events!"
 import os, sys
