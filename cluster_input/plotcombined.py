@@ -32,8 +32,8 @@ with open("orientations/"+ orientation +".csv", 'rb') as csvfile:
 reconstructdata = afspath + targetfolder + batchname + "_combined.csv"
 
 llcuts = oz.run(reconstructdata, rowcount, int(cfg.mincount), graph=False)
-pl.run(reconstructdata, graph=False, llcuts)
-pz.run(reconstructdata, rowcount, int(mincount), graph=False, llcuts)
-pp.run(reconstructdata, rowcount, int(mincount), graph=False, llcuts)
-pe.run(reconstructdata, rowcount, int(mincount), graph=False, llcuts)
-ph.run(reconstructdata, rowcount, int(mincount), graph=False, llcuts)
+pl.run(reconstructdata, graph=False, llcuts=llcuts)
+pz.run(reconstructdata, rowcount, int(mincount), graph=False, llcuts=llcuts)
+pp.run(reconstructdata, rowcount, int(mincount), graph=False, llcuts=llcuts)
+pe.run(reconstructdata, rowcount, int(mincount), graph=False, llcuts=llcuts)
+ph.run(reconstructdata, rowcount, int(mincount), graph=False, llcuts=llcuts)
