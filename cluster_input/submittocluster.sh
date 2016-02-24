@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/usr/bin/env bash
 # 
 
 #        This is how to submit a job to the cluster:
