@@ -47,6 +47,9 @@
 
 # Ab hier beginnt das Script
 
+ls
+pwd
+
 ./d1/hhsoft/ini_python2.7.8.sh 
 
 python /afs/desy.de/user/s/steinrob/Documents/DESY/cluster_input/execute$SGE_TASK_ID.py
