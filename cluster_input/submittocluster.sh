@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/d1/hhsoft/ini_python2.7.8.sh
 # 
 
 #        This is how to submit a job to the cluster:
