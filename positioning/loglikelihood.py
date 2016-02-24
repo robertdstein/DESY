@@ -26,7 +26,7 @@ def expected(x,y,Epn,Z, height, x0,y0, category, raweff, phi, epsilon):
 		expectedcount = int(expectedsig + expectedbkg)
 	
 	else:
-		expectedcount = 0.0
+		expectedcount = 7.0
 	
 	return expectedcount
 	
@@ -44,6 +44,8 @@ def run(x,y,Epn,Z, height, x0,y0, count, category, eff, phi, epsilon):
 		minusll = 10**10
 	else:
 		lognfactorial = stirling(N)
+		if expectedcount < 0:
+			print expectedcount
 		minusll = expectedcount - (N*math.log(float(expectedcount))) + lognfactorial
-		
+	
 	return minusll

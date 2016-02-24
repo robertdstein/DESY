@@ -4,6 +4,9 @@ nsbkg = 7
 
 def run(distance, Epn, Z, rmax, eff):
 	
+	if Epn < 0:
+		print distance, Epn, Z, rmax, eff
+	
 	scale = (50 * (10**-3)* Epn *eff)*(math.e**-0.5)
 	
 	if distance < 100:

@@ -92,6 +92,7 @@ def min(a, gridwidth, eff, phi, epsilon, detections):
 	xycount = len(coordinates)			
 	ehcount = len(ehvals)
 	zcount = len(zvalues)
+	line = [0,0]
 	
 	#~ rg = guess
 	#~ rf = guessfval
@@ -127,7 +128,7 @@ def min(a, gridwidth, eff, phi, epsilon, detections):
 		
 		print time.asctime(time.localtime()), zguess, "(", zguessfval, ")"
 		#~ print rg, "(", rf, ") Rejected!"
-
+		
 		if zguessfval < guessfval:
 			guess = zguess
 			guessfval = zguessfval
