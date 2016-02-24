@@ -1,3 +1,5 @@
+. /nfs/astrop/d1/hhsoft/ini_python2.7.8.sh
+
 #        This is how to submit a job to the cluster:
 #          login to a submit node, e.g. astro-wgs01.desy.de
 #          Initialize by sourcing init script: . /usr/sge/default/common/settings.sh
