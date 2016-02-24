@@ -128,5 +128,6 @@ def run(source, detectorcount, eff, gridwidth):
 				figure = plt.gcf() # get current figure
 				figure.set_size_inches(20, 15)
 				plt.savefig('graphs/likelihoodprofile.pdf')
+				plt.close()
 
 run("executeprocessX", 9, 0.06, 100)
