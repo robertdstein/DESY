@@ -12,7 +12,7 @@ import numpy as np
 
 nparrallel = 10
 
-targetfolder = "data/"
+targetfolder = "reconstructeddata/"
 
 batchname= "executereconstructed"
 
