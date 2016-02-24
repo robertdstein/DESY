@@ -1,3 +1,5 @@
+import sys
+
 afspath = '/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/'
 
 sys.path.append(afspath)
