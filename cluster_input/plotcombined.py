@@ -25,15 +25,15 @@ import optimisez as oz
 import initialise as i
 numberofhours, mincount, reconstructiongridwidth, orientation, eff, flux, area, solidangle, selectionefficiency = i.run()
 
-with open("orientations/"+ orientation +".csv", 'rb') as csvfile:
+with open(afspath + "/orientations/"+ orientation +".csv", 'rb') as csvfile:
 	reader = csv.reader(csvfile, delimiter=',', quotechar='|')
 	rowcount = 0
 	for row in reader:
 		rowcount +=1
 		
-reconstructdata = afspath + targetfolder + batchname + "_combined.csv"
+reconstructdata = batchname + "_combined"
 
-llcuts = oz.run(reconstructdata, rowcount, int(cfg.mincount), graph=False)
+llcuts = oz.run(reconstructdata, rowcount, int(mincount), graph=False)
 pl.run(reconstructdata, graph=False, llcuts=llcuts)
 pz.run(reconstructdata, rowcount, int(mincount), graph=False, llcuts=llcuts)
 pp.run(reconstructdata, rowcount, int(mincount), graph=False, llcuts=llcuts)
