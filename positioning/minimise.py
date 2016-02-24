@@ -44,18 +44,17 @@ def min(a, gridwidth, eff, phi, epsilon, detections):
 	xsites = np.linspace(-150, 150, int(gridwidth))
 	ysites = np.linspace(-150, 150, int(gridwidth))
 	
-	eraw = np.linspace(0, 1, num=30)
+	eraw = np.linspace(0, 1, num=25)
 	R = eraw*0.0178
 	evals = ((1.7*R/321)+(3571**-1.7))**(-1/1.7)
 	hvals = np.linspace(20000, 30000, num=3)
 	
 	zvalues = np.arange(20.,33.)
-	#~ zvalues=[26]
 	
 	minangle = 0
 	j = 0
 	
-	while j < 1:
+	while j < 8:
 		coordinates = []
 		j = 0
 		minangle += 0.5
@@ -72,8 +71,6 @@ def min(a, gridwidth, eff, phi, epsilon, detections):
 							
 							if math.fabs(dangle - recordeddangle) < math.radians(minangle):
 								n+=1
-								
-							#~ print dangle, recordeddangle, n
 							
 						if n > (len(a)-1):
 							coordinates.append([x,y])

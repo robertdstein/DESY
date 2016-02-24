@@ -42,7 +42,6 @@ def run(source, outputfile, detectorcount, rgw, eff):
 						return sum
 					
 					truefval = f(float(row[lim]), float(row[lim+1]), float(row[lim+3]), float(row[lim+2]), float(row[lim+4]))
-					print "True Values are", true, "(", truefval, ")"
 					guessx, guessy, guessEpn, guessZ, guessHeight, guessfval =m.min(a, rgw, eff, smearphi, smearepsilon, float(row[lim+5]))
 					print "True Values are", true, "(", truefval, ")"
 					

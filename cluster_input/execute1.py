@@ -1,5 +1,3 @@
-#!/bin/env python
-
 n = 1
 
 import initialise as i

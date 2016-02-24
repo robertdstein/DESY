@@ -14,10 +14,8 @@ nparrallel = 10
 
 targetfolder = "data/"
 
-batchname = "executeprocess"
+batchname= "executereconstructed"
 
-
-#~ reconstructdata="executereconstructed" + str(n)
 
 with open(afspath + targetfolder + batchname + "_combined.csv", 'wb') as csvout:
 	writer = csv.writer(csvout, delimiter=',', quotechar='|')
