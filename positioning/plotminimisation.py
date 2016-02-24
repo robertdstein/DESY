@@ -13,6 +13,7 @@ import atmosphere as atm
 import scipy.optimize
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
+import matplotlib.colors as colors
 import matplotlib.mlab as mlab
 
 def run(source, detectorcount, eff, gridwidth):
@@ -63,47 +64,9 @@ def run(source, detectorcount, eff, gridwidth):
 				argumentZ = "fix_Z=True, "
 				argumentE = "limit_Epn = (232, 4000), error_Epn=100, "
 				argumentheight = "limit_height=(17500, 40000), error_height=1000, "
-				argumenterror = "print_level=0, errordef = 100"
-			
-				xsites = np.linspace(-150, 150, int(gridwidth))
-				ysites = np.linspace(-150, 150, int(gridwidth))
-				
-				z=26
-				
-				minangle = 0
-				j = 0
-				
-				while j < 1:
-					coordinates = []
-					j = 0
-					minangle += 0.1
-					for x in xsites:
-							for y in ysites:
-									n=0
-									
-									for detection in a:
-										x0 = float(detection[0])
-										y0 = float(detection[1])
-										recordeddangle = float(detection[4])
-										
-										dangle = ce.dangle(x0, y0, x, y)
-										
-										if math.fabs(dangle - recordeddangle) < math.radians(minangle):
-											n+=1
-											
-										#~ print dangle, recordeddangle, n
-										
-									if n > (len(a)-1):
-										coordinates.append([x,y])
-										j+=1
-					if minangle > 10:
-						j=10
-						
-				fix = coordinates[0]
+				argumenterror = "print_level=0, errordef = 10"
 					
-				print fix
-					
-				m = eval("Minuit(f, x="+ str(fix[0]) + ", " + argumentx + "y="+ str(fix[1]) + ", " + argumenty+ "Epn = "+ str(trueEpn) + ", " + argumentE + "Z=" + str(z) + "," +argumentZ + "height = " + str(trueheight) + ", " + argumentheight + argumenterror + ")")
+				m = eval("Minuit(f, x="+ str(truex) + ", " + argumentx + "y="+ str(truey) + ", " + argumenty+ "Epn = "+ str(trueEpn) + ", " + argumentE + "Z=" + str(trueZ) + "," +argumentZ + "height = " + str(trueheight) + ", " + argumentheight + argumenterror + ")")
 				m.migrad()
 				params = m.values
 				zguess = [params['x'], params['y'], params['Epn'], params['Z'], params['height']]
@@ -120,25 +83,47 @@ def run(source, detectorcount, eff, gridwidth):
 					ax.plot(bins, f)
 				
 				ax = plt.subplot(4, 2, 6)
-				levels = np.arange(zguessfval-1, 100, 1)
+				
 				cmap = cm.jet_r
 				
-				xbins, ybins, values = m.contour("x", "y")
+				xbins, ybins, values = m.contour("x", "y", bound=[(float(truex)-50, float(truex)+50), (float(truey)-50, float(truey)+50)])
+				levels = np.arange(zguessfval-1, np.amax(values), 100)
+				norm=colors.LogNorm(vmin=zguessfval-1, vmax=np.amax(values))
 				
-				cset1 = plt.contourf(xbins, ybins, values, levels, cmap=cmap, origin='lower')
-				cbar = plt.colorbar(cset1)
+				cset1 = plt.contourf(xbins, ybins, values, levels, cmap=cmap, norm=norm, origin='lower')
 				CS =plt.contour(xbins, ybins, values, colors='k')
 				plt.clabel(CS, inline=1, fontsize=10)
+				plt.scatter(truex, truey, marker='x', color='k')
+				plt.ylabel("Y")
+				plt.xlabel("X")
 					
-				ax = plt.subplot(4, 1, 4)
+				ax = plt.subplot(4, 2, 7)
 				
-				xbins, ybins, values = m.contour("Epn", "height")
+				xbins, ybins, values = m.contour("Epn", "height", bound=[(232, 3000),(17500, 40000)])
+				levels = np.arange(zguessfval-1, np.amax(values), 1)
+				norm=colors.LogNorm(vmin=zguessfval-1, vmax=np.amax(values))
 
-				cset2 = plt.contourf(xbins, ybins, values, levels, cmap=cmap, origin='lower')
-				cbar = plt.colorbar(cset2)
-				plt.xlim(0, 4000)
+				cset2 = plt.contourf(xbins, ybins, values, levels,  cmap=cmap, norm=norm, origin='lower')
 				CS =plt.contour(xbins, ybins, values, colors='k')
 				plt.clabel(CS)
+				plt.scatter(trueEpn, trueheight, marker='x', color='k')
+				plt.ylabel("height")
+				plt.xlabel("Epn")
+				
+				ax = plt.subplot(4, 2, 8)
+				
+				xbins, ybins, values = m.contour("Epn", "Z", bound=[(232, 3000),(20, 32)])
+				
+				levels = np.arange(zguessfval-1, np.amax(values), 1)
+				norm=colors.LogNorm(vmin=zguessfval-1, vmax=np.amax(values))
+
+				cset3 = plt.contourf(xbins, ybins, values, levels,  norm=norm, cmap=cmap, origin='lower')
+				CS =plt.contour(xbins, ybins, values, colors='k')
+				plt.clabel(CS)
+				plt.scatter(trueEpn, trueZ, marker='x', color='k')
+				plt.gca().set_xlim(left=232)
+				plt.ylabel("Z")
+				plt.xlabel("Epn")
 				
 				figure = plt.gcf() # get current figure
 				figure.set_size_inches(20, 15)

@@ -22,8 +22,8 @@ def run(eff, rowcount, mincount=4, text=False, graph=False, output="default", la
 	#Define number of bins, maximum Epn
 	
 	Rcount = 3
-	rlower = 50
-	rupper = 150
+	rlower = 70
+	rupper = 130
 	Z=26
 	
 	sdensity=[]
@@ -105,7 +105,9 @@ def run(eff, rowcount, mincount=4, text=False, graph=False, output="default", la
 	Rmax = 100
 	Z = 26
 	
-	Erange = np.linspace(232, 3512, 5)
+	eraw = np.linspace(0.01, 0.99, num=5)
+	R = eraw*0.0178
+	Erange = ((1.7*R/321)+(3571**-1.7))**(-1/1.7)
 	
 	for Epn in Erange:
 
@@ -138,7 +140,7 @@ def run(eff, rowcount, mincount=4, text=False, graph=False, output="default", la
 	
 	#Define number of bins, maximum Epn
 	
-	height = 30000
+	height = 22000
 	Z = 26
 	
 	for Epn in Erange:
@@ -151,7 +153,7 @@ def run(eff, rowcount, mincount=4, text=False, graph=False, output="default", la
 		
 		for r in rrange:
 			
-			sig, bkg = ld.run(r, Epn, Z, Rmax, 1)
+			sig, bkg = ld.run(r, Epn, Z, rmax, 1)
 			
 			count = sig + bkg
 			
@@ -167,7 +169,7 @@ def run(eff, rowcount, mincount=4, text=False, graph=False, output="default", la
 	plt.yscale('log')
 	plt.ylabel('Photons per m$^2$')
 	plt.xlabel('Radius (m)')
-	plt.title('Height = 30km, Z = 26')
+	plt.title('Height = ' + str(height) + ', Z = 26')
 	
 	plt.legend(loc=3)
 	
