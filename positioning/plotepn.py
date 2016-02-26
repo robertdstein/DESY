@@ -10,7 +10,7 @@ def run(source, detectorcount, mindetections, graph, llcuts):
 	k=0
 	for j in range (detectorcount, mindetections -1, -1):
 		specificcount=[]
-		with open("reconstructeddata/"+ str(source) +".csv", 'rb') as csvfile:
+		with open("/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/reconstructeddata/"+ str(source) +".csv", 'rb') as csvfile:
 			reader = csv.reader(csvfile, delimiter=',', quotechar='|')
 			i = 0
 			upperll=llcuts[k]
@@ -90,7 +90,7 @@ def run(source, detectorcount, mindetections, graph, llcuts):
 	plt.xlabel("Fractional diference from True EPN")
 	plt.title("Reconstruction of Energy per Nucleon")
 	plt.legend()
-	plt.savefig('graphs/epn.pdf')
+	plt.savefig('/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/graphs/epn.pdf')
 	
 	
 	if graph:

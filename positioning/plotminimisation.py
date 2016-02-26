@@ -81,13 +81,14 @@ def run(source, detectorcount, eff, gridwidth):
 					ax = plt.subplot(4, 2, i+1)
 					bins, f  = m.draw_profile(plotters[i], bins=100, bound=ranges[i], text=False)
 					ax.plot(bins, f)
-				
+					plt.yscale('log')
+					
 				ax = plt.subplot(4, 2, 6)
 				
 				cmap = cm.jet_r
 				
 				xbins, ybins, values = m.contour("x", "y", bound=[(float(truex)-50, float(truex)+50), (float(truey)-50, float(truey)+50)])
-				levels = np.arange(zguessfval-1, np.amax(values), 100)
+				levels = np.arange(zguessfval-1, np.amax(values), 10)
 				norm=colors.LogNorm(vmin=zguessfval-1, vmax=np.amax(values))
 				
 				cset1 = plt.contourf(xbins, ybins, values, levels, cmap=cmap, norm=norm, origin='lower')
@@ -100,7 +101,7 @@ def run(source, detectorcount, eff, gridwidth):
 				ax = plt.subplot(4, 2, 7)
 				
 				xbins, ybins, values = m.contour("Epn", "height", bound=[(232, 3000),(17500, 40000)])
-				levels = np.arange(zguessfval-1, np.amax(values), 1)
+				levels = np.arange(zguessfval-1, np.amax(values), 10)
 				norm=colors.LogNorm(vmin=zguessfval-1, vmax=np.amax(values))
 
 				cset2 = plt.contourf(xbins, ybins, values, levels,  cmap=cmap, norm=norm, origin='lower')
@@ -114,7 +115,7 @@ def run(source, detectorcount, eff, gridwidth):
 				
 				xbins, ybins, values = m.contour("Epn", "Z", bound=[(232, 3000),(20, 32)])
 				
-				levels = np.arange(zguessfval-1, np.amax(values), 1)
+				levels = np.arange(zguessfval-1, np.amax(values), 10)
 				norm=colors.LogNorm(vmin=zguessfval-1, vmax=np.amax(values))
 
 				cset3 = plt.contourf(xbins, ybins, values, levels,  norm=norm, cmap=cmap, origin='lower')

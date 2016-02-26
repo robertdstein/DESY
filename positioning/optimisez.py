@@ -12,7 +12,7 @@ def run(source, detectorcount, mindetections, graph=False):
 	Z = 26
 	
 	upperlim = 150
-	lowerlim = 20
+	lowerlim = 18
 	bincount=(upperlim-lowerlim)*2 + 1
 	
 	zrange = [19.5, 32.5]
@@ -21,12 +21,15 @@ def run(source, detectorcount, mindetections, graph=False):
 	llrange = np.linspace(lowerlim, upperlim, bincount)
 	annotation = ""
 	llcuts = []
+	llmins=[]
 	
 	for j in range (detectorcount, mindetections -1, -1):
 		lowestsigma = 5
+		dataset = 0
 		datawidth = 0
 		text = ""
 		optimumll = 500
+		optimummin=0
 		mincount = 5
 		meansigmas=[]
 		llvalues =[]
@@ -34,79 +37,99 @@ def run(source, detectorcount, mindetections, graph=False):
 		limitsigmas = []
 		overflowvalues = []
 		
-		for ll in llrange:
-			with open("reconstructeddata/"+ str(source) +".csv", 'rb') as csvfile:
-				reader = csv.reader(csvfile, delimiter=',', quotechar='|')
-
-				i=0
-				
+		frac=0
+		
+		for i in range(2, len(llrange)):
+			ll = llrange[i]
+			currentsigma = 5		
+			best=['nope']
+			for k in range(0, i-2):
 				specificcount = []
-
-				for row in reader:
-					if i == 0:
-						i = 1
-					else:
-						detections = row[0]
-						reconx = row[1]
-						recony = row[2]
-						reconEPN = row[3]
-						reconZ = row[4]
-						reconHeight = row[5]
-						truex = row[6]
-						truey = row[7]
-						trueEPN = row[8]
-						trueZ = row[9]
-						trueHeight = row[10]
-						likelihood = row[13]
+				minll=llrange[k]	
+				with open("/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/reconstructeddata/"+ str(source) +".csv", 'rb') as csvfile:
+					reader = csv.reader(csvfile, delimiter=',', quotechar='|')
+					full = 0
+					passing = 0
+					
+					i=0
+					for row in reader:
+						if i == 0:
+							i = 1
+						else:
+							detections = row[0]
+							reconx = row[1]
+							recony = row[2]
+							reconEPN = row[3]
+							reconZ = row[4]
+							reconHeight = row[5]
+							truex = row[6]
+							truey = row[7]
+							trueEPN = row[8]
+							trueZ = row[9]
+							trueHeight = row[10]
+							likelihood = row[13]
+							
+							if float(detections) == float(j):
+								if int(Z) == int(trueZ):
+									full += 1
+									if float(minll) < float(likelihood) < float(ll):
+										passing += 1
+										specificcount.append(float(reconZ))
+										
+					line = "Detections = " + str(j)
+					
+					total = passing
+					fraction = float(passing)/float(full)
+					
+					if float(total) > float(1):
+					
+						specificcount.sort()
 						
-						if float(detections) == float(j):
-							if int(Z) == int(trueZ):
-								if float(likelihood) < float(ll):
-									specificcount.append(float(reconZ))
-									
-				line = "Detections = " + str(j)
+						interval = (float(0.5)/float(total))
+						probinside = 1-interval
+						sigmas = scipy.stats.norm(0, 1).ppf(probinside)
+						
+						lowerz = specificcount[0]
+						upperz = specificcount[total-1]
+						meansigma = (float(upperz)-float(lowerz))/(2*sigmas)
+						
+						
+						if float(meansigma) > float(currentsigma):
+							pass
+							
+						elif fraction > 0.2:
+							best = [meansigma, sigmas, ll, minll, total, specificcount, fraction]
+							
+			if len(best) > 1:
+							
+				meansigmas.append(best[0])
+				llvalues.append(best[2])
 				
-				total = len(specificcount)
-				
-				if float(total) > float(1):
-				
-					specificcount.sort()
-					
-					interval = (float(0.5)/float(total))
-					probinside = 1-interval
-					sigmas = scipy.stats.norm(0, 1).ppf(probinside)
-					
-					lowerz = specificcount[0]
-					upperz = specificcount[total-1]
-					meansigma = (float(upperz)-float(lowerz))/(2*sigmas)
-					meansigmas.append(meansigma)
-					llvalues.append(ll)
-					
-					if float(meansigma) == float(0):
-						limitsigma = float(1)/(2*sigmas)
-						limitsigmas.append(limitsigma)
-						overflowvalues.append(ll)
+				if float(best[0]) == float(0):
+					limitsigma = float(1)/(2*sigmas)
+					limitsigmas.append(limitsigma)
+					overflowvalues.append(ll)
 	
-					if float(meansigma) > float(lowestsigma):
-						pass
-					
-					else:
-						if float(sigmas) > float(datawidth):
-							lowestsigma = meansigma
-							dataset = total
-							text = specificcount
-							optimumll=ll
-							mincount = j
+				if float(best[0]) > float(lowestsigma):
+					pass
+				
+				else:
+					if float(best[1]) > float(datawidth):
+						lowestsigma = best[0]
+						optimumll=best[2]
+						optimummin=best[3]
+						dataset = best[4]
+						text = best[5]
+						frac = best[6]
+						mincount = j
 		
 		plt.plot(llvalues, meansigmas, label=line)
-		if len(overflowvalues) > 0:
-			limitlabel = line + " upper limit"
-			plt.plot(overflowvalues, limitsigmas, label=limitlabel, linestyle = "--", color='r')
 	
-		annotation += "Optimum Cut occurs with LL < " + str(optimumll)+ " and with " + str(mincount) + " detections \n"
-		annotation += "This leaves " + str(dataset) + " events \n \n"
+		annotation += "Optimum Cut occurs with " + str(optimummin) + " < LL < " + str(optimumll)+ " and with " + str(mincount) + " detections \n"
+		annotation += "This leaves " + str(dataset) + " events , a fraction of " + str(frac) + "\n \n"
 		
 		llcuts.append(optimumll)
+		llmins.append(optimummin)
 
 	figure = plt.gcf() # get current figure
 	figure.set_size_inches(20, 15)
@@ -118,10 +141,10 @@ def run(source, detectorcount, mindetections, graph=False):
 	plt.ylabel("Mean Sigma Z")
 	plt.xscale('log')
 	
-	plt.annotate(annotation, (12, -0.5))
+	plt.annotate(annotation, xy=(0.7, 0.4), xycoords="axes fraction",  fontsize=10)
 	
 	plt.legend()
-	plt.savefig('graphs/Zcuts.pdf')
+	plt.savefig('/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/graphs/Zcuts.pdf')
 	
 	if graph:
 		plt.show()
@@ -129,4 +152,4 @@ def run(source, detectorcount, mindetections, graph=False):
 	else:
 		plt.close()
 	
-	return llcuts
+	return llcuts, llmins

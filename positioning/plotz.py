@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
 import scipy.stats
 
-def run(source, detectorcount, mindetections, graph, llcuts):
+def run(source, detectorcount, mindetections, graph, llcuts=None, llmins=None):
 
 	i=1
 
@@ -14,6 +14,15 @@ def run(source, detectorcount, mindetections, graph, llcuts):
 	bincount = 13
 	zrange = [19.5, 32.5]
 	reconvalues = np.linspace(zrange[0]+0.5, zrange[1]-0.5, bincount)
+	
+	if llcuts == None:
+		llcuts = np.ones(1 + detectorcount-mindetections)*500
+		path = '/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/graphs/rawZ.pdf'
+	else:
+		path = '/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/graphs/Z.pdf'
+		
+	if llmins == None:
+		llmins = np.zeros(1 + detectorcount-mindetections)
 	
 	for val in zvalues:
 		
@@ -35,7 +44,7 @@ def run(source, detectorcount, mindetections, graph, llcuts):
 		
 		for j in range (detectorcount, mindetections -1, -1):
 			
-			with open("reconstructeddata/"+ str(source) +".csv", 'rb') as csvfile:
+			with open("/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/reconstructeddata/"+ str(source) +".csv", 'rb') as csvfile:
 				reader = csv.reader(csvfile, delimiter=',', quotechar='|')
 				specificcount = []
 				
@@ -45,6 +54,8 @@ def run(source, detectorcount, mindetections, graph, llcuts):
 				i = 0
 				
 				upperll=llcuts[k]
+				minll = llmins[k]
+				print j, upperll, minll
 
 				for row in reader:
 					if i == 0:
@@ -67,7 +78,7 @@ def run(source, detectorcount, mindetections, graph, llcuts):
 						if int(detections) == int(j):
 							if int(z) == int(trueZ):
 								full += 1
-								if float(likelihood) < float(upperll):
+								if float(minll) < float(likelihood) < float(upperll):
 									passing += 1
 									specificcount.append(float(reconZ))
 								
@@ -82,9 +93,10 @@ def run(source, detectorcount, mindetections, graph, llcuts):
 				
 				total = len(specificcount)
 				
-				fraction = float(passing)/float(full)
-				info += str("For N = " + str(j) + " we require LL < " + str(upperll) + "\n ")
-				info += str("Fraction passing is " + str(fraction) + "\n")
+				if float(full) > 0:
+					fraction = float(passing)/float(full)
+					info += str("For N = " + str(j) + " we require " + str(minll) + " < LL < " + str(upperll) + "\n ")
+					info += str("Fraction passing is " + str(fraction) + "\n")
 				
 				if float(total) > float(0):
 				
@@ -142,12 +154,15 @@ def run(source, detectorcount, mindetections, graph, llcuts):
 		plt.xlim(zrange)
 		plt.xlabel('Reconstructed Z', labelpad=0)
 		plt.title(title)
+		
+	figure = plt.gcf() # get current figure
+	figure.set_size_inches(20, 15)
 	
-	plt.annotate(info, xy=(0.6, 0.3), xycoords="axes fraction",  fontsize=10)
+	plt.annotate(info, xy=(0.7, 0.4), xycoords="axes fraction",  fontsize=10)
 	plt.suptitle("True Z reconstruction", fontsize=20)
 	plt.legend()
 	
-	plt.savefig('graphs/Z.pdf')
+	plt.savefig(path)
 		
 	if graph:
 		plt.show()

@@ -12,7 +12,7 @@ def run(source, detectorcount, mindetections, graph, llcuts):
 		specificcount=[]
 		
 		
-		with open("reconstructeddata/"+ str(source) +".csv", 'rb') as csvfile:
+		with open("/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/reconstructeddata/"+ str(source) +".csv", 'rb') as csvfile:
 			reader = csv.reader(csvfile, delimiter=',', quotechar='|')
 			i = 0
 			upperll=llcuts[k]
@@ -49,22 +49,21 @@ def run(source, detectorcount, mindetections, graph, llcuts):
 		
 			specificcount.sort()
 		
-			lower = int(total*0.16)
+			lower = int(0)
 			mid = int(total*0.5)
-			upper = int(total*0.84)
+			upper = int(total*0.68)
 			
-			lowerz = specificcount[lower]
+			lowerz = 0
 			meanz = specificcount[mid]
 			upperz = specificcount[upper]
 			sigma = (upperz-lowerz) * 0.5
 			
 			info += str("For N = " + str(j) + " \n ")
-			info += ('Lower bound = ' + str(lowerz) + " \n")
 			info += ('Upper bound = ' + str(upperz) + " \n")
-			info += ('Mean = ' + str(meanz) + " \n")
+			info += ('Median = ' + str(meanz) + " \n")
 			info += ('Sigma = ' + str(sigma) + "\n \n")
 	
-	plt.annotate(info, xy=(0.5, 0.4), xycoords="axes fraction",  fontsize=10)
+	plt.annotate(info, xy=(0.6, 0.3), xycoords="axes fraction",  fontsize=15)
 	
 	n, bins, _ = plt.hist(fullcount, bins=30, range=[0,30], label=labels, histtype='bar', stacked=True)
 
@@ -95,13 +94,16 @@ def run(source, detectorcount, mindetections, graph, llcuts):
 	uplim = nmax + (math.sqrt(nmax))
 	
 	plt.ylim(0, uplim)
+	
+	figure = plt.gcf() # get current figure
+	figure.set_size_inches(20, 15)
 
 	plt.xlabel("Distance from True Position")
 	plt.ylabel("Count")
 	plt.title("Distance Reconstruction")
 	plt.legend()
 	
-	plt.savefig('graphs/position.pdf')
+	plt.savefig('/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/graphs/position.pdf')
 	
 	if graph:
 		plt.show()

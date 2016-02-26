@@ -16,7 +16,7 @@ def run(source, graph, llcuts):
 	wrong = []
 	full = []
 	
-	with open("reconstructeddata/"+ str(source) +".csv", 'rb') as csvfile:
+	with open("/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/reconstructeddata/"+ str(source) +".csv", 'rb') as csvfile:
 		reader = csv.reader(csvfile, delimiter=',', quotechar='|')
 		
 		i = 0
@@ -81,9 +81,9 @@ def run(source, graph, llcuts):
 		
 	bincount = 50
 	
-	limits = [correct[0], correct[total-1]]
+	limits = [15, 50]
 	
-	plt.hist([correct, close, wrong], color = ["green", "orange", "red"], bins = bincount, stacked=True, label=["Delta Z = 0", "Delta Z = 1", "Delta Z > 1"], histtype='bar')
+	plt.hist([correct, close, wrong], range=limits, color = ["green", "orange", "red"], bins = bincount, stacked=True, label=["Delta Z = 0", "Delta Z = 1", "Delta Z > 1"], histtype='bar')
 	
 	for val in llcuts:
 		plt.axvline(x=(val+0.01), linestyle='--', color='m', label="LL Cut")
@@ -95,7 +95,7 @@ def run(source, graph, llcuts):
 	plt.annotate(info, (1300, 10),  fontsize=10)
 	plt.suptitle('Likelihood', fontsize=20)
 	
-	plt.savefig('graphs/Likelihood.pdf')
+	plt.savefig('/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/graphs/Likelihood.pdf')
 		
 	if graph:
 		plt.show()
