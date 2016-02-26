@@ -43,7 +43,7 @@ with open(afspath + targetfolder + batchname + "_combined.csv", 'wb') as csvout:
 			
 			j = 0
 			
-	filename= batchname + "_combined"
+	filename= batchname + "_saved"
 	path = afspath + targetfolder + filename + ".csv"
 		
 	print "Adding", path

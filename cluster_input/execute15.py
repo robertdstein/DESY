@@ -1,4 +1,4 @@
-n = 16
+n = 15
 
 import initialise as i
 numberofhours, mincount, reconstructiongridwidth, orientation, eff, flux, area, solidangle, selectionefficiency = i.run()

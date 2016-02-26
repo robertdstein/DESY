@@ -55,7 +55,6 @@ def run(source, detectorcount, mindetections, graph, llcuts=None, llmins=None):
 				
 				upperll=llcuts[k]
 				minll = llmins[k]
-				print j, upperll, minll
 
 				for row in reader:
 					if i == 0:

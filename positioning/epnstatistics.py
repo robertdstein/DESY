@@ -137,6 +137,29 @@ def run(eff, rowcount, mincount=4, text=False, graph=False, layout="five", numbe
 	emin=[]
 	rmax = []
 	
+	Erange = [3571, 850, 231]
+	
+	labels = [" = Infinity "]
+	for e in Erange:
+		labels.append(" = " + str(e))
+		
+	colors=["k", "r", "g", "b"]
+	
+	nucleonmass = 0.93827 
+	
+	betarange = [1.0]
+	for E in Erange:
+		gamma = float(E)/nucleonmass
+		betarange.append(math.sqrt(1-(float(1)/(gamma**2))))
+	
+	print Erange
+	print betarange
+	
+	curves=[]
+	for j in range (0, len(betarange)):
+		curves.append([])
+		rawheights.append([])
+
 	#Look up values from atmprofile10.csv
 	
 	with open('atmospheredata/atmprofile.csv', 'rb') as csvfile:
@@ -158,47 +181,59 @@ def run(eff, rowcount, mincount=4, text=False, graph=False, layout="five", numbe
 				
 				theta = math.acos(float(1)/float(ri))
 				
+				for j in range (0, len(betarange)):
+					beta = betarange[j]
+					costheta = float(1)/((float(ri))*float(beta))
+					if costheta < 1:
+						theta = math.acos(float(1)/((float(ri))*float(beta)))
+						r = theta*(height-1800)
+						curves[j].append(r)
+						rawheights[j].append(height)
+				
 				#Calculates the Threshold Energy using Refractive Index
 				
 				Ethreshold = float(cr.runemin(ri))*(10**-3)
 				
 				#Calculate the Maximum Ring Size, and appends these values to arrays
-				r = theta*(height-1800)
 				
-				rawheights.append(height)
 				emin.append(Ethreshold)
-				rmax.append(r)
+
+	for j in range (0, len(betarange)):
+		print j, len(curves[j]), len(rawheights[j])
+		label = "Radius (m) for E" + str(labels[j])
+		ax3.plot(curves[j], rawheights[j], color = colors[k], label=label)
+	plt.axhline(y=22000, color='m')
+	ax3.plot(emin,rawheights[0],  color='c', label="Threshold Energy (TeV per Nucleon)")	
 	
-	ax3.plot(emin,rawheights,  label="Threshold Energy (TeV per Nucleon)")
-	ax3.plot(rmax, rawheights, label="Maximum Radius (m)")
+	
 	plt.xscale('log')
 	
 	plt.ylabel('Height', labelpad=0)
 	plt.legend(loc=2)
 	
-	print "Maximum Radius is", max(rmax)
+	print "Maximum Radius is", max(curves[0])
 	
 	figure = plt.gcf() # get current figure
 	figure.set_size_inches(20, 15)
 	
-	#~ #Option to produce a full size graph, for use in presentations etc.
+	#Option to produce a full size graph, for use in presentations etc.
+	
+	#~ ax3 = plt.subplot(111)
 	#~ 
-	ax3 = plt.subplot(111)
-	
-	ax3.plot(emin,rawheights,  label="Threshold Energy (TeV per Nucleon)")
-	ax3.plot(rmax, rawheights, label="Maximum Radius (m)")
-	plt.xscale('log')
-	
-	mid = atm.runheight(0.5)
-	plt.axhline(y=mid, color='r', label="50% First Interaction Height")
-	
-	plt.ylabel('Height', labelpad=0)
-	plt.legend(loc=2)
-	
-	extent = ax3.get_window_extent().transformed(figure.dpi_scale_trans.inverted())
-	plt.savefig('heightenergyradius.pdf', bbox_inches=extent.expanded(1.3, 1.1))
-	
+	#~ ax3.plot(emin,rawheights,  label="Threshold Energy (TeV per Nucleon)")
+	#~ ax3.plot(rmax, rawheights, label="Maximum Radius (m)")
+	#~ plt.xscale('log')
 	#~ 
+	#~ mid = atm.runheight(0.5)
+	#~ plt.axhline(y=mid, color='r', label="50% First Interaction Height")
+	#~ 
+	#~ plt.ylabel('Height', labelpad=0)
+	#~ plt.legend(loc=2)
+	#~ 
+	#~ extent = ax3.get_window_extent().transformed(figure.dpi_scale_trans.inverted())
+	#~ plt.savefig('heightenergyradius.pdf', bbox_inches=extent.expanded(1.3, 1.1))
+	#~ 
+	
 	title = 'Epn Statistics for ' + str(float(nh)*float(bincount)) + " hours"
 	plt.suptitle(title, fontsize=20)
 	

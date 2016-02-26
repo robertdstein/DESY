@@ -1,0 +1,5 @@
+Reading /nfs/astrop/d1/hhsoft/64bit/ini_python2.7.8_64bit.sh
+Fri Feb 26 11:03:58 2016 Cosmic Ray Iron Flux is 0.0002 Simulated Area is 90000 Field of View is 0.0872664625997 Detected Flux is 0.785398163397
+Fri Feb 26 11:03:58 2016 Rate per hour 2827.43338823 Simulated Hours 1.5 Simulated Events 4241
+Fri Feb 26 11:04:00 2016 In total there were 4241 Simulated Events. Of these 3173 did not produce Cherenkov Light.
+Fri Feb 26 11:04:00 2016 A further 1033 Events produced Cherenkov Light below Threshold, leaving 35 accepted events.

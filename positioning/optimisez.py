@@ -79,10 +79,10 @@ def run(source, detectorcount, mindetections, graph=False):
 					line = "Detections = " + str(j)
 					
 					total = passing
-					fraction = float(passing)/float(full)
+					
 					
 					if float(total) > float(1):
-					
+						fraction = float(passing)/float(full)
 						specificcount.sort()
 						
 						interval = (float(0.5)/float(total))
@@ -97,8 +97,13 @@ def run(source, detectorcount, mindetections, graph=False):
 						if float(meansigma) > float(currentsigma):
 							pass
 							
-						elif fraction > 0.2:
-							best = [meansigma, sigmas, ll, minll, total, specificcount, fraction]
+						elif fraction > 0.3:
+							if int(lowerz) > int(26):
+								pass
+							elif int(26) > int(upperz):
+								pass
+							else: 
+								best = [meansigma, sigmas, ll, minll, total, specificcount, fraction]
 							
 			if len(best) > 1:
 							

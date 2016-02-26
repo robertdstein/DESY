@@ -36,7 +36,7 @@ reconstructdata = batchname + "_combined"
 llcuts, llmins = oz.run(reconstructdata, rowcount, int(mincount), graph=False)
 print llcuts
 print llmins
-pl.run(reconstructdata, graph=False, llcuts=llcuts)
+pl.run(reconstructdata, rowcount, int(mincount), graph=False, llcuts=llcuts, llmins=llmins)
 pz.run(reconstructdata, rowcount, int(mincount), graph=False, llcuts=None)
 pz.run(reconstructdata, rowcount, int(mincount), graph=False, llcuts=llcuts, llmins=llmins)
 pp.run(reconstructdata, rowcount, int(mincount), graph=False, llcuts=llcuts)
