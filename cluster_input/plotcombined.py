@@ -33,9 +33,12 @@ with open(afspath + "/orientations/"+ orientation +".csv", 'rb') as csvfile:
 		
 reconstructdata = batchname + "_combined"
 
-llcuts = oz.run(reconstructdata, rowcount, int(mincount), graph=False)
+llcuts, llmins = oz.run(reconstructdata, rowcount, int(mincount), graph=False)
+print llcuts
+print llmins
 pl.run(reconstructdata, graph=False, llcuts=llcuts)
-pz.run(reconstructdata, rowcount, int(mincount), graph=False, llcuts=llcuts)
+pz.run(reconstructdata, rowcount, int(mincount), graph=False, llcuts=None)
+pz.run(reconstructdata, rowcount, int(mincount), graph=False, llcuts=llcuts, llmins=llmins)
 pp.run(reconstructdata, rowcount, int(mincount), graph=False, llcuts=llcuts)
 pe.run(reconstructdata, rowcount, int(mincount), graph=False, llcuts=llcuts)
 ph.run(reconstructdata, rowcount, int(mincount), graph=False, llcuts=llcuts)

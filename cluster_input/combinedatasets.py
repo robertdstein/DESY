@@ -10,7 +10,7 @@ import argparse, math, random, time
 import csv
 import numpy as np
 
-nparrallel = 10
+nparrallel = 30
 
 targetfolder = "reconstructeddata/"
 
@@ -42,3 +42,16 @@ with open(afspath + targetfolder + batchname + "_combined.csv", 'wb') as csvout:
 					pass
 			
 			j = 0
+			
+	filename= batchname + "_combined"
+	path = afspath + targetfolder + filename + ".csv"
+		
+	print "Adding", path
+	with open(path, 'rb') as csvfile:
+		reader = csv.reader(csvfile, delimiter=',', quotechar='|')
+		j = 0
+		for row in reader:
+			if j == 1:
+				writer.writerow(row)
+			elif j == 0:
+				j = 1

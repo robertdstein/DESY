@@ -13,7 +13,7 @@
 #$ -N ChargeReconstruction
 
 # runtime/ Maximale Laufzeit, hat einfluss auf die Priorität. Die Schwellen sind 2:59:59, 23:59:59, 2:59:59, 167:59:59
-#$ -l h_rt=23:59:59 
+#$ -l h_rt=167:59:59 
 
 # Hosts/  host die benutzt werden sollen
 #$ -l hostname="!bird001.desy.de&!bird002.desy.de&!bird003.desy.de&!bird004.desy.de&!bird009.desy.de"
