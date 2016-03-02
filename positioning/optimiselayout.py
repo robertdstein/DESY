@@ -31,10 +31,10 @@ def run(numberofhours):
 	lowerbincount = 20
 	upperbincount = 10
 	
-	lowerrange = [lowerlim, midlim-0.01, lowerbincount]
+	lowerrange = [lowerlim, midlim, lowerbincount]
 	ranges.append(lowerrange)
 	
-	upperrange = [midlim+0.01, upperlim, upperbincount]
+	upperrange = [midlim, upperlim, upperbincount]
 	ranges.append(upperrange)
 	
 	fullcount = []
@@ -51,8 +51,15 @@ def run(numberofhours):
 		upper = entry[1]
 		bins = entry[2]
 		
-		telescopegap = np.linspace(lower, upper, bins)
-		edges.extend(np.linspace(lower-0.01, upper+0.01, bins+1))
+		
+		edge = np.linspace(lower, upper, bins)
+		edges.extend(edge)
+		telescopegap = (edge[1:] + edge[:-1])*0.5
+		
+		print edge
+		print telescopegap
+		
+		
 		simlim = (upper + 150)
 		
 		area = 4*(simlim**2)
@@ -148,8 +155,8 @@ def run(numberofhours):
 	print bins
 
 	plt.legend(loc=2)
-	plt.xlabel('Grid width (m)', labelpad=0)
-	plt.ylabel('Count', labelpad=0)
+	plt.xlabel('Grid width (m)', fontsize=20, labelpad=0)
+	plt.ylabel('Count', fontsize=20, labelpad=0)
 	
 	ax2 = plt.subplot(212)
 	
@@ -202,9 +209,12 @@ def run(numberofhours):
 		
 	plt.legend()
 	
-	plt.xlabel('Grid width (m)', labelpad=0)
-	plt.ylabel('Count', labelpad=0)
+	plt.xlabel('Grid width (m)', fontsize=20, labelpad=0)
+	plt.ylabel('Count', fontsize=20, labelpad=0)
 	plt.yscale('log')
+	
+	ax1.tick_params(labelsize=20)
+	ax2.tick_params(labelsize=20)
 	
 	title = "Telescope Observations for " +str(numberofhours) + " hours"
 	
@@ -214,3 +224,4 @@ def run(numberofhours):
 	figure.set_size_inches(20, 15)	
 	
 	plt.savefig('graphs/stats/optimiselayout.pdf')
+	plt.savefig('/afs/desy.de/user/s/steinrob/Documents/DESY/presentations/dpg presentation/optimiselayout.png')

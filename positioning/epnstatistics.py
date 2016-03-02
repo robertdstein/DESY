@@ -131,19 +131,19 @@ def run(eff, rowcount, mincount=4, text=False, graph=False, layout="five", numbe
 	
 	#Plot variables Etheshold and Ring Radius againist height
 	
-	ax3 = plt.subplot(122)
+	ax3 = plt.subplot(111)
 	
 	rawheights=[]
 	emin=[]
 	rmax = []
 	
-	Erange = [3571, 850, 231]
+	Erange = [3571, 850]
 	
 	labels = [" = Infinity "]
 	for e in Erange:
 		labels.append(" = " + str(e))
 		
-	colors=["k", "r", "g", "b"]
+	colors=["k", "r", "g"]
 	
 	nucleonmass = 0.93827 
 	
@@ -201,15 +201,17 @@ def run(eff, rowcount, mincount=4, text=False, graph=False, layout="five", numbe
 	for j in range (0, len(betarange)):
 		print j, len(curves[j]), len(rawheights[j])
 		label = "Radius (m) for E" + str(labels[j])
-		ax3.plot(curves[j], rawheights[j], color = colors[k], label=label)
-	plt.axhline(y=22000, color='m')
-	ax3.plot(emin,rawheights[0],  color='c', label="Threshold Energy (TeV per Nucleon)")	
+		ax3.plot(curves[j], rawheights[j], color = colors[j], label=label, linewidth=3.0)
+	plt.axhspan(19000, 26000, color='m', alpha=0.5)
+	ax3.plot(emin,rawheights[0],  color='b', linewidth=3.0, label="Threshold Energy (TeV per Nucleon)")	
 	
 	
 	plt.xscale('log')
 	
-	plt.ylabel('Height', labelpad=0)
+	plt.ylabel('Height', labelpad=0, fontsize=30)
 	plt.legend(loc=2)
+	
+	ax3.tick_params(labelsize=30)
 	
 	print "Maximum Radius is", max(curves[0])
 	
@@ -218,26 +220,14 @@ def run(eff, rowcount, mincount=4, text=False, graph=False, layout="five", numbe
 	
 	#Option to produce a full size graph, for use in presentations etc.
 	
-	#~ ax3 = plt.subplot(111)
-	#~ 
-	#~ ax3.plot(emin,rawheights,  label="Threshold Energy (TeV per Nucleon)")
-	#~ ax3.plot(rmax, rawheights, label="Maximum Radius (m)")
-	#~ plt.xscale('log')
-	#~ 
-	#~ mid = atm.runheight(0.5)
-	#~ plt.axhline(y=mid, color='r', label="50% First Interaction Height")
-	#~ 
-	#~ plt.ylabel('Height', labelpad=0)
-	#~ plt.legend(loc=2)
-	#~ 
-	#~ extent = ax3.get_window_extent().transformed(figure.dpi_scale_trans.inverted())
-	#~ plt.savefig('heightenergyradius.pdf', bbox_inches=extent.expanded(1.3, 1.1))
-	#~ 
+	plt.suptitle("Energy per Nucleon statistics", fontsize=30)
 	
+	plt.savefig('/afs/desy.de/user/s/steinrob/Documents/DESY/presentations/dpg presentation/Energy.png')
 	title = 'Epn Statistics for ' + str(float(nh)*float(bincount)) + " hours"
 	plt.suptitle(title, fontsize=20)
 	
 	plt.savefig('graphs/stats/Energy.pdf')
+	
 		
 	if graph:
 		plt.show()

@@ -15,7 +15,7 @@ from matplotlib.patches import Ellipse
 
 def run(eff, rowcount, mincount=4, text=False, graph=False, output="default", layout="five", number=1, nh=1):
 	
-	ax1 = plt.subplot(211)
+	ax1 = plt.subplot(212)
 	
 	#Define number of bins, maximum Epn
 	
@@ -47,13 +47,13 @@ def run(eff, rowcount, mincount=4, text=False, graph=False, output="default", la
 		ax1.plot(rrange, sdensity, label=label)
 	
 	plt.yscale('log')
-	plt.ylabel('Photons per m$^2$')
-	plt.xlabel('Radius (m)')
-	plt.title('No background, Rmax=100')
+	plt.ylabel('Photons per m$^2$', fontsize=20)
+	plt.xlabel('Radius (m)', fontsize=20)
+	plt.title('No background, Rmax=100', fontsize=20)
 	
 	plt.legend(loc=2)
 	
-	ax2 = plt.subplot(212)
+	ax2 = plt.subplot(211)
 	
 	#Define number of bins, maximum Epn
 	
@@ -64,7 +64,7 @@ def run(eff, rowcount, mincount=4, text=False, graph=False, output="default", la
 	R = eraw*0.0178
 	Erange = ((1.7*R/321)+(3571**-1.7))**(-1/1.7)
 	
-	Erange = [3571, 850, 231]
+	Erange = [3571, 850]
 	
 	height = 22000
 	Z = 26
@@ -115,18 +115,22 @@ def run(eff, rowcount, mincount=4, text=False, graph=False, output="default", la
 		ax2.plot(rrange, density, color=color, label=label, linewidth=3.0)
 	
 	plt.yscale('log')
-	plt.ylabel('Photons per m$^2$')
-	plt.xlabel('Radius (m)')
-	plt.title('Height = ' + str(height) + ', Z = 26')
+	plt.ylabel('Photons per m$^2$', fontsize=20)
+	plt.xlabel('Radius (m)', fontsize=20)
+	plt.title('Height = ' + str(height) + ', Z = 26', fontsize=20)
 	
 	plt.legend()
 	
+	ax1.tick_params(labelsize=20)
+	ax2.tick_params(labelsize=20)
+	
+	plt.suptitle("Lateral Photon Distribution in DC pixel", fontsize=20)
+	
 	figure = plt.gcf() # get current figure
 	figure.set_size_inches(20, 15)
-	title = 'Light Density Statistics'
-	plt.suptitle(title, fontsize=20)
 	
 	plt.savefig('graphs/stats/Light.pdf')
+	plt.savefig('/afs/desy.de/user/s/steinrob/Documents/DESY/presentations/dpg presentation/Light.png')
 		
 	if graph:
 		plt.show()

@@ -14,7 +14,7 @@ def runindex(height, text=False):
 		currenth=0
 		currentri=0
 		
-		ri = 1 + (4.12908*(10**-6))
+		ri = 1.0
 		
 		for row in reader:
 			i +=1

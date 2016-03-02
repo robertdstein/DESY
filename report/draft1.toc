@@ -1,0 +1,13 @@
+\contentsline {section}{\numberline {1}Introduction}{3}
+\contentsline {section}{\numberline {2}Lateral Photon Distribution Method}{3}
+\contentsline {subsection}{\numberline {2.1}Cherenkov Light Emission}{3}
+\contentsline {subsection}{\numberline {2.2}Nuclear Charge}{4}
+\contentsline {subsection}{\numberline {2.3}Iterative Log Likelihood Minimisation}{4}
+\contentsline {section}{\numberline {3}HESS-type Event Reconstruction}{5}
+\contentsline {subsection}{\numberline {3.1}First Interaction Height}{5}
+\contentsline {subsection}{\numberline {3.2}HESS Energy saturation region}{5}
+\contentsline {subsection}{\numberline {3.3}Extended Air Shower Background}{5}
+\contentsline {section}{\numberline {4}Optimised Telescope Array}{5}
+\contentsline {subsection}{\numberline {4.1}Count Rates}{8}
+\contentsline {subsection}{\numberline {4.2}Saturation Region Energies}{8}
+\contentsline {section}{\numberline {5}Conclusion}{8}

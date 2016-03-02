@@ -39,11 +39,11 @@ def run(source, detectorcount, mindetections, graph=False):
 		
 		frac=0
 		
-		for i in range(2, len(llrange)):
+		for i in range(1, len(llrange)):
 			ll = llrange[i]
 			currentsigma = 5		
 			best=['nope']
-			for k in range(0, i-2):
+			for k in range(i-10, i-1):
 				specificcount = []
 				minll=llrange[k]	
 				with open("/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/reconstructeddata/"+ str(source) +".csv", 'rb') as csvfile:
@@ -92,17 +92,29 @@ def run(source, detectorcount, mindetections, graph=False):
 						lowerz = specificcount[0]
 						upperz = specificcount[total-1]
 						meansigma = (float(upperz)-float(lowerz))/(2*sigmas)
+
+						#~ lower = int(total*0.16)
+						#~ upper = int(total*0.84)
+						#~ 
+						#~ lowerz = specificcount[lower]
+						#~ upperz = specificcount[upper]
+						#~ sixtyeightsigma = (upperz-lowerz) * 0.5
+						
+						#~ if extremesigma < sixtyeightsigma:
+							#~ meansigma = sixtyeightsigma
+						#~ else:
+							#~ meansigma = extremesigma
 						
 						
 						if float(meansigma) > float(currentsigma):
 							pass
 							
-						elif fraction > 0.3:
+						elif fraction > 0.05:
 							if int(lowerz) > int(26):
 								pass
 							elif int(26) > int(upperz):
 								pass
-							else: 
+							else:
 								best = [meansigma, sigmas, ll, minll, total, specificcount, fraction]
 							
 			if len(best) > 1:
