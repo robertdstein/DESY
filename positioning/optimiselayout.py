@@ -224,4 +224,4 @@ def run(numberofhours):
 	figure.set_size_inches(20, 15)	
 	
 	plt.savefig('graphs/stats/optimiselayout.pdf')
-	plt.savefig('/afs/desy.de/user/s/steinrob/Documents/DESY/presentations/dpg presentation/optimiselayout.png')
+	plt.savefig('/afs/desy.de/user/s/steinrob/Documents/DESY/report/graphs/logenergyradius.png')

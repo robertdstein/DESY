@@ -13,11 +13,13 @@ import atmosphere as atm
 import cherenkovradius as cr
 from matplotlib.patches import Ellipse
 
+altitude = 1800
+
 def run(eff, rowcount, mincount=4, text=False, graph=False, layout="five", number=1, nh=1):
 	
 	#Create a subplot for the fractional abundance
 
-	ax1 = plt.subplot(221)
+	ax1 = plt.subplot(211)
 	
 	#Define number of bins, maximum Epn
 	
@@ -118,7 +120,7 @@ def run(eff, rowcount, mincount=4, text=False, graph=False, layout="five", numbe
 	
 	#plot the histogram scaled with E^-2.7 distribution to the second subplot
 	
-	ax2 = plt.subplot(223)
+	ax2 = plt.subplot(212)
 		
 	plt.hist([mT, bT, nDC], weights=[wmT, wbT, wnDC], log=True, bins=Erange, histtype='bar',range=limits, label=labels)
 
@@ -129,21 +131,34 @@ def run(eff, rowcount, mincount=4, text=False, graph=False, layout="five", numbe
 	plt.ylabel('Scaled Count')
 	plt.legend()
 	
+	fig = plt.gcf() # get current figure
+	title = 'Epn Statistics for ' + str(float(nh)*float(bincount)) + " hours"
+	st = plt.suptitle(title, fontsize=20)
+	st.set_y(0.98)
+	fig.set_size_inches(10, 15)
+	fig.tight_layout()
+	fig.subplots_adjust(top=0.95)
+	
+	plt.savefig('/afs/desy.de/user/s/steinrob/Documents/DESY/report/graphs/energystats.png')
+	
+	plt.close()
+
+	
 	#Plot variables Etheshold and Ring Radius againist height
 	
-	ax3 = plt.subplot(111)
+	ax3 = plt.subplot(211)
 	
 	rawheights=[]
 	emin=[]
 	rmax = []
 	
-	Erange = [3571, 850]
+	Erange = [3521, 750, 232]
 	
 	labels = [" = Infinity "]
 	for e in Erange:
 		labels.append(" = " + str(e))
 		
-	colors=["k", "r", "g"]
+	colors=["k", "r", "g", "m", "c", "b"]
 	
 	nucleonmass = 0.93827 
 	
@@ -179,14 +194,12 @@ def run(eff, rowcount, mincount=4, text=False, graph=False, layout="five", numbe
 				
 				#Calculate the maximum Cherenkov Angle as 1/eta
 				
-				theta = math.acos(float(1)/float(ri))
-				
 				for j in range (0, len(betarange)):
 					beta = betarange[j]
 					costheta = float(1)/((float(ri))*float(beta))
 					if costheta < 1:
 						theta = math.acos(float(1)/((float(ri))*float(beta)))
-						r = theta*(height-1800)
+						r = theta*(height-altitude)
 						curves[j].append(r)
 						rawheights[j].append(height)
 				
@@ -202,27 +215,111 @@ def run(eff, rowcount, mincount=4, text=False, graph=False, layout="five", numbe
 		print j, len(curves[j]), len(rawheights[j])
 		label = "Radius (m) for E" + str(labels[j])
 		ax3.plot(curves[j], rawheights[j], color = colors[j], label=label, linewidth=3.0)
-	plt.axhspan(19000, 26000, color='m', alpha=0.5)
+	#~ plt.axhspan(19000, 26000, color='m', alpha=0.5)
 	ax3.plot(emin,rawheights[0],  color='b', linewidth=3.0, label="Threshold Energy (TeV per Nucleon)")	
-	
 	
 	plt.xscale('log')
 	
-	plt.ylabel('Height', labelpad=0, fontsize=30)
-	plt.legend(loc=2)
-	
-	ax3.tick_params(labelsize=30)
+	plt.ylabel('Height', labelpad=0)
+	plt.legend(loc=3)
 	
 	print "Maximum Radius is", max(curves[0])
 	
-	figure = plt.gcf() # get current figure
-	figure.set_size_inches(20, 15)
+	ax4 = plt.subplot(212)
 	
-	#Option to produce a full size graph, for use in presentations etc.
+	plots = []
+	weighting = []
+	labels = []
+
+	requiredfracs=np.linspace(0.6, 0.9, 3)
 	
-	plt.suptitle("Energy per Nucleon statistics", fontsize=30)
+	for requiredfrac in requiredfracs:
+		heights = []	
+		
+		probrange = []
+		normweight = []
+		
+		stepcount = 1000
+		
+		lower = float(1)/float(stepcount)
+		upper = float(1-lower)
+		
+		Rrange = np.linspace(lower, upper, stepcount)
 	
-	plt.savefig('/afs/desy.de/user/s/steinrob/Documents/DESY/presentations/dpg presentation/Energy.png')
+		for R in Rrange:
+			h = atm.runheight(1-R)
+			ri = atm.runindex(h)
+			thetamax = math.acos(float(1)/(float(ri)))
+			rmax = thetamax * (h - altitude)
+			
+			if rmax > 60:
+				
+				rthreshold = 0.5*rmax
+				
+				hthreshold = 20000
+				r = 120000
+				
+				while r > rthreshold:
+					ri = atm.runindex(hthreshold)
+					thetamax = math.acos(float(1)/(float(ri)))
+					r = thetamax * (hthreshold - altitude)
+					hthreshold += 1000
+				
+				requiredr = (requiredfrac*rthreshold)
+	
+				etrial = 250
+				r = 0
+				ri = atm.runindex(hthreshold)
+				while r < requiredr:
+					gamma = float(etrial)/nucleonmass
+					beta = math.sqrt(1-(float(1)/(gamma**2)))
+					costheta = float(1)/((float(ri))*beta)
+					
+					if costheta < 1:
+						theta = math.acos(costheta)
+						r = theta * (hthreshold - altitude)
+					
+					etrial += 100
+					
+			
+				N = ((etrial**(-1.7)))*(float(321)/1.7)
+				#~ print "For the Saturation Threshold of", etrial, "we have a probability of", N, "that an event will meet this" 
+				#~ 
+				#~ print "For a height", h, "rmax is", rmax, "our threshold is", rthreshold, "(and the an angle is", thetamax, ")" 
+				#~ print "We examine", hthreshold, "where the max radius is", r, "and the threshold was", rthreshold
+				#~ print "For beta = 1, we have", rthreshold, "we require",  requiredr, "at an energy", etrial, "we have", r
+				#~ print "For a height", h, "Our Probability is", R, "that an event will reach this height or further"
+				heights.append(h)
+				normweight.append(N)
+				
+		
+		label = "For half Rmax, we require r=" + str(round(requiredfrac, 2))
+		labels.append(label)
+		
+		plots.append(heights)
+		weighting.append(normweight/np.sum(normweight))
+	
+	plots.append(heights)
+	weighting.append(np.ones(len(heights))/len(heights))
+	labels.append("All Events")
+	
+	print len(plots), len(weighting), len(labels)	
+	
+	plt.hist(plots, bins=20, weights=weighting, histtype='bar', label=labels)
+	
+	plt.xlabel('Height', labelpad=0)
+	plt.ylabel('Normalised Fraction of Events', labelpad=0)
+		
+	plt.legend(loc=2)
+	fig = plt.gcf() # get current figure
+	
+	st = fig.suptitle("Threshold Energy and Cherenkov Ring Radii", fontsize=20)
+	st.set_y(0.98)
+	fig.set_size_inches(10, 15)
+	fig.tight_layout()
+	fig.subplots_adjust(top=0.95)
+	plt.savefig('/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/graphs/stats/logenergyradius.pdf')
+	plt.savefig('/afs/desy.de/user/s/steinrob/Documents/DESY/report/graphs/logenergyradius.png')
 	title = 'Epn Statistics for ' + str(float(nh)*float(bincount)) + " hours"
 	plt.suptitle(title, fontsize=20)
 	
