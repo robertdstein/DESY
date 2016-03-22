@@ -1,4 +1,4 @@
-import argparse, math, random, time
+import argparse, math, random, time, sys
 import csv
 import numpy as np
 import simulate as s
@@ -16,6 +16,7 @@ import lightstatistics as ls
 import plotlikelihood as pl
 import optimisez as oz
 import optimiselayout as ol
+import categorycounts as cc
 
 parser = argparse.ArgumentParser(description='Create a canvas for positions of telescopes')
 parser.add_argument("-o", "--orientation", default="five")
@@ -49,9 +50,9 @@ n = int(rateperhour*float(cfg.numberofhours))
 defaultcuts = [500, 500]
 
 if cfg.data == "default":
-	sourcedata="simulated" + str(cfg.mincount)
-	processdata = "processed"+ str(cfg.mincount)
-	reconstructdata = "reconstructed"+ str(cfg.mincount)
+	sourcedata="executesimulated_combined"
+	processdata = "executeprocessed_combined"
+	reconstructdata = "executereconstructed_combined"
 	
 else:
 	sourcedata= str(cfg.data) + "simulated" + str(cfg.mincount)
@@ -78,12 +79,19 @@ if cfg.simulate:
 	se.send(name, message)
 	
 if cfg.plotcut:
-	llcuts = oz.run(reconstructdata, rowcount, int(cfg.mincount), cfg.graph)
-	pl.run(reconstructdata, cfg.graph, llcuts)
-	pz.run(reconstructdata, rowcount, int(cfg.mincount), cfg.graph, llcuts)
-	pp.run(reconstructdata, rowcount, int(cfg.mincount), cfg.graph, llcuts)
-	pe.run(reconstructdata, rowcount, int(cfg.mincount), cfg.graph, llcuts)
-	ph.run(reconstructdata, rowcount, int(cfg.mincount), cfg.graph, llcuts)
+	allcounts = cc.run(reconstructdata, rowcount, int(cfg.mincount))
+	
+	sys.path.append('/home/steinrob/Documents/DESY/BDT')
+	import BDT
+	BDT.run(reconstructdata, rowcount, int(cfg.mincount), allcounts)
+	
+	llcuts = oz.run(reconstructdata + "_BDT", rowcount, int(cfg.mincount), cfg.graph, allcounts)
+	print llcuts
+	pl.run(reconstructdata+ "_BDT", rowcount, int(cfg.mincount), cfg.graph, llcuts, allcounts)
+	pz.run(reconstructdata+ "_BDT", rowcount, int(cfg.mincount), cfg.graph, llcuts, allcounts)
+	pp.run(reconstructdata+ "_BDT", rowcount, int(cfg.mincount), cfg.graph, llcuts)
+	pe.run(reconstructdata+ "_BDT", rowcount, int(cfg.mincount), cfg.graph, llcuts)
+	ph.run(reconstructdata+ "_BDT", rowcount, int(cfg.mincount), cfg.graph, llcuts)
 	
 if cfg.plot:
 	pz.run(reconstructdata, rowcount, int(cfg.mincount), cfg.graph, defaultcuts)

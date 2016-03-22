@@ -5,57 +5,51 @@ import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
 import scipy.stats
 
-def run(source, detectorcount, mindetections, graph=False):
+def run(source, detectorcount, mindetections, graph=False, allcounts=None):
+
+	plt.figure()
 
 	i=1
 
 	Z = 26
 	
-	upperlim = 150
-	lowerlim = 18
-	bincount=(upperlim-lowerlim)*2 + 1
-	
-	zrange = [19.5, 32.5]
-	reconvalues = np.linspace(zrange[0]+0.5, zrange[1]-0.5, bincount)
-	
-	llrange = np.linspace(lowerlim, upperlim, bincount)
+	BDTrange = np.linspace(0.0, 1.0, 51)
 	annotation = ""
-	llcuts = []
-	llmins=[]
+	
+	optimumcuts = []
 	
 	for j in range (detectorcount, mindetections -1, -1):
-		lowestsigma = 5
-		dataset = 0
-		datawidth = 0
-		text = ""
-		optimumll = 500
-		optimummin=0
-		mincount = 5
-		meansigmas=[]
-		llvalues =[]
+			
+		count = allcounts[detectorcount-j]
 		
-		limitsigmas = []
-		overflowvalues = []
+		testcount = int(float(count)/4.) 
 		
-		frac=0
-		
-		for i in range(1, len(llrange)):
-			ll = llrange[i]
-			currentsigma = 5		
-			best=['nope']
-			for k in range(i-10, i-1):
-				specificcount = []
-				minll=llrange[k]	
+		if int(testcount) > int(1):
+			
+			lowestsigma = 5
+			optimumbdt = 0.0
+			optimumpassing = 1.0
+			
+			meansigmas=[]
+			
+			bdtcuts =[]
+			
+			frac=0
+			
+			
+			for i in range(0, len(BDTrange)):
+				BDTcut = BDTrange[i]
+				
+				currentsigma = 5
+				specificcount = []	
 				with open("/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/reconstructeddata/"+ str(source) +".csv", 'rb') as csvfile:
 					reader = csv.reader(csvfile, delimiter=',', quotechar='|')
 					full = 0
 					passing = 0
 					
-					i=0
+					i=-1
 					for row in reader:
-						if i == 0:
-							i = 1
-						else:
+						if testcount < i < (2*testcount):
 							detections = row[0]
 							reconx = row[1]
 							recony = row[2]
@@ -68,97 +62,76 @@ def run(source, detectorcount, mindetections, graph=False):
 							trueZ = row[9]
 							trueHeight = row[10]
 							likelihood = row[13]
+							BDT = row[15]
 							
 							if float(detections) == float(j):
 								if int(Z) == int(trueZ):
 									full += 1
-									if float(minll) < float(likelihood) < float(ll):
+									if float(BDTcut) < float(BDT):
 										passing += 1
 										specificcount.append(float(reconZ))
+						
+						else:
+							i += 1
 										
 					line = "Detections = " + str(j)
 					
 					total = passing
 					
+					if total > 0:
 					
-					if float(total) > float(1):
-						fraction = float(passing)/float(full)
-						specificcount.sort()
+						frac = float(passing)/float(full)
 						
-						interval = (float(0.5)/float(total))
-						probinside = 1-interval
-						sigmas = scipy.stats.norm(0, 1).ppf(probinside)
-						
-						lowerz = specificcount[0]
-						upperz = specificcount[total-1]
-						meansigma = (float(upperz)-float(lowerz))/(2*sigmas)
-
-						#~ lower = int(total*0.16)
-						#~ upper = int(total*0.84)
-						#~ 
-						#~ lowerz = specificcount[lower]
-						#~ upperz = specificcount[upper]
-						#~ sixtyeightsigma = (upperz-lowerz) * 0.5
-						
-						#~ if extremesigma < sixtyeightsigma:
-							#~ meansigma = sixtyeightsigma
-						#~ else:
-							#~ meansigma = extremesigma
-						
-						
-						if float(meansigma) > float(currentsigma):
-							pass
+						if float(frac) > float(0.10):
+							specificcount.sort()
 							
-						elif fraction > 0.05:
-							if int(lowerz) > int(26):
+							interval = (float(0.5)/float(total))
+							probinside = 1-interval
+							sigmas = scipy.stats.norm(0, 1).ppf(probinside)
+							
+							lowerz = specificcount[0]
+							upperz = specificcount[total-1]
+							meansigma = (float(upperz)-float(lowerz))/(2*sigmas)
+							
+							bdtcuts.append(BDTcut)
+							meansigmas.append(meansigma)
+							
+							if float(meansigma) > float(lowestsigma):
 								pass
-							elif int(26) > int(upperz):
+								
+							elif float(lowerz) > float(26):
 								pass
+							
+							elif float(upperz) < float(26):
+								pass
+							
 							else:
-								best = [meansigma, sigmas, ll, minll, total, specificcount, fraction]
-							
-			if len(best) > 1:
-							
-				meansigmas.append(best[0])
-				llvalues.append(best[2])
-				
-				if float(best[0]) == float(0):
-					limitsigma = float(1)/(2*sigmas)
-					limitsigmas.append(limitsigma)
-					overflowvalues.append(ll)
-	
-				if float(best[0]) > float(lowestsigma):
-					pass
-				
-				else:
-					if float(best[1]) > float(datawidth):
-						lowestsigma = best[0]
-						optimumll=best[2]
-						optimummin=best[3]
-						dataset = best[4]
-						text = best[5]
-						frac = best[6]
-						mincount = j
+								lowestsigma=meansigma
+								optimumbdt=BDTcut
+								optimumpassing = passing
 		
-		plt.plot(llvalues, meansigmas, label=line)
-	
-		annotation += "Optimum Cut occurs with " + str(optimummin) + " < LL < " + str(optimumll)+ " and with " + str(mincount) + " detections \n"
-		annotation += "This leaves " + str(dataset) + " events , a fraction of " + str(frac) + "\n \n"
-		
-		llcuts.append(optimumll)
-		llmins.append(optimummin)
+			if optimumbdt > 0:
+			
+				plt.plot(bdtcuts, meansigmas, label=line)
+				
+				optimumfrac = float(optimumpassing)/float(full)
+			
+				annotation += "Optimum Cut occurs with BDT > " + str(optimumbdt)+ " and with " + str(j) + " detections \n"
+				annotation += "This leaves " + str(optimumpassing) + " events , a fraction of " + str(optimumfrac) + "\n \n"
+			
+			optimumcuts.append(optimumbdt)
+
+		else:
+			optimumcuts.append(0.0)
 
 	figure = plt.gcf() # get current figure
 	figure.set_size_inches(20, 15)
 	
-	plt.ylim(-0.5, 4)
-	
 	plt.title("Optimisation of Sigma Z")
-	plt.xlabel("Upper Log Likelihood Limit")
+	plt.xlabel("Lower BDT Limit")
 	plt.ylabel("Mean Sigma Z")
-	plt.xscale('log')
 	
-	plt.annotate(annotation, xy=(0.7, 0.4), xycoords="axes fraction",  fontsize=10)
+	plt.annotate(annotation, xy=(0.0, 0.8), xycoords="axes fraction",  fontsize=10)
 	
 	plt.legend()
 	plt.savefig('/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/graphs/Zcuts.pdf')
@@ -169,4 +142,4 @@ def run(source, detectorcount, mindetections, graph=False):
 	else:
 		plt.close()
 	
-	return llcuts, llmins
+	return optimumcuts

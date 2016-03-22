@@ -1,0 +1,61 @@
+\documentclass{article}
+\usepackage{graphicx}
+\graphicspath{ {graphs/} }
+\usepackage{geometry}
+\geometry{a4paper, portrait, margin=1in}
+\begin{document}
+\title{Reconstruction of Charge Number of Heavy Cosmic Rays using Cherenkov Light}
+\author{Robert Stein}
+\maketitle
+\section{Introduction}
+There are numerous Telescope Arrays which image the Cherenkov Light emitted by Cosmic Rays (CRs) in the atmosphere, all relying on Hillas Analysis for event reconstruction. Hillas Analysis extracts parameters from each of the camera images in order to reconstruct the events, but heavy blurring of the events by atmospheric effects means that resolution is very poor. For a typical Iron Nucleus event \cite{hess07}, the charge would be reconstructed as $Z \approx 26 \pm 5 $.
+
+The imaged CRs have energies between $13 $TeV and $200 $TeV and, at present, no study of the relative abundance of different cosmic ray elemental abundances exists for these energies. It could provide important clues regarding the mechanism of CR formation and propagation in the galaxy but current charge resolution from Hillas Analysis is not small enough to undertake such a study.
+
+We consider a new method for event reconstruction, in which we fit the known Direct Cherenkovn (DC) Light observed by each telescope to a characteristic Lateral Photon Distribution (LPD) function. If the LPD method can achieve a resolution $ \sigma_{Z} \approx 1 $ for elements of $Z = 20$ or higher, this will be precise enough to extract the abundances of the different CR Elements. This the prime motivation for introducing the new LPD technique.
+
+\section{Lateral Photon Distribution Method}
+In order to reconstruct events using the LPD method, we require saturation of the Cosmic Ray Energy, and that the event can be seen by at least 4 telescopes. These restrictions confine us to Cosmic Rays with specific characteristics.
+
+Cosmic Rays interactions occur most often at a height of $h \approx 40 \pm 10$ km, and neglecting variations in atmospheric density profiles around the Earth, this can be considered independent of experimental array. The CR energies follow a well-defined power law where $ \frac{dN(E)}{dt} \propto E^{-\gamma} $ and experimentally $ \gamma = 2.7 \pm ? $. Consequently higher energy CRs are heavily suppressed. Once the Energy Threshold falls below the CR Energy, the Nucleus will begin emitting Cherenkov Light. It will stop emitting when it first interacts, at a randomly distributed height we call $h$. Then for a given Telescope Array altitude above sea level, simple trigonometry yields:
+\[ Radius(height = altitude_{array}) = \tan [\theta_{C}(h)] \times (h - altitude_{array})\]
+As the Refractive Index of the Earth increases as height decreases, the angle $\theta_{C}$ increases with decreasing height. Thus the upper earlier emission contributes to the inner LPD, while the later emission contributes to the high-radius LPD. We find that the high-radius emission, (occurring near the first interaction region) varies little between different high energies. We deem this to be \textquoteleft saturated emission\textquoteright.
+
+We see that the amplitude of the 'signal' LPD varies with $ \rho_{DC}  = f(r) \times Z^{2}$. Thus the amplitude of the LPD is proportional to the charge of the Cosmic Ray, enabling the Charge to be determined from the DC emission. This is the basis for charge reconstruction in the LPD method. 
+
+In order to reconstruct an event, we need to find the x/y core position, the Energy per Nucleon, the first interaction height and the charge. However, if one telescope in a five-telescope array does not observe DC light, this data point can be used to constrain the core position. Thus, for the LPD method to be applied, we require a minimum of five telescopes, four or more of which must image the DC light.
+
+We consider the amount of DC light that each telescope receives to be Poissonian and can use Stirling's Approximation to reduce computing time. We then minimise the Log Likelihood function \[ - Ln(L) = - \sum_{i=1}^{n} [P_{i}] \approx  \sum_{i=1}^{n} [\lambda _{i} - N_{i} ln(\lambda _{i}) + N_{i} ln(N_{i}) - N_{i} + \frac{1}{2} ln(2 \pi N_{i})]  \]
+where n is the total number of telescopes in the array.
+
+Unfortunately, as a result of varying Threshold Energies and the sharp drop in the LDF above the maximum radius, the Log likelihood is discontinuous in many places. Consequently, a Minuit-type minimisation algorithm will only be able to find a local minimum near the starting values for the fit parameters. To overcome this problem, we can iterate over a series of starting values for the parameters, with the aim of scanning the true minimum among the many found. To simplify matters, we can scan only the integer Z values over the range $ 20 \leq Z \leq 32 $, rather than considering the charge to be a free floating parameter.
+
+The Z value is fixed and the LL function is then minimised with the assigned starting values, with the other four variables allowed to float freely. Minimisation typically scans 13 Z values, 10 core position coordinates, and 50 Height/Energy coordinates, yielding $ 13 \times 10 \times 50 = 6500$ minimisations in total. Such a technique is very resource intensive but reduces $\sigma_{Z}$ by a factor of 5 or more.
+
+Having reconstructed many events, we can then consider the $\sigma_{Z}$ of the dataset. A large Monte Carlo simulation can also provide optimised values for Log Likelihood cuts that can be applied to datasets, reducing the $\sigma_{Z}$ further.
+
+\section{HESS-type Event Reconstruction}
+We can consider a simulation of the HESS Cherenkov Telescope Array to verify the accuracy of the technique. When the HESS layout is simulated, we find that the 4 telescope events have a mean height of $h \approx 23 \pm 5$ km.
+
+However, in the 4 telescope height region, the Cherenkov Threshold Energy is $ E_{Threshold} \approx 0.35$ TeV per Nucleon. The saturation in for these heights occurs roughly at 0.7 TeV per Nucleon or something...
+
+The Extended Air Shower (EAS) produced after the first interaction of the Cosmic Ray overlaps the DC pixel, leading to background in the LPD. As the Energy of the Cosmic Ray increases, the EAS speads over a larger angular area, and at smaller radii, the EAS-DC-shower direction axis contracts, leading to more overlap. Thus the background in the DC pixel increases with decreasing radius and increasing Energy. 
+
+In addition, we have a fixed night sky background with 7 photons $m^{-2}$. We thus parameterise the background with 
+$ \rho_{bkg}  = (7 + 5E) m^{-2}$. It begins to dominate above roughly 1 TeV per Nucleon, particularly in the case of smaller radii.
+
+In the preliminary HESS simulation, it was found that the 4 telescope event reconstruction had a charge resolution of $\sigma_{Z} = 2.4$. However, requiring that the Log Likelihood satisfied $L.L < 23.5$ removed just $17 \%$ of events, while reducing the Charge resolution to $\sigma_{Z} = 0.4$ . With this cut, core position resolution was $d \approx 2 m $.
+
+For 5 telescope events, it was found that the charge resolution was $\sigma_{Z} = 1.0$. However, requiring that the Log Likelihood satisfied $L.L < 23.0$ removed $47 \%$ of events, including all wrongly reconstructed ones. This placed an upper limit on the charge resolution to $\sigma_{Z} < 0.3$ . With this cut, core position resolution was $d \approx 1 m $.
+
+\section{Optimised Telescope Array}
+
+We can consider a 3x3 array of Cherenkov Telescopes of 12m diameter, which we want to use for identifying Cosmic Ray Elements accurately. The \textquoteleft Good Count Rate' of events observed by sufficient telescopes falls with increasing grid separation. We can clearly see that the optimum grid spacing will lie in the 20-50m region to provide a reasonable count rate.
+
+Competing with this effect is the reliance of LPD reconstruction on sampling the entire lateral distribution. Thus the charge resolution will increase as Grid Width decreases. A further analysis of $\sigma_{Z}$ in this region is required to determine the true optimum.
+
+\section{Conclusion}
+End
+\bibliographystyle{plain}
+\bibliography{report}
+\end{document}
