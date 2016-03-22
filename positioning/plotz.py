@@ -16,7 +16,7 @@ def run(source, detectorcount, mindetections, graph, cuts=None, allcounts=None):
 	reconvalues = np.linspace(zrange[0]+0.5, zrange[1]-0.5, bincount)
 	
 	if cuts == None:
-		cuts = np.ones(1 + detectorcount-mindetections)*500
+		cuts = np.zeros(1 + detectorcount-mindetections)
 		path = '/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/graphs/rawZ.pdf'
 	else:
 		path = '/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/graphs/Z.pdf'
@@ -41,9 +41,14 @@ def run(source, detectorcount, mindetections, graph, cuts=None, allcounts=None):
 		
 		for j in range (detectorcount, mindetections -1, -1):
 			
-			count = allcounts[detectorcount-j]
+			if allcounts != None:
+				count = allcounts[detectorcount-j]
+				testcount = int(float(count)/4.) 
+						
+			else:
+				testcount = 0
 		
-			testcount = int(float(count)/4.) 
+			print j
 			
 			with open("/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/reconstructeddata/"+ str(source) +".csv", 'rb') as csvfile:
 				reader = csv.reader(csvfile, delimiter=',', quotechar='|')
@@ -72,18 +77,23 @@ def run(source, detectorcount, mindetections, graph, cuts=None, allcounts=None):
 						trueZ = row[9]
 						trueHeight = row[10]
 						likelihood = row[13]
-						BDT=row[15]
+						
+						if allcounts != None:
+							BDT=row[15]
+						
+						else:
+							BDT = 1.0
 						
 						
 						if int(detections) == int(j):
 							if int(z) == int(trueZ):
 								full += 1
-								if float(bdtmin) < float(BDT):
+								if float(bdtmin) > float(BDT):
 									passing += 1
 									specificcount.append(float(reconZ))
 											
 				label = str(j) + " detections"
-					
+
 				fullcount.append(specificcount)
 				labels.append(label)
 				
@@ -162,6 +172,7 @@ def run(source, detectorcount, mindetections, graph, cuts=None, allcounts=None):
 	plt.legend()
 	
 	plt.savefig(path)
+	print "saving to", path
 		
 	if graph:
 		plt.show()

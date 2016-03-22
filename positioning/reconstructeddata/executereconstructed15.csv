@@ -1,1 +1,2 @@
-Detections,X,Y,Energy Per Nucleon,Z,Height,True X,True Y,True Energy per nucleon,True Z,True Height,Phi,Epsilon,Theta,Guess Log Likelihood,True Log Likelihood
+Detections,X,Y,Energy Per Nucleon,Z,Height,True X,True Y,True Energy per nucleon,True Z,True Height,Phi,Epsilon,Guess Log Likelihood,True Log Likelihood
+4,-2.313293506079333,-24.314300540495367,771.1071100391594,26.0,23255.523777265716,-1.9665030211960186,-24.422454526295923,797.9851979838757,26,23687.5080422338,1.7313925554123162,2.258983630818275,22.418044298973427,23.18016593513653

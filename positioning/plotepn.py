@@ -3,20 +3,31 @@ import csv
 import numpy as np
 import matplotlib.pyplot as plt
 
-def run(source, detectorcount, mindetections, graph, llcuts):
+def run(source, detectorcount, mindetections, graph, cuts, allcounts):
 	fullcount=[]
 	labels=[]
 	info = ""
 	k=0
 	for j in range (detectorcount, mindetections -1, -1):
 		specificcount=[]
+		if allcounts != None:
+			count = allcounts[detectorcount-j]
+			testcount = int(float(count)/4.) 
+					
+		else:
+			testcount = 0
+		
 		with open("/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/reconstructeddata/"+ str(source) +".csv", 'rb') as csvfile:
 			reader = csv.reader(csvfile, delimiter=',', quotechar='|')
-			i = 0
-			upperll=llcuts[k]
+			specificcount = []
+			
+			i = -1
+			
+			bdtmin = cuts[k]
+
 			for row in reader:
-				if i == 0:
-					i = 1
+				if i < (2*testcount):
+					i += 1
 				else:
 					detections = row[0]
 					reconx = float(row[1])
@@ -30,9 +41,10 @@ def run(source, detectorcount, mindetections, graph, llcuts):
 					trueZ = row[9]
 					trueHeight = row[10]
 					likelihood = row[13]
+					BDT = row[15]
 					
 					if int(detections) == int(j):
-						if float(likelihood) < float(upperll):
+						if float(BDT) < float(bdtmin):
 							difference = (reconEPN-trueEPN)/trueEPN
 							specificcount.append(difference)
 

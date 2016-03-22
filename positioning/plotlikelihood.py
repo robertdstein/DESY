@@ -81,7 +81,7 @@ def run(source, detectorcount, mindetections, graph=False, cuts=None, allcounts=
 					passno = 0
 					totalno = len(category)
 					for entry in category:
-						if float(bdtmin) < float(entry):
+						if float(bdtmin) > float(entry):
 							passno +=1
 					if totalno > 0:
 						passfrac = passno/float(totalno)
@@ -92,17 +92,14 @@ def run(source, detectorcount, mindetections, graph=False, cuts=None, allcounts=
 						passfrac = 0
 					info += ('For ' + str(name) + ' then ' + str(passfrac) + " events pass \n")
 			
-			limits=[0, 1]
-			
 			if len(plot) > 0:
-				plt.hist(plot, range=limits, color = plotcolour, bins = 20, stacked=True, label=plotlabel, histtype='bar')
+				plt.hist(plot, color = plotcolour, bins = 20, stacked=True, label=plotlabel, histtype='bar')
 				plt.axvline(x=bdtmin,  color='r')
 			
 			#~ for val in llcuts:
 				#~ plt.axvline(x=(val+0.01), linestyle='--', color='m', label="LL Cut")
 			
 			plt.xlabel('Log Likelihood')
-			plt.xlim(limits)
 			plt.ylabel('Count', labelpad=0)
 			plt.legend()
 			plt.annotate(info, xy=(0.65, 0.45), xycoords="axes fraction",  fontsize=10)

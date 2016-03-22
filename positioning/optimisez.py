@@ -13,7 +13,7 @@ def run(source, detectorcount, mindetections, graph=False, allcounts=None):
 
 	Z = 26
 	
-	BDTrange = np.linspace(0.0, 1.0, 51)
+	BDTrange = np.linspace(0.0, 3.1, 51)
 	annotation = ""
 	
 	optimumcuts = []
@@ -67,7 +67,7 @@ def run(source, detectorcount, mindetections, graph=False, allcounts=None):
 							if float(detections) == float(j):
 								if int(Z) == int(trueZ):
 									full += 1
-									if float(BDTcut) < float(BDT):
+									if float(BDTcut) > float(BDT):
 										passing += 1
 										specificcount.append(float(reconZ))
 						
@@ -82,7 +82,7 @@ def run(source, detectorcount, mindetections, graph=False, allcounts=None):
 					
 						frac = float(passing)/float(full)
 						
-						if float(frac) > float(0.10):
+						if float(frac) > float(0.2):
 							specificcount.sort()
 							
 							interval = (float(0.5)/float(total))

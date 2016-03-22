@@ -1,5 +1,5 @@
 import time, math
-from sklearn.tree import DecisionTreeClassifier
+from sklearn.tree import DecisionTreeRegressor
 from sklearn import ensemble
 import numpy as np
 from sklearn.metrics import roc_curve, auc
@@ -71,27 +71,27 @@ def run(source, detectorcount, mindetections, allcounts):
 								full.append(entry)
 								
 								if float(deltaz) == float(0):
-									fullscore.append(1)
+									fullscore.append(0.)
 									sig.append(entry)
-									sigscore.append(1)
+									sigscore.append(0.)
 									
 								elif float(deltaz) > float(0):
-									fullscore.append(0)
+									fullscore.append(deltaz)
 									bkg.append(entry)
-									bkgscore.append(0)
+									bkgscore.append(deltaz)
 									
 							else :
 								fulltest.append(entry)
 								
 								if float(deltaz) == float(0):
-									fulltestscore.append(1)
+									fulltestscore.append(0.)
 									sigtest.append(entry)
-									sigtestscore.append(1)
+									sigtestscore.append(0.)
 									
 								elif float(deltaz) > float(0):
-									fulltestscore.append(0)
+									fulltestscore.append(deltaz)
 									bkgtest.append(entry)
-									bkgtestscore.append(0)
+									bkgtestscore.append(deltaz)
 								
 							j += 1
 			
@@ -100,9 +100,15 @@ def run(source, detectorcount, mindetections, allcounts):
 			print time.asctime(time.localtime()), "Training BDT" 
 			
 			#Train the BDT (Gradient Boosting Classifier)  and save
+			
+			lr = (0.25/math.sqrt(math.log(count)))
+			md = int(math.log(count))
+			print lr, md
 		
-			clf = ensemble.GradientBoostingClassifier(max_depth = 3, n_estimators = 100)
+			clf = DecisionTreeRegressor()
 			clf.fit(full, fullscore)
+			
+			print full, fullscore
 			
 			joblib.dump(clf, '/afs/desy.de/user/s/steinrob/Documents/DESY/BDT/pickle/' + str(source) + str(k) + '.pkl')
 			
@@ -122,13 +128,13 @@ def run(source, detectorcount, mindetections, allcounts):
 			sigprobs=[]
 			sigtestprobs = []
 			
-			probs = clf.predict_proba(sig)
+			probs = clf.predict(sig)
 			for pair in probs:
-				sigprobs.append(pair[1])
+				sigprobs.append(pair)
 			
-			probs = clf.predict_proba(sigtest)
+			probs = clf.predict(sigtest)
 			for pair in probs:
-				sigtestprobs.append(pair[1])
+				sigtestprobs.append(pair)
 		
 			plt.figure()
 			
@@ -151,13 +157,13 @@ def run(source, detectorcount, mindetections, allcounts):
 			bkgprobs=[]
 			bkgtestprobs = []
 			
-			probs = clf.predict_proba(bkg)
+			probs = clf.predict(bkg)
 			for pair in probs:
-				bkgprobs.append(pair[1])
+				bkgprobs.append(pair)
 			
-			probs = clf.predict_proba(bkgtest)
+			probs = clf.predict(bkgtest)
 			for pair in probs:
-				bkgtestprobs.append(pair[1])
+				bkgtestprobs.append(pair)
 		
 			
 			plt.hist(bkgtestprobs,
@@ -182,24 +188,24 @@ def run(source, detectorcount, mindetections, allcounts):
 			
 			plt.subplot(2,1,2)
 			
-			probas_ = clf.fit(full, fullscore).predict_proba(fulltest)
-			fpr, tpr, thresholds = roc_curve(fulltestscore, probas_[:, 1])
-			roc_auc = auc(fpr, tpr)
-			print time.asctime(time.localtime()), "Area under the BDT ROC curve : %f" % roc_auc
-			title = 'BDT ROC curve (area = %0.2f)' % roc_auc
-		
-			plt.clf()
-		
-			plt.plot(fpr, tpr, label=title)
-			plt.plot([0, 1], [0, 1], 'k--')
-			plt.xlim([0.0, 1.0])
-			plt.ylim([0.0, 1.0])
-			plt.xlabel('False Positive Rate')
-			plt.ylabel('True Positive Rate')
-			plt.title('ROC Curve')
-			plt.legend(loc="lower right")
-			
-			plt.savefig("roccurve" + str(k) + ".pdf")
+			#~ probas_ = clf.fit(full, fullscore).predict(fulltest)
+			#~ fpr, tpr, thresholds = roc_curve(fulltestscore, probas_[:, 1])
+			#~ roc_auc = auc(fpr, tpr)
+			#~ print time.asctime(time.localtime()), "Area under the BDT ROC curve : %f" % roc_auc
+			#~ title = 'BDT ROC curve (area = %0.2f)' % roc_auc
+		#~ 
+			#~ plt.clf()
+		#~ 
+			#~ plt.plot(fpr, tpr, label=title)
+			#~ plt.plot([0, 1], [0, 1], 'k--')
+			#~ plt.xlim([0.0, 1.0])
+			#~ plt.ylim([0.0, 1.0])
+			#~ plt.xlabel('False Positive Rate')
+			#~ plt.ylabel('True Positive Rate')
+			#~ plt.title('ROC Curve')
+			#~ plt.legend(loc="lower right")
+			#~ 
+			#~ plt.savefig("roccurve" + str(k) + ".pdf")
 			plt.close()
 			
 			fullset = full
@@ -226,7 +232,7 @@ def run(source, detectorcount, mindetections, allcounts):
 			
 				clf = joblib.load('/afs/desy.de/user/s/steinrob/Documents/DESY/BDT/pickle/' + str(source) + str(k) + '.pkl')
 								
-				probs = clf.predict_proba(subset)
+				probs = clf.predict(subset)
 		
 				with open("/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/reconstructeddata/"+ str(source) +".csv", 'rb') as csvfile:
 					reader = csv.reader(csvfile, delimiter=',', quotechar='|')
@@ -255,7 +261,7 @@ def run(source, detectorcount, mindetections, allcounts):
 								
 								entry = [reconEPN, likelihood]
 								
-								BDT = probs[j][1]
+								BDT = probs[j]
 							
 								row.append(BDT)
 								writer.writerow(row)
