@@ -28,6 +28,9 @@ def run(source, detectorcount, mindetections, allcounts):
 			fullscore = []
 			fulltestscore =[]
 			
+			fullclassifier=[]
+			fulltestclassifier=[]
+			
 			sig = []
 			sigtest = []
 			
@@ -65,18 +68,20 @@ def run(source, detectorcount, mindetections, allcounts):
 						if int(detections) == int(k):
 							
 							deltaz = math.fabs(float(trueZ)-float(reconZ))
-							entry = [reconEPN, likelihood]
+							entry = [reconx, recony, reconHeight, reconEPN, likelihood]
 							
 							if int(j) < int(testcount):
 								full.append(entry)
 								
 								if float(deltaz) == float(0):
 									fullscore.append(0.)
+									fullclassifier.append(1)
 									sig.append(entry)
 									sigscore.append(0.)
 									
 								elif float(deltaz) > float(0):
 									fullscore.append(deltaz)
+									fullclassifier.append(0)
 									bkg.append(entry)
 									bkgscore.append(deltaz)
 									
@@ -85,11 +90,13 @@ def run(source, detectorcount, mindetections, allcounts):
 								
 								if float(deltaz) == float(0):
 									fulltestscore.append(0.)
+									fulltestclassifier.append(1)
 									sigtest.append(entry)
 									sigtestscore.append(0.)
 									
 								elif float(deltaz) > float(0):
 									fulltestscore.append(deltaz)
+									fulltestclassifier.append(0)
 									bkgtest.append(entry)
 									bkgtestscore.append(deltaz)
 								
@@ -103,109 +110,96 @@ def run(source, detectorcount, mindetections, allcounts):
 			
 			lr = (0.25/math.sqrt(math.log(count)))
 			md = int(math.log(count))
-			print lr, md
 		
-			clf = DecisionTreeRegressor()
-			clf.fit(full, fullscore)
+			rgr = DecisionTreeRegressor()
+			rgr.fit(full, fullscore)
 			
-			print full, fullscore
+			joblib.dump(rgr, '/afs/desy.de/user/s/steinrob/Documents/DESY/BDT/pickle/' + str(source) + str(k) + 'regressor.pkl')
 			
-			joblib.dump(clf, '/afs/desy.de/user/s/steinrob/Documents/DESY/BDT/pickle/' + str(source) + str(k) + '.pkl')
+			clf = ensemble.GradientBoostingClassifier(max_depth=1, n_estimators=100, learning_rate=0.05)
+			clf.fit(full, fullclassifier)
+			
+			joblib.dump(clf, '/afs/desy.de/user/s/steinrob/Documents/DESY/BDT/pickle/' + str(source) + str(k) + 'classifier.pkl')
 			
 			print time.asctime(time.localtime()), "BDT Trained"
 			
-			print clf.feature_importances_
+			print "Score on whole training sample is", clf.score(full, fullclassifier)
+			print "Score on whole test sample is", clf.score(fulltest, fulltestclassifier)
+			#~ print "Score on training signal is ", clf.score(sig, sigscore)
+			#~ print "Score on test signal is ", clf.score(sigtest, sigtestscore)
+			#~ print "Score on training background is ", clf.score(bkg, bkgscore)
+			#~ print "Score on test background is ", clf.score(bkgtest, bkgtestscore)
 			
-			print "Score on whole training sample is", clf.score(full, fullscore)
-			print "Score on whole test sample is", clf.score(fulltest, fulltestscore)
-			print "Score on training signal is ", clf.score(sig, sigscore)
-			print "Score on test signal is ", clf.score(sigtest, sigtestscore)
-			print "Score on training background is ", clf.score(bkg, bkgscore)
-			print "Score on test background is ", clf.score(bkgtest, bkgtestscore)
-			
-			bins = 20
+			bins = 50
 			
 			sigprobs=[]
 			sigtestprobs = []
 			
-			probs = clf.predict(sig)
+			probs = clf.predict_proba(sig)
 			for pair in probs:
-				sigprobs.append(pair)
+				sigprobs.append(pair[1])
 			
-			probs = clf.predict(sigtest)
+			probs = clf.predict_proba(sigtest)
 			for pair in probs:
-				sigtestprobs.append(pair)
+				sigtestprobs.append(pair[1])
 		
 			plt.figure()
 			
 			plotrange=[0,1]
 			
-			plt.hist(sigtestprobs,
+			sigweights = np.ones(len(sigtestprobs))/float(len(sigtestprobs))
+			
+			plt.hist(sigtestprobs, weights=sigweights,
 					 color='r', alpha=0.5, bins=bins, range=plotrange,
-					 histtype='stepfilled', normed=True,
+					 histtype='stepfilled',
 					 label='DeltaZ = 0 (test)')
-		
-			hist, bins = np.histogram(sigprobs,
-									  bins=bins,range=plotrange, normed=True)
-			scale = len(sigtestprobs) / sum(hist)
-			err = np.sqrt(hist * scale) / scale
-			
-			width = (bins[1] - bins[0])
-			center = (bins[:-1] + bins[1:]) / 2
-			plt.errorbar(center, hist, yerr=err, fmt='o', c='r', label='DeltaZ = 0  (train)')
-			
+					 
 			bkgprobs=[]
 			bkgtestprobs = []
 			
-			probs = clf.predict(bkg)
+			probs = clf.predict_proba(bkg)
 			for pair in probs:
-				bkgprobs.append(pair)
+				bkgprobs.append(pair[1])
 			
-			probs = clf.predict(bkgtest)
+			probs = clf.predict_proba(bkgtest)
 			for pair in probs:
-				bkgtestprobs.append(pair)
+				bkgtestprobs.append(pair[1])
+				
+			bkgweights = np.ones(len(bkgtestprobs))/float(len(bkgtestprobs))
 		
 			
-			plt.hist(bkgtestprobs,
+			plt.hist(bkgtestprobs, weights=bkgweights,
 					 color='b', alpha=0.5, bins=bins, range=plotrange,
-					 histtype='stepfilled', normed=True,
+					 histtype='stepfilled',
 					 label='DeltaZ > 0 (test)')
-		
-			hist, bins = np.histogram(bkgprobs,
-									  bins=bins,range=plotrange, normed=True)
-			scale = len(bkgtestprobs) / sum(hist)
-			err = np.sqrt(hist * scale) / scale
-			
-			width = (bins[1] - bins[0])
-			center = (bins[:-1] + bins[1:]) / 2
-			plt.errorbar(center, hist, yerr=err, fmt='o', c='b', label='DeltaZ > 0 (train)')
 		
 			plt.xlabel("BDT output")
 			plt.ylabel("Arbitrary units")
 			plt.legend(loc='best')
 			
-			plt.savefig("BDTresponse" + str(k) + ".pdf")
+			plt.savefig("/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/graphs/BDTresponse" + str(k) + ".pdf")
 			
 			plt.subplot(2,1,2)
 			
-			#~ probas_ = clf.fit(full, fullscore).predict(fulltest)
-			#~ fpr, tpr, thresholds = roc_curve(fulltestscore, probas_[:, 1])
-			#~ roc_auc = auc(fpr, tpr)
-			#~ print time.asctime(time.localtime()), "Area under the BDT ROC curve : %f" % roc_auc
-			#~ title = 'BDT ROC curve (area = %0.2f)' % roc_auc
-		#~ 
-			#~ plt.clf()
-		#~ 
-			#~ plt.plot(fpr, tpr, label=title)
-			#~ plt.plot([0, 1], [0, 1], 'k--')
-			#~ plt.xlim([0.0, 1.0])
-			#~ plt.ylim([0.0, 1.0])
-			#~ plt.xlabel('False Positive Rate')
-			#~ plt.ylabel('True Positive Rate')
-			#~ plt.title('ROC Curve')
-			#~ plt.legend(loc="lower right")
-			#~ 
-			#~ plt.savefig("roccurve" + str(k) + ".pdf")
+			probas_ = clf.fit(full, fullclassifier).predict_proba(fulltest)
+			
+			fpr, tpr, thresholds = roc_curve(fulltestclassifier, probas_[:, 1])
+			roc_auc = auc(fpr, tpr)
+			print time.asctime(time.localtime()), "Area under the BDT ROC curve : %f" % roc_auc
+			title = 'BDT ROC curve (area = %0.2f)' % roc_auc
+		
+			plt.clf()
+		
+			plt.plot(fpr, tpr, label=title)
+			plt.plot([0, 1], [0, 1], 'k--')
+			plt.xlim([0.0, 1.0])
+			plt.ylim([0.0, 1.0])
+			plt.xlabel('Fraction of Incorrectly Reconstructed Events')
+			plt.ylabel('Fraction of Correctly Reconstructed Evens')
+			plt.title('ROC Curve')
+			plt.legend(loc="lower right")
+			
+			plt.savefig("/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/graphs/roccurve" + str(k) + ".pdf")
 			plt.close()
 			
 			fullset = full
@@ -218,7 +212,7 @@ def run(source, detectorcount, mindetections, allcounts):
 		
 	with open("/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/reconstructeddata/" + str(source) + "_BDT.csv", 'wb') as csvout:
 		writer = csv.writer(csvout, delimiter=',', quotechar='|')
-		writer.writerow(["Detections","X","Y","Energy Per Nucleon","Z","Height","True X","True Y","True Energy per nucleon","True Z","True Height", "Phi", "Epsilon", "Theta", "Guess Log Likelihood", "BDT"])
+		writer.writerow(["Detections","X","Y","Energy Per Nucleon","Z","Height","True X","True Y","True Energy per nucleon","True Z","True Height", "Phi", "Epsilon", "Theta", "Guess Log Likelihood", "Classifier", "BDT"])
 	
 		for k in range (detectorcount, mindetections -1, -1):
 			
@@ -229,10 +223,14 @@ def run(source, detectorcount, mindetections, allcounts):
 			if int(testcount) > int(1):
 	
 				subset = alldata[detectorcount-k]
+				
+				clf=joblib.load('/afs/desy.de/user/s/steinrob/Documents/DESY/BDT/pickle/' + str(source) + str(k) + 'classifier.pkl')
+				
+				probs=clf.predict_proba(subset)
 			
-				clf = joblib.load('/afs/desy.de/user/s/steinrob/Documents/DESY/BDT/pickle/' + str(source) + str(k) + '.pkl')
+				rgr= joblib.load('/afs/desy.de/user/s/steinrob/Documents/DESY/BDT/pickle/' + str(source) + str(k) + 'regressor.pkl')
 								
-				probs = clf.predict(subset)
+				classes = rgr.predict(subset)
 		
 				with open("/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/reconstructeddata/"+ str(source) +".csv", 'rb') as csvfile:
 					reader = csv.reader(csvfile, delimiter=',', quotechar='|')
@@ -261,13 +259,11 @@ def run(source, detectorcount, mindetections, allcounts):
 								
 								entry = [reconEPN, likelihood]
 								
-								BDT = probs[j]
+								BDT = probs[j][1]
+								classifier = classes[j]
 							
+								row.append(classifier)
 								row.append(BDT)
 								writer.writerow(row)
 							
 								j+=1
-								
-	
-
-	

@@ -3,20 +3,35 @@ import csv
 import numpy as np
 import matplotlib.pyplot as plt
 
-def run(source, detectorcount, mindetections, graph, llcuts):
+def run(source, detectorcount, mindetections, graph, cuts, allcounts=None):
 	fullcount=[]
 	labels=[]
 	info = ""
 	k=0
 	for j in range (detectorcount, mindetections -1, -1):
 		specificcount=[]
+		
+		if allcounts != None:
+			count = allcounts[detectorcount-j]
+			testcount = int(float(count)/4.) 
+					
+		else:
+			testcount = 0
+		
 		with open("/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/reconstructeddata/"+ str(source) +".csv", 'rb') as csvfile:
 			reader = csv.reader(csvfile, delimiter=',', quotechar='|')
-			i = 0
-			upperll=llcuts[k]
+			specificcount = []
+			
+			full=0
+			passing=0
+			
+			i = -1
+			
+			bdtmin = cuts[k]
+
 			for row in reader:
-				if i == 0:
-					i = 1
+				if i < (2*testcount):
+					i += 1
 				else:
 					detections = row[0]
 					reconx = float(row[1])
@@ -30,9 +45,14 @@ def run(source, detectorcount, mindetections, graph, llcuts):
 					trueZ = row[9]
 					trueHeight = row[10]
 					likelihood = row[13]
-						
+					classifier = float(row[15])
+					BDT = row[16]
+					
 					if int(detections) == int(j):
-							if float(likelihood) < float(upperll):
+						full += 1
+						if float(bdtmin) < float(BDT):
+							if float(classifier) < float(1.5):
+								passing += 1
 								difference= float(reconHeight) - float(trueHeight)
 								specificcount.append(difference)
 
@@ -41,10 +61,9 @@ def run(source, detectorcount, mindetections, graph, llcuts):
 		labels.append(label)
 		
 		total = len(specificcount)
-
 		
 		if float(total) > float(0):
-		
+			
 			specificcount.sort()
 		
 			lower = int(total*0.16)
@@ -56,11 +75,16 @@ def run(source, detectorcount, mindetections, graph, llcuts):
 			upperz = specificcount[upper]
 			sigma = (upperz-lowerz) * 0.5
 			
-			info += str("For N = " + str(j) + " \n ")
+			fraction = float(passing)/float(full)
+			info += str("For N = " + str(j) + " we require BDT >  " + str(bdtmin) + "\n ")
+			info += str("Fraction passing is " + str(fraction) + "\n")
+			
 			info += ('Lower bound = ' + str(lowerz) + " \n")
 			info += ('Upper bound = ' + str(upperz) + " \n")
 			info += ('Mean = ' + str(meanz) + " \n")
 			info += ('Sigma = ' + str(sigma) + "\n \n")
+	
+		k +=1
 	
 	plt.annotate(info, xy=(0.1, 0.4), xycoords="axes fraction",  fontsize=10)
 	
@@ -92,7 +116,12 @@ def run(source, detectorcount, mindetections, graph, llcuts):
 	plt.title("Height Reconstruction")
 	plt.legend()
 	
-	plt.savefig('/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/graphs/height.pdf')
+	figure = plt.gcf() # get current figure
+	figure.set_size_inches(20, 15)
+	
+	path = '/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/graphs/height.pdf'
+	plt.savefig(path)
+	print "saving to", path
 	
 	if graph:
 		plt.show()

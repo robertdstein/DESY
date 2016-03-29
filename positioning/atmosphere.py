@@ -1,9 +1,10 @@
 import numpy as np
 import csv, math
+from scipy.optimize import curve_fit
 
 #Provides the Refractive Index for a given Height
 
-def runindex(height, text=False):
+def runindex(height, fit=False, text=False):
 	with open('/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/atmospheredata/atmprofile.csv', 'rb') as csvfile:
 		reader = csv.reader(csvfile, delimiter=',', quotechar='|')
 		
@@ -13,8 +14,6 @@ def runindex(height, text=False):
 		
 		currenth=0
 		currentri=0
-		
-		ri = 1.0
 		
 		for row in reader:
 			i +=1
@@ -32,11 +31,11 @@ def runindex(height, text=False):
 				else:
 					
 					#Interpolates refractive Index given Index and Height step size from previous entry
+
+					K, A_log = np.polyfit([currenth, previoush], [math.log(currentri), math.log(previousri)], 1)
+					A = np.exp(A_log)
 					
-					gradient = (float(currentri)-float(previousri))/(float(currenth)-float(previoush))
-					deltah = height - currenth
-					
-					ri = currentri + (deltah*gradient) + 1
+					ri =  1 + (A * math.e**(K*height))
 					
 					if text:
 						print float(row[0])*1000, row[3]
@@ -130,4 +129,42 @@ def runabsorption(height, text=False):
 					
 					return frac
 		return frac
+		
+def linearri(height, fit=False, text=False):
+	with open('/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/atmospheredata/atmprofile.csv', 'rb') as csvfile:
+		reader = csv.reader(csvfile, delimiter=',', quotechar='|')
+		
+		#Provides starting values to avoid errors in extreme cases
+		
+		i=0
+		
+		currenth=0
+		currentri=0
+		
+		for row in reader:
+			i +=1
+			if i > 3:
+				
+				previousri = currentri
+				currentri = float(row[3])
+				previoush = currenth
+				currenth = float(row[0])*1000
+				
+				#Finds nearest height entry above given height
+				
+				if currenth < height:
+					pass
+				else:
+					
+					#Interpolates refractive Index given Index and Height step size from previous entry
+					
+					m, c = np.polyfit([currenth, previoush], [currentri, previousri], 1)
+					
+					ri =  1 + (m*height) + c
+					
+					if text:
+						print float(row[0])*1000, row[3]
+						print ri
+					return ri
+		return ri
 	

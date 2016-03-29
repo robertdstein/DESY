@@ -46,7 +46,7 @@ def run(eff, rowcount, mincount=4, text=False, graph=False, output="default", la
 	
 		ax1.plot(rrange, sdensity, label=label)
 	
-	plt.yscale('log')
+	#~ plt.yscale('log')
 	plt.ylabel('Photons per m$^2$', fontsize=20)
 	plt.xlabel('Radius (m)', fontsize=20)
 	plt.title('No background, Rmax=100', fontsize=20)
@@ -114,7 +114,7 @@ def run(eff, rowcount, mincount=4, text=False, graph=False, output="default", la
 		ax2.plot(rrange, sigdensity, '--', color=color)
 		ax2.plot(rrange, density, color=color, label=label, linewidth=3.0)
 	
-	plt.yscale('log')
+	#~ plt.yscale('log')
 	plt.ylabel('Photons per m$^2$', fontsize=20)
 	plt.xlabel('Radius (m)', fontsize=20)
 	plt.title('Height = ' + str(height) + ', Z = 26', fontsize=20)
@@ -130,7 +130,6 @@ def run(eff, rowcount, mincount=4, text=False, graph=False, output="default", la
 	figure.set_size_inches(20, 15)
 	
 	plt.savefig('graphs/stats/Light.pdf')
-	plt.savefig('/afs/desy.de/user/s/steinrob/Documents/DESY/presentations/dpg presentation/Light.png')
 		
 	if graph:
 		plt.show()

@@ -9,11 +9,11 @@ def run(source, detectorcount, mindetections, graph=False, cuts=None, allcounts=
 	print detectorcount, mindetections
 	
 	ngraphs = 1 + detectorcount-mindetections
-	nrows = ngraphs-int(0.5*ngraphs)
+	nrows =(ngraphs-int(0.5*ngraphs))
 
 	
 	if cuts == None:
-		cuts = np.ones(1 + detectorcount-mindetections)*500
+		cuts = np.zeros(1 + detectorcount-mindetections)
 		
 	for j in range (detectorcount, mindetections -1, -1):
 		
@@ -26,7 +26,7 @@ def run(source, detectorcount, mindetections, graph=False, cuts=None, allcounts=
 			with open("/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/reconstructeddata/"+ str(source) +".csv", 'rb') as csvfile:
 				reader = csv.reader(csvfile, delimiter=',', quotechar='|')
 				
-				ax = plt.subplot(nrows, 2, 1+ detectorcount-j)
+				ax = plt.subplot(nrows, 2, (1+ detectorcount-j))
 				
 				i = -1
 				info = ""
@@ -56,20 +56,22 @@ def run(source, detectorcount, mindetections, graph=False, cuts=None, allcounts=
 						trueZ = row[9]
 						trueHeight = row[10]
 						likelihood = row[13]
-						BDT=row[15]
+						classifier=float(row[15])
+						BDT=row[16]
 						
-						if int(detections) == int(j):
-							deltaz = math.fabs(float(trueZ)-float(reconZ))
-							full.append(float(BDT))
-							
-							if float(deltaz) == float(0):
-								correct.append(float(BDT))
+						if classifier < 1.5:
+							if int(detections) == int(j):
+								deltaz = math.fabs(float(trueZ)-float(reconZ))
+								full.append(float(BDT))
 								
-							elif float(deltaz) == float(1):
-								close.append(float(BDT))
-								
-							elif float(deltaz) > 1:
-								wrong.append(float(BDT))
+								if float(deltaz) == float(0):
+									correct.append(float(BDT))
+									
+								elif float(deltaz) == float(1):
+									close.append(float(BDT))
+									
+								elif float(deltaz) > 1:
+									wrong.append(float(BDT))
 				
 				total = len(correct)
 				info += "For BDT > " + str(bdtmin) + " Values \n"
@@ -81,7 +83,7 @@ def run(source, detectorcount, mindetections, graph=False, cuts=None, allcounts=
 					passno = 0
 					totalno = len(category)
 					for entry in category:
-						if float(bdtmin) > float(entry):
+						if float(bdtmin) < float(entry):
 							passno +=1
 					if totalno > 0:
 						passfrac = passno/float(totalno)
@@ -93,7 +95,7 @@ def run(source, detectorcount, mindetections, graph=False, cuts=None, allcounts=
 					info += ('For ' + str(name) + ' then ' + str(passfrac) + " events pass \n")
 			
 			if len(plot) > 0:
-				plt.hist(plot, color = plotcolour, bins = 20, stacked=True, label=plotlabel, histtype='bar')
+				plt.hist(plot, color = plotcolour, bins = 50, stacked=True, label=plotlabel, histtype='bar')
 				plt.axvline(x=bdtmin,  color='r')
 			
 			#~ for val in llcuts:
@@ -108,7 +110,7 @@ def run(source, detectorcount, mindetections, graph=False, cuts=None, allcounts=
 		
 	figure = plt.gcf() # get current figure
 	figure.set_size_inches(20, 15)
-	plt.suptitle('Likelihood', fontsize=20)
+	plt.suptitle('BDT prediction of signal probability', fontsize=20)
 	
 	plt.savefig('/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/graphs/Likelihood.pdf')
 		

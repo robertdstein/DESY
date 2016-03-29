@@ -47,5 +47,13 @@ def runemin(ri):
 	
 	return Epn
 	
+def runbetaeta(Epn, height, fit=False):
+	gamma = (Epn/nucleonmass) + 1
+	beta = math.sqrt(1 - (1/gamma**2))
+	
+	refractiveindex = atm.runindex(height)
+	
+	return beta, refractiveindex
+	
 	
 	

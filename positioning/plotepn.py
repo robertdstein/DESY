@@ -10,6 +10,7 @@ def run(source, detectorcount, mindetections, graph, cuts, allcounts):
 	k=0
 	for j in range (detectorcount, mindetections -1, -1):
 		specificcount=[]
+		
 		if allcounts != None:
 			count = allcounts[detectorcount-j]
 			testcount = int(float(count)/4.) 
@@ -20,6 +21,9 @@ def run(source, detectorcount, mindetections, graph, cuts, allcounts):
 		with open("/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/reconstructeddata/"+ str(source) +".csv", 'rb') as csvfile:
 			reader = csv.reader(csvfile, delimiter=',', quotechar='|')
 			specificcount = []
+			
+			full=0
+			passing=0
 			
 			i = -1
 			
@@ -41,12 +45,16 @@ def run(source, detectorcount, mindetections, graph, cuts, allcounts):
 					trueZ = row[9]
 					trueHeight = row[10]
 					likelihood = row[13]
-					BDT = row[15]
+					classifier = float(row[15])
+					BDT = row[16]
 					
 					if int(detections) == int(j):
-						if float(BDT) < float(bdtmin):
-							difference = (reconEPN-trueEPN)/trueEPN
-							specificcount.append(difference)
+						full += 1
+						if float(bdtmin) < float(BDT):
+							if float(classifier) < float(1.5):
+								passing += 1
+								difference = (reconEPN-trueEPN)
+								specificcount.append(difference)
 
 		fullcount.append(specificcount)
 		label = str(j) + " detections"
@@ -67,15 +75,20 @@ def run(source, detectorcount, mindetections, graph, cuts, allcounts):
 			upperz = specificcount[upper]
 			sigma = (upperz-lowerz) * 0.5
 			
-			info += str("For N = " + str(j) + " \n ")
+			fraction = float(passing)/float(full)
+			info += str("For N = " + str(j) + " we require BDT >  " + str(bdtmin) + "\n ")
+			info += str("Fraction passing is " + str(fraction) + "\n")
+			
 			info += ('Lower bound = ' + str(lowerz) + " \n")
 			info += ('Upper bound = ' + str(upperz) + " \n")
 			info += ('Mean = ' + str(meanz) + " \n")
 			info += ('Sigma = ' + str(sigma) + "\n \n")
+		
+		k+=1
 	
 	plt.annotate(info, xy=(0.05, 0.4), xycoords="axes fraction",  fontsize=10)
 			
-	n, bins, _ = plt.hist(fullcount, bins=14, range=[-0.7,0.7], label=labels, histtype='bar', stacked=True)
+	n, bins, _ = plt.hist(fullcount, label=labels, histtype='bar', stacked=True)
 	
 	mid = (bins[1:] + bins[:-1])*0.5
 	if isinstance(n[0], np.ndarray):
@@ -99,11 +112,16 @@ def run(source, detectorcount, mindetections, graph, cuts, allcounts):
 	plt.ylim(0, uplim)
 
 	plt.ylabel("Count")
-	plt.xlabel("Fractional diference from True EPN")
+	plt.xlabel("Diference from True EPN (GeV)")
 	plt.title("Reconstruction of Energy per Nucleon")
 	plt.legend()
-	plt.savefig('/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/graphs/epn.pdf')
 	
+	figure = plt.gcf() # get current figure
+	figure.set_size_inches(20, 15)
+	
+	path = '/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/graphs/epn.pdf'
+	plt.savefig(path)
+	print "saving to", path
 	
 	if graph:
 		plt.show()

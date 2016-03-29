@@ -13,7 +13,7 @@ def run(source, detectorcount, mindetections, graph=False, allcounts=None):
 
 	Z = 26
 	
-	BDTrange = np.linspace(0.0, 3.1, 51)
+	BDTrange = np.linspace(0.0, 1.0, 1001)
 	annotation = ""
 	
 	optimumcuts = []
@@ -62,14 +62,16 @@ def run(source, detectorcount, mindetections, graph=False, allcounts=None):
 							trueZ = row[9]
 							trueHeight = row[10]
 							likelihood = row[13]
-							BDT = row[15]
+							classifier=float(row[15])
+							BDT = float(row[16])
 							
 							if float(detections) == float(j):
 								if int(Z) == int(trueZ):
 									full += 1
-									if float(BDTcut) > float(BDT):
-										passing += 1
-										specificcount.append(float(reconZ))
+									if float(BDTcut) < float(BDT):
+										if float(classifier) < 2.5:
+											passing += 1
+											specificcount.append(float(reconZ))
 						
 						else:
 							i += 1
@@ -82,7 +84,7 @@ def run(source, detectorcount, mindetections, graph=False, allcounts=None):
 					
 						frac = float(passing)/float(full)
 						
-						if float(frac) > float(0.2):
+						if float(frac) > float(0.05):
 							specificcount.sort()
 							
 							interval = (float(0.5)/float(total))
@@ -95,22 +97,19 @@ def run(source, detectorcount, mindetections, graph=False, allcounts=None):
 							
 							bdtcuts.append(BDTcut)
 							meansigmas.append(meansigma)
-							
-							if float(meansigma) > float(lowestsigma):
-								pass
 								
-							elif float(lowerz) > float(26):
+							if float(lowerz) > float(26):
 								pass
 							
 							elif float(upperz) < float(26):
 								pass
-							
-							else:
+						
+							elif float(meansigma) < float(lowestsigma):
 								lowestsigma=meansigma
 								optimumbdt=BDTcut
 								optimumpassing = passing
-		
-			if optimumbdt > 0:
+								
+			if optimumpassing > 1:
 			
 				plt.plot(bdtcuts, meansigmas, label=line)
 				
@@ -130,6 +129,8 @@ def run(source, detectorcount, mindetections, graph=False, allcounts=None):
 	plt.title("Optimisation of Sigma Z")
 	plt.xlabel("Lower BDT Limit")
 	plt.ylabel("Mean Sigma Z")
+	plt.gca().set_ylim(bottom=-0.05)
+	plt.gca().set_xlim(left=-0.05)
 	
 	plt.annotate(annotation, xy=(0.0, 0.8), xycoords="axes fraction",  fontsize=10)
 	

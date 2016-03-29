@@ -22,6 +22,9 @@ def run(source, detectorcount, mindetections, graph, cuts, allcounts=None):
 			reader = csv.reader(csvfile, delimiter=',', quotechar='|')
 			specificcount = []
 			
+			full=0
+			passing=0
+			
 			i = -1
 			
 			bdtmin = cuts[k]
@@ -42,19 +45,22 @@ def run(source, detectorcount, mindetections, graph, cuts, allcounts=None):
 					trueZ = row[9]
 					trueHeight = row[10]
 					likelihood = row[13]
-					BDT = row[15]
+					classifier = float(row[15])
+					BDT = row[16]
 					
 					if int(detections) == int(j):
-						if float(BDT) < float(bdtmin):
-							distance = math.sqrt(((reconx-truex)**2)+(recony-truey)**2)
-							specificcount.append(distance)
+						full += 1
+						if float(bdtmin) < float(BDT):
+							if float(classifier) < float(1.5):
+								passing += 1
+								distance = math.sqrt(((reconx-truex)**2)+(recony-truey)**2)
+								specificcount.append(distance)
 
 		fullcount.append(specificcount)
 		label = str(j) + " detections"
 		labels.append(label)
 		
 		total = len(specificcount)
-
 		
 		if float(total) > float(0):
 		
@@ -69,10 +75,15 @@ def run(source, detectorcount, mindetections, graph, cuts, allcounts=None):
 			upperz = specificcount[upper]
 			sigma = (upperz-lowerz) * 0.5
 			
-			info += str("For N = " + str(j) + " \n ")
+			fraction = float(passing)/float(full)
+			info += str("For N = " + str(j) + " we require BDT >  " + str(bdtmin) + "\n ")
+			info += str("Fraction passing is " + str(fraction) + "\n")
+			
 			info += ('Upper bound = ' + str(upperz) + " \n")
 			info += ('Median = ' + str(meanz) + " \n")
 			info += ('Sigma = ' + str(sigma) + "\n \n")
+	
+		k +=1
 	
 	plt.annotate(info, xy=(0.6, 0.3), xycoords="axes fraction",  fontsize=15)
 	
@@ -114,7 +125,9 @@ def run(source, detectorcount, mindetections, graph, cuts, allcounts=None):
 	plt.title("Distance Reconstruction")
 	plt.legend()
 	
-	plt.savefig('/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/graphs/position.pdf')
+	path = '/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/graphs/position.pdf'
+	plt.savefig(path)
+	print "saving to", path
 	
 	if graph:
 		plt.show()

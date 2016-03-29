@@ -2,7 +2,7 @@
 \usepackage{graphicx}
 \graphicspath{ {graphs/} }
 \usepackage{geometry}
-\geometry{a4paper, portrait, margin=1in}
+\geometry{a4paper, portrait, margin=1.0in}
 \begin{document}
 \title{Reconstruction of Charge Number of Heavy Cosmic Rays using Cherenkov Light}
 \author{Robert Stein}
@@ -15,40 +15,33 @@ The imaged CRs have energies between $13 $TeV and $200 $TeV and, at present, no 
 We consider a new method for event reconstruction, in which we fit the known Direct Cherenkov (DC) Light observed by each telescope to a characteristic Lateral Photon Distribution (LPD) function. If the LPD method can achieve a resolution $ \sigma_{Z} \approx 1 $ for elements of $Z = 20$ or higher, this will be precise enough to extract the abundances of the different CR Elements. This the prime motivation for introducing the new LPD technique.
 
 \section{Lateral Photon Distribution Method}
-In order to reconstruct events using the LPD method, we require saturation of the CR Energy, and that the event can be seen by at least 4 telescopes. These restrictions confine us to Cosmic Rays with specific characteristics.
+Once the Cherenkov Energy Threshold of the atmosphere falls below the CR Energy, the Nucleus will begin emitting a ring of Cherenkov Light. It will stop emitting when it first interacts, at a randomly distributed height we call $h$. Then for a given Telescope Array altitude above sea level, simple trigonometry yields $ Radius(height = altitude_{array}) = \tan [\theta_{C}(h)] \times (h - altitude_{array})$. 
 
-Cosmic Rays interactions occur most often at a height of $h \approx 40 \pm 10$ km, and neglecting variations in atmospheric density profiles around the Earth, this can be considered independent of experimental array. The CR energies follow a well-defined power law where $ \frac{dN(E)}{dt} \propto E^{-\gamma} $ and experimentally $ \gamma = 2.7 \pm ? $. Consequently higher energy CRs are heavily suppressed. Once the Energy Threshold falls below the CR Energy, the Nucleus will begin emitting Cherenkov Light. It will stop emitting when it first interacts, at a randomly distributed height we call $h$. Then for a given Telescope Array altitude above sea level, simple trigonometry yields:
-\[ Radius(height = altitude_{array}) = \tan [\theta_{C}(h)] \times (h - altitude_{array})\]
-As the Refractive Index of the Earth increases as height decreases, the angle $\theta_{C}$ increases with decreasing height. Thus the upper earlier emission contributes to the inner LPD, while the later emission contributes to the high-radius LPD. We find that the high-radius emission, (occurring near the first interaction region) varies little between different high energies. We deem this to be \textquoteleft saturated emission\textquoteright.
+The Refractive Index of the atmosphere, and thus the angle $\theta_{C}$, increases as the height decreases. Thus the upper atmosphere emission contributes to the inner LPD, while the lower atmosphere emission contributes to the outer LPD. We find that the high-radius emission (occurring near the first interaction region) varies little between different high energies. We deem this to be \textquoteleft Saturated Emission\textquoteright.
 
-We see that the amplitude of the 'signal' LPD varies with $ \rho_{DC}  = f(r) \times Z^{2}$. Thus the amplitude of the LPD is proportional to the charge of the Cosmic Ray, enabling the Charge to be determined from the DC emission. This is the basis for charge reconstruction in the LPD method. 
+We see that the amplitude of the LPD varies with $ \rho_{DC}  = f(r) \times Z^{2}$. Thus the amplitude of the LPD is proportional to the charge of the Cosmic Ray, enabling the Charge to be determined from the DC emission. This is the basis for charge reconstruction in the LPD method. 
 
 In order to reconstruct an event, we need to find the x/y core position, the Energy per Nucleon, the first interaction height and the charge. However, if one telescope in a five-telescope array does not observe DC light, this data point can be used to constrain the core position. Thus, for the LPD method to be applied, we require a minimum of five telescopes, four or more of which must image the DC light.
 
 We consider the amount of DC light that each telescope receives to be Poissonian and can use Stirling's Approximation to reduce computing time. We then minimise the Log Likelihood function \[ - Ln(L) = - \sum_{i=1}^{n} [P_{i}] \approx  \sum_{i=1}^{n} [\lambda _{i} - N_{i} ln(\lambda _{i}) + N_{i} ln(N_{i}) - N_{i} + \frac{1}{2} ln(2 \pi N_{i})]  \]
 where n is the total number of telescopes in the array.
 
-Unfortunately, as a result of varying Threshold Energies and the sharp drop in the LDF above the maximum radius, the Log likelihood is discontinuous in many places. Consequently, a Minuit-type minimisation algorithm will only be able to find a local minimum near the starting values for the fit parameters. To overcome this problem, we can iterate over a series of starting values for the parameters, with the aim of scanning the true minimum among the many found. To simplify matters, we can scan only the integer Z values over the range $ 20 \leq Z \leq 32 $, rather than considering the charge to be a free floating parameter.
+\section{Reconstruction Optimisation}
+Having reconstructed many events, we can then derive the $\sigma_{Z}$ of the dataset by assuming a Gaussian Distribution, giving us a number to directly compare the quality of event reconstruction.
 
-The Z value is fixed and the LL function is then minimised with the assigned starting values, with the other four variables allowed to float freely. Minimisation typically scans 13 Z values, 10 core position coordinates, and 50 Height/Energy coordinates, yielding $ 13 \times 10 \times 50 = 6500$ minimisations in total. Such a technique is very resource intensive but reduces $\sigma_{Z}$ by a factor of 5 or more.
+We find that the LPD initially provides very poor event reconstruction because, as a result of varying Threshold Energies and the sharp drop in the LDF above the maximum radius, the Log Likelihood is frequently discontinuous. Consequently, a Minuit-type minimisation algorithm will only be able to find a local minimum near the starting values for the fit parameters. To overcome this problem, we can iterate over a series of starting values for the parameters, with the aim of scanning the true minimum among the many minima found. To simplify matters, we can scan only the integer Z values over the range $ 20 \leq Z \leq 32 $, rather than considering the charge to be a free floating parameter.
 
-Having reconstructed many events, we can then consider the $\sigma_{Z}$ of the dataset. A large Monte Carlo simulation can also provide optimised values for Log Likelihood cuts that can be applied to datasets, reducing the $\sigma_{Z}$ further.
+The Z value is fixed and the LL function is then minimised with the assigned starting values, allowing the other four variables to float freely. Minimisation typically scans 13 Z values, 10 core position coordinates, and 50 Height/Energy coordinates, yielding $ 13 \times 10 \times 50 = 6500$ minimisations in total. Such a technique is very resource intensive but typically reduces $\sigma_{Z}$ of a dataset by a factor of 5 or more.
+
+Using one quarter of a large sample of Monte Carlo data, we can train a Boosted Decision Tree (BDT) for a given telescope multiplicity, using the reconstructed x/y core position, height and energy, as well as the Log Likelihood. The BDT is told whether each event is \textquoteleft signal' (correctly reconstructed) or \textquoteleft background' (incorrectly reconstructed). For every simulated event, this trained BDT can then be used to assign a \textquoteleft Signal Probability'. On a second quarter of the dataset we can optimise a cut on the minimum \textquoteleft Signal Probability', in order to maximise the ratio of signal to background. We find that the $\sigma_{Z}$ of the remaining \textquoteleft Test' Monte Carlo data is reduced when the same BDT cut is applied.
 
 \section{HESS-type Event Reconstruction}
-We can consider a simulation of the HESS Cherenkov Telescope Array to verify the accuracy of the technique. When the HESS layout is simulated, we find that the 4 telescope events have a mean height of $h \approx 23 \pm 5$ km.
-
-However, in the 4 telescope height region, the Cherenkov Threshold Energy is $ E_{Threshold} \approx 0.35$ TeV per Nucleon. The saturation in for these heights occurs roughly at 0.7 TeV per Nucleon or something...
-
-The Extended Air Shower (EAS) produced after the first interaction of the Cosmic Ray overlaps the DC pixel, leading to background in the LPD. As the Energy of the Cosmic Ray increases, the EAS speads over a larger angular area, and at smaller radii, the EAS-DC-shower direction axis contracts, leading to more overlap. Thus the background in the DC pixel increases with decreasing radius and increasing Energy. 
-
-In addition, we have a fixed night sky background with 7 photons $m^{-2}$. We thus parameterise the background with 
+We can consider a simulation of the HESS Cherenkov Telescope Array to verify the accuracy of the technique, with a 5 telescope array. The Extended Air Shower (EAS) produced after the first interaction of the Cosmic Ray overlaps the DC pixel, leading to background in the LPD. As the Energy of the Cosmic Ray increases, the EAS speads over a larger angular area, and at smaller radii, the EAS-DC-shower direction axis contracts, leading to more overlap. Thus the background in the DC pixel increases with decreasing radius and increasing Energy. In addition, we have a fixed night sky background with 7 photons $m^{-2}$. We thus parameterise the background with 
 $ \rho_{bkg}  = (7 + 5E) m^{-2}$. It begins to dominate above roughly 1 TeV per Nucleon, particularly in the case of smaller radii.
 
-In the preliminary HESS simulation, it was found that the 4 telescope event reconstruction had a charge resolution of $\sigma_{Z} = 2.4$. However, requiring that the Log Likelihood satisfied $L.L < 23.5$ removed just $17 \%$ of events, while reducing the Charge resolution to $\sigma_{Z} = 0.4$ . With this cut, core position resolution was $d \approx 2 m $.
+In the preliminary HESS simulation, it was found that the 4 telescope event reconstruction had a charge resolution of $\sigma_{Z} = 1.4$. However, requiring that the BDT signal Probability satisfied $P < 0.81$ removed $75 \%$ of events, while reducing the Charge resolution to $\sigma_{Z} = 0.9$ . With this cut, core position resolution was $d \approx 1.4 m $. For 5 telescope events, it was found that the charge resolution was also $\sigma_{Z} = 1.4$. However, requiring that the Log Likelihood satisfied $P < 0.05$ removed $53 \%$ of events, including all wrongly reconstructed ones. This placed an upper limit on the charge resolution of $\sigma_{Z} < 0.35$ . With this cut, core position resolution was $d \approx 0.8 m $.
 
-For 5 telescope events, it was found that the charge resolution was $\sigma_{Z} = 1.0$. However, requiring that the Log Likelihood satisfied $L.L < 23.0$ removed $47 \%$ of events, including all wrongly reconstructed ones. This placed an upper limit on the charge resolution to $\sigma_{Z} < 0.3$ . With this cut, core position resolution was $d \approx 1 m $.
-
-\section{Optimised Telescope Array}
+\section{Telescope Array Optimisation}
 
 We can consider a 3x3 array of Cherenkov Telescopes of 12m diameter, which we want to use for identifying Cosmic Ray Elements accurately. The \textquoteleft Good Count Rate' of events observed by sufficient telescopes falls with increasing grid separation. We can clearly see that the optimum grid spacing will lie in the 20-50m region to provide a reasonable count rate.
 
