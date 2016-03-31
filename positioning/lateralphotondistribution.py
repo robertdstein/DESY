@@ -12,26 +12,31 @@ import looptelescopes as lt
 import atmosphere as atm
 import matplotlib.pyplot as plt
 
+eff=1.0
+
 radii = []
 weights = []
 labels=[]
 colors=[]
 		
-Epns = [50000./56., 40000./56., 30000./56., 20000./56.]
+Epns = np.linspace(15, 65, 5)
 height = 25000
 
 wl=450*(10**-9)
 Z = 26
 alpha=float(1)/float(137)
-ewidth = 1.6*(10**-19)
-scaling= (Z**2) * alpha * ewidth * math.pi * 2/(wl**2)
+ewidth = 0.7
+#~ scaling= (Z**2) * alpha * ewidth * math.pi * 2/(wl**2)
+scaling = 370 * (Z**2) * 100 * ewidth
 
-for Epn in Epns:
+for tev in Epns:
+	
+	Epn = tev*1000./56.
 	
 	r=[]
 	w=[]
 
-	print Epn, height
+	print tev, "TeV", height, Epn
 	
 	h = 65000
 	
@@ -51,43 +56,59 @@ for Epn in Epns:
 		if float(beta) > (float(1)/float(ri)):
 			radius, theta = cr.run(Epn, h, sinphi=1)
 			
-			n = (1-(1/(ri*beta)**2))
+			n = scaling*(math.sin(theta)**2)
+			
+			DeltaE = (10**-9)*(n*2.74)/56.
 			
 			oldradius, oldtheta = cr.run(Epn, h+1, sinphi=1)
 			
 			deltar =  float(radius)- float(oldradius)
 			
-			area= deltar * math.pi * ((2*radius) + deltar) 
+			area= math.pi * ((radius**2) -(oldradius**2))
 			
-			density = scaling*n/area
+			frac = atm.runabsorption(h)
+			frac=1
+			
+			density = frac*eff*n/area
 			
 			r.append(radius)
 			w.append(density)
 			rmax=radius
 			
+			Epn += -DeltaE
+	
+	r.append(radius+0.01)
+	w.append(1)
+		
 	radii.append(r)
 	weights.append(w)
-	labels.append(str(Epn))
+	labels.append(str(tev) + " TeV")
 	colors.append("k")
 		
-plt.subplot(2,1,1)
+plt.subplot(3,1,1)
 plt.plot(heights, ris, label="Exponential")
 plt.plot(heights, linears, label="Linear", color='r')
 plt.yscale("Log")
 plt.legend()
-plt.subplot(2,1,2)
 
-n, bins, patches = plt.hist(radii, weights=weights,  bins=100, histtype='bar', alpha=0.0, color=colors)
-#~ plt.yscale("Log", nonposy='clip')
+plt.subplot(3,1,2)
 
-mid = (bins[1:] + bins[:-1])*0.5
+plt.yscale("Log", nonposy='clip')
 
 for i in range(0, len(labels)):
-	plt.plot(mid, n[i], label=labels[i])
+	plt.plot(radii[i], weights[i], label=labels[i])
+plt.legend(loc=2)
+plt.gca().set_ylim(bottom=1)
+
+plt.subplot(3,1,3)
+
+for i in range(0, len(labels)):
+	plt.plot(radii[i], weights[i], label=labels[i])
 plt.legend(loc=2)
 
+plt.gca().set_ylim(bottom=1)
 figure = plt.gcf() # get current figure
-figure.set_size_inches(20, 15)
+figure.set_size_inches(15, 25)
 
 path = '/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/graphs/stats/lpd.pdf'
 print "saving to", path

@@ -35,7 +35,7 @@ def run(eff, rowcount, mincount=4, text=False, graph=False, output="default", la
 		
 		for r in rrange:
 			
-			sig, bkg = ld.run(r, 0, Z, Rmax, 1)
+			sig, bkg = ld.run(r, 0, Z, Rmax, eff)
 			
 			if sig > 1:
 				sdensity.append(sig)
@@ -46,7 +46,7 @@ def run(eff, rowcount, mincount=4, text=False, graph=False, output="default", la
 	
 		ax1.plot(rrange, sdensity, label=label)
 	
-	#~ plt.yscale('log')
+	plt.yscale('log')
 	plt.ylabel('Photons per m$^2$', fontsize=20)
 	plt.xlabel('Radius (m)', fontsize=20)
 	plt.title('No background, Rmax=100', fontsize=20)
@@ -89,7 +89,7 @@ def run(eff, rowcount, mincount=4, text=False, graph=False, output="default", la
 		
 		for r in rrange:
 			
-			sig, bkg = ld.run(r, Epn, Z, rmax, 1)
+			sig, bkg = ld.run(r, Epn, Z, rmax, eff)
 			
 			count = sig + bkg
 			
@@ -114,7 +114,7 @@ def run(eff, rowcount, mincount=4, text=False, graph=False, output="default", la
 		ax2.plot(rrange, sigdensity, '--', color=color)
 		ax2.plot(rrange, density, color=color, label=label, linewidth=3.0)
 	
-	#~ plt.yscale('log')
+	plt.yscale('log')
 	plt.ylabel('Photons per m$^2$', fontsize=20)
 	plt.xlabel('Radius (m)', fontsize=20)
 	plt.title('Height = ' + str(height) + ', Z = 26', fontsize=20)
