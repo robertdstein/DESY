@@ -20,6 +20,7 @@ labels=[]
 colors=[]
 		
 Epns = np.linspace(15, 65, 5)
+np.append(Epns, float("inf"))
 height = 25000
 
 wl=450*(10**-9)

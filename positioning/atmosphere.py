@@ -141,6 +141,8 @@ def runindex(height, fit=False, text=False):
 		currenth=0
 		currentri=0
 		
+		ri=1
+		
 		for row in reader:
 			i +=1
 			if i > 3:
