@@ -56,14 +56,13 @@ def run(source, detectorcount, mindetections, graph, cuts, allcounts=None):
 								distance = math.sqrt(((reconx-truex)**2)+(recony-truey)**2)
 								specificcount.append(distance)
 
-		fullcount.append(specificcount)
-		label = str(j) + " detections"
-		labels.append(label)
-		
 		total = len(specificcount)
 		
 		if float(total) > float(0):
-		
+			fullcount.append(specificcount)
+			label = str(j) + " detections"
+			labels.append(label)
+
 			specificcount.sort()
 		
 			lower = int(0)

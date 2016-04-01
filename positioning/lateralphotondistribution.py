@@ -47,20 +47,20 @@ for tev in Epns:
 	while h > height:
 		h += -1
 		
-		beta, ri = cr.runbetaeta(Epn, h)
+		beta, ri = cr.runbetaeta(Epn, h, fit="exp")
 		heights.append(h)
 		ris.append(ri-1)
-		linearri=atm.linearri(h)
+		linearri=atm.runindex(h)
 		linears.append(linearri - 1)
 		
 		if float(beta) > (float(1)/float(ri)):
-			radius, theta = cr.run(Epn, h, sinphi=1)
+			radius, theta = cr.run(Epn, h, sinphi=1, fit="exp")
 			
 			n = scaling*(math.sin(theta)**2)
 			
 			DeltaE = (10**-9)*(n*2.74)/56.
 			
-			oldradius, oldtheta = cr.run(Epn, h+1, sinphi=1)
+			oldradius, oldtheta = cr.run(Epn, h+1, sinphi=1, fit="exp")
 			
 			deltar =  float(radius)- float(oldradius)
 			
@@ -91,9 +91,16 @@ plt.plot(heights, linears, label="Linear", color='r')
 plt.yscale("Log")
 plt.legend()
 
+plt.ylabel('n-1', fontsize=20)
+plt.xlabel('Height', fontsize=20)
+plt.title('Atmospheric Refractive Index', fontsize=20)
+
 plt.subplot(3,1,2)
 
 plt.yscale("Log", nonposy='clip')
+plt.ylabel('Photons per m$^2$', fontsize=20)
+plt.xlabel('Radius (m)', fontsize=20)
+plt.title('Height = 25km, Z = 26', fontsize=20)
 
 for i in range(0, len(labels)):
 	plt.plot(radii[i], weights[i], label=labels[i])
@@ -101,6 +108,10 @@ plt.legend(loc=2)
 plt.gca().set_ylim(bottom=1)
 
 plt.subplot(3,1,3)
+
+plt.ylabel('Photons per m$^2$', fontsize=20)
+plt.xlabel('Radius (m)', fontsize=20)
+plt.title('Height = 25km, Z = 26', fontsize=20)
 
 for i in range(0, len(labels)):
 	plt.plot(radii[i], weights[i], label=labels[i])
@@ -113,3 +124,4 @@ figure.set_size_inches(15, 25)
 path = '/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/graphs/stats/lpd.pdf'
 print "saving to", path
 plt.savefig(path)
+plt.savefig('/afs/desy.de/user/s/steinrob/Documents/DESY/report/graphs/simulatedlpd.png')

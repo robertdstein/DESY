@@ -3,9 +3,9 @@ import atmosphere as atm
 
 nucleonmass= 0.93827 
 
-def run(Epn, height, sinphi, text=False):
+def run(Epn, height, sinphi, fit="linear", text=False):
 	
-	theta = runtheta(Epn, height)
+	theta = runtheta(Epn, height, fit)
 
 	if height is None:
 		print refractiveindex, height, sinphi, gamma, costheta
@@ -19,12 +19,16 @@ def run(Epn, height, sinphi, text=False):
 	
 	return radius, theta
 
-def runtheta(Epn, height):
+def runtheta(Epn, height, fit="linear"):
 	
 	gamma = (Epn/nucleonmass) + 1
 	beta = math.sqrt(1 - (1/gamma**2))
 	
-	refractiveindex = atm.runindex(height)
+	if fit == "linear":	
+		refractiveindex = atm.runindex(height)
+	elif fit == "exp":
+		refractiveindex = atm.expindex(height)
+	
 	
 	costheta = 1/(beta*refractiveindex)
 	
@@ -47,11 +51,14 @@ def runemin(ri):
 	
 	return Epn
 	
-def runbetaeta(Epn, height, fit=False):
+def runbetaeta(Epn, height, fit="linear"):
 	gamma = (Epn/nucleonmass) + 1
 	beta = math.sqrt(1 - (1/gamma**2))
 	
-	refractiveindex = atm.runindex(height)
+	if fit == "linear":	
+		refractiveindex = atm.runindex(height)
+	elif fit == "exp":
+		refractiveindex = atm.expindex(height)
 	
 	return beta, refractiveindex
 	

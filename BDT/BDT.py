@@ -257,8 +257,6 @@ def run(source, detectorcount, mindetections, allcounts):
 							
 							if int(detections) == int(k):
 								
-								entry = [reconEPN, likelihood]
-								
 								BDT = probs[j][1]
 								classifier = classes[j]
 							

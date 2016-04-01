@@ -127,7 +127,7 @@ def run(eff, rowcount, mincount=4, text=False, graph=False, output="default", la
 	plt.suptitle("Lateral Photon Distribution in DC pixel", fontsize=20)
 	
 	figure = plt.gcf() # get current figure
-	figure.set_size_inches(20, 15)
+	figure.set_size_inches(15, 25)
 	
 	plt.savefig('graphs/stats/Light.pdf')
 		

@@ -1,15 +1,21 @@
 \contentsline {section}{\numberline {1}Introduction}{3}
-\contentsline {section}{\numberline {2}Lateral Photon Distribution Method}{3}
+\contentsline {section}{\numberline {2}Cosmic Ray Event Simulation}{3}
 \contentsline {subsection}{\numberline {2.1}First Interaction Height}{3}
-\contentsline {subsection}{\numberline {2.2}Energy Considerations}{5}
-\contentsline {subsection}{\numberline {2.3}Nuclear Charge}{5}
-\contentsline {subsection}{\numberline {2.4}Iterative Log Likelihood Minimisation}{5}
-\contentsline {subsection}{\numberline {2.5}Extracting Charge Resolution}{7}
-\contentsline {section}{\numberline {3}HESS-type Event Reconstruction}{7}
-\contentsline {subsection}{\numberline {3.1}First Interaction and Energy Saturation}{7}
-\contentsline {subsection}{\numberline {3.2}HESS Energy saturation region}{8}
-\contentsline {subsection}{\numberline {3.3}Extended Air Shower Background}{8}
-\contentsline {section}{\numberline {4}Optimised Telescope Array}{8}
-\contentsline {subsection}{\numberline {4.1}Count Rates}{8}
-\contentsline {subsection}{\numberline {4.2}Saturation Region Energies}{12}
-\contentsline {section}{\numberline {5}Conclusion}{12}
+\contentsline {subsection}{\numberline {2.2}Energy Considerations}{3}
+\contentsline {subsection}{\numberline {2.3}Nuclear Charge}{6}
+\contentsline {subsection}{\numberline {2.4}Energy saturation region}{6}
+\contentsline {subsection}{\numberline {2.5}Atmospheric Absorption}{6}
+\contentsline {section}{\numberline {3}LPD Event Reconstruction}{6}
+\contentsline {subsection}{\numberline {3.1}Log Likelihood Minimisation}{6}
+\contentsline {subsection}{\numberline {3.2}Extracting Charge Resolution}{6}
+\contentsline {subsection}{\numberline {3.3}Iterative Scanning Minimisation}{8}
+\contentsline {subsection}{\numberline {3.4}Boosted Decision Trees}{8}
+\contentsline {section}{\numberline {4}HESS-type Event Reconstruction}{8}
+\contentsline {subsection}{\numberline {4.1}First Interaction and Energy Saturation}{8}
+\contentsline {subsection}{\numberline {4.2}Extended Air Shower Background}{8}
+\contentsline {subsection}{\numberline {4.3}Reconstructed Charge Resolution}{10}
+\contentsline {section}{\numberline {5}Optimised Telescope Array}{11}
+\contentsline {subsection}{\numberline {5.1}Count Rates}{11}
+\contentsline {subsection}{\numberline {5.2}Saturation Region Energies}{11}
+\contentsline {subsection}{\numberline {5.3}High Speed Telescopes}{11}
+\contentsline {section}{\numberline {6}Conclusion}{12}

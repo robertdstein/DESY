@@ -3,7 +3,7 @@ import csv
 import numpy as np
 import matplotlib.pyplot as plt
 
-def run(source, detectorcount, mindetections, graph, cuts, allcounts):
+def run(source, detectorcount, mindetections, graph, cuts, allcounts=None):
 	fullcount=[]
 	labels=[]
 	info = ""
@@ -56,13 +56,14 @@ def run(source, detectorcount, mindetections, graph, cuts, allcounts):
 								difference = (reconEPN-trueEPN)
 								specificcount.append(difference)
 
-		fullcount.append(specificcount)
-		label = str(j) + " detections"
-		labels.append(label)
-		
 		total = len(specificcount)
 		
 		if float(total) > float(0):
+			fullcount.append(specificcount)
+			label = str(j) + " detections"
+			labels.append(label)
+		
+			
 		
 			specificcount.sort()
 		
@@ -88,7 +89,7 @@ def run(source, detectorcount, mindetections, graph, cuts, allcounts):
 	
 	plt.annotate(info, xy=(0.05, 0.4), xycoords="axes fraction",  fontsize=10)
 			
-	n, bins, _ = plt.hist(fullcount, label=labels, histtype='bar', stacked=True)
+	n, bins, _ = plt.hist(fullcount, bins=30, label=labels, histtype='bar', stacked=True)
 	
 	mid = (bins[1:] + bins[:-1])*0.5
 	if isinstance(n[0], np.ndarray):

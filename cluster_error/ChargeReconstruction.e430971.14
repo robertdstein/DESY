@@ -1,0 +1,14 @@
+Traceback (most recent call last):
+  File "/afs/desy.de/user/s/steinrob/Documents/DESY/cluster_input/execute14.py", line 34, in <module>
+    s.run(eff, rowcount, mincount=mincount, text=False, graph=False, output=sourcedata, layout=orientation, number = n)
+  File "/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/simulate.py", line 24, in run
+    rayxpos, rayypos, epsilon, rayradius, Epn, Z, height, phi, theta = g.run(text=text)
+  File "/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/generate.py", line 39, in run
+    radius, theta = cr.run(Epn, height, math.sin(phi), text=text)
+  File "/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/cherenkovradius.py", line 8, in run
+    theta = runtheta(Epn, height)
+  File "/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/cherenkovradius.py", line 27, in runtheta
+    refractiveindex = atm.runindex(height)
+  File "/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/atmosphere.py", line 44, in runindex
+    return ri
+UnboundLocalError: local variable 'ri' referenced before assignment

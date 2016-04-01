@@ -84,7 +84,7 @@ def run(source, detectorcount, mindetections, graph=False, allcounts=None):
 					
 						frac = float(passing)/float(full)
 						
-						if float(frac) > float(0.05):
+						if float(frac) > float(0.2):
 							specificcount.sort()
 							
 							interval = (float(0.5)/float(total))

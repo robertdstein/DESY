@@ -4,7 +4,7 @@ from scipy.optimize import curve_fit
 
 #Provides the Refractive Index for a given Height
 
-def runindex(height, fit=False, text=False):
+def expindex(height, fit=False, text=False):
 	with open('/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/atmospheredata/atmprofile.csv', 'rb') as csvfile:
 		reader = csv.reader(csvfile, delimiter=',', quotechar='|')
 		
@@ -130,7 +130,7 @@ def runabsorption(height, text=False):
 					return frac
 		return frac
 		
-def linearri(height, fit=False, text=False):
+def runindex(height, fit=False, text=False):
 	with open('/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/atmospheredata/atmprofile.csv', 'rb') as csvfile:
 		reader = csv.reader(csvfile, delimiter=',', quotechar='|')
 		
@@ -158,9 +158,16 @@ def linearri(height, fit=False, text=False):
 					
 					#Interpolates refractive Index given Index and Height step size from previous entry
 					
-					m, c = np.polyfit([currenth, previoush], [currentri, previousri], 1)
+					gradient = (float(currentri)-float(previousri))/(float(currenth)-float(previoush))
+					deltah = height - previoush
 					
-					ri =  1 + (m*height) + c
+					ri = previousri + (deltah*gradient) + 1
+					
+					#~ print currentri, previousri, previoush, height, currenth, ri
+					
+					#~ m, c = np.polyfit([currenth, previoush], [currentri, previousri], 1)
+					
+					#~ ri =  1 + (m*height) + c
 					
 					if text:
 						print float(row[0])*1000, row[3]
