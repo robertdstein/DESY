@@ -129,7 +129,7 @@ def run(eff, rowcount, mincount=4, text=False, graph=False, output="default", la
 	figure = plt.gcf() # get current figure
 	figure.set_size_inches(15, 25)
 	
-	plt.savefig('graphs/stats/Light.pdf')
+	plt.savefig('/d6/rstein/Hamburg-Cosmic-Rays/positioning/graphs/stats/Light.pdf')
 		
 	if graph:
 		plt.show()

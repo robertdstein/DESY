@@ -53,7 +53,7 @@ def run(eff, rowcount, mincount=4, text=False, graph=False, output="default", la
 	rawheights=[]
 	opticallengths = []
 	
-	with open('atmospheredata/atmprofile.csv', 'rb') as csvfile:
+	with open('/d6/rstein/Hamburg-Cosmic-Rays/positioning/atmospheredata/atmprofile.csv', 'rb') as csvfile:
 		reader = csv.reader(csvfile, delimiter=',', quotechar='|')
 		i=0
 		for row in reader:
@@ -184,7 +184,7 @@ def run(eff, rowcount, mincount=4, text=False, graph=False, output="default", la
 	fig.tight_layout()
 	fig.subplots_adjust(top=0.95)
 	
-	plt.savefig('/afs/desy.de/user/s/steinrob/Documents/DESY/report/graphs/generalheight.png')
+	plt.savefig('/d6/rstein/Hamburg-Cosmic-Rays/report/graphs/generalheight.png')
 	#Plot the unscaled histogram
 	
 	ax5 = plt.subplot(211, sharex=ax2)
@@ -254,9 +254,9 @@ def run(eff, rowcount, mincount=4, text=False, graph=False, output="default", la
 	#~ extent = ax5.get_window_extent().transformed(figure.dpi_scale_trans.inverted())
 	#~ plt.savefig('interaction category.pdf', bbox_inches=extent.expanded(1.2, 1.2))
 
-	plt.savefig('/afs/desy.de/user/s/steinrob/Documents/DESY/report/graphs/hessheight.png')
+	plt.savefig('/d6/rstein/Hamburg-Cosmic-Rays/report/graphs/hessheight.png')
 
-	plt.savefig('graphs/stats/Height.pdf')
+	plt.savefig('/d6/rstein/Hamburg-Cosmic-Rays/positioning/graphs/stats/Height.pdf')
 	
 		
 	if graph:

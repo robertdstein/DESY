@@ -8,7 +8,7 @@ def run(source, detectorcount, mindetections, graph):
 	plt1 = fig.add_subplot(2,1,1)
 	plt2 = fig.add_subplot(2,1,2)
 	
-	with open("reconstructeddata/"+ str(source) +".csv", 'rb') as csvfile:
+	with open("/d6/rstein/Hamburg-Cosmic-Rays/positioning/reconstructeddata/"+ str(source) +".csv", 'rb') as csvfile:
 		reader = csv.reader(csvfile, delimiter=',', quotechar='|')
 		i = 0
 		for row in reader:

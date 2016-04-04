@@ -42,7 +42,7 @@ def run(source, detectorcount, mindetections, graph=False, allcounts=None):
 				
 				currentsigma = 5
 				specificcount = []	
-				with open("/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/reconstructeddata/"+ str(source) +".csv", 'rb') as csvfile:
+				with open("/d6/rstein/Hamburg-Cosmic-Rays/positioning/reconstructeddata/"+ str(source) +".csv", 'rb') as csvfile:
 					reader = csv.reader(csvfile, delimiter=',', quotechar='|')
 					full = 0
 					passing = 0
@@ -135,7 +135,7 @@ def run(source, detectorcount, mindetections, graph=False, allcounts=None):
 	plt.annotate(annotation, xy=(0.0, 0.8), xycoords="axes fraction",  fontsize=10)
 	
 	plt.legend()
-	plt.savefig('/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/graphs/Zcuts.pdf')
+	plt.savefig('/d6/rstein/Hamburg-Cosmic-Rays/positioning/graphs/Zcuts.pdf')
 	
 	if graph:
 		plt.show()

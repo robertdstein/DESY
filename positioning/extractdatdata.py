@@ -5,9 +5,9 @@ i=0
 
 setwavelength = 400
 
-with open('atmospheredata/atmabs.csv','wb') as csvout:
+with open('/d6/rstein/Hamburg-Cosmic-Rays/positioning/atmospheredata/atmabs.csv','wb') as csvout:
 	writer = csv.writer(csvout, delimiter=',', quotechar='|')
-	with open('atmospheredata/atmabs.dat', 'rb') as csvfile:
+	with open('/d6/rstein/Hamburg-Cosmic-Rays/positioning/atmospheredata/atmabs.dat', 'rb') as csvfile:
 		reader = csv.reader(csvfile, delimiter=' ', quotechar='|')
 		j = -1
 		newrow=[]

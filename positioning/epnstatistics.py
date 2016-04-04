@@ -140,8 +140,8 @@ def run(eff, rowcount, mincount=4, text=False, graph=False, layout="five", numbe
 	fig.tight_layout()
 	fig.subplots_adjust(top=0.95)
 	
-	plt.savefig('/afs/desy.de/user/s/steinrob/Documents/DESY/report/graphs/energystats.png')
-	plt.savefig('/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/graphs/stats/energystats.pdf')
+	plt.savefig('/d6/rstein/Hamburg-Cosmic-Rays/report/graphs/energystats.png')
+	plt.savefig('/d6/rstein/Hamburg-Cosmic-Rays/positioning/graphs/stats/energystats.pdf')
 	
 	plt.close()
 
@@ -179,7 +179,7 @@ def run(eff, rowcount, mincount=4, text=False, graph=False, layout="five", numbe
 
 	#Look up values from atmprofile10.csv
 	
-	with open('atmospheredata/atmprofile.csv', 'rb') as csvfile:
+	with open('/d6/rstein/Hamburg-Cosmic-Rays/positioning/atmospheredata/atmprofile.csv', 'rb') as csvfile:
 		reader = csv.reader(csvfile, delimiter=',', quotechar='|')
 		i=0
 		for row in reader:
@@ -320,12 +320,12 @@ def run(eff, rowcount, mincount=4, text=False, graph=False, layout="five", numbe
 	fig.set_size_inches(10, 15)
 	fig.tight_layout()
 	fig.subplots_adjust(top=0.95)
-	plt.savefig('/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/graphs/stats/logenergyradius.pdf')
-	plt.savefig('/afs/desy.de/user/s/steinrob/Documents/DESY/report/graphs/logenergyradius.png')
+	plt.savefig('/d6/rstein/Hamburg-Cosmic-Rays/positioning/graphs/stats/logenergyradius.pdf')
+	plt.savefig('/d6/rstein/Hamburg-Cosmic-Rays/report/graphs/logenergyradius.png')
 	title = 'Epn Statistics for ' + str(float(nh)*float(bincount)) + " hours"
 	plt.suptitle(title, fontsize=20)
 	
-	plt.savefig('graphs/stats/Energy.pdf')
+	plt.savefig('/d6/rstein/Hamburg-Cosmic-Rays/positioning/graphs/stats/Energy.pdf')
 	
 		
 	if graph:

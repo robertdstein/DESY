@@ -40,8 +40,8 @@
 #$ -M robert.stein@desy.de
 
 # Path for/ Pfade für   stdout und stderr
-#$ -o /afs/desy.de/user/s/steinrob/Documents/DESY/cluster_output
-#$ -e /afs/desy.de/user/s/steinrob/Documents/DESY/cluster_error
+#$ -o /d6/rstein/Hamburg-Cosmic-Rays/cluster_output
+#$ -e /d6/rstein/Hamburg-Cosmic-Rays/cluster_error
 #
 #
 
@@ -49,5 +49,5 @@
 
 . /nfs/astrop/d1/hhsoft/64bit/ini_python2.7.8_64bit.sh
 
-python /afs/desy.de/user/s/steinrob/Documents/DESY/cluster_input/execute$SGE_TASK_ID.py
-#cp $TMPDIR/* /afs/desy.de/user/s/steinrob/Documents/DESY/cluster_output
+python /d6/rstein/Hamburg-Cosmic-Rayscluster_input/execute$SGE_TASK_ID.py
+#cp $TMPDIR/* /d6/rstein/Hamburg-Cosmic-Rays/cluster_output

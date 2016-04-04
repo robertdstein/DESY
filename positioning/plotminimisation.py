@@ -17,7 +17,7 @@ import matplotlib.colors as colors
 import matplotlib.mlab as mlab
 
 def run(source, detectorcount, eff, gridwidth):
-	with open("/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/data/"+ str(source) +".csv", 'rb') as csvfile:
+	with open("/d6/rstein/Hamburg-Cosmic-Rays/positioning/data/"+ str(source) +".csv", 'rb') as csvfile:
 		reader = csv.reader(csvfile, delimiter=',', quotechar='|')
 		i = 0
 		for row in reader:
@@ -128,7 +128,7 @@ def run(source, detectorcount, eff, gridwidth):
 				
 				figure = plt.gcf() # get current figure
 				figure.set_size_inches(20, 15)
-				plt.savefig('graphs/likelihoodprofile.pdf')
+				plt.savefig('/d6/rstein/Hamburg-Cosmic-Rays/positioning/graphs/likelihoodprofile.pdf')
 				plt.close()
 
 run("executeprocessX", 9, 0.06, 100)

@@ -11,7 +11,7 @@ import looptelescopes as lt
 import atmosphere as atm
 
 def run(raweff, rowcount, mincount=4, text=False, graph=False, output="default", layout="five", number=1):
-	with open("/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/output/" + output + ".csv", 'wb') as csvout:
+	with open("/d6/rstein/Hamburg-Cosmic-Rays/positioning/output/" + output + ".csv", 'wb') as csvout:
 		writer = csv.writer(csvout, delimiter=',', quotechar='|')
 		writer.writerow(["Event Number", "Category", "Xpos", "Ypos", "Smeared Count", "True X", "True Y", "True Energy per Nucleon", "True Z", "True Height", "Phi", "Epsilon", "Trigger", "Dangle", "Theta", "Background"])
 		

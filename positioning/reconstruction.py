@@ -81,7 +81,7 @@ if cfg.simulate:
 if cfg.plotcut:
 	allcounts = cc.run(reconstructdata, rowcount, int(cfg.mincount))
 	
-	sys.path.append('/home/steinrob/Documents/DESY/BDT')
+	sys.path.append('/d6/rstein/Hamburg-Cosmic-Rays/BDT')
 	import BDT
 	BDT.run(reconstructdata, rowcount, int(cfg.mincount), allcounts)
 	

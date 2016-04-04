@@ -1,6 +1,6 @@
 import sys
 
-afspath = '/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/'
+afspath = '/d6/rstein/Hamburg-Cosmic-Rays/positioning/'
 
 sys.path.append(afspath)
 
@@ -27,7 +27,7 @@ import initialise as i
 orientation="ideal"
 mincount=5
 
-sys.path.append('/home/steinrob/Documents/DESY/BDT')
+sys.path.append('/d6/rstein/Hamburg-Cosmic-Rays/BDT')
 import BDT
 
 with open(afspath + "/orientations/"+ orientation +".csv", 'rb') as csvfile:

@@ -148,7 +148,7 @@ plt.gca().set_ylim(bottom=1)
 figure = plt.gcf() # get current figure
 figure.set_size_inches(15, 25)
 
-path = '/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/graphs/stats/lpd.pdf'
+path = '/d6/rstein/Hamburg-Cosmic-Rays/positioning/graphs/stats/lpd.pdf'
 print "saving to", path
 plt.savefig(path)
-plt.savefig('/afs/desy.de/user/s/steinrob/Documents/DESY/report/graphs/simulatedlpd.png')
+plt.savefig('/d6/rstein/Hamburg-Cosmic-Rays/report/graphs/simulatedlpd.png')

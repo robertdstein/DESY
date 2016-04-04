@@ -18,7 +18,7 @@ def run(source, detectorcount, mindetections, graph, cuts, allcounts=None):
 		else:
 			testcount = 0
 		
-		with open("/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/reconstructeddata/"+ str(source) +".csv", 'rb') as csvfile:
+		with open("/d6/rstein/Hamburg-Cosmic-Rays/positioning/reconstructeddata/"+ str(source) +".csv", 'rb') as csvfile:
 			reader = csv.reader(csvfile, delimiter=',', quotechar='|')
 			specificcount = []
 			
@@ -119,7 +119,7 @@ def run(source, detectorcount, mindetections, graph, cuts, allcounts=None):
 	figure = plt.gcf() # get current figure
 	figure.set_size_inches(20, 15)
 	
-	path = '/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/graphs/height.pdf'
+	path = '/d6/rstein/Hamburg-Cosmic-Rays/positioning/graphs/height.pdf'
 	plt.savefig(path)
 	print "saving to", path
 	

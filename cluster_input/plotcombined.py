@@ -1,6 +1,6 @@
 import sys
 
-afspath = '/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/'
+afspath = '/d6/rstein/Hamburg-Cosmic-Rays/positioning/'
 
 sys.path.append(afspath)
 
@@ -26,7 +26,7 @@ import categorycounts as cc
 import initialise as i
 numberofhours, mincount, reconstructiongridwidth, orientation, eff, flux, area, solidangle, selectionefficiency = i.run()
 
-sys.path.append('/home/steinrob/Documents/DESY/BDT')
+sys.path.append('/d6/rstein/Hamburg-Cosmic-Rays/BDT')
 import BDT
 
 with open(afspath + "/orientations/"+ orientation +".csv", 'rb') as csvfile:

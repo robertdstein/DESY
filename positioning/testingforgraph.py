@@ -26,7 +26,7 @@ n = int(rateperhour*float(numberofhours))
 print time.asctime(time.localtime()),"Cosmic Ray Iron Flux is", flux, "Simulated Area is", area, "Field of View is", solidangle, "Detected Flux is", detectedflux
 print time.asctime(time.localtime()),"Rate per hour", rateperhour, "Simulated Hours", numberofhours, "Simulated Events", n 
 
-with open("/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/orientations/"+ orientation +".csv", 'rb') as csvfile:
+with open("/d6/rstein/Hamburg-Cosmic-Rayspositioning/orientations/"+ orientation +".csv", 'rb') as csvfile:
 	reader = csv.reader(csvfile, delimiter=',', quotechar='|')
 	rowcount = 0
 	for row in reader:

@@ -223,5 +223,5 @@ def run(numberofhours):
 	figure = plt.gcf() # get current figure
 	figure.set_size_inches(20, 15)	
 	
-	plt.savefig('graphs/stats/optimiselayout.pdf')
-	plt.savefig('/afs/desy.de/user/s/steinrob/Documents/DESY/report/graphs/logenergyradius.png')
+	plt.savefig('/d6/rstein/Hamburg-Cosmic-Rays/positioning/graphs/stats/optimiselayout.pdf')
+	plt.savefig('/d6/rstein/Hamburg-Cosmic-Rays/report/graphs/logenergyradius.png')

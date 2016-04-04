@@ -2,7 +2,6 @@ import argparse, math, random
 import csv
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.optimize import curve_fit
 import scipy.stats
 
 def run(source, detectorcount, mindetections, graph, cuts=None, allcounts=None):
@@ -18,10 +17,10 @@ def run(source, detectorcount, mindetections, graph, cuts=None, allcounts=None):
 	if cuts == None:
 		cuts = np.zeros(1 + detectorcount-mindetections)
 		classifiermax=8.5
-		path = '/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/graphs/rawZ.pdf'
+		path = '/d6/rstein/Hamburg-Cosmic-Rays/positioning/graphs/rawZ.pdf'
 	else:
 		classifiermax=1.5
-		path = '/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/graphs/Z.pdf'
+		path = '/d6/rstein/Hamburg-Cosmic-Rays/positioning/graphs/Z.pdf'
 	
 	for val in zvalues:
 		
@@ -49,7 +48,7 @@ def run(source, detectorcount, mindetections, graph, cuts=None, allcounts=None):
 			else:
 				testcount = 0
 				
-			with open("/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/reconstructeddata/"+ str(source) +".csv", 'rb') as csvfile:
+			with open("/d6/rstein/Hamburg-Cosmic-Rays/positioning/reconstructeddata/"+ str(source) +".csv", 'rb') as csvfile:
 				reader = csv.reader(csvfile, delimiter=',', quotechar='|')
 				specificcount = []
 				

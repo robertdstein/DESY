@@ -23,7 +23,7 @@ def run(source, detectorcount, mindetections, graph=False, cuts=None, allcounts=
 		
 		if int(testcount) > int(1):
 		
-			with open("/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/reconstructeddata/"+ str(source) +".csv", 'rb') as csvfile:
+			with open("/d6/rstein/Hamburg-Cosmic-Rays/positioning/reconstructeddata/"+ str(source) +".csv", 'rb') as csvfile:
 				reader = csv.reader(csvfile, delimiter=',', quotechar='|')
 				
 				ax = plt.subplot(nrows, 2, (1+ detectorcount-j))
@@ -112,7 +112,7 @@ def run(source, detectorcount, mindetections, graph=False, cuts=None, allcounts=
 	figure.set_size_inches(20, 15)
 	plt.suptitle('BDT prediction of signal probability', fontsize=20)
 	
-	plt.savefig('/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/graphs/Likelihood.pdf')
+	plt.savefig('/d6/rstein/Hamburg-Cosmic-Rays/positioning/graphs/Likelihood.pdf')
 		
 	if graph:
 		plt.show()

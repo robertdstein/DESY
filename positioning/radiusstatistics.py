@@ -67,7 +67,7 @@ def run(graph=False):
 	
 	plt.suptitle('Radius with Height')
 	
-	plt.savefig('graphs/stats/radius.pdf')
+	plt.savefig('/d6/rstein/Hamburg-Cosmic-Rays/positioning/graphs/stats/radius.pdf')
 		
 	if graph:
 		plt.show()

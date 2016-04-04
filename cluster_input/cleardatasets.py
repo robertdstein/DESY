@@ -3,7 +3,7 @@
 import sys
 import os.path
 
-afspath = '/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/'
+afspath = '/d6/rstein/Hamburg-Cosmic-Rays/positioning/'
 
 sys.path.append(afspath)
 
