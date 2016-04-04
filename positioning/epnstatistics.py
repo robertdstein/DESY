@@ -117,6 +117,7 @@ def run(eff, rowcount, mincount=4, text=False, graph=False, layout="five", numbe
 	plt.xticks(bin_centers, xlabels, rotation=90)
 	plt.xlabel('Epn', labelpad=0)
 	plt.ylabel('Abundance')
+	plt.gca().set_ylim(bottom=0.1)
 	
 	#plot the histogram scaled with E^-2.7 distribution to the second subplot
 	
@@ -140,6 +141,7 @@ def run(eff, rowcount, mincount=4, text=False, graph=False, layout="five", numbe
 	fig.subplots_adjust(top=0.95)
 	
 	plt.savefig('/afs/desy.de/user/s/steinrob/Documents/DESY/report/graphs/energystats.png')
+	plt.savefig('/afs/desy.de/user/s/steinrob/Documents/DESY/positioning/graphs/stats/energystats.pdf')
 	
 	plt.close()
 

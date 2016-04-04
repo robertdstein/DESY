@@ -12,23 +12,30 @@ import looptelescopes as lt
 import atmosphere as atm
 import matplotlib.pyplot as plt
 
-eff=1.0
+cutoff = 0
 
 radii = []
 weights = []
 labels=[]
 colors=[]
 		
-Epns = np.linspace(15, 65, 5)
-np.append(Epns, float("inf"))
-height = 25000
+lins = np.linspace(75, 15, 4)
+Epns = np.append(float("inf"), lins)
+height = 20000
+
+deltah = 1
 
 wl=450*(10**-9)
 Z = 26
 alpha=float(1)/float(137)
 ewidth = 0.7
 #~ scaling= (Z**2) * alpha * ewidth * math.pi * 2/(wl**2)
-scaling = 370 * (Z**2) * 100 * ewidth
+scaling = 370 * (Z**2) * 100 * ewidth * deltah
+
+print Epns
+
+maxN = []
+maxradii=[]
 
 for tev in Epns:
 	
@@ -39,14 +46,16 @@ for tev in Epns:
 
 	print tev, "TeV", height, Epn
 	
-	h = 65000
+	h = 120000
 	
 	heights = []
 	ris = []
 	linears=[]
 	
+	currentN=0
+	
 	while h > height:
-		h += -1
+		h += -deltah
 		
 		beta, ri = cr.runbetaeta(Epn, h, fit="exp")
 		heights.append(h)
@@ -61,7 +70,7 @@ for tev in Epns:
 			
 			DeltaE = (10**-9)*(n*2.74)/56.
 			
-			oldradius, oldtheta = cr.run(Epn, h+1, sinphi=1, fit="exp")
+			oldradius, oldtheta = cr.run(Epn, h+deltah, sinphi=1, fit="exp")
 			
 			deltar =  float(radius)- float(oldradius)
 			
@@ -70,20 +79,37 @@ for tev in Epns:
 			frac = atm.runabsorption(h)
 			frac=1
 			
-			density = frac*eff*n/area
+			density = frac*n/area
 			
 			r.append(radius)
 			w.append(density)
 			rmax=radius
 			
 			Epn += -DeltaE
+			
+			if float(Epn) == float("inf"):
+				maxN.append(n)
+				maxradii.append(radius)
+			
+			if radius > cutoff:
+				currentN += n
 	
 	r.append(radius+0.01)
 	w.append(1)
+	
+	restrictedmax=0
+	
+	for i in range(0, len(maxradii)):
+		radius = maxradii[i]
+		
+		if cutoff< radius < rmax:
+			restrictedmax += maxN[i+1]
+
+	frac = currentN/restrictedmax
 		
 	radii.append(r)
 	weights.append(w)
-	labels.append(str(tev) + " TeV")
+	labels.append(str(tev) + " TeV with " + str(int(currentN)) + " photons, " + str(int(frac*100)) + "%")
 	colors.append("k")
 		
 plt.subplot(3,1,1)
@@ -101,7 +127,7 @@ plt.subplot(3,1,2)
 plt.yscale("Log", nonposy='clip')
 plt.ylabel('Photons per m$^2$', fontsize=20)
 plt.xlabel('Radius (m)', fontsize=20)
-plt.title('Height = 25km, Z = 26', fontsize=20)
+plt.title('Height = ' + str(height/1000) + 'km, Z = 26', fontsize=20)
 
 for i in range(0, len(labels)):
 	plt.plot(radii[i], weights[i], label=labels[i])
@@ -112,7 +138,7 @@ plt.subplot(3,1,3)
 
 plt.ylabel('Photons per m$^2$', fontsize=20)
 plt.xlabel('Radius (m)', fontsize=20)
-plt.title('Height = 25km, Z = 26', fontsize=20)
+plt.title('Height = ' + str(height/1000) + 'km, Z = 26', fontsize=20)
 
 for i in range(0, len(labels)):
 	plt.plot(radii[i], weights[i], label=labels[i])
