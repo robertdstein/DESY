@@ -1,0 +1,93 @@
+Temporary directory:  /nfs/astrop/d6/rstein/tmp/
+Reading /nfs/astrop/d1/hhsoft/64bit_crf/ini_python2.7.8_64bit_crf.sh
+* Used Corsika Version: /nfs/astrop/d6/rstein/corsika_simtelarray/corsika-6990/run  
+RUNNR   1                           number of run     
+
+*
+* [ Random number generator: 4 sequences used in IACT mode ]
+*
+SEED    4   0   0                seed for 1st random number sequence
+SEED    5   0   0                seed for 2nd random number sequence
+SEED    6   0   0                seed for 3rd random number sequence
+SEED    7   0   0                seed for 4th random number sequence
+DIRECT /nfs/astrop/d6/rstein/tmp/
+TELFIL /nfs/astrop/d6/rstein/tmp/run1-iact.corsika.gz:100:100:1              Telescope photon bunch output (eventio format)  
+EVTNR   1                              number of first shower event
+NSHOW   1                             number of showers
+DATBAS T                             write a file with parameters used
+
+*
+* [ Primary particle options ]
+*
+PRMPAR  5626                             Primary particle type: 1 Gamma, 14 proton, 402 Helium
+ESLOPE  -2.7                             slope of primary energy spectrum
+ERANGE 5000   5000                 Energy range (GeV)	
+OBSLEV  675.E2
+
+THETAP  0  0                          range of zenith angle (degree)
+PHIP    0  0                     range of azimuth angle (degree): from South if PHIP=ARRANG
+*
+* [ Site specific options ]
+*
+OBSLEV  1800.E2                        observation level (in cm)
+ATMOSPHERE 10 N                        table of atmospheric profile (10 N: Windhoek average, no refr.)
+* ATMOSPHERE 1 N                       table of atmospheric profile (1 N: tropical, no refr.)
+MAGNET  12.5  -25.9                    magnetic field Gamsberg [H, Z] (muT)
+ARRANG  -14.                           rotation of array to north [D] (degree)
+*
+* [ Cherenkov emission parameters ]
+*
+CERSIZ  5.                            bunch size Cherenkov photons
+CERFIL  T                              Cherenkov output to extra file
+CWAVLG  250.  700.                     Cherenkov wavelength band
+*
+* [ H.E.S.S. telescopes ] (x -> North, y -> West)
+* 
+*            X     Y    Z    R         (all in cm)
+TELESCOPE     0 -8485    1000  750        Tel. 1
+TELESCOPE  8485     0    1000  750        Tel. 2
+TELESCOPE     0  8485    1000  750        Tel. 3
+TELESCOPE -8485     0    1000  750        Tel. 4
+TELESCOPE     0     0    2000  1650       Tel. 5, huge central phase 2 telescope
+*
+* [Interaction flags]
+*
+FIXHEI  0.  0                          first interaction height & target
+FIXCHI  0.                             starting altitude (g/cm**2)
+ELMFLG  T   T                          em. interaction flags (NKG,EGS)
+RADNKG  200.E2                         outer radius for NKG lat.dens.determ.
+HADFLG  0  0  0  0  0  2               flags for hadr. interaction
+MUADDI  F                              additional info for muons
+MUMULT  T                              muon multiple scattering angle
+LONGI   T  10.  F  T                   longit.distr. & step size & fit
+MAXPRT  0                              max. number of printed events
+ECTMAP  1.E6                           cut on gamma factor for printout
+STEPFC  1.0                            mult. scattering step length fact.
+TSTART  T                              needed for emission and scattering of primary
+*
+* [ Debugging and output options ]
+*
+DEBUG   F  6  F  1000000               debug flag and logical unit for output
+*DIRECT  /dev/null                      /dev/null means no normal CORSIKA data written
+*
+DIRECT /nfs/astrop/d6/rstein/tmp/
+EXIT                                   terminates input
+1 /nfs/astrop/d6/rstein/tmp/
+Making directory /nfs/astrop/d6/rstein/data/934878/run1
+
+Now starting CORSIKA run number1
+
+Corsika Directory: /nfs/astrop/d6/rstein/corsika_simtelarray/corsika-6990/run
+Changed into Corsika Directory: /nfs/astrop/d6/rstein/corsika_simtelarray/corsika-6990/run
+./corsika6990Linux__ < /nfs/astrop/d6/rstein/data/934878/run1/run1.inputcard > /nfs/astrop/d6/rstein/tmp/run1-simulation.log
+Output is written to /nfs/astrop/d6/rstein/tmp/
+mv /nfs/astrop/d6/rstein/tmp/run1-iact.corsika.gz /nfs/astrop/d6/rstein/data/934878/run1
+mv /nfs/astrop/d6/rstein/tmp/run1-simulation.log /nfs/astrop/d6/rstein/data/934878/run1
+000001
+mv /nfs/astrop/d6/rstein/tmp/CER000001 /nfs/astrop/d6/rstein/data/934878/run1
+mv /nfs/astrop/d6/rstein/tmp/DAT000001 /nfs/astrop/d6/rstein/data/934878/run1
+mv /nfs/astrop/d6/rstein/tmp/DAT000001.long /nfs/astrop/d6/rstein/data/934878/run1
+mv /nfs/astrop/d6/rstein/tmp/DAT000001.dbase /nfs/astrop/d6/rstein/data/934878/run1
+Output is copied into /nfs/astrop/d6/rstein/data/934878/run1
+1
+zcat /nfs/astrop/d6/rstein/data/934878/run1/run1-iact.corsika.gz | ./bin/sim_hessarray -c hess3.cfg  -DPHASE2B=1 -DHESS2_SECTOR=1 -C SAVE_PHOTONS=2 -C SAMPLED_OUTPUT=0  -C nightsky_background=all:0.100 -C trigger_pixels=1  -C discriminator_threshold=112 -C discriminator_pulse_shape=hess_disc_shape-01-10.dat -C iobuf_maximum=200000000 -C maximum_telescopes=5 -C min_photons=20 -C atmospheric_transmission=atm_trans_1800_1_10_0_0_1800.dat  -C convergent_depth=0 -C telescope_theta=0.0 -C telescope_phi=166.0 -C power_law=2.50 -C histogram_file=/nfs/astrop/d6/rstein/data/934878/run1/run1_off0.hdata.gz -C output_file=/nfs/astrop/d6/rstein/data/934878/run1/run1_off0.simhess.gz -C random_state=auto -C show=all - | tee /nfs/astrop/d6/rstein/data/934878/run1/run1_off0.log > /nfs/astrop/d6/rstein/data/934878/run1/run1_sim_telarray.log

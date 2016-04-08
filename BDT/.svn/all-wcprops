@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/desy/astrohh/!svn/ver/6739/rstein/Hamburg-Cosmic-Rays/BDT
+END
+BDT.py
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/desy/astrohh/!svn/ver/6739/rstein/Hamburg-Cosmic-Rays/BDT/BDT.py
+END
+write.py
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/desy/astrohh/!svn/ver/6739/rstein/Hamburg-Cosmic-Rays/BDT/write.py
+END
+roccurves.py
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/desy/astrohh/!svn/ver/6739/rstein/Hamburg-Cosmic-Rays/BDT/roccurves.py
+END
+fulldata.py
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/desy/astrohh/!svn/ver/6739/rstein/Hamburg-Cosmic-Rays/BDT/fulldata.py
+END
+features.py
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/desy/astrohh/!svn/ver/6739/rstein/Hamburg-Cosmic-Rays/BDT/features.py
+END
+plot.py
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/desy/astrohh/!svn/ver/6739/rstein/Hamburg-Cosmic-Rays/BDT/plot.py
+END
+cutdata.py
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/desy/astrohh/!svn/ver/6739/rstein/Hamburg-Cosmic-Rays/BDT/cutdata.py
+END

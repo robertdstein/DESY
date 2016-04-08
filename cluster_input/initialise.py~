@@ -1,8 +1,0 @@
-numberofhours = 0.01
-mincount=4
-reconstructiongridwidth=13
-orientation="five"
-
-def run():
-	return numberofhours, mincount, reconstructiongridwidth, orientation
-	

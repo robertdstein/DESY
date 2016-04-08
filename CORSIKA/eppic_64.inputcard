@@ -1,0 +1,62 @@
+EVTNR   1                              number of first shower event
+NSHOW   3                             number of showers
+MAGNET  20.0  42.8                     magnetic field centr. Europe
+HADFLG  0  0  0  0  0  2               flags hadr.interact.&fragmentation
+ECUTS   0.3  0.3  0.003  0.003         energy cuts for particles
+MUADDI  F                              additional info for muons
+MUMULT  T                              muon multiple scattering angle
+
+* [ EPPIC telescopes ] (x -> North, y -> West)
+* 
+*            X     Y    Z    R         (all in cm)
+
+TELESCOPE       0       0   0  260        Tel. 1
+TELESCOPE      5000       0   0  260        Tel. 1
+TELESCOPE     10000       0   0  260        Tel. 3
+TELESCOPE     20000       0   0  260        Tel. 4
+TELESCOPE     30000       0   0  260        Tel. 5
+
+
+*TELESCOPE -60000  -60000   0  260        Tel. 1
+*TELESCOPE -60000      0    0  260        Tel. 2
+*TELESCOPE -60000   60000   0  260        Tel. 3
+*TELESCOPE      0  -60000   0  260        Tel. 4
+*TELESCOPE      0      0    0  260        Tel. 5
+*TELESCOPE      0   60000   0  260        Tel. 6
+*TELESCOPE  60000  -60000   0  260        Tel. 7
+*TELESCOPE  60000      0    0  260        Tel. 8
+*TELESCOPE  60000   60000   0  260        Tel. 9
+*
+*
+
+*
+CSCAT  1   0.  0.                  use shower several times core position scattered within radius xxx cm
+*
+
+
+ELMFLG  T   T                          em. interaction flags (NKG,EGS)
+STEPFC  1.0                            mult. scattering step length fact.
+RADNKG  200.E2                         outer radius for NKG lat.dens.distr.
+ARRANG  0.                             rotation of array to north
+LONGI   T  20.  T  T                    longit.distr. & step size & fit & out
+ECTMAP  1.E3                           cut on gamma factor for printout
+MAXPRT  100000                         max. number of printed events
+DATBAS  F                              write .dbase file
+USER    kunnas                        user 
+DEBUG   F  6  F  1000000               debug flag and log.unit for out
+*PLOTSH  T
+
+*
+* [ Primary particle options ]
+*
+PRMPAR  5626                             Primary particle type: 1 Gamma, 14 proton, 402 Helium
+ESLOPE  -1                             slope of primary energy spectrum
+
+
+
+ERANGE 50000   50000                 Energy range (GeV)	
+OBSLEV  675.E2
+
+THETAP  0  0                          range of zenith angle (degree)
+PHIP    0  0                     range of azimuth angle (degree): from South if PHIP=ARRANG
+

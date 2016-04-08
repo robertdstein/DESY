@@ -47,7 +47,7 @@
 
 # Ab hier beginnt das Script
 
-. /nfs/astrop/d1/hhsoft/64bit/ini_python2.7.8_64bit.sh
+. /nfs/astrop/d1/hhsoft/64bit_crf/ini_python2.7.8_64bit_crf.sh
 
-python /d6/rstein/Hamburg-Cosmic-Rayscluster_input/execute$SGE_TASK_ID.py
+python /d6/rstein/Hamburg-Cosmic-Rays/cluster_input/execute$SGE_TASK_ID.py
 #cp $TMPDIR/* /d6/rstein/Hamburg-Cosmic-Rays/cluster_output
