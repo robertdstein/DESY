@@ -13,7 +13,8 @@
 #$ -N CorsikaSIM
 
 # runtime/ Maximale Laufzeit, hat einfluss auf die Priorität. Die Schwellen sind 2:59:59, 23:59:59, 2:59:59, 167:59:59
-#$ -l h_rt=167:59:59 
+#~ #$ -l h_rt=167:59:59
+#$ -l h_rt=2:59:59 
 
 # Hosts/  host die benutzt werden sollen
 #$ -l hostname="!bird001.desy.de&!bird002.desy.de&!bird003.desy.de&!bird004.desy.de&!bird009.desy.de"
@@ -55,8 +56,48 @@ echo "Temporary directory: " $TMPDIR
 . /nfs/astrop/d1/hhsoft/64bit_crf/ini_python2.7.8_64bit_crf.sh
 
 python /nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/CORSIKA/runtest.py -rn $SGE_TASK_ID -td $TMPDIR -jid $JOB_ID
+
+# This file should be sourced from each example
+
+# The example should work (on Linux) without the following environment variables:
+unset HESSROOT
+export HESSROOT
+unset LD_LIBRARY_PATH
+export LD_LIBRARY_PATH
+
+export CTA_PATH=/nfs/astrop/d6/rstein/corsika_simtelarray
+
+# Paths to software, libraries, configuration files (read-only)
+export CORSIKA_PATH="$(cd ${CTA_PATH}/corsika-run && pwd -P)"
+export SIM_TELARRAY_PATH="$(cd ${CTA_PATH}/sim_telarray && pwd -P)"
+export HESSIO_PATH="$(cd ${CTA_PATH}/hessioxxx && pwd -P)"
+export LD_LIBRARY_PATH="${HESSIO_PATH}/lib"
+export PATH="${HESSIO_PATH}/bin:${SIM_TELARRAY_PATH}/bin:${PATH}"
+
+# Sim_telarray configuration paths are normally compiled-in but you can set
+#   SIM_TELARRAY_CONFIG_PATH : replace compiled-in paths with this
+#   SIMTEL_CONFIG_PATH : precede compiled-in or replaced paths with this
+# while any '-I...' options to sim_telarray precedes any of these paths.
+# Recent versions of the generic_run.sh script may also fill in the
+# values of environment values SIM_TELARRAY_DEFINES and SIM_TELARRAY_INCLUDES
+# early into the sim_telarray command line. 
+
+# Paths where data gets written to. Normally everything goes into
+# a sub-directory/symlink 'Data' but you can either set MCDATA_PATH
+# or CTA_DATA to direct the output elsewhere.
+export CTA_DATA_PATH="${CTA_PATH}/Data"
+export MCDATA_PATH="${CTA_DATA_PATH}"
+
+# CORSIKA is run in a 'run......' sub-directory of this path:
+export CORSIKA_DATA="${MCDATA_PATH}/corsika"
+# Sim_telarray output goes into config dependent sub-directory of this path:
+export SIM_TELARRAY_DATA="${CTA_PATH}/sim_telarray/cfg"
+
+printenv | egrep '^(CTA_PATH|CORSIKA_PATH|SIM_TELARRAY_PATH|SIM_TELARRAY_CONFIG_PATH|SIMTEL_CONFIG_PATH|HESSIO_PATH|CTA_DATA|MCDATA_PATH|CORSIKA_DATA|SIM_TELARRAY_DATA|HESSROOT|LD_LIBRARY_PATH|PATH|RUNPATH)=' | sort
+
+export MAX_PRINT_ARRAY=2100
+echo "MAX_PRINT_ARRAY set to 2100"
+
 python /nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/CORSIKA/runsimtel.py -rn $SGE_TASK_ID -jid $JOB_ID
 
-#~ echo /nfs/astrop/d6/rstein/data/$JOB_ID/run$SGE_TASK_ID/run$SGE_TASK_ID-iact.corsika.gz
-#~ 
-#~ . /nfs/astrop/d6/rstein/corsika_simtelarray/sim_telarray/sim_hessarray
+python /nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/CORSIKA/extractpixels.py -rn $SGE_TASK_ID -jid $JOB_ID

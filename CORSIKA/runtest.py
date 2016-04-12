@@ -13,8 +13,8 @@ data_dir = "/nfs/astrop/d6/rstein/data"
 # default input card
 filename_in = "/nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/CORSIKA/run.inputcard"
 
-corsika_dir = "/nfs/astrop/d6/rstein/corsika_simtelarray/corsika-6990/run"
-corsika_exe = "corsika6990Linux__"
+corsika_dir = "/nfs/astrop/d6/rstein/corsika_simtelarray/corsika-run"
+corsika_exe = "corsika74000Linux_QGSJET_urqmd"
 
 # directory that contains run directories
 result_dir = data_dir + "/" + str(cfg.jobID)
@@ -43,10 +43,10 @@ f_out.write("""
 *
 """)
 
-f_out.write("SEED    " + str((int(cfg.jobID)*4) + 0) + "   0   0                seed for 1st random number sequence\n")
-f_out.write("SEED    " + str((int(cfg.jobID)*4) + 1) + "   0   0                seed for 2nd random number sequence\n")
-f_out.write("SEED    " + str((int(cfg.jobID)*4) + 2) + "   0   0                seed for 3rd random number sequence\n")
-f_out.write("SEED    " + str((int(cfg.jobID)*4) + 3) + "   0   0                seed for 4th random number sequence\n")
+f_out.write("SEED    " + str((int(cfg.runnumber)*4) + 0 + int(cfg.jobID)) + "   0   0                seed for 1st random number sequence\n")
+f_out.write("SEED    " + str((int(cfg.runnumber)*4) + 1 + int(cfg.jobID)) + "   0   0                seed for 2nd random number sequence\n")
+f_out.write("SEED    " + str((int(cfg.runnumber)*4) + 2 + int(cfg.jobID)) + "   0   0                seed for 3rd random number sequence\n")
+f_out.write("SEED    " + str((int(cfg.runnumber)*4) + 3 + int(cfg.jobID)) + "   0   0                seed for 4th random number sequence\n")
 
 
 f_out.write("DIRECT %s\n"%cfg.tempdir)

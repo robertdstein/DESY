@@ -7,11 +7,11 @@ DATBAS T                             write a file with parameters used
 *
 PRMPAR  5626                             Primary particle type: 1 Gamma, 14 proton, 402 Helium
 ESLOPE  -2.7                             slope of primary energy spectrum
-ERANGE 50000   50000                 Energy range (GeV)	
-OBSLEV  675.E2
+ERANGE 35000   35000                 Energy range (GeV)	
+OBSLEV  1800.E2
 
-THETAP  0  0                          range of zenith angle (degree)
-PHIP    0  0                     range of azimuth angle (degree): from South if PHIP=ARRANG
+THETAP  0  1                          range of zenith angle (degree)
+PHIP    -1  1                    range of azimuth angle (degree): from South if PHIP=ARRANG
 *
 * [ Site specific options ]
 *
