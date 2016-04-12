@@ -114,12 +114,12 @@ def run(source, detectorcount, mindetections, allcounts):
 			rgr = DecisionTreeRegressor()
 			rgr.fit(full, fullscore)
 			
-			joblib.dump(rgr, '/d6/rstein/Hamburg-Cosmic-Rays/BDT/pickle/' + str(source) + str(k) + 'regressor.pkl')
+			joblib.dump(rgr, '/d6/rstein/BDTpickle/' + str(source) + str(k) + 'regressor.pkl')
 			
 			clf = ensemble.GradientBoostingClassifier(max_depth=1, n_estimators=100, learning_rate=0.05)
 			clf.fit(full, fullclassifier)
 			
-			joblib.dump(clf, '/d6/rstein/Hamburg-Cosmic-Rays/BDT/pickle/' + str(source) + str(k) + 'classifier.pkl')
+			joblib.dump(clf, '/d6/rstein/BDTpickle/' + str(source) + str(k) + 'classifier.pkl')
 			
 			print time.asctime(time.localtime()), "BDT Trained"
 			
@@ -224,11 +224,11 @@ def run(source, detectorcount, mindetections, allcounts):
 	
 				subset = alldata[detectorcount-k]
 				
-				clf=joblib.load('/d6/rstein/Hamburg-Cosmic-Rays/BDT/pickle/' + str(source) + str(k) + 'classifier.pkl')
+				clf=joblib.load('/d6/rstein/BDTpickle/' + str(source) + str(k) + 'classifier.pkl')
 				
 				probs=clf.predict_proba(subset)
 			
-				rgr= joblib.load('/d6/rstein/Hamburg-Cosmic-Rays/BDT/pickle/' + str(source) + str(k) + 'regressor.pkl')
+				rgr= joblib.load('/d6/rstein/BDTpickle/' + str(source) + str(k) + 'regressor.pkl')
 								
 				classes = rgr.predict(subset)
 		
