@@ -43,7 +43,7 @@ os.system(q1)
 
 # do read_hess
 
-readhesscmd = "/nfs/astrop/d6/rstein/corsika_simtelarray/hessioxxx/bin/read_hess -S -q -v -r 5 -p " + base_file_name + ".ps " + base_file_name + ".simhess.gz > " + base_file_name + "_read_hess_output.txt"
+readhesscmd = "/nfs/astrop/d6/rstein/corsika_simtelarray/hessioxxx/bin/read_hess -S -q -v -r 10 -p " + base_file_name + ".ps " + base_file_name + ".simhess.gz > " + base_file_name + "_read_hess_output.txt"
 
 print readhesscmd
 

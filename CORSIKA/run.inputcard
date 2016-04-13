@@ -7,11 +7,11 @@ DATBAS T                             write a file with parameters used
 *
 PRMPAR  5626                             Primary particle type: 1 Gamma, 14 proton, 402 Helium
 ESLOPE  -2.7                             slope of primary energy spectrum
-ERANGE 35000   35000                 Energy range (GeV)	
+ERANGE 50000   50000                 Energy range (GeV)	
 OBSLEV  1800.E2
 
-THETAP  0  1                          range of zenith angle (degree)
-PHIP    -1  1                    range of azimuth angle (degree): from South if PHIP=ARRANG
+THETAP  0  3                         range of zenith angle (degree)
+PHIP    -1.5  1.5                    range of azimuth angle (degree): from South if PHIP=ARRANG
 *
 * [ Site specific options ]
 *
@@ -30,11 +30,11 @@ CWAVLG  250.  700.                     Cherenkov wavelength band
 * [ H.E.S.S. telescopes ] (x -> North, y -> West)
 * 
 *            X     Y    Z    R         (all in cm)
-TELESCOPE     0 -8485    1000  750        Tel. 1
-TELESCOPE  8485     0    1000  750        Tel. 2
-TELESCOPE     0  8485    1000  750        Tel. 3
-TELESCOPE -8485     0    1000  750        Tel. 4
-TELESCOPE     0     0    2000  1650       Tel. 5, huge central phase 2 telescope
+TELESCOPE     0 -8485    0  750        Tel. 1
+TELESCOPE  8485     0    0  750        Tel. 2
+TELESCOPE     0  8485    0  750        Tel. 3
+TELESCOPE -8485     0    0  750        Tel. 4
+TELESCOPE     0     0    0  1650       Tel. 5, huge central phase 2 telescope
 *
 * [Interaction flags]
 *
