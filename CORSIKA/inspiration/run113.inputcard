@@ -1,17 +1,29 @@
-EVTNR   1                              number of first shower event
-NSHOW   1                            number of showers
-DATBAS T                             write a file with parameters used
+RUNNR   1                         number of run     
+NSHOW   1000                            number of showers to generate        
+EVTNR   1                              number of first shower event        
+DATBAS T                             write a file with parameters used   
+
+*
+* [ Random number generator: 4 sequences used in IACT mode ]
+*
+SEED    200   0   0                seed for 1st random number sequence
+SEED    300   0   0                seed for 2nd random number sequence
+SEED    400   0   0                seed for 3rd random number sequence
+SEED    500   0   0                seed for 4th random number sequence
+PRMPAR   5626                            primary particle        
+ERANGE  20000 100000      energy range of primary particle (in GeV)
+THETAP  0   30                          range of zenith angle (degree)
+PHIP -180   180                          range of zenith angle (degree)
 
 *
 * [ Primary particle options ]
 *
-PRMPAR  5626                             Primary particle type: 1 Gamma, 14 proton, 402 Helium
-ESLOPE  -2.7                             slope of primary energy spectrum
-ERANGE 36000   136000                 Energy range (GeV)	
-OBSLEV  1800.E2
+ESLOPE  -2.7        	                 slope of primary energy spectrum
 
-THETAP  0  2                        range of zenith angle (degree)
-PHIP    -2  2                    range of azimuth angle (degree): from South if PHIP=ARRANG
+*  
+CSCAT   1  5000 0.                  use shower several times  
+*					core position scattered within radius xxx m  
+TELFIL /nfs/astrop/d6/rstein/tmp/run113_iact.corsika.gz:100:100:1              Telescope photon bunch output (eventio format)  
 *
 * [ Site specific options ]
 *
@@ -23,18 +35,18 @@ ARRANG  -14.                           rotation of array to north [D] (degree)
 *
 * [ Cherenkov emission parameters ]
 *
-CERSIZ  5.                             bunch size Cherenkov photons
+CERSIZ  5.                            bunch size Cherenkov photons
 CERFIL  T                              Cherenkov output to extra file
 CWAVLG  250.  700.                     Cherenkov wavelength band
 *
 * [ H.E.S.S. telescopes ] (x -> North, y -> West)
 * 
 *            X     Y    Z    R         (all in cm)
-TELESCOPE     0 -8485    0  750        Tel. 1
-TELESCOPE  8485     0    0  750        Tel. 2
-TELESCOPE     0  8485    0  750        Tel. 3
-TELESCOPE -8485     0    0  750        Tel. 4
-TELESCOPE     0     0    0  1650       Tel. 5, huge central phase 2 telescope
+TELESCOPE     0 -8485    1000  750        Tel. 1
+TELESCOPE  8485     0    1000  750        Tel. 2
+TELESCOPE     0  8485    1000  750        Tel. 3
+TELESCOPE -8485     0    1000  750        Tel. 4
+TELESCOPE     0     0    2000  1650       Tel. 5, huge central phase 2 telescope
 *
 * [Interaction flags]
 *
@@ -50,7 +62,6 @@ MAXPRT  0                              max. number of printed events
 ECTMAP  1.E6                           cut on gamma factor for printout
 STEPFC  1.0                            mult. scattering step length fact.
 TSTART  T                              needed for emission and scattering of primary
-
 *
 * [ Debugging and output options ]
 *

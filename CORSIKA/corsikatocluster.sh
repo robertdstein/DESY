@@ -35,7 +35,7 @@
 #$ -P astrop
 
 # cluster sends email when:/Festlegen, wann eine E-Mail gesendet werden soll:( b bei Beginn, e bei Ende, a bei Abbruch, s bei Suspend)
-#$ -m as
+#$ -m s
 
 # E-Mail
 #$ -M robert.stein@desy.de
@@ -55,7 +55,7 @@ echo "Temporary directory: " $TMPDIR
 
 . /nfs/astrop/d1/hhsoft/64bit_crf/ini_python2.7.8_64bit_crf.sh
 
-python /nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/CORSIKA/runtest.py -rn $SGE_TASK_ID -td $TMPDIR -jid $JOB_ID
+python /nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/CORSIKA/runcorsika.py -rn $SGE_TASK_ID -td $TMPDIR -jid $JOB_ID
 
 # This file should be sourced from each example
 
@@ -98,6 +98,12 @@ printenv | egrep '^(CTA_PATH|CORSIKA_PATH|SIM_TELARRAY_PATH|SIM_TELARRAY_CONFIG_
 export MAX_PRINT_ARRAY=2100
 echo "MAX_PRINT_ARRAY set to 2100"
 
+python /nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/CORSIKA/runsimtel.py -rn $SGE_TASK_ID -jid $JOB_ID -cn DC
+
+python /nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/CORSIKA/extractpixels.py -rn $SGE_TASK_ID -jid $JOB_ID -cn DC
+
 python /nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/CORSIKA/runsimtel.py -rn $SGE_TASK_ID -jid $JOB_ID
 
 python /nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/CORSIKA/extractpixels.py -rn $SGE_TASK_ID -jid $JOB_ID
+
+

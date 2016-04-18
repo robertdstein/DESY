@@ -1,11 +1,16 @@
 import argparse, os, math, random, time, sys, csv, cmath
+import os.path
 import numpy as np
+from sklearn.externals import joblib
+from sklearn import ensemble
 
 offset="0"
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-rn", "--runnumber", default="1")
-parser.add_argument("-jid", "--jobID", default="1174879")
+parser.add_argument("-jid", "--jobID", default="1379558")
+parser.add_argument("-cn", "--cardname", default="full")
+
 
 cfg = parser.parse_args()
 
@@ -14,15 +19,24 @@ data_dir = "/nfs/astrop/d6/rstein/data"
 result_dir = data_dir + "/" + str(cfg.jobID)
 
 run_dir = os.path.join(result_dir, "run" + str(cfg.runnumber))
-base_file_name = os.path.join(run_dir, "run" + str(cfg.runnumber) + "_off" + offset + "_read_hess_output.txt")
+base_file_name = os.path.join(run_dir, "run" + str(cfg.runnumber)+ str(cfg.cardname) + "_off" + offset  + "_read_hess_output.txt")
 
 full=[]
+
+f=open(run_dir + "/telescopedirections.csv", "w+")
+fwriter = csv.writer(f, delimiter=',')
+fheader = []
 
 g=open(run_dir + "/hillasparameters.csv", "w+")
 gwriter = csv.writer(g, delimiter=',')
 gheader = []
 
+h=open(run_dir + "/eventparameters.csv", "w+")
+hwriter = csv.writer(h, delimiter=',')
+hheader = []
+
 with open(base_file_name, 'rb') as csvfile:
+	i = 1
 	reader = csv.reader(csvfile, delimiter=' ', quotechar='|')
 	test=False
 	new=False
@@ -44,6 +58,14 @@ with open(base_file_name, 'rb') as csvfile:
 					test=True
 		
 		if len(row) > 0:
+			
+			if len(row) > 4:
+				if (row[4] == "Raw:"):
+					telaz = row[7]
+					telalt = row[11]
+					fwriter.writerow([i, telaz, telalt])
+					i+=1
+			
 			if row[0] == "#@+":
 				if row[1] == "Lines":
 					pass
@@ -62,14 +84,40 @@ with open(base_file_name, 'rb') as csvfile:
 						gentry.append(value)
 				
 				gwriter.writerow(gentry)
+			
+			if row[0] == "#@:":
+				if row[1] == "Lines":
+					pass
+				elif row[1] == "":
+					hheader.append('_'.join(row[3:]))
+				else:
+					hheader.append('_'.join(row[2::]))
+			if row[0] == "@:":
+				if 'hheader' in locals():
+					 hwriter.writerow(hheader)
+					 del hheader
+				
+				hentry = []
+				for value in row[1:]:
+					if value != "":
+						hentry.append(value)
+
+				showerazimuth = hentry[4]
+				showeraltitude = hentry[5]
+				
+				print hentry
+				
+				hwriter.writerow(hentry)
 						
 		if new:
 			full.append(current)
 			current=[]
 			new=False
 			test=False
-			
+
+f.close()			
 g.close()
+h.close()
 	
 import matplotlib as mpl
 mpl.use('Agg')
@@ -83,6 +131,19 @@ dcogu = 0.91
 dlinecut = 0.23
 radiuscut = 40
 QDCcut = 1
+arcut = 0.75
+ddireccut = 1.95
+dcogl = 0.10
+dcogu = 1.51
+dlinecut = 1.23
+radiuscut = 40
+QDCcut = 1
+
+picklepath = '/nfs/astrop/d6/rstein/BDTpickle/DCpixelclassifier.pkl'
+if os.path.isfile(picklepath):
+	clf=joblib.load(picklepath)		
+else:
+	print "No pickle!"
 
 with open(run_dir + "/hillasparameters.csv", 'rb') as csvfile:
 	reader = csv.reader(csvfile, delimiter=',', quotechar='|')
@@ -113,10 +174,25 @@ with open(run_dir + "/hillasparameters.csv", 'rb') as csvfile:
 			cogy = float(row[14])
 			angle = math.radians(float(row[11]))
 			coredistance=float(row[3])
+			energy=float(row[2])
 			
-			showerx=0
-			showery=0
+			telaz=0
+			telalt=0			
+			with open(run_dir + "/telescopedirections.csv", 'r') as nf:
+				telreader = csv.reader(nf, delimiter=',', quotechar='|')
+				for telrow in telreader:
+					if int(telrow[0]) == int(row[1]):
+						telazimuth = telrow[1]
+						telaltitude = telrow[2]
+					else:
+						pass
 			
+			deltaaz = float(showerazimuth) - float(telazimuth)
+			deltaalt= float(showeraltitude) - float(telaltitude)
+			
+			showery=cmath.rect(deltaalt, math.radians(180 - float(showerazimuth))).imag
+			showerx=cmath.rect(deltaalt, math.radians(180 - float(showerazimuth))).real
+
 			width=float(row[6])
 			length=float(row[7])
 			distance = float(row[8])
@@ -127,7 +203,7 @@ with open(run_dir + "/hillasparameters.csv", 'rb') as csvfile:
 
 			numrange = np.linspace(-end, end, 2)
 			
-			sm = cmath.rect(1, angle).imag/cmath.rect(1, angle).real
+			sm = (cogy-showery)/(cogx - showerx)
 			sc = showery - (sm * showerx)
 
 			current = full[i]
@@ -139,8 +215,12 @@ with open(run_dir + "/hillasparameters.csv", 'rb') as csvfile:
 			selecty=[]
 			bestQDC=0.0
 			bestID=None
+			
+			if os.path.isfile(picklepath):
+				bestscore=0.0
+				clfID=None
 
-			with open('/nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/CORSIKA/'+targetfile, 'rb') as csvfile:
+			with open('/nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/CORSIKA/data/'+targetfile, 'rb') as csvfile:
 				reader = csv.reader(csvfile, delimiter=',', quotechar='|')
 				for row in reader:
 					ID = int(row[0])
@@ -163,9 +243,7 @@ with open(run_dir + "/hillasparameters.csv", 'rb') as csvfile:
 					ddirec = math.sqrt((xpos-showerx)**2 + (ypos-showery)**2)
 					dcog = math.sqrt((xpos-cogx)**2 + (ypos-cogy)**2)
 					
-					intersectionangle = angle + math.pi/2
-					
-					m = cmath.rect(1, intersectionangle).imag/cmath.rect(1, intersectionangle).real
+					m = -1./sm
 					c = ypos - (m*xpos)
 					
 					intersectionx = (sc - c)/(m-sm)
@@ -180,14 +258,35 @@ with open(run_dir + "/hillasparameters.csv", 'rb') as csvfile:
 						#~ plt.scatter(intersectiony, intersectionx, c='pink', s=100, marker="x", zorder=2)
 						#~ plt.scatter(ypos, xpos, c='pink', s=100, marker="*", zorder=2)
 					
-					if ddirec < ddireccut:				
-						if dcogl < dcog < dcogu:
-							if dline < dlinecut:
-								selectx.append(xpos)
-								selecty.append(ypos)
-								if QDC > bestQDC:
-									bestID=ID
-									bestQDC=QDC
+					if (random.random() > 0.7) or (QDC >0.9):
+						includeinBDT = 0
+					else:
+						includeinBDT = -1
+					
+					if cfg.cardname =="full":
+						if ddirec < ddireccut:				
+							if dcogl < dcog < dcogu:
+								if dline < dlinecut:
+									selectx.append(xpos)
+									selecty.append(ypos)
+									
+									if QDC > bestQDC:
+										bestID=ID
+										bestQDC=QDC
+					
+					elif cfg.cardname == "DC":
+						if QDC > bestQDC:
+							bestID=ID
+							bestQDC=QDC
+							
+					if os.path.isfile(picklepath):
+						bdtentry = [count, QDC, ddirec, dcog, dline, energy]
+						bdtscore = clf.predict_proba([bdtentry])[0]
+						bdtscore = clf.predict_proba([bdtentry])[0][1]
+						if bdtscore > bestscore:
+							print bestscore, clfID, bestscore, ID
+							clfID=ID
+							bestscore= bdtscore
 
 					entry.append(xpos)
 					entry.append(ypos)
@@ -197,6 +296,10 @@ with open(run_dir + "/hillasparameters.csv", 'rb') as csvfile:
 					entry.append(ddirec)
 					entry.append(dcog)
 					entry.append(dline)
+					entry.append(includeinBDT)
+					entry.append(energy)
+					if os.path.isfile(picklepath):
+						entry.append(bdtscore)
 					x.append(xpos)
 					y.append(ypos)
 					color.append(value)
@@ -204,8 +307,8 @@ with open(run_dir + "/hillasparameters.csv", 'rb') as csvfile:
 			
 			plt.plot((numrange*sm)+sc, numrange, color='w', linestyle='dashed')
 			
-			#~ coordinates = [[(showery,showerx), ddireccut], [(cogy, cogx), dcogl], [(cogy, cogx), dcogu]]
-			#~ 
+			coordinates = [[(showery,showerx), ddireccut], [(cogy, cogx), dcogl], [(cogy, cogx), dcogu]]
+			
 			#~ for cset in coordinates:
 				#~ e = Circle(xy=cset[0], radius=cset[1])
 				#~ fig.add_artist(e)
@@ -213,14 +316,16 @@ with open(run_dir + "/hillasparameters.csv", 'rb') as csvfile:
 				#~ e.set_facecolor("none")
 				#~ e.set_linestyle('dashed')
 					
-			plt.scatter(y, x, s=size, c=color, linewidth='0', marker="H", zorder=1)
-			plt.scatter(selecty, selectx, s=size, facecolors='none', edgecolors='w', marker="H", zorder=2)
+			plt.scatter(y, x, s=size, c=color, linewidth='0', marker="H", zorder=1, vmin=3800, vmax=7800)
+			#~ if cfg.cardname == "full":
+				#~ plt.scatter(selecty, selectx, s=size, facecolors='none', edgecolors='w', marker="H", zorder=2)
 			plt.xlim(-angularwidth, angularwidth)
 			plt.ylim(-angularwidth, angularwidth)
 			
 			plt.axis('off')
 			
 			plt.scatter(cogy, cogx, c='w', s=100, marker="x")
+			plt.scatter(showery, showerx, c='w', s=100, marker="o")
 
 			message="REJECTED!"
 			
@@ -241,25 +346,58 @@ with open(run_dir + "/hillasparameters.csv", 'rb') as csvfile:
 				ringcolor = "red"
 				status = "Rejected"
 				print message
+			
+			DCpath = run_dir + "/DCpixel" + str(i+1) + ".text"
+			csvpath = run_dir + "/" + cfg.cardname + "pixels" + str(i+1) + ".csv"
+			
+			if (cfg.cardname == "full") & os.path.isfile(DCpath):
+					with open(DCpath) as g:
+						trueID = g.readline()
+						print "DC pixel", trueID
+						plt.scatter(current[int(trueID)][4], current[int(trueID)][3], facecolors='none', edgecolors="orange", s=(size*1.2), marker="o", linewidth=2, zorder=3)
+						current[int(trueID)][11] = 1
+						
+						if bestID != None:
+							if int(trueID) == int(bestID):
+								status += " \n MATCHED!"
+								
+						if os.path.isfile(picklepath):	
+							statspath = run_dir + "/stats" + str(i+1) + ".txt"
+							with open(statspath, 'w+') as h:
+								if int(clfID) == int(trueID):
+									h.write("1 \n")
+									h.write(str(bestscore) + "\n")
+								else:
+									h.write("0 \n")
+									h.write(str(bestscore) + "\n")
+				
+			elif (cfg.cardname =="DC") & (bestQDC > 1.0):
+				g=open(DCpath, 'w+')
+				g.write(str(bestID) + " \n")
 
+				g.write(str(current[bestID]) + " \n")
+				g.close()
+			
+			print csvpath
+			
+			with open(csvpath, 'w+') as f:
+				writer = csv.writer(f, delimiter=',', quotechar='|')
+				writer.writerow(["PixelID", "Count", "Channel", "Xpos(Deg)", "Ypos(Deg)", "Neighbour IDs", "Neighbour Counts", "QDC", "Delta Direction", "Delta C.o.g", "Delta Line", "DC?"])
+				for entry in current:
+					writer.writerow(entry)
+		
 			plt.annotate(status, xy=(0.0, 0.0), xycoords="axes fraction",  fontsize=10)
 			
 			if bestID != None:
 				plt.scatter(current[bestID][4], current[bestID][3], facecolors='none', edgecolors=ringcolor, s=(size*1.2), marker="o", linewidth=2, zorder=3)
-			
-			current=full[i]
-			path = run_dir + "/pixels" +str(i+1)+".csv"
-			print path
-			f=open(path, 'w+')
-			writer = csv.writer(f, delimiter=',')
-			writer.writerow(["PixelID", "Count", "Channel", "Xpos(Deg)", "Ypos(Deg)", "Neighbour IDs", "Neighbour Counts", "QDC", "Delta Direction", "Delta C.o.g"])
-			for entry in current:
-				writer.writerow(entry)
-			f.close()	
+				
+			if os.path.isfile(picklepath):
+				plt.scatter(current[clfID][4], current[clfID][3], facecolors='none', edgecolors="white", s=(size*1.2), marker="*", linewidth=2, zorder=3)
 
 figure = plt.gcf()
 figure.set_size_inches(10, 20)
 plt.subplots_adjust(wspace=0, hspace=0)
 
-plt.savefig(run_dir + "/graph" + str(cfg.runnumber) + ".pdf")
+plt.savefig(run_dir + "/graph" + str(cfg.runnumber) + cfg.cardname + ".pdf")
+plt.close()
 	
