@@ -131,13 +131,7 @@ dcogu = 0.91
 dlinecut = 0.23
 radiuscut = 40
 QDCcut = 1
-arcut = 0.75
-ddireccut = 1.95
-dcogl = 0.10
-dcogu = 1.51
-dlinecut = 1.23
-radiuscut = 40
-QDCcut = 1
+
 
 picklepath = '/nfs/astrop/d6/rstein/BDTpickle/DCpixelclassifier.pkl'
 if os.path.isfile(picklepath):
@@ -239,6 +233,7 @@ with open(run_dir + "/hillasparameters.csv", 'rb') as csvfile:
 					value = entry[1]
 					
 					QDC = float(value)/max(nncounts)
+					nnmean = np.mean(nncounts)
 
 					ddirec = math.sqrt((xpos-showerx)**2 + (ypos-showery)**2)
 					dcog = math.sqrt((xpos-cogx)**2 + (ypos-cogy)**2)
@@ -258,7 +253,7 @@ with open(run_dir + "/hillasparameters.csv", 'rb') as csvfile:
 						#~ plt.scatter(intersectiony, intersectionx, c='pink', s=100, marker="x", zorder=2)
 						#~ plt.scatter(ypos, xpos, c='pink', s=100, marker="*", zorder=2)
 					
-					if (random.random() > 0.7) or (QDC >0.9):
+					if (random.random() > 0.9) or (QDC >0.9):
 						includeinBDT = 0
 					else:
 						includeinBDT = -1
@@ -280,7 +275,7 @@ with open(run_dir + "/hillasparameters.csv", 'rb') as csvfile:
 							bestQDC=QDC
 							
 					if os.path.isfile(picklepath):
-						bdtentry = [count, QDC, ddirec, dcog, dline, energy]
+						bdtentry = [count, QDC, ddirec, dcog, dline, energy, nnmean]
 						bdtscore = clf.predict_proba([bdtentry])[0]
 						bdtscore = clf.predict_proba([bdtentry])[0][1]
 						if bdtscore > bestscore:
@@ -298,6 +293,7 @@ with open(run_dir + "/hillasparameters.csv", 'rb') as csvfile:
 					entry.append(dline)
 					entry.append(includeinBDT)
 					entry.append(energy)
+					entry.append(nnmean)
 					if os.path.isfile(picklepath):
 						entry.append(bdtscore)
 					x.append(xpos)
@@ -356,6 +352,7 @@ with open(run_dir + "/hillasparameters.csv", 'rb') as csvfile:
 						print "DC pixel", trueID
 						plt.scatter(current[int(trueID)][4], current[int(trueID)][3], facecolors='none', edgecolors="orange", s=(size*1.2), marker="o", linewidth=2, zorder=3)
 						current[int(trueID)][11] = 1
+						trueQDC = current[7]
 						
 						if bestID != None:
 							if int(trueID) == int(bestID):
@@ -366,12 +363,15 @@ with open(run_dir + "/hillasparameters.csv", 'rb') as csvfile:
 							with open(statspath, 'w+') as h:
 								if int(clfID) == int(trueID):
 									h.write("1 \n")
-									h.write(str(bestscore) + "\n")
 								else:
 									h.write("0 \n")
-									h.write(str(bestscore) + "\n")
+								h.write(str(bestscore) + "\n")
+								if int(bestID) == int(trueID):
+									h.write("1 \n")
+								else:
+									h.write("0 \n")
 				
-			elif (cfg.cardname =="DC") & (bestQDC > 1.0):
+			elif (cfg.cardname =="DC"):
 				g=open(DCpath, 'w+')
 				g.write(str(bestID) + " \n")
 

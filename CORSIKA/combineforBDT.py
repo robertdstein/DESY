@@ -13,13 +13,14 @@ cfg = parser.parse_args()
 filepath = "/nfs/astrop/d6/rstein/data/"
 
 i = 1
-j = 1500
+j = 2000
 
 targetfolder = filepath + cfg.jobID +"/"
 
 with open(targetfolder + "BDTpixels.csv", 'wb') as csvout:
 	writer = csv.writer(csvout, delimiter=',')
-	while (i < j):
+	writer.writerow(["Count", "QDC", "Delta_direction", "Delta_Centre_of_Gravity", "Delta_line", "Energy", "Nearest_Neighbour_Mean", "score"])
+	while (i < j) or (os.path.isfile(targetfolder + "run" + str(i) + "/fullpixels1.csv")):
 		if (os.path.isfile(targetfolder + "run" + str(i) + "/fullpixels1.csv")):
 			for k in range(1,5):
 			
@@ -37,8 +38,9 @@ with open(targetfolder + "BDTpixels.csv", 'wb') as csvout:
 							Dline = row[10]
 							score = row[11]
 							energy = row[12]
+							nnmean = row[13]
 							
-							entry = [count, QDC, Dd, Dcg, Dline, energy, score]
+							entry = [count, QDC, Dd, Dcg, Dline, energy, nnmean, score]
 							
 							writer.writerow(entry)
 						else:

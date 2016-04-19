@@ -42,6 +42,8 @@ bkgtestscore = []
 with open(filename, 'rb') as csvfile:
 	reader = csv.reader(csvfile, delimiter=',', quotechar='|')
 
+	header = next(reader)
+
 	for row in reader:
 		count = float(row[0])
 		QDC = float(row[1])
@@ -49,9 +51,11 @@ with open(filename, 'rb') as csvfile:
 		Dcg = float(row[3])
 		Dline = float(row[4])
 		energy = float(row[5])
-		score = float(row[6])
+		nnmean = float(row[6])
+		score = float(row[7])
+		entry = [count, QDC, Dd, Dcg, Dline, energy, nnmean]
 		
-		entry = [count, QDC, Dd, Dcg, Dline, energy]
+		print entry, score
 		
 		if random.random() < 0.5:
 			full.append(entry)
@@ -83,7 +87,7 @@ print time.asctime(time.localtime()), "Training BDT"
 
 #Train the BDT (Gradient Boosting Classifier)  and save
 
-clf = ensemble.GradientBoostingClassifier(max_depth=4, n_estimators=100, learning_rate=0.05)
+clf = ensemble.GradientBoostingClassifier(max_depth=3, n_estimators=100, learning_rate=0.05)
 clf.fit(full, fullscore)
 
 joblib.dump(clf, '/nfs/astrop/d6/rstein/BDTpickle/DCpixelclassifier.pkl')
@@ -168,3 +172,16 @@ plt.legend(loc="lower right")
 
 plt.savefig("/nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/CORSIKA/graphs/roccurve.pdf")
 plt.close()
+
+importances = clf.feature_importances_
+indices = np.argsort(importances)[::-1]
+
+v = header[:-1]
+
+print header
+print v
+
+print("Feature ranking:")
+
+for i in range(len(v)):
+	print("%d. %s (%f) " % (i + 1, header[indices[i]], importances[indices[i]]))
