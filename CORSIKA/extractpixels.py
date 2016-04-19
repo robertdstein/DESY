@@ -208,6 +208,7 @@ with open(run_dir + "/hillasparameters.csv", 'rb') as csvfile:
 			selectx=[]
 			selecty=[]
 			bestQDC=0.0
+			bestcount=0.0
 			bestID=None
 			
 			if os.path.isfile(picklepath):
@@ -270,9 +271,10 @@ with open(run_dir + "/hillasparameters.csv", 'rb') as csvfile:
 										bestQDC=QDC
 					
 					elif cfg.cardname == "DC":
-						if QDC > bestQDC:
+						print "Count!", value, bestcount
+						if value > bestcount:
 							bestID=ID
-							bestQDC=QDC
+							bestcount=value
 							
 					if os.path.isfile(picklepath):
 						bdtentry = [count, QDC, ddirec, dcog, dline, energy, nnmean]
@@ -366,10 +368,13 @@ with open(run_dir + "/hillasparameters.csv", 'rb') as csvfile:
 								else:
 									h.write("0 \n")
 								h.write(str(bestscore) + "\n")
-								if int(bestID) == int(trueID):
-									h.write("1 \n")
-								else:
-									h.write("0 \n")
+								bestIDval = 0
+								if bestID != None:
+									if int(bestID) == int(trueID):
+										bestIDval = 1
+
+								h.write(str(bestIDval) + " \n")
+								h.write(str(bestQDC) + "\n")
 				
 			elif (cfg.cardname =="DC"):
 				g=open(DCpath, 'w+')

@@ -40,8 +40,8 @@
 #$ -M robert.stein@desy.de
 
 # Path for/ Pfade für   stdout und stderr
-#$ -o /d6/rstein/Hamburg-Cosmic-Rays/cluster_output
-#$ -e /d6/rstein/Hamburg-Cosmic-Rays/cluster_error
+#$ -o /d6/rstein/cluster_output
+#$ -e /d6/rstein/cluster_error
 #
 #
 

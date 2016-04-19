@@ -43,8 +43,8 @@
 mkdir -p /nfs/astrop/d6/rstein/data/$JOB_ID
 
 # Path for/ Pfade für stdout und stderr
-#$ -o /nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/cluster_output
-#$ -e /nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/cluster_error
+#$ -o /nfs/astrop/d6/rstein/cluster_output
+#$ -e /nfs/astrop/d6/rstein/cluster_error
 #
 
 # Ab hier beginnt das Script

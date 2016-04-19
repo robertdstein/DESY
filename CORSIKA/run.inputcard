@@ -1,6 +1,5 @@
 EVTNR   1                              number of first shower event
 NSHOW   1                            number of showers
-DATBAS T                             write a file with parameters used
 
 *
 * [ Primary particle options ]
