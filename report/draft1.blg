@@ -3,44 +3,46 @@ Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
 The top-level auxiliary file: draft1.aux
 The style file: plain.bst
 Database file #1: report.bib
-You've used 2 entries,
+Warning--empty journal in Heck98
+You've used 4 entries,
             2118 wiz_defined-function locations,
-            511 strings with 4285 characters,
-and the built_in function-call counts, 672 in all, are:
-= -- 64
-> -- 31
+            523 strings with 4588 characters,
+and the built_in function-call counts, 1286 in all, are:
+= -- 121
+> -- 66
 < -- 0
-+ -- 12
-- -- 10
-* -- 49
-:= -- 122
-add.period$ -- 6
-call.type$ -- 2
-change.case$ -- 10
++ -- 26
+- -- 22
+* -- 92
+:= -- 232
+add.period$ -- 12
+call.type$ -- 4
+change.case$ -- 22
 chr.to.int$ -- 0
-cite$ -- 2
-duplicate$ -- 22
-empty$ -- 52
-format.name$ -- 10
-if$ -- 136
+cite$ -- 5
+duplicate$ -- 43
+empty$ -- 95
+format.name$ -- 22
+if$ -- 258
 int.to.chr$ -- 0
-int.to.str$ -- 2
-missing$ -- 2
-newline$ -- 13
-num.names$ -- 4
-pop$ -- 6
+int.to.str$ -- 4
+missing$ -- 4
+newline$ -- 23
+num.names$ -- 8
+pop$ -- 18
 preamble$ -- 1
-purify$ -- 8
+purify$ -- 18
 quote$ -- 0
-skip$ -- 16
+skip$ -- 30
 stack$ -- 0
-substring$ -- 49
-swap$ -- 2
+substring$ -- 80
+swap$ -- 3
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 8
-warning$ -- 0
-while$ -- 6
-width$ -- 3
-write$ -- 24
+type$ -- 16
+warning$ -- 1
+while$ -- 11
+width$ -- 5
+write$ -- 44
+(There was 1 warning)

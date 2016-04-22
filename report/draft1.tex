@@ -62,6 +62,18 @@ Instead of Hillas Analysis, we consider a new method for event reconstruction, i
 
 A theoretical study by Kieda in 2001 \cite{kieda01} suggested that for a core position resolution of $d \approx 5 $ m, we could expect to see a charge resolution of $ \sigma_{Z} \approx 1 $ for elements of $Z = 20$ or higher. In this case the core position resolution would be the limiting value. Thus, if the LPD method can achieve this core position resolution, the precision will be sufficient to extract the abundances of the different Cosmic Ray Elements. This the prime motivation for the new LPD technique.
 
+\section{Camera Image Simulation}
+The first requirement for reconstruction using the LPD method is to identify the DC pixel in a shower image, and consequently determine the number of DC photons present. A full simulation of air showers was performed using the CORSIKA package, and the simtelarray package was used to simulate HESS camera images generated from the shower. The hesioxxx package was used to extract camera image pixel positions and signals.
+
+\subsection{CORSIKA}
+A full simulation of air showers was performed using the CORSIKA package \cite{Heck98}, assuming a standard atmospheric profile derived from measurements conducted at the HESS site in Namibia. The simulated particles were $Fe^{56}$, within the Energy Range of $35-135$ TeV and a spectrum $\phi \propto E^{2.7}$. Four random seed numbers were passed to the program, generated using the overall job number and the run number corresponding to the parallel computing task index. Thus, for each set of simulations, 4 unique random number seeds were used. An altitude of 1800m was assumed, again corresponding to the HESS site. The simulated zenith angle ranged from $0\degree < \theta < 2 \degree$, while the simulated azimuth angle ranges from $-2\degree < \phi < 2 \degree$.
+
+In order to identify the DC pixel, each simulation run with an energy cut of 10 PeV on all muons and electrons. The consequence of this was to ensure that only the Cherenkov Light from the primary particle, as well as its fragments, was simulated. A second identical simulation was run with the same random seeds but without the energy cut on muons and electrons, giving a complete air shower including the DC light.
+
+\subsection{Sim\textunderscore telarray}
+Using the sim\textunderscore telarray package, the expected hardware response to the air shower can be simulated. Again, the response of the HESS telescope was selected for simulation, accounting for 
+
+
 \section{Cosmic Ray Event Simulation}
 In order to reconstruct events using the LPD method, we require saturation of the Cosmic Ray Energy, and that the event can be seen by at least 4 telescopes. These restrictions confine us to Cosmic Rays with specific characteristics.
 

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2015.11.27)  15 APR 2016 16:39
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2015.11.27)  22 APR 2016 16:16
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -228,73 +228,75 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 \tf@toc=\write3
 \openout3 = `draft1.toc'.
 
- [2] <graphs/generalheight.png, id=21, 722.7pt x 1084.05pt>
+ [2] [3]
+<graphs/generalheight.png, id=29, 722.7pt x 1084.05pt>
 File: graphs/generalheight.png Graphic file (type png)
 
 <use graphs/generalheight.png>
-Package pdftex.def Info: graphs/generalheight.png used on input line 73.
+Package pdftex.def Info: graphs/generalheight.png used on input line 85.
 (pdftex.def)             Requested size: 420.31314pt x 630.45189pt.
 
-<graphs/logenergyradius.png, id=22, 722.7pt x 1084.05pt>
+<graphs/logenergyradius.png, id=30, 722.7pt x 1084.05pt>
 File: graphs/logenergyradius.png Graphic file (type png)
 
 <use graphs/logenergyradius.png>
-Package pdftex.def Info: graphs/logenergyradius.png used on input line 87.
+Package pdftex.def Info: graphs/logenergyradius.png used on input line 99.
 (pdftex.def)             Requested size: 420.31314pt x 630.45189pt.
- [3] [4 <./graphs/generalheight.png>] [5 <./graphs/logenergyradius.png>]
-<graphs/simulatedlpd.png, id=39, 1084.05pt x 1806.75pt>
+
+<graphs/simulatedlpd.png, id=31, 1084.05pt x 1806.75pt>
 File: graphs/simulatedlpd.png Graphic file (type png)
 
 <use graphs/simulatedlpd.png>
-Package pdftex.def Info: graphs/simulatedlpd.png used on input line 102.
+Package pdftex.def Info: graphs/simulatedlpd.png used on input line 114.
 (pdftex.def)             Requested size: 378.28185pt x 630.45189pt.
- [6] [7 <./graphs/simulatedlpd.png>]
-<graphs/hessheight.png, id=50, 722.7pt x 1084.05pt>
+ [4] [5 <./graphs/generalheight.png>] [6 <./graphs/logenergyradius.png>] [7 <./
+graphs/simulatedlpd.png>] [8]
+<graphs/hessheight.png, id=53, 722.7pt x 1084.05pt>
 File: graphs/hessheight.png Graphic file (type png)
 
 <use graphs/hessheight.png>
-Package pdftex.def Info: graphs/hessheight.png used on input line 149.
+Package pdftex.def Info: graphs/hessheight.png used on input line 161.
 (pdftex.def)             Requested size: 420.31314pt x 630.45189pt.
- [8] [9 <./graphs/hessheight.png>]
-<graphs/hess.png, id=58, 1046.91125pt x 924.45375pt>
+
+<graphs/hess.png, id=54, 1046.91125pt x 924.45375pt>
 File: graphs/hess.png Graphic file (type png)
  <use graphs/hess.png>
-Package pdftex.def Info: graphs/hess.png used on input line 160.
+Package pdftex.def Info: graphs/hess.png used on input line 172.
 (pdftex.def)             Requested size: 407.66833pt x 359.97127pt.
 
-[10 <./graphs/hess.png>] <optimiselayout.png, id=62, 1445.4pt x 1084.05pt>
+[9] [10 <./graphs/hessheight.png>] [11 <./graphs/hess.png>]
+<optimiselayout.png, id=65, 1445.4pt x 1084.05pt>
 File: optimiselayout.png Graphic file (type png)
-
-<use optimiselayout.png>
-Package pdftex.def Info: optimiselayout.png used on input line 179.
+ <use optimiselayout.png>
+Package pdftex.def Info: optimiselayout.png used on input line 191.
 (pdftex.def)             Requested size: 407.66833pt x 305.74846pt.
- (./draft1.bbl [11 <./optimiselayout.png>]) [12]
-(./draft1.aux) ) 
+
+(./draft1.bbl [12 <./optimiselayout.png>]) [13] (./draft1.aux) ) 
 Here is how much of TeX's memory you used:
- 2055 strings out of 494976
- 29891 string characters out of 6179136
- 95522 words of memory out of 5000000
- 5268 multiletter control sequences out of 15000+600000
+ 2058 strings out of 494976
+ 29929 string characters out of 6179136
+ 96529 words of memory out of 5000000
+ 5271 multiletter control sequences out of 15000+600000
  6716 words of font info for 24 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 38i,5n,29p,831b,265s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/c
-mbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.
-pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></
-usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/sh
-are/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/share/tex
-live/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/te
-xmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dis
-t/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts
-/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/
-public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/a
-msfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfont
-s/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cm
-ti10.pfb>
-Output written on draft1.pdf (13 pages, 1220364 bytes).
+ 38i,5n,29p,827b,265s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/share/tex
+live/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/t
+exmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-d
+ist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fo
+nts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/ty
+pe1/public/amsfonts/cm/cmmi5.pfb></usr/share/texlive/texmf-dist/fonts/type1/pub
+lic/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/ams
+fonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/c
+m/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17
+.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></u
+sr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/sha
+re/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texl
+ive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb>
+Output written on draft1.pdf (14 pages, 1224652 bytes).
 PDF statistics:
- 114 PDF objects out of 1000 (max. 8388607)
- 71 compressed objects within 1 object stream
+ 117 PDF objects out of 1000 (max. 8388607)
+ 73 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  41 words of extra memory for PDF output out of 10000 (max. 10000000)
 
