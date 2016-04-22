@@ -254,10 +254,7 @@ with open(run_dir + "/hillasparameters.csv", 'rb') as csvfile:
 						#~ plt.scatter(intersectiony, intersectionx, c='pink', s=100, marker="x", zorder=2)
 						#~ plt.scatter(ypos, xpos, c='pink', s=100, marker="*", zorder=2)
 					
-					if (random.random() > 0.9) or (QDC >0.9):
-						includeinBDT = 0
-					else:
-						includeinBDT = -1
+					includeinBDT = 0
 					
 					if cfg.cardname =="full":
 						if ddirec < ddireccut:				

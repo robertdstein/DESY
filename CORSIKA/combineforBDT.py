@@ -3,7 +3,6 @@ import os.path
 import argparse, math, random, time
 import csv
 import numpy as np
-import os.path
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-jid", "--jobID", default="1385224")
