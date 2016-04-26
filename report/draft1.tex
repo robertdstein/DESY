@@ -4,6 +4,7 @@
 \usepackage{geometry}
 \geometry{a4paper, portrait, margin=1.0in}
 \usepackage{gensymb}
+\usepackage{booktabs}
 \begin{document}
 \begin{titlepage}
     \begin{center}
@@ -53,6 +54,11 @@ Between impact with the upper atmosphere and decay into a charged particle showe
 \newpage
 \tableofcontents
 \newpage
+
+\section{Preface}
+I basically just did everything. It was great.
+\newpage
+
 \section{Introduction}
 There are numerous Telescope Arrays which image the Cherenkov Light emitted by Cosmic Rays in the atmosphere, including the HESS, Magic and Veritas Experiments. All rely on Hillas Analysis with extracted parameters from each of the camera images being used to reconstruct the events, but heavy atmospheric blurring means that charge resolution is very poor. For Iron Nucleus events, we would expect to reconstruct \[Z \approx 26 \pm 5 \] with a core position resolution of the core position resolution is roughly $d \approx 20 m $ \cite{hess07}. 
 
@@ -62,8 +68,8 @@ Instead of Hillas Analysis, we consider a new method for event reconstruction, i
 
 A theoretical study by Kieda in 2001 \cite{kieda01} suggested that for a core position resolution of $d \approx 5 $ m, we could expect to see a charge resolution of $ \sigma_{Z} \approx 1 $ for elements of $Z = 20$ or higher. In this case the core position resolution would be the limiting value. Thus, if the LPD method can achieve this core position resolution, the precision will be sufficient to extract the abundances of the different Cosmic Ray Elements. This the prime motivation for the new LPD technique.
 
-\section{Camera Image Simulation}
-The first requirement for reconstruction using the LPD method is to identify the DC pixel in a shower image, and consequently determine the number of DC photons present. A full simulation of air showers was performed using the CORSIKA package, and the simtelarray package was used to simulate HESS camera images generated from the shower. The hesioxxx package was used to extract camera image pixel positions and signals.
+\section{DC Pixel Identification}
+The first requirement for reconstruction using the LPD method is to identify the DC pixel in a shower image, and consequently determine the number of DC photons present. A full simulation of air showers was performed using the CORSIKA package, and the simtelarray package was used to simulate HESS camera images generated from the shower. A Boosted Decision Tree (BDT) was trained using image parameters to identify DC pixels, and its performance was tested. 
 
 \subsection{CORSIKA}
 A full simulation of air showers was performed using the CORSIKA package \cite{Heck98}, assuming a standard atmospheric profile derived from measurements conducted at the HESS site in Namibia. The simulated particles were $Fe^{56}$, within the Energy Range of $35-135$ TeV and a spectrum $\phi \propto E^{2.7}$. Four random seed numbers were passed to the program, generated using the overall job number and the run number corresponding to the parallel computing task index. Thus, for each set of simulations, 4 unique random number seeds were used. An altitude of 1800m was assumed, again corresponding to the HESS site. The simulated zenith angle ranged from $0\degree < \theta < 2 \degree$, while the simulated azimuth angle ranges from $-2\degree < \phi < 2 \degree$.
@@ -71,8 +77,51 @@ A full simulation of air showers was performed using the CORSIKA package \cite{H
 In order to identify the DC pixel, each simulation run with an energy cut of 10 PeV on all muons and electrons. The consequence of this was to ensure that only the Cherenkov Light from the primary particle, as well as its fragments, was simulated. A second identical simulation was run with the same random seeds but without the energy cut on muons and electrons, giving a complete air shower including the DC light.
 
 \subsection{Sim\textunderscore telarray}
-Using the sim\textunderscore telarray package, the expected hardware response to the air shower can be simulated. Again, the response of the HESS telescope was selected for simulation, accounting for 
+Using the sim\textunderscore telarray package, the expected hardware response to the air shower can be simulated. Again, the built-in response of the HESS telescope was selected for simulation. The program accounts for atmospheric transmission and density, mirror positions, sizes and reflectivities, camera shadowing and triggering, quantum efficiency and pulse responses. The resultant images can be considered representative of true camera images to a good approximation.
 
+A script was written to extract the location of each pixel (dependent on camera size), alongside the Sim\textunderscore telarray simulated NUMBER OF PHOTOELECTRONS. In addition, the Sim\textunderscore telarray derives various Hillas image parameters, which the script also extracted. These include the image width and length measured in degrees, from which the aspect ratio $A.R = \frac{width}{length}$ was calculated. Further the reconstructed shower direction and the shower center of gravity were calculated as positions in azimuth and zenith. Additionally the calculated energy and distance to core $r_{core}$ were recorded.
+
+A entry was constructed for every pixel, containing its count and position. The variables $ \Delta_{C.o.G}$, $\Delta_{Direction}$ and $\Delta_{Line}$ were defined as the distance from the pixel to the shower center of gravity, shower direction, and the line joining those two points. Furthermore, the nearest neigbouring pixel IDs were calculated for every pixel position, enabling the count in each neighbouring pixel to be found. From this, two further pixel variables were defined. The largest neighbouring count $Count_{N.N.max}$ was found, and the ratio $ Q_{DC} = \frac{Count}{Count_{N.N.max}} $ was recorded. In addition the Nearest Neighbour Mean Count was recorded. This pixel dataset was created for each camera image, and stored for further analysis.
+
+\subsection{Classic DC Identification}
+The initial method used by the HESS collaboration \cite{hess07} was replicated for this analysis, in which a number of cuts were applied to each image dataset.
+
+\begin{table}[h!]
+  \centering
+  \caption{Cuts applied to image pixel sets}
+  \label{tab:table1}
+  \begin{tabular}{ccc}
+    \toprule
+    Variable & Cut\\
+    \midrule
+     $r_{core}$ & \textgreater 0.4 \\
+     $Q_{DC}$ & \textgreater 1.3 \\
+     $ \Delta_{C.o.G}$ & \textgreater 0.17 \\
+     $ \Delta_{C.o.G}$ & \textless 0.91 \\
+     $\Delta_{Direction}$ & \textless 0.45 \\
+     $\Delta_{Line}$ & \textless 0.23 \\
+     Aspect Ratio & \textless 0.75 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+From the subset of pixels satisfying these conditions, the DC pixel was selected as the remaining pixel with $Q_{DC}$. The result was compared with the true DC pixel, identified from the hadron-only image, to test the accuracy of this cut. Out of 400 events, it was fount that only 55\% of these events contained a clear DC signal, as defined by requiring the DC pixel to have $Count_{DC} > 5500$ in the hadron-only image. SOMETHING! Of this subset of 'DC events', 17\% events passed all of the required cuts. The QDC was found to be 100\% accurate in identifying the DC pixel in those passing events. 
+
+\subsection{Boosted Decision Tree DC Identification}  As an alternative to  new method of DC pixel identification was developed as part of this analysis, using a BDT trained with the Scikit Learn Python package. A set of 2000 simulated events was selected, and randomly split through use of the python random.random() function into two subsets for training and testing. The variable $DC_{Count} = Count-Mean_{N.N}$ was defined as the reconstructed \textquoteleft DC signal', assuming the pixel was the DC candidate. For every pixel in the 2000 simulated events HESS 1 images, an entry was formed of $Q_{DC}$, $ \Delta_{C.o.G}$, $\Delta_{Direction}$, $\Delta_{Line}$, Channel1, Channel0, $DC_{Count}$ and $Mean_{N.N}$. A score of 0 was assigned to every pixel to indicate background, with the exception of those that were identified as the DC pixel through the Shower-Free simulation. If the DC count was larger than 300, the pixel was included with a score of 1, identifying it as a signal pixel. Pure DC pixels below the threshold cut of 300 were deemed to be too faint to reconstruct, so these entries were omitted from the training set.
+
+Having created a dataset, the BDT was then trained with a maximum depth of 5, and 100 trees generated. It was found that the BDT was 100 \% accurate for the entire training dataset, with a breakdown of 100 \% for the training background and 99 \% accurate with the training signal. When the trained BDT was applied to the testing pixels, it was found to be 99.99 \%  accurate for the entire training dataset, with a breakdown of 100 \% for the testing background and 99 \% accurate with the testing signal. This indicates that the BDT was not significantly overtrained, which would otherwise be manifested by a large divergence in accuracy between testing and training data.
+
+\subsection{Composite Event Selection}
+Having trained the BDT successfully, it was then applied to the same dataset as for the classic QDC identification. In each camera image, the event with the largest BDT score was deemed to be \textquoteleft most signal-like', and thus selected as the DC pixel candidate. A cut was applied, requiring $Probability_{signal} > 0.5$ for the DC candidate to be accepted. 
+
+With this cut applied, out of 1896 events, it was fount that only 55\% of these events contained a clear DC signal, as defined by requiring the DC pixel to have $Count_{DC} > 5500$ in the hadron-only image. Of this subset of 'DC events', 46\% events passed all of the required cuts. The BDT was found to be 75 \% accurate in identifying the DC pixel in those passing events. 
+
+In FIG, a plot of true vs. reconstructed DC count is shown, obtained by comparing the BDT selected pixel to the hadron-only DC pixel. The black line indicates the optimal 1:1 ratio that we are aiming for. It is seen that there the vast majority of misidentified events have a small $candidate_{DC count}$, forming a red line in the region $candidate_{DC count} \approx 0$. To remove these misidentified events, we can apply a second cut requiring $candidate_{DC count} > 300$.
+
+Application of this combined cut greatly increases the successful identification rate. Of the 2000 events, 84\% of events passed all of the required cuts. The BDT was found to be 90 \% accurate in identifying the DC pixel in those passing events. This represents a very significant improvement in DC pixel identification over the previous QDC method, and corresponds to a fivefold increase in the number of HESS data events that can be studied using the LPD method.
+
+\subsection{Error in calculated $Count_{DC}$}
+Having successfully identified the DC pixel in many events, we can calculate the difference between the derived $candidate_{DC count}$ and the hadron-only $True_{DC}$ to determine the error we will find for the LPD. Binning the difference $\Delta = candidate_{DC count} - True_{DC count}$ as shown in FIG, we find that the mean difference is 65 and the median difference is -75. We thus see that the distribution is not significantly skewed. However, the Standard deviation is approximately 600 when measured both by half of the difference from the 16th to 84th centile, and by 68th centile of an absolute difference. This again suggests that, although skewed, the fraction error in intensity is rather large.  
 
 \section{Cosmic Ray Event Simulation}
 In order to reconstruct events using the LPD method, we require saturation of the Cosmic Ray Energy, and that the event can be seen by at least 4 telescopes. These restrictions confine us to Cosmic Rays with specific characteristics.
@@ -119,6 +168,8 @@ If we divide the number of emitted photons by the area of the annulus between th
 
 \subsection{Energy saturation region}
 However, in the 4 telescope height region, the Cherenkov Threshold Energy is $ E_{Threshold} \approx 0.35$ TeV per Nucleon as shown in \ref{fig:lpd}! The saturation in for these heights occurs roughly at 0.7 TeV per Nucleon or something...
+
+NOW I KNOW!
 
 \subsection{Atmospheric Absorption}
 The Cherenkov Light, mostly emitted in the visible blue part of the EM spectrum, experiences relatively little atmospheric absorption. The major of Rayleigh scattering-based atmospheric absorption occurs in the lower part of the troposphere, and thus the atmospheric absorption is almost independent of emission up to first interaction height.

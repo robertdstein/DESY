@@ -3,6 +3,7 @@ import os.path
 import numpy as np
 from sklearn.externals import joblib
 from sklearn import ensemble
+import initialisecuts as ic
 
 offset="0"
 
@@ -49,11 +50,21 @@ with open(base_file_name, 'rb') as csvfile:
 
 		if len(row) > 8:
 			if row[8] == "Pixel":
-				if str(row[11]) == "1:":
+				if str(row[11]) == "0:":
 					pixno = float(row[9][:-1])
 					channel = float(row[11][:-1])
 					count = float(row[12])
-					current.append([pixno, count, channel])
+					current.append([pixno, count])
+					new=False
+					test=True
+				elif str(row[11]) == "1:":
+					pixno = int(row[9][:-1])
+					channel = float(row[11][:-1])
+					count = float(row[12])
+					entry = current[pixno]
+					oldpixno = entry[0]
+					oldcount = entry[1]
+					current[pixno] = [pixno, count, oldcount]
 					new=False
 					test=True
 		
@@ -124,14 +135,8 @@ mpl.use('Agg')
 import matplotlib.pyplot as plt
 from matplotlib.patches import Circle
 
-arcut = 0.75
-ddireccut = 0.45
-dcogl = 0.17
-dcogu = 0.91
-dlinecut = 0.23
-radiuscut = 40
-QDCcut = 1
-
+arcut, ddireccut, dcogl, dcogu, dlinecut, radiuscut = ic.run()
+cut, ucut, QDCcut, DCcut, signalcut = ic.runforstats()
 
 picklepath = '/nfs/astrop/d6/rstein/BDTpickle/DCpixelclassifier.pkl'
 if os.path.isfile(picklepath):
@@ -231,10 +236,13 @@ with open(run_dir + "/hillasparameters.csv", 'rb') as csvfile:
 						
 					
 					entry = current[ID]
-					value = entry[1]
+					channel1 = entry[1]
+					channel0 = entry[2]
 					
-					QDC = float(value)/max(nncounts)
+					QDC = float(channel1)/max(nncounts)
 					nnmean = np.mean(nncounts)
+					
+					signal = channel1-nnmean
 
 					ddirec = math.sqrt((xpos-showerx)**2 + (ypos-showery)**2)
 					dcog = math.sqrt((xpos-cogx)**2 + (ypos-cogy)**2)
@@ -268,13 +276,13 @@ with open(run_dir + "/hillasparameters.csv", 'rb') as csvfile:
 										bestQDC=QDC
 					
 					elif cfg.cardname == "DC":
-						print "Count!", value, bestcount
-						if value > bestcount:
+						print "Count!", channel1, bestcount
+						if channnel1 > bestcount:
 							bestID=ID
-							bestcount=value
+							bestcount=channel1
 							
 					if os.path.isfile(picklepath):
-						bdtentry = [count, QDC, ddirec, dcog, dline, energy, nnmean]
+						bdtentry = [channel1, QDC, ddirec, dcog, dline, nnmean, signal]
 						bdtscore = clf.predict_proba([bdtentry])[0]
 						bdtscore = clf.predict_proba([bdtentry])[0][1]
 						if bdtscore > bestscore:
@@ -297,7 +305,7 @@ with open(run_dir + "/hillasparameters.csv", 'rb') as csvfile:
 						entry.append(bdtscore)
 					x.append(xpos)
 					y.append(ypos)
-					color.append(value)
+					color.append(channel1)
 			
 			
 			plt.plot((numrange*sm)+sc, numrange, color='w', linestyle='dashed')
@@ -350,7 +358,12 @@ with open(run_dir + "/hillasparameters.csv", 'rb') as csvfile:
 						trueID = g.readline()
 						print "DC pixel", trueID
 						plt.scatter(current[int(trueID)][4], current[int(trueID)][3], facecolors='none', edgecolors="orange", s=(size*1.2), marker="o", linewidth=2, zorder=3)
-						current[int(trueID)][11] = 1
+						trueevent = current[int(trueID)]
+						truecount = trueevent[1]
+						if truecount > signalcut:
+							current[int(trueID)] = 1
+						else:
+							current[int(trueID)] = -1
 						trueQDC = current[7]
 						
 						if bestID != None:
@@ -372,6 +385,25 @@ with open(run_dir + "/hillasparameters.csv", 'rb') as csvfile:
 
 								h.write(str(bestIDval) + " \n")
 								h.write(str(bestQDC) + "\n")
+								h.write(str(current[clfID]) + "\n")
+						
+							countpath = run_dir + "/candidate" + str(i+1) + ".txt"
+							with open(countpath, 'w+') as f:
+								candidateID = 0
+								passcut = False
+								if bestID != None:
+									if float(bestQDC) > float(QDCcut):
+										candidateID = bestID
+										passcut = True
+										
+								if not passcut:
+									candidateID = clfID
+									passcut = False
+								
+								candidate = current[int(candidateID)]
+								
+								f.write(str(passcut) + " \n")
+								f.write(str(candidate) + "\n")
 				
 			elif (cfg.cardname =="DC"):
 				g=open(DCpath, 'w+')
@@ -384,8 +416,9 @@ with open(run_dir + "/hillasparameters.csv", 'rb') as csvfile:
 			
 			with open(csvpath, 'w+') as f:
 				writer = csv.writer(f, delimiter=',', quotechar='|')
-				writer.writerow(["PixelID", "Count", "Channel", "Xpos(Deg)", "Ypos(Deg)", "Neighbour IDs", "Neighbour Counts", "QDC", "Delta Direction", "Delta C.o.g", "Delta Line", "DC?"])
+				writer.writerow(["PixelID", "Channel1", "Channel0", "Xpos(Deg)", "Ypos(Deg)", "Neighbour IDs", "Neighbour Counts", "QDC", "Delta Direction", "Delta C.o.g", "Delta Line", "DC?"])
 				for entry in current:
+					print entry
 					writer.writerow(entry)
 		
 			plt.annotate(status, xy=(0.0, 0.0), xycoords="axes fraction",  fontsize=10)

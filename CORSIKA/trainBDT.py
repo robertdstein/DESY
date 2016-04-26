@@ -51,7 +51,9 @@ with open(filename, 'rb') as csvfile:
 		energy = float(row[5])
 		nnmean = float(row[6])
 		score = float(row[7])
-		entry = [count, QDC, Dd, Dcg, Dline, energy, nnmean]
+		channel0 = float(row[8])
+		signal = count-nnmean
+		entry = [count, QDC, Dd, Dcg, Dline, nnmean, signal]
 		
 		if random.random() < 0.5:
 			full.append(entry)
@@ -83,7 +85,7 @@ print time.asctime(time.localtime()), "Training BDT"
 
 #Train the BDT (Gradient Boosting Classifier)  and save
 
-clf = ensemble.GradientBoostingClassifier(max_depth=8, n_estimators=100, learning_rate=0.01)
+clf = ensemble.GradientBoostingClassifier(max_depth=8, n_estimators=100, learning_rate=0.008)
 clf.fit(full, fullscore)
 
 joblib.dump(clf, '/nfs/astrop/d6/rstein/BDTpickle/DCpixelclassifier.pkl')
@@ -100,7 +102,7 @@ print "Score on test background is ", clf.score(bkgtest, bkgtestscore)
 importances = clf.feature_importances_
 indices = np.argsort(importances)[::-1]
 
-v = header[:-1]
+v = ["Channel1", "QDC", "Dd", "Dcg", "Dline", "nnmean", "signal"]
 
 print header
 print v

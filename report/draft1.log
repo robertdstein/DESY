@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2015.11.27)  22 APR 2016 16:16
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2015.11.27)  26 APR 2016 16:19
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -84,34 +84,54 @@ Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
 )
 (/usr/share/texlive/texmf-dist/tex/latex/was/gensymb.sty
 Package: gensymb 2003/07/02 v1.0 (WaS)
+)
+(/usr/share/texlive/texmf-dist/tex/latex/booktabs/booktabs.sty
+Package: booktabs 2005/04/14 v1.61803 publication quality tables
+\heavyrulewidth=\dimen113
+\lightrulewidth=\dimen114
+\cmidrulewidth=\dimen115
+\belowrulesep=\dimen116
+\belowbottomsep=\dimen117
+\aboverulesep=\dimen118
+\abovetopsep=\dimen119
+\cmidrulesep=\dimen120
+\cmidrulekern=\dimen121
+\defaultaddspace=\dimen122
+\@cmidla=\count91
+\@cmidlb=\count92
+\@aboverulesep=\dimen123
+\@belowrulesep=\dimen124
+\@thisruleclass=\count93
+\@lastruleclass=\count94
+\@thisrulewidth=\dimen125
 ) (./draft1.aux)
 \openout1 = `draft1.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 7.
-LaTeX Font Info:    ... okay on input line 7.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 7.
-LaTeX Font Info:    ... okay on input line 7.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 7.
-LaTeX Font Info:    ... okay on input line 7.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 7.
-LaTeX Font Info:    ... okay on input line 7.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 7.
-LaTeX Font Info:    ... okay on input line 7.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 7.
-LaTeX Font Info:    ... okay on input line 7.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 8.
+LaTeX Font Info:    ... okay on input line 8.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 8.
+LaTeX Font Info:    ... okay on input line 8.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 8.
+LaTeX Font Info:    ... okay on input line 8.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 8.
+LaTeX Font Info:    ... okay on input line 8.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 8.
+LaTeX Font Info:    ... okay on input line 8.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 8.
+LaTeX Font Info:    ... okay on input line 8.
 
 (/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count91
-\scratchdimen=\dimen113
+\scratchcounter=\count95
+\scratchdimen=\dimen126
 \scratchbox=\box26
-\nofMPsegments=\count92
-\nofMParguments=\count93
+\nofMPsegments=\count96
+\nofMParguments=\count97
 \everyMPshowfont=\toks16
-\MPscratchCnt=\count94
-\MPscratchDim=\dimen114
-\MPnumerator=\count95
-\makeMPintoPDFobject=\count96
+\MPscratchCnt=\count98
+\MPscratchDim=\dimen127
+\MPnumerator=\count99
+\makeMPintoPDFobject=\count100
 \everyMPtoPDFconversion=\toks17
 ) (/usr/share/texlive/texmf-dist/tex/generic/oberdiek/pdftexcmds.sty
 Package: pdftexcmds 2011/11/29 v0.20 Utility functions of pdfTeX for LuaTeX (HO
@@ -191,13 +211,13 @@ e
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-LaTeX Info: Redefining \celsius on input line 7.
-Package gensymb Info: Faking symbols for \degree and \celsius on input line 7.
+LaTeX Info: Redefining \celsius on input line 8.
+Package gensymb Info: Faking symbols for \degree and \celsius on input line 8.
 
 Package gensymb Warning: Not defining \perthousand.
 
-LaTeX Info: Redefining \ohm on input line 7.
-Package gensymb Info: Using \Omega for \ohm on input line 7.
+LaTeX Info: Redefining \ohm on input line 8.
+Package gensymb Info: Using \Omega for \ohm on input line 8.
 
 Package gensymb Warning: Not defining \micro.
 
@@ -206,14 +226,14 @@ File: graphs/Imperial_College_London_logo.jpg Graphic file (type jpg)
 
 <use graphs/Imperial_College_London_logo.jpg>
 Package pdftex.def Info: graphs/Imperial_College_London_logo.jpg used on input 
-line 23.
+line 24.
 (pdftex.def)             Requested size: 181.18439pt x 69.66176pt.
 
 <graphs/hamburglogo.png, id=2, 2007.5pt x 650.43pt>
 File: graphs/hamburglogo.png Graphic file (type png)
 
 <use graphs/hamburglogo.png>
-Package pdftex.def Info: graphs/hamburglogo.png used on input line 25.
+Package pdftex.def Info: graphs/hamburglogo.png used on input line 26.
 (pdftex.def)             Requested size: 181.18439pt x 58.69496pt.
  [1
 
@@ -221,82 +241,97 @@ Package pdftex.def Info: graphs/hamburglogo.png used on input line 25.
 London_logo.jpg> <./graphs/hamburglogo.png>]
 [1] (./draft1.toc
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 3.
+(Font)              <7> on input line 4.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 3.
+(Font)              <5> on input line 4.
 )
 \tf@toc=\write3
 \openout3 = `draft1.toc'.
 
- [2] [3]
-<graphs/generalheight.png, id=29, 722.7pt x 1084.05pt>
+ [2] [3] [4]
+LaTeX Font Info:    Try loading font information for OML+cmr on input line 97.
+
+(/usr/share/texlive/texmf-dist/tex/latex/base/omlcmr.fd
+File: omlcmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OML/cmr/m/n' in size <10> not available
+(Font)              Font shape `OML/cmm/m/it' tried instead on input line 97.
+ [5]
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <12> on input line 123.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <8> on input line 123.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <6> on input line 123.
+
+<graphs/generalheight.png, id=36, 722.7pt x 1084.05pt>
 File: graphs/generalheight.png Graphic file (type png)
 
 <use graphs/generalheight.png>
-Package pdftex.def Info: graphs/generalheight.png used on input line 85.
+Package pdftex.def Info: graphs/generalheight.png used on input line 134.
 (pdftex.def)             Requested size: 420.31314pt x 630.45189pt.
 
-<graphs/logenergyradius.png, id=30, 722.7pt x 1084.05pt>
+<graphs/logenergyradius.png, id=37, 722.7pt x 1084.05pt>
 File: graphs/logenergyradius.png Graphic file (type png)
 
 <use graphs/logenergyradius.png>
-Package pdftex.def Info: graphs/logenergyradius.png used on input line 99.
+Package pdftex.def Info: graphs/logenergyradius.png used on input line 148.
 (pdftex.def)             Requested size: 420.31314pt x 630.45189pt.
-
-<graphs/simulatedlpd.png, id=31, 1084.05pt x 1806.75pt>
+ [6] [7 <./graphs/generalheight.png>]
+<graphs/simulatedlpd.png, id=48, 1084.05pt x 1806.75pt>
 File: graphs/simulatedlpd.png Graphic file (type png)
 
 <use graphs/simulatedlpd.png>
-Package pdftex.def Info: graphs/simulatedlpd.png used on input line 114.
+Package pdftex.def Info: graphs/simulatedlpd.png used on input line 163.
 (pdftex.def)             Requested size: 378.28185pt x 630.45189pt.
- [4] [5 <./graphs/generalheight.png>] [6 <./graphs/logenergyradius.png>] [7 <./
-graphs/simulatedlpd.png>] [8]
-<graphs/hessheight.png, id=53, 722.7pt x 1084.05pt>
+ [8] [9 <./graphs/logenergyradius.png>] [10 <./graphs/simulatedlpd.png>] <graph
+s/hessheight.png, id=61, 722.7pt x 1084.05pt>
 File: graphs/hessheight.png Graphic file (type png)
 
 <use graphs/hessheight.png>
-Package pdftex.def Info: graphs/hessheight.png used on input line 161.
+Package pdftex.def Info: graphs/hessheight.png used on input line 212.
 (pdftex.def)             Requested size: 420.31314pt x 630.45189pt.
-
-<graphs/hess.png, id=54, 1046.91125pt x 924.45375pt>
+ [11] [12 <./graphs/hessheight.png>]
+<graphs/hess.png, id=70, 1046.91125pt x 924.45375pt>
 File: graphs/hess.png Graphic file (type png)
  <use graphs/hess.png>
-Package pdftex.def Info: graphs/hess.png used on input line 172.
+Package pdftex.def Info: graphs/hess.png used on input line 223.
 (pdftex.def)             Requested size: 407.66833pt x 359.97127pt.
 
-[9] [10 <./graphs/hessheight.png>] [11 <./graphs/hess.png>]
-<optimiselayout.png, id=65, 1445.4pt x 1084.05pt>
+[13 <./graphs/hess.png>] <optimiselayout.png, id=74, 1445.4pt x 1084.05pt>
 File: optimiselayout.png Graphic file (type png)
- <use optimiselayout.png>
-Package pdftex.def Info: optimiselayout.png used on input line 191.
-(pdftex.def)             Requested size: 407.66833pt x 305.74846pt.
 
-(./draft1.bbl [12 <./optimiselayout.png>]) [13] (./draft1.aux) ) 
+<use optimiselayout.png>
+Package pdftex.def Info: optimiselayout.png used on input line 242.
+(pdftex.def)             Requested size: 407.66833pt x 305.74846pt.
+ [14 <./optimiselayout.png>] (./draft1.bbl) [15]
+(./draft1.aux) ) 
 Here is how much of TeX's memory you used:
- 2058 strings out of 494976
- 29929 string characters out of 6179136
- 96529 words of memory out of 5000000
- 5271 multiletter control sequences out of 15000+600000
- 6716 words of font info for 24 fonts, out of 8000000 for 9000
+ 2152 strings out of 494976
+ 31183 string characters out of 6179136
+ 97277 words of memory out of 5000000
+ 5351 multiletter control sequences out of 15000+600000
+ 9154 words of font info for 32 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 38i,5n,29p,827b,265s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/share/tex
-live/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/t
-exmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-d
-ist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fo
-nts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/ty
-pe1/public/amsfonts/cm/cmmi5.pfb></usr/share/texlive/texmf-dist/fonts/type1/pub
-lic/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/ams
-fonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/c
-m/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17
-.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></u
-sr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/sha
-re/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texl
-ive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb>
-Output written on draft1.pdf (14 pages, 1224652 bytes).
+ 38i,9n,29p,1168b,265s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/c
+mbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.
+pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></
+usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/sh
+are/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/te
+xlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/share/texlive/t
+exmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-di
+st/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/texmf-dist/font
+s/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1
+/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public
+/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfon
+ts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cm
+sy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pf
+b></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb>
+Output written on draft1.pdf (16 pages, 1254374 bytes).
 PDF statistics:
- 117 PDF objects out of 1000 (max. 8388607)
- 73 compressed objects within 1 object stream
+ 131 PDF objects out of 1000 (max. 8388607)
+ 83 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  41 words of extra memory for PDF output out of 10000 (max. 10000000)
 
