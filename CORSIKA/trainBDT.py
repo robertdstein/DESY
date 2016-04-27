@@ -85,7 +85,7 @@ print time.asctime(time.localtime()), "Training BDT"
 
 #Train the BDT (Gradient Boosting Classifier)  and save
 
-clf = ensemble.GradientBoostingClassifier(max_depth=8, n_estimators=100, learning_rate=0.008)
+clf = ensemble.GradientBoostingClassifier(max_depth=7, n_estimators=100, learning_rate=0.008)
 clf.fit(full, fullscore)
 
 joblib.dump(clf, '/nfs/astrop/d6/rstein/BDTpickle/DCpixelclassifier.pkl')
@@ -102,15 +102,14 @@ print "Score on test background is ", clf.score(bkgtest, bkgtestscore)
 importances = clf.feature_importances_
 indices = np.argsort(importances)[::-1]
 
-v = ["Channel1", "QDC", "Dd", "Dcg", "Dline", "nnmean", "signal"]
+v = ["Channel1", "QDC", "Dd", "Dcg", "Dline", "Nearest Neighbour Mean", "DC Signal"]
 
-print header
 print v
 
 print("Feature ranking:")
 
 for i in range(len(v)):
-	print("%d. %s (%f) " % (i + 1, header[indices[i]], importances[indices[i]]))
+	print("%d. %s (%f) " % (i + 1, v[indices[i]], importances[indices[i]]))
 
 #~ import matplotlib as mpl
 #~ mpl.use('Agg')

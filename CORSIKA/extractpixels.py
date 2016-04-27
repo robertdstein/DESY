@@ -277,7 +277,7 @@ with open(run_dir + "/hillasparameters.csv", 'rb') as csvfile:
 					
 					elif cfg.cardname == "DC":
 						print "Count!", channel1, bestcount
-						if channnel1 > bestcount:
+						if channel1 > bestcount:
 							bestID=ID
 							bestcount=channel1
 							
@@ -361,9 +361,9 @@ with open(run_dir + "/hillasparameters.csv", 'rb') as csvfile:
 						trueevent = current[int(trueID)]
 						truecount = trueevent[1]
 						if truecount > signalcut:
-							current[int(trueID)] = 1
+							current[int(trueID)][14] = 1
 						else:
-							current[int(trueID)] = -1
+							current[int(trueID)][14] = -1
 						trueQDC = current[7]
 						
 						if bestID != None:
@@ -417,8 +417,7 @@ with open(run_dir + "/hillasparameters.csv", 'rb') as csvfile:
 			with open(csvpath, 'w+') as f:
 				writer = csv.writer(f, delimiter=',', quotechar='|')
 				writer.writerow(["PixelID", "Channel1", "Channel0", "Xpos(Deg)", "Ypos(Deg)", "Neighbour IDs", "Neighbour Counts", "QDC", "Delta Direction", "Delta C.o.g", "Delta Line", "DC?"])
-				for entry in current:
-					print entry
+				for entry in current:	
 					writer.writerow(entry)
 		
 			plt.annotate(status, xy=(0.0, 0.0), xycoords="axes fraction",  fontsize=10)

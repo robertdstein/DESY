@@ -179,34 +179,39 @@ import matplotlib as mpl
 mpl.use('Agg')
 import matplotlib.pyplot as plt
 
-plt.subplot(3,2,1)
-plt.hist(DCcounts, bins=30)
-plt.xlabel("DC pixel count")
+for rows in [2, 3]:
 
-plt.subplot(3,2,2)
-
-plt.title("Distribution of QDC-reconstructed Events")
-plt.hist([oldright, oldwrong], color=['g', 'r'], stacked=True, bins=50)
-plt.xlabel("QDC value")
-
-plt.subplot(3,2,3)
-plt.title("Distribution of BDT-reconstructed Events")
-plt.hist([right, wrong], color=['g', 'r'], stacked=True, bins=50)
-plt.xlabel("BDT score")
-
-plt.subplot(3,2,4)
-plt.title("Distribution of BDT-reconstructed Events, after QDC cuts")
-plt.hist([combinedright, combinedwrong], color=['g', 'r'], stacked=True, bins=50)
-plt.xlabel("BDT score")
-
-plt.subplot(3,1,3)
-plt.axis('off')
-plt.annotate(toprint, xy=(0.0, 0.25), xycoords="axes fraction",  fontsize=10)
-
-figure = plt.gcf() # get current figure
-figure.set_size_inches(20, 15)
-
-plt.savefig("/nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/CORSIKA/graphs/stats.pdf")
-plt.savefig("/nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/report/graphs/DCidentificationstats.pdf")
+	ax1 = plt.subplot(rows,2,1)
+	plt.title("Signal in pure DC pixel without shower")
+	plt.hist(DCcounts, bins=30)
+	plt.xlabel("DC pixel count")
+	
+	ax2 = plt.subplot(rows,2,2)
+	
+	plt.title("Distribution of QDC-reconstructed Events")
+	plt.hist([oldright, oldwrong], color=['g', 'r'], stacked=True, bins=50)
+	plt.xlabel("QDC value")
+	
+	ax3 = plt.subplot(rows,2,3)
+	plt.title("Distribution of BDT-reconstructed Events")
+	plt.hist([right, wrong], color=['g', 'r'], stacked=True, bins=50)
+	plt.xlabel("BDT score")
+	
+	ax4 = plt.subplot(rows,2,4)
+	plt.title("Distribution of BDT-reconstructed Events, after cuts")
+	plt.hist([combinedright, combinedwrong], color=['g', 'r'], stacked=True, bins=50)
+	plt.xlabel("BDT score")
+	
+	figure = plt.gcf() # get current figure
+	if rows == 2:
+		figure.set_size_inches(15, 15)
+		plt.savefig("/nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/report/graphs/cutdistribution.pdf")
+		
+	elif rows ==3:
+		figure.set_size_inches(20, 15)
+		ax5 = plt.subplot(3,1,3)
+		plt.axis('off')
+		plt.annotate(toprint, xy=(0.0, 0.25), xycoords="axes fraction",  fontsize=10)
+		plt.savefig("/nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/CORSIKA/graphs/stats.pdf")
 	
 
