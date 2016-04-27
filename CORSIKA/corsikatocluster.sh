@@ -23,10 +23,10 @@
 #$ -l arch="amd64"
 
 # Stacksize/  Größe des Stacks
-#$ -l h_stack=10M 
+#$ -l h_stack=15M 
 
 # needed memory/  Benötigter Speicher. Vorsicht: bei mehr als 2G kommt der Job in die long queue.
-#$ -l h_vmem=2G
+#$ -l h_vmem=20G
 
 # Disk space/  Benötigter temporärer Festplattenspeicher auf dem Host .
 #$ -l h_fsize=20G
@@ -49,13 +49,9 @@ mkdir -p /nfs/astrop/d6/rstein/data/$JOB_ID
 
 # Ab hier beginnt das Script
 
-TMPDIR=/nfs/astrop/d6/rstein/tmp/
-echo "Temporary directory: " $TMPDIR
-
-
 . /nfs/astrop/d1/hhsoft/64bit_crf/ini_python2.7.8_64bit_crf.sh
 
-python /nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/CORSIKA/runcorsika.py -rn $SGE_TASK_ID -td $TMPDIR -jid $JOB_ID
+python /nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/CORSIKA/runcorsika.py -rn $SGE_TASK_ID -jid $JOB_ID
 
 # This file should be sourced from each example
 
