@@ -40,6 +40,8 @@ q1 = "zcat " + run_dir + "/run" + str(cfg.runnumber) + str(cfg.cardname) + "-iac
 
 if cfg.cardname == "full":
 	q1 += "-C nightsky_background=all:0.100"
+else:
+	q1 += "-C nightsky_background=0.0"
 
 print q1
 
