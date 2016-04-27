@@ -6,6 +6,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("-rn", "--runnumber", default="0")
 parser.add_argument("-jid", "--jobID", default="0")
 parser.add_argument("-cn", "--cardname", default="full")
+parser.add_argument("-td", "--tempdir", default="/nfs/astrop/d6/rstein/tmp/")
 
 cfg = parser.parse_args()
 print int(cfg.runnumber)
@@ -15,10 +16,13 @@ data_dir = "/nfs/astrop/d6/rstein/data"
 result_dir = data_dir + "/" + str(cfg.jobID)
 
 run_dir = os.path.join(result_dir, "run" + str(cfg.runnumber))
+
 base_file_name = os.path.join(run_dir, "run" + str(cfg.runnumber) + str(cfg.cardname) + "_off" + offset)
 
+Direc = os.path.join(cfg.tempdir, cfg.cardname)
+
 # open inputcard to extract source theta
-f_in = open(os.path.join(run_dir, "run" + str(cfg.runnumber) + str(cfg.cardname) + ".inputcard"))
+f_in = open(os.path.join(Direc, "run" + str(cfg.runnumber) + str(cfg.cardname) + ".inputcard"))
 for zeile in f_in:
 	if "THETAP" in zeile:
 		elements = zeile[:-1].split()
@@ -35,8 +39,7 @@ os.chdir("/nfs/astrop/d6/rstein/corsika_simtelarray/sim_telarray")
 
 # hess2 configuration
 
-
-q1 = "zcat " + run_dir + "/run" + str(cfg.runnumber) + str(cfg.cardname) + "-iact.corsika.gz | ./sim_hessarray -c hess-phase2.cfg -DPHASE2B=1 -DHESS2_SECTOR=1 -C IMAGE_FILE=" + base_file_name + ".ps -C PLOT_FILE=" + base_file_name + ".txt -C SAVE_PHOTONS=2 -C SAMPLED_OUTPUT=0 -C trigger_pixels=1  -C discriminator_threshold=112 -C discriminator_pulse_shape=hess_disc_shape-01-10.dat -C iobuf_maximum=200000000 -C maximum_telescopes=5 -C min_photons=20 -C atmospheric_transmission=atm_trans_1800_1_10_0_0_1800.dat  -C convergent_depth=0 -C telescope_theta=" + str(telescope_theta) + " -C telescope_phi=" + str(telescope_phi) + " -C power_law=2.50 -C histogram_file=" + base_file_name + ".hdata.gz -C output_file=" + base_file_name + ".simhess.gz -C random_state=auto -C show=all - | tee " + base_file_name + ".log"
+q1 = "zcat " + Direc + "/run" + str(cfg.runnumber) + str(cfg.cardname) + "-iact.corsika.gz | ./sim_hessarray -c hess-phase2.cfg -DPHASE2B=1 -DHESS2_SECTOR=1 -C IMAGE_FILE=" + base_file_name + ".ps -C PLOT_FILE=" + base_file_name + ".txt -C SAVE_PHOTONS=2 -C SAMPLED_OUTPUT=0 -C trigger_pixels=1  -C discriminator_threshold=112 -C discriminator_pulse_shape=hess_disc_shape-01-10.dat -C iobuf_maximum=200000000 -C maximum_telescopes=5 -C min_photons=20 -C atmospheric_transmission=atm_trans_1800_1_10_0_0_1800.dat  -C convergent_depth=0 -C telescope_theta=" + str(telescope_theta) + " -C telescope_phi=" + str(telescope_phi) + " -C power_law=2.50 -C histogram_file=" + base_file_name + ".hdata.gz -C output_file=" + base_file_name + ".simhess.gz -C random_state=auto -C show=all - | tee " + base_file_name + ".log"
 
 if cfg.cardname == "full":
 	q1 += "-C nightsky_background=all:0.100"

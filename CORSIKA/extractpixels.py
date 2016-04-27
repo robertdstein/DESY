@@ -28,11 +28,11 @@ f=open(run_dir + "/telescopedirections.csv", "w+")
 fwriter = csv.writer(f, delimiter=',')
 fheader = []
 
-g=open(run_dir + "/hillasparameters.csv", "w+")
+g=open(run_dir + "/hillasparameters" + cfg.cardname + ".csv", "w+")
 gwriter = csv.writer(g, delimiter=',')
 gheader = []
 
-h=open(run_dir + "/eventparameters.csv", "w+")
+h=open(run_dir + "/eventparameters" + cfg.cardname + ".csv", "w+")
 hwriter = csv.writer(h, delimiter=',')
 hheader = []
 
@@ -144,7 +144,7 @@ if os.path.isfile(picklepath):
 else:
 	print "No pickle!"
 
-with open(run_dir + "/hillasparameters.csv", 'rb') as csvfile:
+with open(run_dir + "/hillasparameters" + cfg.cardname + ".csv", 'rb') as csvfile:
 	reader = csv.reader(csvfile, delimiter=',', quotechar='|')
 	
 	for row in reader:
@@ -276,7 +276,6 @@ with open(run_dir + "/hillasparameters.csv", 'rb') as csvfile:
 										bestQDC=QDC
 					
 					elif cfg.cardname == "DC":
-						print "Count!", channel1, bestcount
 						if channel1 > bestcount:
 							bestID=ID
 							bestcount=channel1
@@ -340,15 +339,21 @@ with open(run_dir + "/hillasparameters.csv", 'rb') as csvfile:
 
 			if coredistance < radiuscut:
 				message += " \n Too close, r = " + str(coredistance) + " Cut requires r > " + str(radiuscut)
+			
+			if (cfg.cardname == "full"):
+				if message == "REJECTED!":
+					status="Accepted"
+					ringcolor="pink"
+					print "PASSED!"
+				else:	
+					ringcolor = "red"
+					status = "Rejected"
+					print message
 				
-			if message == "REJECTED!":
-				status="Accepted"
-				ringcolor="pink"
-				print "PASSED!"
-			else:	
-				ringcolor = "red"
-				status = "Rejected"
-				print message
+				plt.annotate(status, xy=(0.0, 0.0), xycoords="axes fraction",  fontsize=10)	
+				
+			elif (cfg.cardname == "DC"):
+				ringcolor = "white"
 			
 			DCpath = run_dir + "/DCpixel" + str(i+1) + ".text"
 			csvpath = run_dir + "/" + cfg.cardname + "pixels" + str(i+1) + ".csv"
@@ -419,13 +424,11 @@ with open(run_dir + "/hillasparameters.csv", 'rb') as csvfile:
 				writer.writerow(["PixelID", "Channel1", "Channel0", "Xpos(Deg)", "Ypos(Deg)", "Neighbour IDs", "Neighbour Counts", "QDC", "Delta Direction", "Delta C.o.g", "Delta Line", "DC?"])
 				for entry in current:	
 					writer.writerow(entry)
-		
-			plt.annotate(status, xy=(0.0, 0.0), xycoords="axes fraction",  fontsize=10)
 			
 			if bestID != None:
 				plt.scatter(current[bestID][4], current[bestID][3], facecolors='none', edgecolors=ringcolor, s=(size*1.2), marker="o", linewidth=2, zorder=3)
 				
-			if os.path.isfile(picklepath):
+			if os.path.isfile(picklepath) and (cfg.cardname == "full"):
 				plt.scatter(current[clfID][4], current[clfID][3], facecolors='none', edgecolors="white", s=(size*1.2), marker="*", linewidth=2, zorder=3)
 
 figure = plt.gcf()

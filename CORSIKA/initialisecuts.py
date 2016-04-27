@@ -5,7 +5,7 @@ dcogu = 0.91
 dlinecut = 0.23
 radiuscut = 40
 
-cut = 0.20
+cut = 0.50
 ucut = 1.01
 QDCcut = 1.3
 DCcut = 4500

@@ -30,6 +30,10 @@ os.mkdir(Direc)
 cards = ["full", "DC"]
 
 for cardname in cards:
+	
+	Direc = os.path.join(cfg.tempdir, cardname)
+	print "Making directory " + Direc
+	os.mkdir(Direc)
 
 	inputcard_name = os.path.join(Direc, "run" + str(cfg.runnumber) + str(cardname) + ".inputcard")
 	
@@ -53,9 +57,9 @@ for cardname in cards:
 	f_out.write("SEED    " + str((int(cfg.runnumber)*4) + 3 + int(cfg.jobID)) + "   0   0                seed for 4th random number sequence\n")
 	
 	
-	f_out.write("DIRECT %s\n"%cfg.tempdir)
+	f_out.write("DIRECT %s\n"%(Direc +"/"))
 	
-	iact_name = os.path.join(cfg.tempdir, "run" + str(cfg.runnumber) + str(cardname) + "-iact.corsika.gz")
+	iact_name = os.path.join(Direc, "run" + str(cfg.runnumber) + str(cardname) + "-iact.corsika.gz")
 	
 	f_out.write("TELFIL " + iact_name + ":100:100:1              Telescope photon bunch output (eventio format)  \n")
 
@@ -84,7 +88,7 @@ for cardname in cards:
 	print "Now starting CORSIKA run number" + str(cfg.runnumber)
 	print
 	# during runtime everything is written in temp_dir (on cluster a local disk)
-	logfile_name = os.path.join(cfg.tempdir, "run" + str(cfg.runnumber) + str(cardname) + "-simulation.log")
+	logfile_name = os.path.join(Direc, "run" + str(cfg.runnumber) + str(cardname) + "-simulation.log")
 	#if os.path.exists(logfile_name):
 	#	os.system("rm " + logfile_name)
 	
@@ -99,37 +103,36 @@ for cardname in cards:
 	print q1
 	os.system(q1)
 	
+	print "Output is written to " + Direc
 	
-	print "Output is written to " + cfg.tempdir
-	
-	filetypes = ["-iact.corsika.gz", "-simulation.log"]
-	
-	for suffix in filetypes:
-		filename = os.path.join(cfg.tempdir, "run" + str(cfg.runnumber) + str(cardname)+ suffix)
-		if os.path.isfile(filename):
-			q = "mv " + filename + " " + Direc
-			os.system(q)
-			print q
-			
-	width = 6-len(str(cfg.runnumber))
-	IDno = (width*str(0)) + str(cfg.runnumber)
-	print IDno
-			
-	filename = os.path.join(cfg.tempdir, "CER" + IDno)
-	if os.path.isfile(filename):
-		q = "mv " + filename + " " + Direc
-		os.system(q)
-		print q
-		
-	filecore = "DAT" + IDno
-	filetypes = ["", ".long", ".dbase"]
-	for suffix in filetypes:
-		filename = os.path.join(cfg.tempdir, filecore + suffix )
-		if os.path.isfile(filename):
-			q = "mv " + filename + " " + Direc
-			os.system(q)
-			print q
-	
-	print "Output is copied into " + Direc
+	#~ filetypes = ["-iact.corsika.gz", "-simulation.log"]
+	#~ 
+	#~ for suffix in filetypes:
+		#~ filename = os.path.join(cfg.tempdir, "run" + str(cfg.runnumber) + str(cardname)+ suffix)
+		#~ if os.path.isfile(filename):
+			#~ q = "mv " + filename + " " + Direc
+			#~ os.system(q)
+			#~ print q
+			#~ 
+	#~ width = 6-len(str(cfg.runnumber))
+	#~ IDno = (width*str(0)) + str(cfg.runnumber)
+	#~ print IDno
+			#~ 
+	#~ filename = os.path.join(cfg.tempdir, "CER" + IDno)
+	#~ if os.path.isfile(filename):
+		#~ q = "mv " + filename + " " + Direc
+		#~ os.system(q)
+		#~ print q
+		#~ 
+	#~ filecore = "DAT" + IDno
+	#~ filetypes = ["", ".long", ".dbase"]
+	#~ for suffix in filetypes:
+		#~ filename = os.path.join(cfg.tempdir, filecore + suffix )
+		#~ if os.path.isfile(filename):
+			#~ q = "mv " + filename + " " + Direc
+			#~ os.system(q)
+			#~ print q
+	#~ 
+	#~ print "Output is copied into " + Direc
 
 
