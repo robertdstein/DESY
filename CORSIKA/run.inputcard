@@ -57,5 +57,4 @@ CSCAT   1 5000. 5000.
 DEBUG   F  6  F  1000000               debug flag and logical unit for output
 *DIRECT  /dev/null                      /dev/null means no normal CORSIKA data written
 *
-DIRECT /nfs/astrop/d6/rstein/tmp/
 EXIT                                   terminates input

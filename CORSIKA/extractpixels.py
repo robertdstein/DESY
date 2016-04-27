@@ -28,11 +28,11 @@ f=open(run_dir + "/telescopedirections.csv", "w+")
 fwriter = csv.writer(f, delimiter=',')
 fheader = []
 
-g=open(run_dir + "/hillasparameters.csv", "w+")
+g=open(run_dir + "/hillasparameters" + cfg.cardname + ".csv", "w+")
 gwriter = csv.writer(g, delimiter=',')
 gheader = []
 
-h=open(run_dir + "/eventparameters.csv", "w+")
+h=open(run_dir + "/eventparameters" + cfg.cardname + ".csv", "w+")
 hwriter = csv.writer(h, delimiter=',')
 hheader = []
 
@@ -144,7 +144,7 @@ if os.path.isfile(picklepath):
 else:
 	print "No pickle!"
 
-with open(run_dir + "/hillasparameters.csv", 'rb') as csvfile:
+with open(run_dir + "/hillasparameters" + cfg.cardname + ".csv", 'rb') as csvfile:
 	reader = csv.reader(csvfile, delimiter=',', quotechar='|')
 	
 	for row in reader:
