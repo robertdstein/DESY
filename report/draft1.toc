@@ -5,25 +5,23 @@
 \contentsline {subsection}{\numberline {3.2}Sim\textunderscore telarray}{4}
 \contentsline {subsection}{\numberline {3.3}Classic DC Identification}{5}
 \contentsline {subsection}{\numberline {3.4}Boosted Decision Tree DC Identification}{5}
-\contentsline {subsection}{\numberline {3.5}Composite Event Selection}{6}
-\contentsline {subsection}{\numberline {3.6}Error in calculated $Count_{DC}$}{6}
-\contentsline {section}{\numberline {4}Cosmic Ray Event Simulation}{6}
-\contentsline {subsection}{\numberline {4.1}First Interaction Height}{6}
-\contentsline {subsection}{\numberline {4.2}Energy Considerations}{6}
-\contentsline {subsection}{\numberline {4.3}Nuclear Charge}{8}
-\contentsline {subsection}{\numberline {4.4}Energy saturation region}{8}
-\contentsline {subsection}{\numberline {4.5}Atmospheric Absorption}{8}
-\contentsline {section}{\numberline {5}LPD Event Reconstruction}{8}
-\contentsline {subsection}{\numberline {5.1}Log Likelihood Minimisation}{8}
-\contentsline {subsection}{\numberline {5.2}Extracting Charge Resolution}{8}
-\contentsline {subsection}{\numberline {5.3}Iterative Scanning Minimisation}{11}
-\contentsline {subsection}{\numberline {5.4}Boosted Decision Trees}{11}
-\contentsline {section}{\numberline {6}HESS-type Event Reconstruction}{11}
-\contentsline {subsection}{\numberline {6.1}First Interaction and Energy Saturation}{11}
-\contentsline {subsection}{\numberline {6.2}Extended Air Shower Background}{13}
-\contentsline {subsection}{\numberline {6.3}Reconstructed Charge Resolution}{13}
+\contentsline {subsection}{\numberline {3.5}Composite Event Selection}{7}
+\contentsline {subsection}{\numberline {3.6}Error in calculated $Count_{DC}$}{7}
+\contentsline {section}{\numberline {4}Cosmic Ray Event Simulation}{7}
+\contentsline {subsection}{\numberline {4.1}Cherenkov Emission}{7}
+\contentsline {subsection}{\numberline {4.2}First Interaction Height}{11}
+\contentsline {subsection}{\numberline {4.3}Atmospheric Absorption}{11}
+\contentsline {section}{\numberline {5}LPD Event Reconstruction}{11}
+\contentsline {subsection}{\numberline {5.1}Log Likelihood Minimisation}{11}
+\contentsline {subsection}{\numberline {5.2}Extracting Charge Resolution}{13}
+\contentsline {subsection}{\numberline {5.3}Iterative Scanning Minimisation}{13}
+\contentsline {subsection}{\numberline {5.4}Boosted Decision Trees}{13}
+\contentsline {section}{\numberline {6}HESS-type Event Reconstruction}{13}
+\contentsline {subsection}{\numberline {6.1}First Interaction and Energy Saturation}{13}
+\contentsline {subsection}{\numberline {6.2}Extended Air Shower Background}{14}
+\contentsline {subsection}{\numberline {6.3}Reconstructed Charge Resolution}{14}
 \contentsline {section}{\numberline {7}Optimised Telescope Array}{14}
 \contentsline {subsection}{\numberline {7.1}Count Rates}{14}
 \contentsline {subsection}{\numberline {7.2}Saturation Region Energies}{14}
 \contentsline {subsection}{\numberline {7.3}High Speed Telescopes}{14}
-\contentsline {section}{\numberline {8}Conclusion}{15}
+\contentsline {section}{\numberline {8}Conclusion}{18}

@@ -105,7 +105,15 @@ The initial method used by the HESS collaboration \cite{hess07} was replicated f
   \end{tabular}
 \end{table}
 
-From the subset of pixels satisfying these conditions, the DC pixel was selected as the remaining pixel with $Q_{DC}$. The result was compared with the true DC pixel, identified from the hadron-only image, to test the accuracy of this cut. Out of 400 events, it was fount that only 55\% of these events contained a clear DC signal, as defined by requiring the DC pixel to have $Count_{DC} > 5500$ in the hadron-only image. SOMETHING! Of this subset of 'DC events', 17\% events passed all of the required cuts. The QDC was found to be 100\% accurate in identifying the DC pixel in those passing events. 
+From the subset of pixels satisfying these conditions, the remaining pixel with the largest $Q_{DC}$ was selected as the DC pixel. The result was compared with the true DC pixel, identified from the hadron-only image, to test the accuracy of this cut. Out of 400 events, it was fount that only 55\% of these events contained a clear DC signal, as defined by requiring the DC pixel to have $Count_{DC} > 5500$ in the hadron-only image. SOMETHING! Of this subset of 'DC events', 17\% events passed all of the required cuts. The QDC was found to be 100\% accurate in identifying the DC pixel in those passing events \ref{fig:cutdistribution}.
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=\textwidth]{cutdistribution}
+\caption{The DC signal in the shower-free pixel is shown in the top left, with a broad gaussian distribution with the tail of the night-sky background extending up to appproximately 5000. Events below this are unlikely to be identified correctly because the DEC light is too faint. In the top right- the distribution of the dataset is shown, once all the non-QDC cuts have been applied. In the bottom left, the BDT score distribution is shown before any cuts. On the bottom right, we see the same distribution after both signal and BDT score cuts are applied. All green events are ones in which the DC pixel has been correctly identified, while red events are ones that have been incorrectly identified.}
+\label{fig:cutdistribution}
+\end{center}
+\end{figure} 
 
 \subsection{Boosted Decision Tree DC Identification}  As an alternative to  new method of DC pixel identification was developed as part of this analysis, using a BDT trained with the Scikit Learn Python package. A set of 2000 simulated events was selected, and randomly split through use of the python random.random() function into two subsets for training and testing. The variable $DC_{Count} = Count-Mean_{N.N}$ was defined as the reconstructed \textquoteleft DC signal', assuming the pixel was the DC candidate. For every pixel in the 2000 simulated events HESS 1 images, an entry was formed of $Q_{DC}$, $ \Delta_{C.o.G}$, $\Delta_{Direction}$, $\Delta_{Line}$, Channel1, Channel0, $DC_{Count}$ and $Mean_{N.N}$. A score of 0 was assigned to every pixel to indicate background, with the exception of those that were identified as the DC pixel through the Shower-Free simulation. If the DC count was larger than 300, the pixel was included with a score of 1, identifying it as a signal pixel. Pure DC pixels below the threshold cut of 300 were deemed to be too faint to reconstruct, so these entries were omitted from the training set.
 
@@ -114,17 +122,59 @@ Having created a dataset, the BDT was then trained with a maximum depth of 5, an
 \subsection{Composite Event Selection}
 Having trained the BDT successfully, it was then applied to the same dataset as for the classic QDC identification. In each camera image, the event with the largest BDT score was deemed to be \textquoteleft most signal-like', and thus selected as the DC pixel candidate. A cut was applied, requiring $Probability_{signal} > 0.5$ for the DC candidate to be accepted. 
 
-With this cut applied, out of 1896 events, it was fount that only 55\% of these events contained a clear DC signal, as defined by requiring the DC pixel to have $Count_{DC} > 5500$ in the hadron-only image. Of this subset of 'DC events', 46\% events passed all of the required cuts. The BDT was found to be 75 \% accurate in identifying the DC pixel in those passing events. 
+With this cut applied, out of 1200 events, 46\% events passed all of the required cuts. The BDT was found to be 75 \% accurate in identifying the DC pixel in those passing events.
 
-In FIG, a plot of true vs. reconstructed DC count is shown, obtained by comparing the BDT selected pixel to the hadron-only DC pixel. The black line indicates the optimal 1:1 ratio that we are aiming for. It is seen that there the vast majority of misidentified events have a small $candidate_{DC count}$, forming a red line in the region $candidate_{DC count} \approx 0$. To remove these misidentified events, we can apply a second cut requiring $candidate_{DC count} > 300$.
+In \ref{fig:cutdistribution}, a plot of true vs. reconstructed DC count is shown, obtained by comparing the BDT selected pixel to the hadron-only DC pixel. The black line indicates the optimal 1:1 ratio that we are aiming for. It is seen that there the vast majority of misidentified events have a small $candidate_{DC count}$, forming a red line in the region $candidate_{DC count} \approx 0$. To remove these misidentified events, we can apply a second cut requiring $candidate_{DC count} > 300$.
 
-Application of this combined cut greatly increases the successful identification rate. Of the 2000 events, 84\% of events passed all of the required cuts. The BDT was found to be 90 \% accurate in identifying the DC pixel in those passing events. This represents a very significant improvement in DC pixel identification over the previous QDC method, and corresponds to a fivefold increase in the number of HESS data events that can be studied using the LPD method.
+Application of this combined cut greatly increases the successful identification rate. Of the 2000 events, 84\% of events passed all of the required cuts. The BDT was found to be 90 \% accurate in identifying the DC pixel in those passing events. This represents a very significant improvement in DC pixel identification over the previous QDC method, and corresponds to a fivefold increase in the number of HESS data events that can be studied using the LPD method. Use of this BDT method is thus assumed throughout the rest of this analysis.
 
 \subsection{Error in calculated $Count_{DC}$}
-Having successfully identified the DC pixel in many events, we can calculate the difference between the derived $candidate_{DC count}$ and the hadron-only $True_{DC}$ to determine the error we will find for the LPD. Binning the difference $\Delta = candidate_{DC count} - True_{DC count}$ as shown in FIG, we find that the mean difference is 65 and the median difference is -75. We thus see that the distribution is not significantly skewed. However, the Standard deviation is approximately 600 when measured both by half of the difference from the 16th to 84th centile, and by 68th centile of an absolute difference. This again suggests that, although skewed, the fraction error in intensity is rather large.  
+Having successfully identified the DC pixel in many events, we can calculate the difference between the derived $candidate_{DC count}$ and the hadron-only $True_{DC}$ to determine the error we will find for the LPD. Binning the difference $\Delta = candidate_{DC count} - True_{DC count}$ as shown in FIG, we find that the mean difference is 65 and the median difference is -75. We thus see that the distribution is not significantly skewed. However, the Standard deviation is approximately 600 when measured both by half of the difference from the 16th to 84th centile, and by 68th centile of an absolute difference. This again suggests that, although skewed, the fraction error in intensity is rather large. However, the fractional error found purely on the basis of QDC calculations is EQUALLY LARGE??LARGER?.
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=\textwidth]{DCcounterror}
+\caption{The difference between true and reconstructed DC signal for events passing the cuts is shown in the top left. In the top right the same is shown for events which were rejected. The true DC signals for events which passed the cuts is plotted against the reconstructed signals in the lower left, and for rejected events in the lower right. As in \ref{fig:cutdistribution}, in all plots a green event is one in which the DC pixel has been correctly identified, while a red event is one that has been incorrectly identified.}
+\label{fig:dcdiff}
+\end{center}
+\end{figure}
 
 \section{Cosmic Ray Event Simulation}
 In order to reconstruct events using the LPD method, we require saturation of the Cosmic Ray Energy, and that the event can be seen by at least 4 telescopes. These restrictions confine us to Cosmic Rays with specific characteristics.
+
+\subsection{Cherenkov Emission}
+Cosmic Rays follow a well-defined power law where $ \frac{dN(E)}{dt} \propto E^{-\gamma} $ and experimentally $ \gamma = 2.7 \pm ? $. Consequently higher energy Cosmic Rays are heavily suppressed. The Energy Threshold for Cherenkov Light Emission as a function of height is illustrated in \ref{fig:generalenergy}. Once the Energy of a Cosmic Ray exceeds the local Cherenkov Energy Threshold of the atmosphere, the Nucleus will begin emitting a ring of Cherenkov Light. 
+
+Above threshold, Cherenkov Emission is determined by the Frank Tamm formula!!!!! A full simulation of the LPD was undertaken. Under the assumption of constant magnetic permittivity and a zenith angle of $90\degree$ we can use the approximate form \[ N_{photons} \approx (37000 \times Z^{2} \times \Delta_{h} \times \Delta_{E})\] where $\Delta_{h}$ is the vertical distance travelled in meters and $\Delta_{E}$ is the emission energy range in eV.
+
+If we divide the number of emitted photons by the area of the annulus between the ring radii at $h$ and $h - \Delta_{h}$, we retrieve the LDF shown in \ref{fig:lpd}, which varies with $ \rho_{DC}  = f(r) \times Z^{2}$ . Thus the amplitude of the LDF is proportional to the charge of the Cosmic Ray, enabling the Charge to be determined from the DC emission. This is the basis for charge reconstruction in the LDF method.
+
+\begin{figure}
+\begin{center}
+\includegraphics[height=0.9\textheight]{logenergyradius}
+\caption{The Threshold Energy for Cherenkov Emission is marked in blue. With the assumption of $\beta=1$, the maximum emission radius is marked in black. The red and green and magenta line show the emission radius at 3.57 and 0.75 and 0.23 TeV per Nucleon respectively. The Green line is sufficiently close to the background to be saturated at 24km, while the magenta line is not.}
+\label{fig:generalenergy}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[height=0.9\textheight]{simulatedlpd}
+\caption{The LPD obtained from simulation of an Iron Nucleus up to a first interaction height of 25km for a range of Core Energies. An altitude of 1.8km for the experimental array is assumed. Atmospheric absorption, although neglected, is broadly constant across the emission range leading to uniform amplitude scaling.}
+\label{fig:lpd}
+\end{center}
+\end{figure}
+
+The Refractive Index of the atmosphere, and thus the Cherenkov angle $\theta_{C}$, increases as the altitude decreases. The refractive index at a series of heights, based on data from the HESS site, is shown \ref{fig:lpd}. Exponentials are fitted between points to provide interpolation, and a comparison can be made to a linear interpolation that is also plotted. Despite the exponential interpolation, discontinuities in the second derivative of the refractive index prevent the LPD from being smooth in the simulation. This is unimportant, because in reality the variation due to atmospheric conditions and random noise will smear out any discontinuities in the LDF.
+
+Emission continues until the first interaction with the atmosphere, occurring at a randomly distributed height we call $h$. Then for a given Telescope Array altitude above sea level, simple trigonometry yields the radius of the LDF on the ground:
+\[ Radius(height = altitude_{array}) = \tan [\theta_{C}(h)] \times (h - altitude_{array})\]
+
+Thus the upper atmosphere emission contributes to the inner LDF, while the lower atmosphere emission contributes to the outer LDF. We can also see ground emission radius as a function of height in \ref{fig:generalenergy}. We find that the high-radius emission (occurring near the first interaction region) varies little between different high energies. We deem this to be \textquoteleft Saturated Emission\textquoteright.
+
+To accurately quantify Saturated Emission, we can compare the photon density to the theoretical maximum photon density, corresponding to an infinite-energy particle with $\beta =1$. The illustrated maximum is useful as a reference, although because the atmosphere is not modelled beyond an altitude of 120km, the small-radius emission is not accurately simulated entirely correctly. However, real cosmic rays in the considered energy regime will all cross the emission threshold and begin emission at an altitude much lower than 120km, so can be considered accurately modelled. Absorption WAS/WAS NOT modelled.
+
+However, in the 4 telescope height region, the Cherenkov Threshold Energy is $ E_{Threshold} \approx 0.35$ TeV per Nucleon as shown in \ref{fig:lpd}! The saturation in for these heights occurs roughly at 0.7 TeV per Nucleon or something...
 
 \subsection{First Interaction Height}
 Cosmic Rays survival in from the top of the atmosphere follows an exponential decay with the number of 'interaction lengths' passed. The interaction length is dependent on the interaction cross section, which increases with density. Thus the number of interaction lengths increases exponentially as height decreases. The resultant decays occur most often at a height of $h \approx 40 \pm 10$ km , as seen in \ref{fig:generalheight}.
@@ -136,40 +186,6 @@ Cosmic Rays survival in from the top of the atmosphere follows an exponential de
 \label{fig:generalheight}
 \end{center}
 \end{figure}
-
-\subsection{Energy Considerations}
-Cosmic Rays follow a well-defined power law where $ \frac{dN(E)}{dt} \propto E^{-\gamma} $ and experimentally $ \gamma = 2.7 \pm ? $. Consequently higher energy Cosmic Rays are heavily suppressed. The Energy Threshold for Cherenkov Light Emission as a function of height is illustrated in \ref{fig:generalenergy}. Once the Energy of a Cosmic Ray exceeds the local Cherenkov Energy Threshold of the atmosphere, the Nucleus will begin emitting a ring of Cherenkov Light. Emission continues until the first interaction with the atmosphere, occurring at a randomly distributed height we call $h$. Then for a given Telescope Array altitude above sea level, simple trigonometry yields the radius of the LDF on the ground:
-\[ Radius(height = altitude_{array}) = \tan [\theta_{C}(h)] \times (h - altitude_{array})\]
-
-The Refractive Index of the atmosphere, and thus the Cherenkov angle $\theta_{C}$, increases as the altitude decreases. Thus the upper atmosphere emission contributes to the inner LDF, while the lower atmosphere emission contributes to the outer LDF. We can also see ground emission radius as a function of height in \ref{fig:generalenergy}. We find that the high-radius emission (occurring near the first interaction region) varies little between different high energies. We deem this to be \textquoteleft Saturated Emission\textquoteright.
-
-\begin{figure}
-\begin{center}
-\includegraphics[height=0.9\textheight]{logenergyradius}
-\caption{The Threshold Energy for Cherenkov Emission is marked in blue. With the assumption of $\beta=1$, the maximum emission radius is marked in black. The red and green and magenta line show the emission radius at 3.57 and 0.75 and 0.23 TeV per Nucleon respectively. The Green line is sufficiently close to the background to be saturated at 24km, while the magenta line is not.}
-\label{fig:generalenergy}
-\end{center}
-\end{figure}
-
-\subsection{Nuclear Charge}
-Cherenkov Emission is determined by the Frank Tamm formula!!!!! 
-
-Under the assumption of constant magnetic permittivity and a zenith angle of $90\degree$ we can use the approximate form \[ N_{photons} \approx (37000 \times Z^{2} \times \Delta_{h} \times \Delta_{E})\] where $\Delta_{h}$ is the vertical distance travelled in meters and $\Delta_{E}$ is the emission energy range in eV.
-
-If we divide the number of emitted photons by the area of the annulus between the ring radii at $h$ and $h - \Delta_{h}$, we retrieve the LDF shown in \ref{fig:lpd}, which varies with $ \rho_{DC}  = f(r) \times Z^{2}$ . Thus the amplitude of the LDF is proportional to the charge of the Cosmic Ray, enabling the Charge to be determined from the DC emission. This is the basis for charge reconstruction in the LDF method.
-
-\begin{figure}
-\begin{center}
-\includegraphics[height=0.9\textheight]{simulatedlpd}
-\caption{The LPD obtained from simulation of an Iron Nucleus up to a first interaction height of 25km for a range of Core Energies. An altitude of 1.8km for the experimental array is assumed. Atmospheric absorption, although neglected, is broadly constant across the emission range leading to uniform amplitude scaling.}
-\label{fig:lpd}
-\end{center}
-\end{figure}
-
-\subsection{Energy saturation region}
-However, in the 4 telescope height region, the Cherenkov Threshold Energy is $ E_{Threshold} \approx 0.35$ TeV per Nucleon as shown in \ref{fig:lpd}! The saturation in for these heights occurs roughly at 0.7 TeV per Nucleon or something...
-
-NOW I KNOW!
 
 \subsection{Atmospheric Absorption}
 The Cherenkov Light, mostly emitted in the visible blue part of the EM spectrum, experiences relatively little atmospheric absorption. The major of Rayleigh scattering-based atmospheric absorption occurs in the lower part of the troposphere, and thus the atmospheric absorption is almost independent of emission up to first interaction height.
