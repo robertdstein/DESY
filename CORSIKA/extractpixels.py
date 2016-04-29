@@ -255,13 +255,6 @@ with open(run_dir + "/hillasparameters" + cfg.cardname + ".csv", 'rb') as csvfil
 					
 					dline = math.sqrt((xpos-intersectionx)**2 + (ypos-intersectiony)**2)
 					
-					#~ if (float(ID)/400)-(int(float(ID)/400)) > 0:
-						#~ pass
-					#~ else:
-						#~ plt.plot([intersectiony, ypos], [intersectionx, xpos], color='w')
-						#~ plt.scatter(intersectiony, intersectionx, c='pink', s=100, marker="x", zorder=2)
-						#~ plt.scatter(ypos, xpos, c='pink', s=100, marker="*", zorder=2)
-					
 					includeinBDT = 0
 					
 					if cfg.cardname =="full":
@@ -311,16 +304,7 @@ with open(run_dir + "/hillasparameters" + cfg.cardname + ".csv", 'rb') as csvfil
 			
 			coordinates = [[(showery,showerx), ddireccut], [(cogy, cogx), dcogl], [(cogy, cogx), dcogu]]
 			
-			#~ for cset in coordinates:
-				#~ e = Circle(xy=cset[0], radius=cset[1])
-				#~ fig.add_artist(e)
-				#~ e.set_edgecolor('w')
-				#~ e.set_facecolor("none")
-				#~ e.set_linestyle('dashed')
-					
 			plt.scatter(y, x, s=size, c=color, linewidth='0', marker="H", zorder=1, vmin=3800, vmax=7800)
-			#~ if cfg.cardname == "full":
-				#~ plt.scatter(selecty, selectx, s=size, facecolors='none', edgecolors='w', marker="H", zorder=2)
 			plt.xlim(-angularwidth, angularwidth)
 			plt.ylim(-angularwidth, angularwidth)
 			

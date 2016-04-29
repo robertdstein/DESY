@@ -26,7 +26,7 @@
 #$ -l h_stack=15M 
 
 # needed memory/  Benötigter Speicher. Vorsicht: bei mehr als 2G kommt der Job in die long queue.
-#$ -l h_vmem=50G
+#$ -l h_vmem=2G
 
 # Disk space/  Benötigter temporärer Festplattenspeicher auf dem Host .
 #$ -l h_fsize=20G
@@ -40,7 +40,7 @@
 # E-Mail
 #$ -M robert.stein@desy.de
 
-mkdir -p /nfs/astrop/d6/rstein/data/$JOB_ID
+
 
 # Path for/ Pfade für stdout und stderr
 #$ -o /nfs/astrop/d6/rstein/cluster_output
@@ -50,11 +50,6 @@ mkdir -p /nfs/astrop/d6/rstein/data/$JOB_ID
 # Ab hier beginnt das Script
 
 . /nfs/astrop/d1/hhsoft/64bit_crf/ini_python2.7.8_64bit_crf.sh
-
-python /nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/CORSIKA/runcorsika.py -rn $SGE_TASK_ID -td $TMPDIR -jid $JOB_ID
-
-cd $TMPDIR
-ls -l
 
 # This file should be sourced from each example
 
@@ -97,12 +92,21 @@ printenv | egrep '^(CTA_PATH|CORSIKA_PATH|SIM_TELARRAY_PATH|SIM_TELARRAY_CONFIG_
 export MAX_PRINT_ARRAY=2100
 echo "MAX_PRINT_ARRAY set to 2100"
 
-python /nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/CORSIKA/runsimtel.py -rn $SGE_TASK_ID -jid $JOB_ID -cn DC -td $TMPDIR 
+mkdir -p /nfs/astrop/d6/rstein/data/$JOB_ID
 
-python /nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/CORSIKA/extractpixels.py -rn $SGE_TASK_ID -jid $JOB_ID -cn DC
+for (( i=0; i <= 3; i++ ))
+do 
+ python /nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/CORSIKA/runcorsika.py -rn $((($i*500) + $SGE_TASK_ID)) -td $TMPDIR -jid $JOB_ID
 
-python /nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/CORSIKA/runsimtel.py -rn $SGE_TASK_ID -jid $JOB_ID -td $TMPDIR 
+ python /nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/CORSIKA/runsimtel.py -rn $((($i*500) + $SGE_TASK_ID)) -jid $JOB_ID -cn DC -td $TMPDIR 
 
-python /nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/CORSIKA/extractpixels.py -rn $SGE_TASK_ID -jid $JOB_ID
+ python /nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/CORSIKA/extractpixels.py -rn $((($i*500) + $SGE_TASK_ID))  -jid $JOB_ID -cn DC
+
+ python /nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/CORSIKA/runsimtel.py -rn $((($i*500) + $SGE_TASK_ID)) -jid $JOB_ID -td $TMPDIR 
+
+ python /nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/CORSIKA/extractpixels.py -rn $((($i*500) + $SGE_TASK_ID)) -jid $JOB_ID
+done
+
+
 
 

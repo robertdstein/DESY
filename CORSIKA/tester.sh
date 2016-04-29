@@ -49,5 +49,6 @@
 # Ab hier beginnt das Script
 
 echo "Temporary directory: " $TMPDIR
-
-
+echo "JOB ID" $JOB_ID
+echo "Run number" $SGE_TASK_ID
+echo "Double" "$((2*$SGE_TASK_ID))"

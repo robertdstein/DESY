@@ -2,8 +2,8 @@ import os, argparse, subprocess, time
 import os.path
 
 parser = argparse.ArgumentParser()
-parser.add_argument("-bid", "--BDTID", default="1981906")
-parser.add_argument("-tid", "--testID", default="1957737")
+parser.add_argument("-bid", "--BDTID", default="2842781")
+parser.add_argument("-tid", "--testID", default="2567181")
 parser.add_argument("-t", "--train", action="store_true")
 parser.add_argument("-re", "--reextract", action="store_true")
 
@@ -55,7 +55,7 @@ if cfg.train:
 	print time.asctime(time.localtime()), traincommand, "\n"
 	os.system(traincommand)
 
-execute = "qsub -t 1-500:1 extractpixelsoncluster.sh " + cfg.testID
+execute = "qsub -t 1-2000:1 extractpixelsoncluster.sh " + cfg.testID
 print time.asctime(time.localtime()), execute, "\n"
 os.system(execute)
 

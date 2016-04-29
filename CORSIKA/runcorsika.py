@@ -25,7 +25,8 @@ result_dir = data_dir + "/" + str(cfg.jobID)
 
 Direc = os.path.join(result_dir, "run" + str(cfg.runnumber))
 print "Making directory " + Direc
-os.mkdir(Direc)
+if not os.path.exists(Direc):
+	os.mkdir(Direc)
 
 cards = ["full", "DC"]
 
@@ -33,7 +34,8 @@ for cardname in cards:
 	
 	Direc = os.path.join(cfg.tempdir, cardname)
 	print "Making directory " + Direc
-	os.mkdir(Direc)
+	if not os.path.exists(Direc):
+		os.mkdir(Direc)
 
 	inputcard_name = os.path.join(Direc, "run" + str(cfg.runnumber) + str(cardname) + ".inputcard")
 	

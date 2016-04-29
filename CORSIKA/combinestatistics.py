@@ -17,7 +17,7 @@ cfg = parser.parse_args()
 filepath = "/nfs/astrop/d6/rstein/data/"
 
 i = 1
-j = 500
+j = 2000
 totalevents = 0
 DCpasstotal = 0
 correctevents =0

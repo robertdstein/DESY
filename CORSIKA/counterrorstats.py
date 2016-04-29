@@ -20,7 +20,7 @@ cfg = parser.parse_args()
 filepath = "/nfs/astrop/d6/rstein/data/"
 
 i = 1
-j = 500
+j = 2000
 
 passed = [[], []]
 rejected = [[], []]
@@ -61,11 +61,11 @@ while (i < j):
 				score = candidateentry[14]
 				
 				candidatenn = candidateentry[6]
-				nnmax = np.max(candidatenn)
-				nnmin = np.min(candidatenn)
-				bkg = 0.5* (nnmax + nnmin)
+				sqcount = 0
+				for count in candidatenn:
+					sqcount += count**0.25
+				bkg = (sqcount/len(candidatenn))**4
 				newsig = candidatecount - bkg
-				
 				passcut = False
 				
 				if (str(result) == str(True)):

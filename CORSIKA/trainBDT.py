@@ -85,7 +85,7 @@ print time.asctime(time.localtime()), "Training BDT"
 
 #Train the BDT (Gradient Boosting Classifier)  and save
 
-clf = ensemble.GradientBoostingClassifier(max_depth=7, n_estimators=100, learning_rate=0.008)
+clf = ensemble.GradientBoostingClassifier(max_depth=8, n_estimators=100, learning_rate=0.008)
 clf.fit(full, fullscore)
 
 joblib.dump(clf, '/nfs/astrop/d6/rstein/BDTpickle/DCpixelclassifier.pkl')
