@@ -116,8 +116,6 @@ with open(base_file_name, 'rb') as csvfile:
 				showerazimuth = hentry[4]
 				showeraltitude = hentry[5]
 				
-				print hentry
-				
 				hwriter.writerow(hentry)
 						
 		if new:
@@ -197,7 +195,6 @@ with open(run_dir + "/hillasparameters" + cfg.cardname + ".csv", 'rb') as csvfil
 			distance = float(row[8])
 			
 			aspectratio = width/length
-			
 			end=distance + (2*length)
 
 			numrange = np.linspace(-end, end, 2)
@@ -219,6 +216,7 @@ with open(run_dir + "/hillasparameters" + cfg.cardname + ".csv", 'rb') as csvfil
 			if os.path.isfile(picklepath):
 				bestscore=0.0
 				clfID=None
+				
 
 			with open('/nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/CORSIKA/data/'+targetfile, 'rb') as csvfile:
 				reader = csv.reader(csvfile, delimiter=',', quotechar='|')
@@ -243,6 +241,7 @@ with open(run_dir + "/hillasparameters" + cfg.cardname + ".csv", 'rb') as csvfil
 					nnmean = np.mean(nncounts)
 					
 					signal = channel1-nnmean
+					print QDC, nnmean, signal
 
 					ddirec = math.sqrt((xpos-showerx)**2 + (ypos-showery)**2)
 					dcog = math.sqrt((xpos-cogx)**2 + (ypos-cogy)**2)
@@ -278,7 +277,6 @@ with open(run_dir + "/hillasparameters" + cfg.cardname + ".csv", 'rb') as csvfil
 						bdtscore = clf.predict_proba([bdtentry])[0]
 						bdtscore = clf.predict_proba([bdtentry])[0][1]
 						if bdtscore > bestscore:
-							print bestscore, clfID, bestscore, ID
 							clfID=ID
 							bestscore= bdtscore
 
@@ -328,11 +326,9 @@ with open(run_dir + "/hillasparameters" + cfg.cardname + ".csv", 'rb') as csvfil
 				if message == "REJECTED!":
 					status="Accepted"
 					ringcolor="pink"
-					print "PASSED!"
 				else:	
 					ringcolor = "red"
 					status = "Rejected"
-					print message
 				
 				plt.annotate(status, xy=(0.0, 0.0), xycoords="axes fraction",  fontsize=10)	
 				
@@ -400,8 +396,6 @@ with open(run_dir + "/hillasparameters" + cfg.cardname + ".csv", 'rb') as csvfil
 
 				g.write(str(current[bestID]) + " \n")
 				g.close()
-			
-			print csvpath
 			
 			with open(csvpath, 'w+') as f:
 				writer = csv.writer(f, delimiter=',', quotechar='|')
