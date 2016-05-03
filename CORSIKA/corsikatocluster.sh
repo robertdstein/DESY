@@ -100,9 +100,7 @@ do
 
  python /nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/CORSIKA/runsimtel.py -rn $((($i*500) + $SGE_TASK_ID)) -jid $JOB_ID -cn DC -td $TMPDIR 
 
- python /nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/CORSIKA/extractpixels.py -rn $((($i*500) + $SGE_TASK_ID))  -jid $JOB_ID -cn DC
-
- python /nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/CORSIKA/runsimtel.py -rn $((($i*500) + $SGE_TASK_ID)) -jid $JOB_ID -td $TMPDIR 
+ python /nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/CORSIKA/runsimtel.py -rn $((($i*500) + $SGE_TASK_ID)) -jid $JOB_ID -td $TMPDIR
 
  python /nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/CORSIKA/extractpixels.py -rn $((($i*500) + $SGE_TASK_ID)) -jid $JOB_ID
 done

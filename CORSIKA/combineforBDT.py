@@ -1,11 +1,22 @@
 import sys
 import os.path
+import os
 import argparse, math, random, time
 import csv
 import numpy as np
+import cPickle as pickle
+
+hess1picklepath = '/nfs/astrop/d6/rstein/BDTpickle/hess1pixelclassifier.p'
+hess2picklepath = '/nfs/astrop/d6/rstein/BDTpickle/hess2pixelclassifier.p'
+for picklepath in [hess1picklepath, hess2picklepath]:
+	if os.path.isfile(picklepath):
+		remove_old_BDT = "rm " + picklepath 
+		os.system(remove_old_BDT)
+
+from telescopeclasses import *
 
 parser = argparse.ArgumentParser()
-parser.add_argument("-jid", "--jobID", default="1385224")
+parser.add_argument("-jid", "--jobID", default="2842781")
 
 cfg = parser.parse_args()
 
@@ -27,34 +38,58 @@ custom_options = {
 p = ProgressBar(**custom_options)
 print p
 
-with open(targetfolder + "BDTpixels.csv", 'wb') as csvout:
-	writer = csv.writer(csvout, delimiter=',')
-	writer.writerow(["Channel1", "QDC", "Delta_direction", "Delta_Centre_of_Gravity", "Delta_line", "Energy", "Nearest_Neighbour_Mean", "score", "Channel0"])
-	while (i < j) or (os.path.isfile(targetfolder + "run" + str(i) + "/fullpixels1.csv")):
-		if (os.path.isfile(targetfolder + "run" + str(i) + "/fullpixels1.csv")):
-			for k in range(1,5):
-			
-				path = targetfolder + "run" + str(i) + "/fullpixels" + str(k) + ".csv"
-				
-				with open(path, 'rb') as csvfile:
-					reader = csv.reader(csvfile, delimiter=',', quotechar='|')
-					for row in reader:
-						if (row[11] == str(0)) or (row[11] == str(1)):
-							channel1 = row[1]
-							channel0 = row[2]
-							QDC = row[7]
-							Dd = row[8]
-							Dcg = row[9]
-							Dline = row[10]
-							score = row[11]
-							energy = row[12]
-							nnmean = row[13]
-							
-							entry = [channel1, QDC, Dd, Dcg, Dline, energy, nnmean, score, channel0]
-							
-							writer.writerow(entry)
-						else:
-							pass
-		if (int(float(i)*100/float(j)) - float(i)*100/float(j)) ==0:
-			print p+1
-		i+=1
+hess1set = []
+hess2set = []
+
+hess1scores = []
+hess2scores = []
+
+targetpath = targetfolder +  "run" + str(i) + "/pickle/eventdata.p"
+
+def makeBDTentry(pixelentry):
+	bdtentry =[]
+	for variable in bdtvariables:
+		varsplit = variable.split('.')
+		suffix = pixelentry
+		if len(varsplit) > 1:
+			for name in varsplit[:-1]:
+				 suffix = getattr(suffix, name)
+			varname = varsplit[-1]
+		else:
+			varname = variable
+		if hasattr(suffix, varname):
+			newval = getattr(suffix, varname)
+			bdtentry.append(newval)
+		else:
+			print("No variable named " +variable)
+			return None, None
+	return bdtentry, pixelentry.truescore
+
+while (i < j):
+	targetpath = targetfolder +  "run" + str(i) + "/pickle/eventdata.p"
+	if (os.path.isfile(targetpath)):
+		event = pickle.load(open(targetpath, 'rb'))
+		hess1pixels, hess2pixels = event.returnforBDT()
+		for hess1pixel in hess1pixels:
+			bdtentry, truescore = makeBDTentry(hess1pixel)
+			if (bdtentry != None) and (truescore != None):
+				hess1set.append(bdtentry)
+				hess1scores.append(truescore)
+		for hess2pixel in hess2pixels:
+			bdtentry, truescore = makeBDTentry(hess2pixel)
+			if (bdtentry != None) and (truescore != None):
+				hess2set.append(bdtentry)
+				hess2scores.append(truescore)
+	
+	if (int(float(i)*100/float(j)) - float(i)*100/float(j)) ==0:
+		print p+1
+	i+=1
+
+pickle_dump_dir = os.path.join(targetfolder, "bdtpickle")
+if not os.path.exists(pickle_dump_dir):
+	print "Making directory " + pickle_dump_dir
+	os.mkdir(pickle_dump_dir)
+pickle.dump(hess1set,  open(pickle_dump_dir+"/hess1bdtdata.p", "wb"))
+pickle.dump(hess2set,  open(pickle_dump_dir+"/hess2bdtdata.p", "wb"))
+pickle.dump(hess1scores,  open(pickle_dump_dir+"/hess1bdtscores.p", "wb"))
+pickle.dump(hess2scores,  open(pickle_dump_dir+"/hess2bdtscores.p", "wb"))

@@ -8,8 +8,8 @@ radiuscut = 40
 cut = 0.50
 ucut = 1.01
 QDCcut = 1.3
-DCcut = 4500
-signalcut = 300
+DCcut = 150
+signalcut = DCcut
 
 def run(): 
 	return arcut, ddireccut, dcogl, dcogu, dlinecut, radiuscut

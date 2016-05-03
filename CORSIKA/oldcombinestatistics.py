@@ -57,7 +57,6 @@ custom_options = {
 p = ProgressBar(**custom_options)
 print p
 
-
 while (i < j):
 	for k in range(1,5):
 		path = targetfolder + "run" + str(i) + "/stats" + str(k) + ".txt"

@@ -3,6 +3,7 @@ import os.path
 import numpy as np
 from sklearn.externals import joblib
 from sklearn import ensemble
+import cPickle as pickle
 import initialisecuts as ic
 import re
 import cmath
@@ -15,20 +16,14 @@ from matplotlib.patches import Circle
 arcut, ddireccut, dcogl, dcogu, dlinecut, radiuscut = ic.run()
 cut, ucut, QDCcut, DCcut, signalcut = ic.runforstats()
 
-offset="0"
-
-parser = argparse.ArgumentParser()
-parser.add_argument("-rn", "--runnumber", default="1")
-parser.add_argument("-jid", "--jobID", default="2842781")
-parser.add_argument("-t", "--test", action="store_true")
-
-cfg = parser.parse_args()
-
 nchannels = 2
 
-picklepath = '/nfs/astrop/d6/rstein/BDTpickle/DCpixelclassifier.pkl'
-if os.path.isfile(picklepath):
-	clf=joblib.load(picklepath)		
+hess1picklepath = '/nfs/astrop/d6/rstein/BDTpickle/hess1pixelclassifier.p'
+hess2picklepath = '/nfs/astrop/d6/rstein/BDTpickle/hess2pixelclassifier.p'
+if os.path.isfile(hess1picklepath):
+	hess1clf = pickle.load(open(hess1picklepath, "r"))
+if os.path.isfile(hess2picklepath):
+	hess2clf = pickle.load(open(hess2picklepath, "r"))
 else:
 	print "No pickle!"
 	
@@ -37,13 +32,12 @@ with open('/nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/CORSIKA/pixelBDTvariables.c
 	reader = csv.reader(csvfile, delimiter=',', quotechar='|')
 	for row in reader:
 		bdtvariables.append(row[0])
-print "BDT variables are", bdtvariables
 
 class fullevent:
 	"An event which contains all of the event information for both a full and a hadron-only simulation"
-	def __init__(self):
-		self.runnumber = cfg.runnumber
-		self.jobID = cfg.jobID
+	def __init__(self, runnumber, jobID):
+		self.runnumber = runnumber
+		self.jobID = jobID
 		self.simulationcount = 0
 		self.simulations = container()
 		
@@ -53,12 +47,12 @@ class fullevent:
 		self.simulationcount += 1
 		return getattr(self.simulations, simcategory)
 		
-	def makeplots(self):
+	def makeplots(self, run_dir):
 		self.findtrueDCpixel()
 		sims = vars(self.simulations)
 		for simname in sims:
 			sim = getattr(self.simulations, simname)
-			sim.plotgraphs()
+			sim.plotgraphs(run_dir, self.runnumber)
 	
 	def findtrueDCpixel(self):
 		if hasattr(self.simulations, "DC"):
@@ -73,6 +67,8 @@ class fullevent:
 						bestID=i
 						bestsignal=pixelentry.channel1.intensity 
 				tel.trueDC = bestID
+				if bestID != None:
+					tel.assignpixelscore()
 			
 			if hasattr(self.simulations, "full"):
 				fullsim = getattr(self.simulations, "full")
@@ -81,11 +77,36 @@ class fullevent:
 					trueID = DCtel.trueDC
 					fulltel = fullsim.images[index]
 					fulltel.trueDC = trueID
+					if trueID != None:
+						fulltel.assignpixelscore()
 			else:
 				print "No full simulations for some reason!"
 
 		else:
 			raise Exception("No pure DC simulation exists")
+			
+	def returnforBDT(self):
+		if hasattr(self.simulations, "full"):
+			fullsim = self.simulations.full
+			hess1BDT = []
+			hess2BDT = []
+			i=0
+			j=0
+			if hasattr(fullsim.shower, 'shower_azimuth_'):
+				for tel in fullsim.images:
+					if tel.trueDC != None:
+						if tel.size == "HESS1":
+							i += 1
+						elif tel.size == "HESS2":
+							j += 1
+						for pixelentry in tel.pixels:
+							if tel.size == "HESS1":
+								hess1BDT.append(pixelentry)
+							elif tel.size == "HESS2":
+								hess2BDT.append(pixelentry)
+			return hess1BDT, hess2BDT
+		else:
+			raise Exception("No full simulation exists")
 	
 class simulation:
 	"One simulation, which can be either full or hadron simulation"
@@ -143,14 +164,14 @@ class simulation:
 		else:
 			print "No Shower Azimuth and Altitude"
 			
-	def plotgraphs(self):
+	def plotgraphs(self, run_dir, runnumber):
 		figure = plt.figure()
 		for i in range(len(self.images)):
 			tel = self.images[i]
 			tel.plotimage(i)
 		figure.set_size_inches(10, 20)
 		plt.subplots_adjust(wspace=0, hspace=0)
-		plt.savefig(run_dir + "/graph" + str(cfg.runnumber)+ self.simcategory + ".pdf")
+		plt.savefig(run_dir + "/graph" + str(runnumber)+ self.simcategory + ".pdf")
 		plt.close()
 				
 		
@@ -195,6 +216,7 @@ class telescopeimage:
 		self.QDCID = None
 		self.BDTID = None
 		self.trueDC = None
+		self.rawQDCID = None
 					
 	def getpixel(self, ID):
 		return self.pixels[int(ID)]
@@ -258,11 +280,15 @@ class telescopeimage:
 		for pixelentry in self.pixels:
 			nnIDs = pixelentry.nearestneighbourIDs
 			nnc1s = []
+			rawnnc1s =[]
 			for index in nnIDs:
 				neighbour = self.pixels[index]
 				c1 = neighbour.channel1.intensity
 				nnc1s.append(c1)
+				rawc1 = neighbour.channel1.count
+				rawnnc1s.append(rawc1)
 			pixelentry.nnc1s = nnc1s
+			pixelentry.rawnnc1s = rawnnc1s
 	
 	def plotimage(self, i):
 		if self.size == "HESS1":
@@ -316,6 +342,27 @@ class telescopeimage:
 			return self.getpixel(self.QDCID)
 		else:
 			raise Exception("No QDC pixel!")
+			
+	def findrawQDCpixel(self):
+		bestID = None
+		bestrawQDC = None
+		if hasattr(self.hillas, "aspect_ratio_"):
+			if self.hillas.aspect_ratio_ < arcut:
+				for i in range(len(self.pixels)):
+					pixelentry = self.pixels[i]
+					if pixelentry.ddirec < ddireccut:				
+						if dcogl < pixelentry.dcog < dcogu:
+							if pixelentry.dline < dlinecut:
+								if pixelentry.rawQDC > bestrawQDC:
+									bestID=i
+									bestrawQDC=pixelentry.rawQDC
+		self.rawQDCID = bestID
+		
+	def getrawQDCpixel(self):
+		if self.rawQDCID != None:
+			return self.getpixel(self.rawQDCID)
+		else:
+			raise Exception("No raw QDC pixel!")
 	
 	def gettruepixel(self):
 		if self.trueDC != None:
@@ -326,7 +373,7 @@ class telescopeimage:
 	def findBDTpixel(self):
 		bestID = None
 		bestscore = None
-		if os.path.isfile(picklepath):
+		if os.path.isfile(hess1picklepath):
 			for i in range(len(self.pixels)):
 				pixelentry = self.pixels[i]
 				bdtentry=[]
@@ -344,9 +391,14 @@ class telescopeimage:
 						bdtentry.append(newval)
 					else:
 						raise Exception("No variable named " +variable)
-				bdtscore = clf.predict_proba([bdtentry])[0]
-				bdtscore = clf.predict_proba([bdtentry])[0][1]
-				self.bdtscore = bdtscore
+				if self.size == "HESS2" and os.path.isfile(hess2picklepath):
+					bdtscore = hess2clf.predict_proba([bdtentry])[0][1]
+				elif self.size == "HESS1" and os.path.isfile(hess1picklepath):
+					bdtscore =  hess1clf.predict_proba([bdtentry])[0][1]
+				else:
+					print "self.size error, self.size=" + self.size
+					bdtscore = None
+				pixelentry.bdtscore = bdtscore
 				if bdtscore > bestscore:
 					bestID=i
 					bestscore= bdtscore
@@ -356,7 +408,7 @@ class telescopeimage:
 		if self.BDTID != None:
 			return self.getpixel(self.BDTID)
 		else:
-			raise Exception("No QDC pixel!")
+			raise Exception("No BDT pixel!")
 		
 	def generatepixelhillasparameters(self, showerazimuth, showeraltitude):
 		self.fillnearestneighbours()
@@ -384,7 +436,17 @@ class telescopeimage:
 			pixelentry.hillas(cogx, cogy, showerx, showery, sm, sc)
 		
 		self.findQDCpixel()
+		self.findrawQDCpixel()
 		self.findBDTpixel()
+		
+	def assignpixelscore(self):
+		if self.trueDC != None:
+			for pixelentry in self.pixels:
+				pixelentry.truescore = 0
+			dcpixel = self.gettruepixel()
+			dcpixel.truescore = 1
+		else:
+			raise Exception("No DC pixel has been identified!")
 	
 			
 class pixel:
@@ -397,6 +459,9 @@ class pixel:
 		self.imagedata = False
 		self.channel0 = channelentry()
 		self.channel1 = channelentry()
+		self.nnc1s = None
+		self.bdtscore = None
+		self.truescore = None
 		
 	def getentry(self):
 		return [self.ID, self.x, self.y, self.nearestneighbourIDs]
@@ -444,7 +509,8 @@ class pixel:
 		intersectiony = (m * intersectionx) + c
 		self.dline = math.sqrt((self.x-intersectionx)**2 + (self.y-intersectiony)**2)
 		
-		self.QDC = math.fabs(self.channel1.intensity/max(self.nnc1s))
+		self.QDC = math.fabs(self.channel1.intensity/max([ abs(i) for i in self.nnc1s]))
+		self.rawQDC = math.fabs(self.channel1.count/max([ abs(i) for i in self.rawnnc1s]))
 		self.nnmean = np.mean(self.nnc1s)
 		self.signalguess = self.channel1.intensity-self.nnmean
 		self.imagedata = True
@@ -467,144 +533,3 @@ class channelentry:
 			
 class container():
 	pass
-		
-event = fullevent()
-
-data_dir = "/nfs/astrop/d6/rstein/data"
-
-result_dir = data_dir + "/" + str(cfg.jobID)
-run_dir = os.path.join(result_dir, "run" + str(cfg.runnumber))
-
-Pickle_dir = os.path.join(run_dir, "pickle")
-if not os.path.exists(Pickle_dir):
-	print "Making directory " + Pickle_dir
-	os.mkdir(Pickle_dir)
-
-for category in ["DC", "full"]:
-	base_file_name = os.path.join(run_dir, "run" + str(cfg.runnumber)+ str(category) + "_off" + offset  + "_read_hess_output.txt")
-	currentsimulation = event.addsimulation(category)
-	print category
-	
-	with open(base_file_name, 'rb') as csvfile:
-		reader = csv.reader(csvfile, delimiter=' ', quotechar='|')
-		gheader =[]
-		hheader = []
-		i=1
-		for row in reader:
-			if len(row) > 4:
-				if (row[4] == "Raw:"):
-					telaz = row[7]
-					telalt = row[11]
-					if i < 5:
-						currentsimulation.addimage("HESS1", telaz, telalt)
-					else:
-						currentsimulation.addimage("HESS2", telaz, telalt)
-					i+=1
-			
-			if len(row) > 0:
-				if row[0] == "#@+":
-					if row[1] == "Lines":
-						pass
-					elif row[1] == "":
-						gheader.append('_'.join(row[3:]))
-					else:
-						gheader.append('_'.join(row[2::]))
-				elif row[0] == "@+":
-					gentry = []
-					for value in row[1:]:
-						if value != "":
-							gentry.append(value)
-
-					telnumber = gentry[1]
-					telescope = currentsimulation.gettelescope(telnumber)
-					telescope.sethillasparameters(gheader[2:], gentry[2:])
-					currentsimulation.settriggerIDs()
-					
-				elif row[0] == "#@:":
-					if row[1] == "Lines":
-						pass
-					elif row[1] == "":
-						hheader.append('_'.join(row[3:]))
-					else:
-						hheader.append('_'.join(row[2::]))
-				elif row[0] == "@:":				
-					hentry = []
-					for value in row[1:]:
-						if value != "":
-							hentry.append(value)
-
-					currentsimulation.setshowerparameters(hheader[1:], hentry[1:])
-	
-	#Add raw count for each pixel in both channels			
-	
-	with open(base_file_name, 'rb') as csvfile:
-		reader = csv.reader(csvfile, delimiter=' ', quotechar='|')
-		j = 1
-		for row in reader:
-			if 8 < len(row) < 15:
-				if row[8] == "Pixel":
-					pixno = float(row[9][:-1])
-					channel = float(row[11][:-1])
-					count = float(row[12])
-					tel = currentsimulation.gettriggeredtelescope(j)
-					if tel.npixels > pixno:
-						pass
-					else:
-						j+=1 
-						tel = currentsimulation.gettriggeredtelescope(j)
-					
-					currentpixel = tel.getpixel(pixno)
-					hasempty = currentpixel.hasemptychannels()
-
-					if not hasempty:
-						j+=1
-						tel = currentsimulation.gettriggeredtelescope(j)
-						currentpixel = telescope.getpixel(pixno)
-						
-					currentpixel.addchannelcount(channel, count)
-	
-	#Add the pedestal and gain for each pixel in both channels
-					
-	with open(base_file_name, 'rb') as csvfile:
-		reader = csv.reader(csvfile, delimiter=' ', quotechar='|')
-		j=1
-		k=1
-		for row in reader:	
-			if len(row) > 6 :
-				if row[6] == "Pedestals":
-					channel = row[8][:-1]
-					pedestals = row[10:]
-					tel = currentsimulation.gettelescope(j)
-					hasemptypedestal = tel.hasemptypedestals()
-					if not hasemptypedestal:
-						j+=1
-						tel = currentsimulation.gettelescope(j)
-					#~ print "Channel", channel, len(row), len(pedestals), j, "Pedestal"
-					tel.addpedestals(channel, pedestals)
-					
-				elif row[3] == "Gain":
-					channel = row[4][:-1]
-					gains = row[6:]
-					tel = currentsimulation.gettelescope(k)
-					hasemptygain = tel.hasemptygains()
-					if not hasemptygain:
-						k+=1
-						tel = currentsimulation.gettelescope(k)
-					#~ print "Channel", channel, len(row), len(gains), k, "Gain"
-					tel.addgains(channel, gains)
-	
-	#Calculate the intensity using the count, gain and pedestal for all pixels and both channels
-	
-	for telID in currentsimulation.triggerIDs:
-		tel = currentsimulation.images[telID]
-		tel.findintensities()
-	
-	currentsimulation.extractpixelhillas()
-
-event.makeplots()
-
-print "Saving as pickle file"
-joblib.dump(event, Pickle_dir+"/eventdata.pkl")
-					
-		
-					

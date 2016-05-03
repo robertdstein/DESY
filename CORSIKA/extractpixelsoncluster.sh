@@ -48,6 +48,10 @@
 
 . /nfs/astrop/d1/hhsoft/64bit_crf/ini_python2.7.8_64bit_crf.sh
 
-python /nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/CORSIKA/extractpixels.py -rn $SGE_TASK_ID -jid $1
+for (( i=0; i <= 9; i++ ))
+do 
+ python /nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/CORSIKA/extractpixels.py -rn $((($i*200) + $SGE_TASK_ID)) -jid $1
+done
+
 
 
