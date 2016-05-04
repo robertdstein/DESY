@@ -13,7 +13,7 @@ cfg = parser.parse_args()
 
 filepath = "/nfs/astrop/d6/rstein/data/"
 i = 1
-j = 100
+j = 2000
 totalimages = [0, 0]
 DCpasstotal = [0, 0]
 correctimages =[0, 0]

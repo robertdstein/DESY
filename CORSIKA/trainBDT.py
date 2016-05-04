@@ -25,7 +25,7 @@ print bdtvariables
 
 i = 1
 
-for category in ["hess1"]:
+for category in ["hess1", "hess2"]:
 
 	jobfolder = os.path.join(filepath, cfg.jobID)
 	pickledatafolder = os.path.join(jobfolder, "bdtpickle")

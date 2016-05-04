@@ -131,7 +131,6 @@ for category in ["DC", "full"]:
 							if not hasemptypedestal:
 								j+=1
 								tel = currentsimulation.gettelescope(j)
-							#~ print "Channel", channel, len(row), len(pedestals), j, "Pedestal"
 							tel.addpedestals(channel, pedestals)
 							
 						elif row[3] == "Gain":
@@ -142,7 +141,6 @@ for category in ["DC", "full"]:
 							if not hasemptygain:
 								k+=1
 								tel = currentsimulation.gettelescope(k)
-							#~ print "Channel", channel, len(row), len(gains), k, "Gain"
 							tel.addgains(channel, gains)
 			
 			#Calculate the intensity using the count, gain and pedestal for all pixels and both channels

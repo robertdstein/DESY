@@ -1,7 +1,7 @@
-channel1.count
+channel1.intensity
 QDC
 ddirec
-dcog
+rawQDC
 dline
 nnmean
 signalguess
