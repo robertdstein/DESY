@@ -6,13 +6,6 @@ import csv
 import numpy as np
 import cPickle as pickle
 
-hess1picklepath = '/nfs/astrop/d6/rstein/BDTpickle/hess1pixelclassifier.p'
-hess2picklepath = '/nfs/astrop/d6/rstein/BDTpickle/hess2pixelclassifier.p'
-for picklepath in [hess1picklepath, hess2picklepath]:
-	if os.path.isfile(picklepath):
-		remove_old_BDT = "rm " + picklepath 
-		os.system(remove_old_BDT)
-
 from telescopeclasses import *
 
 parser = argparse.ArgumentParser()
@@ -38,11 +31,20 @@ custom_options = {
 p = ProgressBar(**custom_options)
 print p
 
-hess1set = []
-hess2set = []
+hess1testset = []
+hess1trainset = []
+hess2testset = []
+hess2trainset = []
 
-hess1scores = []
-hess2scores = []
+hess1testscores = []
+hess1trainscores = []
+hess2testscores = []
+hess2trainscores = []
+
+hess1candidatepixels = []
+hess2candidatepixels = []
+hess1DCsignals = []
+hess2DCsignals = []
 
 targetpath = targetfolder +  "run" + str(i) + "/pickle/eventdata.p"
 
@@ -61,7 +63,6 @@ def makeBDTentry(pixelentry):
 			newval = getattr(suffix, varname)
 			bdtentry.append(newval)
 		else:
-			print("No variable named " +variable)
 			return None, None
 	return bdtentry, pixelentry.truescore
 
@@ -73,14 +74,37 @@ while (i < j):
 		for hess1pixel in hess1pixels:
 			bdtentry, truescore = makeBDTentry(hess1pixel)
 			if (bdtentry != None) and (truescore != None):
-				hess1set.append(bdtentry)
-				hess1scores.append(truescore)
+				if random.random() > 0.5:
+					hess1trainset.append(bdtentry)
+					hess1trainscores.append(truescore)
+				else:
+					hess1testset.append(bdtentry)
+					hess1testscores.append(truescore)
 		for hess2pixel in hess2pixels:
 			bdtentry, truescore = makeBDTentry(hess2pixel)
 			if (bdtentry != None) and (truescore != None):
-				hess2set.append(bdtentry)
-				hess2scores.append(truescore)
-	
+				if random.random() > 0.5:
+					hess2trainset.append(bdtentry)
+					hess2trainscores.append(truescore)
+				else:
+					hess2testset.append(bdtentry)
+					hess2testscores.append(truescore)
+		for index in event.simulations.DC.triggerIDs:
+			DCtel =  event.simulations.DC.images[index]
+			fulltel = event.simulations.full.images[index]
+			if fulltel.trueDC != None:
+				DCpixel = DCtel.getpixel(DCtel.trueDC)
+				fullpixel = fulltel.gettruepixel()
+				if fulltel.size == "HESS1":
+					hess1candidatepixels.append(fullpixel)
+					hess1DCsignals.append(DCpixel.channel1.intensity)
+				elif fulltel.size == "HESS2":
+					hess2candidatepixels.append(fullpixel)
+					hess2DCsignals.append(DCpixel.channel1.intensity)
+				else:
+					raise Exception("Name error with size " + fulltel.size)
+					
+					
 	if (int(float(i)*100/float(j)) - float(i)*100/float(j)) ==0:
 		print p+1
 	i+=1
@@ -89,7 +113,15 @@ pickle_dump_dir = os.path.join(targetfolder, "bdtpickle")
 if not os.path.exists(pickle_dump_dir):
 	print "Making directory " + pickle_dump_dir
 	os.mkdir(pickle_dump_dir)
-pickle.dump(hess1set,  open(pickle_dump_dir+"/hess1bdtdata.p", "wb"))
-pickle.dump(hess2set,  open(pickle_dump_dir+"/hess2bdtdata.p", "wb"))
-pickle.dump(hess1scores,  open(pickle_dump_dir+"/hess1bdtscores.p", "wb"))
-pickle.dump(hess2scores,  open(pickle_dump_dir+"/hess2bdtscores.p", "wb"))
+pickle.dump(hess1trainset,  open(pickle_dump_dir+"/hess1trainbdtdata.p", "wb"))
+pickle.dump(hess1testset,  open(pickle_dump_dir+"/hess1testbdtdata.p", "wb"))
+pickle.dump(hess2trainset,  open(pickle_dump_dir+"/hess2trainbdtdata.p", "wb"))
+pickle.dump(hess2testset,  open(pickle_dump_dir+"/hess2testbdtdata.p", "wb"))
+pickle.dump(hess1trainscores,  open(pickle_dump_dir+"/hess1trainbdtscores.p", "wb"))
+pickle.dump(hess1testscores,  open(pickle_dump_dir+"/hess1testbdtscores.p", "wb"))
+pickle.dump(hess2trainscores,  open(pickle_dump_dir+"/hess2trainbdtscores.p", "wb"))
+pickle.dump(hess2testscores,  open(pickle_dump_dir+"/hess2testbdtscores.p", "wb"))
+pickle.dump(hess1candidatepixels,  open(pickle_dump_dir+"/hess1candidatepixels.p", "wb"))
+pickle.dump(hess2candidatepixels,  open(pickle_dump_dir+"/hess2candidatepixels.p", "wb"))
+pickle.dump(hess1DCsignals,  open(pickle_dump_dir+"/hess1DCsignals.p", "wb"))
+pickle.dump(hess2DCsignals,  open(pickle_dump_dir+"/hess2DCsignals.p", "wb"))

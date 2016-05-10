@@ -5,7 +5,9 @@ parser = argparse.ArgumentParser()
 parser.add_argument("-bid", "--BDTID", default="2842781")
 parser.add_argument("-tid", "--testID", default="2567181")
 parser.add_argument("-t", "--train", action="store_true")
+parser.add_argument("-tr", "--trainregressor", action="store_true")
 parser.add_argument("-re", "--reextract", action="store_true")
+parser.add_argument("-rc", "--recombine", action="store_true")
 
 cfg = parser.parse_args()
 
@@ -34,20 +36,13 @@ def wait():
 bdttargetfolder = "/nfs/astrop/d6/rstein/data/" + cfg.BDTID + "/bdtpickle/"
 bdtfilename = bdttargetfolder + "hess2bdtdata.p"
 
-if cfg.reextract:
-	for name in telnames:
-		picklepath = '/nfs/astrop/d6/rstein/BDTpickle/' +name + 'pixelclassifier.pkl'
-		if os.path.isfile(picklepath):
-			remove_old_BDT = "rm " + picklepath 
-			os.system(remove_old_BDT)
+if not cfg.reextract and not cfg.recombine:
+	pass
+else:
 	rextract_for_BDT = "qsub -t 1-200:1 extractpixelsoncluster.sh " + cfg.BDTID
 	print time.asctime(time.localtime()), rextract_for_BDT, "\n"
 	os.system(rextract_for_BDT)
 	wait()
-
-if os.path.isfile(bdtfilename) and not cfg.reextract:
-	pass
-else:
 	BDT_combine_command = "python combineforBDT.py -jid " + cfg.BDTID
 	print time.asctime(time.localtime()), BDT_combine_command, "\n"
 	os.system(BDT_combine_command)
@@ -60,7 +55,7 @@ if cfg.train:
 statstargetfolder = "/nfs/astrop/d6/rstein/data" + cfg.testID + "statspickle/"
 statsfilename = statstargetfolder + "datastats.pkl"
 	
-if os.path.isfile(statsfilename) and not cfg.train:
+if not cfg.train and not cfg.recombine:
 	pass
 else:
 	execute = "qsub -t 1-200:1 extractpixelsoncluster.sh " + cfg.testID
@@ -68,6 +63,13 @@ else:
 	os.system(execute)
 	
 	wait()
+	
+if not cfg.train and not cfg.recombine and not cfg.trainregressor:
+	pass
+else:
+	rgrcommand = "python trainextrapolation.py -jid " + cfg.BDTID
+	print time.asctime(time.localtime()), rgrcommand, "\n"
+	os.system(rgrcommand)
 	
 stats_combine_command = "python combineforstatistics.py -jid " + cfg.testID
 print time.asctime(time.localtime()), stats_combine_command, "\n"

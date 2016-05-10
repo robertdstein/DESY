@@ -29,10 +29,12 @@ hess1picklepath = '/nfs/astrop/d6/rstein/BDTpickle/hess1pixelclassifier.p'
 hess2picklepath = '/nfs/astrop/d6/rstein/BDTpickle/hess2pixelclassifier.p'
 if os.path.isfile(hess1picklepath):
 	hess1clf = pickle.load(open(hess1picklepath, "r"))
+else:
+	print "No hess1 pickle!"
 if os.path.isfile(hess2picklepath):
 	hess2clf = pickle.load(open(hess2picklepath, "r"))
 else:
-	print "No pickle!"
+	print "No hess2 pickle!"
 	
 #Read in the list of BDT variables top be used for training
 	
@@ -41,6 +43,12 @@ with open('/nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/CORSIKA/pixelBDTvariables.c
 	reader = csv.reader(csvfile, delimiter=',', quotechar='|')
 	for row in reader:
 		bdtvariables.append(row[0])
+		
+signalbdtvariables = []
+with open('/nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/CORSIKA/signalBDTvariables.csv', 'rb') as csvfile:
+	reader = csv.reader(csvfile, delimiter=',', quotechar='|')
+	for row in reader:
+		signalbdtvariables.append(row[0])
 
 class fullevent:
 	"""An event which contains all of the event information 
@@ -79,40 +87,40 @@ class fullevent:
 		in both the full and DC simulation
 		"""
 		#Checks if there is a DC simulation
-		if hasattr(self.simulations, "DC"):
+		if hasattr(self.simulations, "DC") and hasattr(self.simulations, "full"):
 			DCsim = getattr(self.simulations, "DC")
+			fullsim = getattr(self.simulations, "full")
+			
 			#Loops over 'triggered telescopes', identified by Simtel array at those which saw at least 20 p.e
 			for index in DCsim.triggerIDs:
-				tel = DCsim.images[index]
+				DCtel = DCsim.images[index]
+				fulltel = fullsim.images[index]
 				bestID = None
 				bestsignal = None
-				for i in range(len(tel.pixels)):
-					pixelentry = tel.pixels[i]
-					if pixelentry.channel1.intensity > bestsignal:
+				for i in range(len(DCtel.pixels)):
+					DCpixelentry = DCtel.pixels[i]
+					fullpixelentry = fulltel.pixels[i]
+					DCsignal = DCpixelentry.channel1.intensity
+					fullpixelentry.truesignal = DCsignal
+					if DCsignal > bestsignal:
 						bestID=i
-						bestsignal=pixelentry.channel1.intensity 
-				tel.trueDC = bestID
+						bestsignal=DCsignal
+				print bestID
+				DCtel.trueDC = bestID
+				fulltel.trueDC = bestID
 				#Assigns the 'true scores' to each pixel, 1 for the DC pixel and 0 for all other pixels
 				#This value is used for BDT training
 				if bestID != None:
-					tel.assignpixelscore()
+					fulltel.assignpixelscore()
+					DCtel.assignpixelscore()
 					
-			#Loops over the same DC 'triggered telescopes' IDs, and assigns the true ID and true scores in each corresponding full simulation telescope 
-			
-			if hasattr(self.simulations, "full"):
-				fullsim = getattr(self.simulations, "full")
-				for index in DCsim.triggerIDs:
-					DCtel = DCsim.images[index]
-					trueID = DCtel.trueDC
-					fulltel = fullsim.images[index]
-					fulltel.trueDC = trueID
-					if trueID != None:
-						fulltel.assignpixelscore()
-			else:
-				print "No full simulations for some reason!"
-
+				pix = DCtel.gettruepixel()
+				print pix.channel1.intensity,
+				pix2 = fulltel.gettruepixel()
+				print pix2.truesignal
+				
 		else:
-			raise Exception("No pure DC simulation exists")
+			raise Exception("Either DC or full simulation missing")
 			
 	def returnforBDT(self):
 		"""Returns a Hess1 and a Hess2 dataset for use in BDT training.
@@ -515,13 +523,18 @@ class telescopeimage:
 					else:
 						raise Exception("No variable named " +variable)
 				if self.size == "HESS2" and os.path.isfile(hess2picklepath):
-					bdtscore = hess2clf.predict_proba([bdtentry])[0][1]
+					bdtvalues = hess2clf.predict_proba([bdtentry])[0]
+					bdtscore = bdtvalues[1]
 				elif self.size == "HESS1" and os.path.isfile(hess1picklepath):
-					bdtscore =  hess1clf.predict_proba([bdtentry])[0][1]
+					bdtvalues = hess1clf.predict_proba([bdtentry])[0]
+					bdtscore = bdtvalues[1]
 				else:
 					print "self.size error, self.size=" + self.size
 					bdtscore = None
 				pixelentry.bdtscore = bdtscore
+				bdtsum = bdtvalues[0] + bdtvalues[1]
+				if bdtsum != 1.0:
+					print bdtsum 
 				if bdtscore > bestscore:
 					bestID=i
 					bestscore= bdtscore
@@ -657,6 +670,12 @@ class pixel:
 		self.rawQDC = math.fabs(self.channel1.count/max([ abs(i) for i in self.rawnnc1s]))
 		self.nnmean = np.mean(self.nnc1s)
 		self.signalguess = self.channel1.intensity-self.nnmean
+		self.nnmax = np.max(self.nnc1s)
+		self.nnmin = np.min(self.nnc1s)
+		nns=0
+		for neighbour in self.nnc1s:
+			nns += (neighbour**2)
+		self.nnrms = math.sqrt(nns/float(len(self.nnc1s)))
 		
 class channelentry:
 	"""One channel entry in a pixel.
