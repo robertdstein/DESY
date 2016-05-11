@@ -17,7 +17,7 @@ from matplotlib.patches import Circle
 
 #Retrieve the cut values for selecting the candidates, stored in a common file initialisecuts.py
 
-arcut, ddireccut, dcogl, dcogu, dlinecut, radiuscut = ic.run()
+arcut, ddireccut, dcogl, dcogu, dlinecut, radiuscut, c1cut = ic.run()
 cut, ucut, QDCcut, DCcut, signalcut = ic.runforstats()
 
 #Define the total number of channels, here 2 (CHannel0/Channel1)
@@ -433,7 +433,7 @@ class telescopeimage:
 		assigned as the telescope attribute self.QDCID
 		""" 
 		bestID = None
-		bestQDC = None
+		bestQDC = 5.0
 		if hasattr(self.hillas, "aspect_ratio_"):
 			if self.hillas.aspect_ratio_ < arcut:
 				for i in range(len(self.pixels)):
@@ -441,9 +441,11 @@ class telescopeimage:
 					if pixelentry.ddirec < ddireccut:				
 						if dcogl < pixelentry.dcog < dcogu:
 							if pixelentry.dline < dlinecut:
-								if pixelentry.QDC > bestQDC:
-									bestID=i
-									bestQDC=pixelentry.QDC
+								if pixelentry.channel1.intensity < c1cut:
+									if pixelentry.QDC < self.qdccut:
+										if pixelentry.QDC < bestQDC:
+											bestID=i
+											bestQDC=pixelentry.QDC
 		self.QDCID = bestID
 		
 	def getQDCpixel(self):
@@ -577,9 +579,15 @@ class telescopeimage:
 		sm = (cogy-showery)/(cogx - showerx)
 		sc = showery - (sm * showerx)
 		
+		itot = self.hillas.image_size_amplitude_
+		
 		for pixelentry in self.pixels:
 			pixelentry.hillas(cogx, cogy, showerx, showery, sm, sc)
+			pixelentry.image_size_amplitude_=itot
 		
+		arg = itot / (math.sin(math.radians(float(self.altitude)))*161)
+		self.qdccut = 0.14 * math.log(arg)
+				
 		self.findQDCpixel()
 		self.findrawQDCpixel()
 		self.findBDTpixel()
@@ -666,16 +674,17 @@ class pixel:
 		intersectiony = (m * intersectionx) + c
 		self.dline = math.sqrt((self.x-intersectionx)**2 + (self.y-intersectiony)**2)
 		
-		self.QDC = math.fabs(self.channel1.intensity/max([ abs(i) for i in self.nnc1s]))
-		self.rawQDC = math.fabs(self.channel1.count/max([ abs(i) for i in self.rawnnc1s]))
-		self.nnmean = np.mean(self.nnc1s)
-		self.signalguess = self.channel1.intensity-self.nnmean
-		self.nnmax = np.max(self.nnc1s)
-		self.nnmin = np.min(self.nnc1s)
-		nns=0
-		for neighbour in self.nnc1s:
-			nns += (neighbour**2)
-		self.nnrms = math.sqrt(nns/float(len(self.nnc1s)))
+		if float(self.channel1.intensity) != float(0):
+			self.QDC = math.fabs(max([ abs(i) for i in self.nnc1s])/self.channel1.intensity)
+			self.rawQDC = math.fabs(max([ abs(i) for i in self.rawnnc1s])/self.channel1.count)
+			self.nnmean = np.mean(self.nnc1s)
+			self.signalguess = self.channel1.intensity-self.nnmean
+			self.nnmax = np.max(self.nnc1s)
+			self.nnmin = np.min(self.nnc1s)
+			nns=0
+			for neighbour in self.nnc1s:
+				nns += (neighbour**2)
+			self.nnrms = math.sqrt(nns/float(len(self.nnc1s)))
 		
 class channelentry:
 	"""One channel entry in a pixel.

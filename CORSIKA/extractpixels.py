@@ -13,7 +13,7 @@ mpl.use('Agg')
 import matplotlib.pyplot as plt
 from matplotlib.patches import Circle
 
-arcut, ddireccut, dcogl, dcogu, dlinecut, radiuscut = ic.run()
+arcut, ddireccut, dcogl, dcogu, dlinecut, radiuscut, c1cut = ic.run()
 cut, ucut, QDCcut, DCcut, signalcut = ic.runforstats()
 
 offset="0"
@@ -148,6 +148,7 @@ for category in ["DC", "full"]:
 			for telID in currentsimulation.triggerIDs:
 				tel = currentsimulation.images[telID]
 				tel.findintensities()
+				print tel.hillas.image_size_amplitude_
 			
 			currentsimulation.extractpixelhillas()
 	

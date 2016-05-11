@@ -36,7 +36,7 @@ def wait():
 bdttargetfolder = "/nfs/astrop/d6/rstein/data/" + cfg.BDTID + "/bdtpickle/"
 bdtfilename = bdttargetfolder + "hess2bdtdata.p"
 
-if not cfg.reextract and not cfg.recombine:
+if not cfg.reextract:
 	pass
 else:
 	rextract_for_BDT = "qsub -t 1-200:1 extractpixelsoncluster.sh " + cfg.BDTID

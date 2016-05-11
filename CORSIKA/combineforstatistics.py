@@ -168,7 +168,7 @@ for sigfit in ["rgr", None]:
 								raise Exception("sigfit is "+sigfit)
 								
 							
-							difference = (candidatesignal - DCcount)/DCcount
+							difference = (candidatesignal - DCcount)
 							absd = math.fabs(difference)
 						
 							totalimages[plotindex] += 1
@@ -212,12 +212,12 @@ for sigfit in ["rgr", None]:
 							if passcut:
 								passed[plotindex][result].append(difference)
 								passeddiff[plotindex].append(absd)
-								passedcsignals[plotindex][result].append(candidatesignal)
+								passedcsignals[plotindex][result].append(candidatesignal/DCcount)
 								passedDCsignals[plotindex][result].append(DCcount)
 							else:
 								rejected[plotindex][result].append(difference)
 								rejecteddiff[plotindex].append(absd)
-								rejectedcsignals[plotindex][result].append(candidatesignal)
+								rejectedcsignals[plotindex][result].append(candidatesignal/DCcount)
 								rejectedDCsignals[plotindex][result].append(DCcount)	
 									
 							if fulltel.QDCID != None:
@@ -232,13 +232,11 @@ for sigfit in ["rgr", None]:
 								if float(oldresult) == float(1):
 									oldcorrectimages[plotindex] += 1
 									oldright[plotindex].append(fullQDC.rawQDC)
-									if float(fullQDC.QDC) > float(QDCcut):
-										oldcorrectcut[plotindex] += 1
-										oldtotalcut[plotindex] += 1
+									oldcorrectcut[plotindex] += 1
+									oldtotalcut[plotindex] += 1
 								elif float(oldresult) == float(0):
 									oldwrong[plotindex].append(fullQDC.QDC)
-									if float(fullQDC.QDC) > float(QDCcut):
-										oldtotalcut[plotindex] += 1
+									oldtotalcut[plotindex] += 1
 										
 							if fulltel.rawQDCID != None:
 									
@@ -318,29 +316,29 @@ for sigfit in ["rgr", None]:
 
 			for rows in [2, 3]:
 			
-				ax1 = plt.subplot(3,2,1)
+				ax1 = plt.subplot(rows,2,1)
 				plt.title("Signal in pure DC pixel without shower")
 				plt.hist(DCcounts[i], bins=100)
 				plt.xlabel("DC pixel intensity")
 				
-				ax2 = plt.subplot(3,2,2)
+				ax2 = plt.subplot(rows,2,2)
 				
 				plt.title("Distribution of QDC-reconstructed Events")
 				plt.hist([oldright[i], oldwrong[i]], color=['g', 'r'], stacked=True, bins=50)
 				plt.xlabel("QDC value")
 				
-				ax3 = plt.subplot(3,2,3)
+				ax3 = plt.subplot(rows,2,3)
 				plt.title("Distribution of BDT-reconstructed Events")
 				plt.hist([right[i], wrong[i]], color=['g', 'r'], stacked=True, bins=50)
 				plt.xlabel("BDT score")
 				
-				ax4 = plt.subplot(3,2,4)
+				ax4 = plt.subplot(rows,2,4)
 				plt.title("Distribution of BDT-reconstructed Events, after cuts")
 				plt.hist([combinedright[i], combinedwrong[i]], color=['g', 'r'], stacked=True, bins=50)
 				plt.xlabel("BDT score")
 				
 				figure = plt.gcf() # get current figure
-				if rows == 2:
+				if (rows == 2) and (sigfit==None):
 					figure.set_size_inches(15, 15)
 					plt.savefig("/nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/report/graphs/cutdistribution" + str(i+1) +str(sigfit)+".pdf")
 					
@@ -378,22 +376,32 @@ for sigfit in ["rgr", None]:
 			plt.title("DC pixel error for events passing cuts")
 			plt.xlabel("Difference from true count")
 	
+			linear = np.linspace(1, 3000, 1000)
+			plotcut = []
+			for entry in linear:
+				plotcut.append(signalcut/entry)
+			
 			
 			ax4 = plt.subplot(2,2,4)
 			for j in range(2):
-				plt.scatter(rejectedcsignals[i][j], rejectedDCsignals[i][j], color=colors[j], marker="o")
-			plt.plot([0,1000], [0, 1000], color='k')
-			plt.xlabel("Candidate reconstructed signal")
+				plt.scatter( rejectedDCsignals[i][j],rejectedcsignals[i][j], color=colors[j], marker="o")
+			plt.axhline(1, color='k')
+			plt.plot(linear, plotcut, color='k', linestyle='--')
+			plt.xlabel("True signal")
 			plt.title("True vs. reconstructed signal for rejected events")
-			plt.ylabel("Pure DC signal")
+			plt.ylabel("Candidate reconstructed signal / True signal")
 			
 			ax3 = plt.subplot(223, sharex = ax4, sharey=ax4)
 			for j in range(2):
-				plt.scatter(passedcsignals[i][j], passedDCsignals[i][j], color=colors[j], marker="o")
-			plt.plot([0,1000], [0,1000], color='k')
-			plt.xlabel("Candidate reconstructed signal")
+				plt.scatter( passedDCsignals[i][j],passedcsignals[i][j], color=colors[j], marker="o")
+			plt.axhline(1, color='k')
+			plt.plot(linear, plotcut, color='k', linestyle='--')
+			ax3.fill_between(linear, 0, plotcut, alpha=0.2)
+			plt.xlabel("True signal")
 			plt.title("True vs. reconstructed signal for accepted events")
-			plt.ylabel("Pure DC signal")
+			plt.ylabel("Candidate reconstructed signal / True signal")
+			ax3.set_ylim([0,5])
+			ax3.set_xlim(left=0)
 			
 			k=1
 			
@@ -440,5 +448,7 @@ for sigfit in ["rgr", None]:
 			print "Saving to", saveto
 			
 			plt.savefig(saveto)
-			plt.savefig("/nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/report/graphs/DCcounterrorhess" + str(i+1) + str(sigfit)+".pdf")
+			if sigfit == None:
+				plt.savefig("/nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/report/graphs/DCcounterrorhess" + str(i+1) + str(sigfit)+".pdf")
+			plt.close()
 	
