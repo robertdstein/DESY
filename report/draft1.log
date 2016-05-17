@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2015.11.27)  10 MAY 2016 11:29
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2015.11.27)  11 MAY 2016 14:10
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -258,42 +258,42 @@ File: omlcmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 LaTeX Font Info:    Font shape `OML/cmr/m/n' in size <10> not available
 (Font)              Font shape `OML/cmm/m/it' tried instead on input line 103.
 
-<graphs/cutdistributionhess1.pdf, id=32, 1445.4pt x 1084.05pt>
-File: graphs/cutdistributionhess1.pdf Graphic file (type pdf)
+<graphs/cutdistribution1None.pdf, id=32, 1084.05pt x 1084.05pt>
+File: graphs/cutdistribution1None.pdf Graphic file (type pdf)
 
-<use graphs/cutdistributionhess1.pdf>
-Package pdftex.def Info: graphs/cutdistributionhess1.pdf used on input line 118
+<use graphs/cutdistribution1None.pdf>
+Package pdftex.def Info: graphs/cutdistribution1None.pdf used on input line 118
 .
-(pdftex.def)             Requested size: 452.9679pt x 339.72418pt.
- [5] [6 <./graphs/cutdistributionhess1.pdf>]
+(pdftex.def)             Requested size: 452.9679pt x 452.96558pt.
+ [5] [6 <./graphs/cutdistribution1None.pdf>]
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <12> on input line 137.
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <8> on input line 137.
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <6> on input line 137.
- <graphs/DCcounterrorhess1.pdf, id=103, 1445.4pt x 1445.4pt>
+ <graphs/DCcounterrorhess1.pdf, id=89, 1445.4pt x 1445.4pt>
 File: graphs/DCcounterrorhess1.pdf Graphic file (type pdf)
 
 <use graphs/DCcounterrorhess1.pdf>
 Package pdftex.def Info: graphs/DCcounterrorhess1.pdf used on input line 142.
 (pdftex.def)             Requested size: 452.9679pt x 452.96558pt.
  [7] [8 <./graphs/DCcounterrorhess1.pdf>]
-<graphs/logenergyradius.png, id=166, 722.7pt x 1084.05pt>
+<graphs/logenergyradius.png, id=152, 722.7pt x 1084.05pt>
 File: graphs/logenergyradius.png Graphic file (type png)
 
 <use graphs/logenergyradius.png>
 Package pdftex.def Info: graphs/logenergyradius.png used on input line 160.
 (pdftex.def)             Requested size: 420.31314pt x 630.45189pt.
 
-<graphs/simulatedlpd.png, id=167, 1084.05pt x 1806.75pt>
+<graphs/simulatedlpd.png, id=153, 1084.05pt x 1806.75pt>
 File: graphs/simulatedlpd.png Graphic file (type png)
 
 <use graphs/simulatedlpd.png>
 Package pdftex.def Info: graphs/simulatedlpd.png used on input line 168.
 (pdftex.def)             Requested size: 378.28185pt x 630.45189pt.
 
-<graphs/generalheight.png, id=168, 722.7pt x 1084.05pt>
+<graphs/generalheight.png, id=154, 722.7pt x 1084.05pt>
 File: graphs/generalheight.png Graphic file (type png)
 
 <use graphs/generalheight.png>
@@ -301,21 +301,21 @@ Package pdftex.def Info: graphs/generalheight.png used on input line 190.
 (pdftex.def)             Requested size: 420.31314pt x 630.45189pt.
  [9] [10 <./graphs/logenergyradius.png>] [11 <./graphs/simulatedlpd.png>] [12 <
 ./graphs/generalheight.png>] [13]
-<graphs/hessheight.png, id=189, 722.7pt x 1084.05pt>
+<graphs/hessheight.png, id=175, 722.7pt x 1084.05pt>
 File: graphs/hessheight.png Graphic file (type png)
 
 <use graphs/hessheight.png>
 Package pdftex.def Info: graphs/hessheight.png used on input line 234.
 (pdftex.def)             Requested size: 420.31314pt x 630.45189pt.
 
-<graphs/hess.png, id=190, 1046.91125pt x 924.45375pt>
+<graphs/hess.png, id=176, 1046.91125pt x 924.45375pt>
 File: graphs/hess.png Graphic file (type png)
  <use graphs/hess.png>
 Package pdftex.def Info: graphs/hess.png used on input line 245.
 (pdftex.def)             Requested size: 407.66833pt x 359.97127pt.
 
 [14] [15 <./graphs/hessheight.png>] [16 <./graphs/hess.png>]
-<optimiselayout.png, id=201, 1445.4pt x 1084.05pt>
+<optimiselayout.png, id=187, 1445.4pt x 1084.05pt>
 File: optimiselayout.png Graphic file (type png)
  <use optimiselayout.png>
 Package pdftex.def Info: optimiselayout.png used on input line 264.
@@ -345,9 +345,9 @@ are/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texl
 ive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/te
 xmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dis
 t/fonts/type1/public/amsfonts/cm/cmti10.pfb>
-Output written on draft1.pdf (19 pages, 1373641 bytes).
+Output written on draft1.pdf (19 pages, 1335199 bytes).
 PDF statistics:
- 260 PDF objects out of 1000 (max. 8388607)
+ 246 PDF objects out of 1000 (max. 8388607)
  102 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
  51 words of extra memory for PDF output out of 10000 (max. 10000000)

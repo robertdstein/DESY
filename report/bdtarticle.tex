@@ -28,19 +28,37 @@ Once trained, the BDT was applied to every pixel entry in a separate 'testing' s
 \section{Image Simulation}
 A full simulation of Cosmic Ray air showers was performed using the CORSIKA package \cite{Heck98}, assuming a standard atmospheric profile derived from measurements conducted at the HESS site in Namibia. The simulated particles were $Fe^{56}$, within the Energy Range of $35-135$ TeV and a spectrum $\phi \propto E^{-2.7}$. For each set of simulated event, 4 unique random number seeds were used to generate the shower. An altitude of 1800m was assumed, again corresponding to the HESS site. The simulated zenith angle ranged from $0\degree < \theta < 2 \degree$, while the simulated azimuth angle ranges from $-2\degree < \phi < 2 \degree$. The four smaller HESS-phase-1 telescopes were arranged in a cross along the x/y axis with the larger HESS-phase-2 \textquoteleft CT5' telescope placed at the center. The length of each cross arm was $85m$. The simulated target region of the cores was chosen to be a square centered on CT5, with each 300m-long side bisecting the x/y axis.
 
-In order to identify the DC pixel, a simulation was initially run with an energy cut of 10 PeV on all muons and electrons. As the primary particle energy did not exceed this value, neither daughter muons and electrons, nor the photons they would have emitted, were simulated. Thus the hadronic Cherenkov Light from the primary particle and daughter fragments, but not the EAS light, was present in the camera image. A second identical \textquoteleft EAS Simulation' was run including the same random seeds, but without the energy cut on muons and electrons. This gave a complete EAS image including the DC light.
+In order to identify the DC pixel, a simulation was initially run with an energy cut of 10 PeV on all muons and electrons. Because this cut exceeded the primary particle energy, neither daughter muons and electrons, nor the photons they would have emitted, were simulated. Thus the hadronic Cherenkov Light from the primary particle and daughter fragments, but not the EAS light, was present in the camera image. A second identical \textquoteleft EAS Simulation' was run including the same random seeds, but without the energy cut on muons and electrons. This gave a complete EAS image including the DC light.
 
 Using the sim\textunderscore telarray package \cite{Bernlohr08}, the expected HESS hardware response to each air shower was simulated. Among other things, the program accounts for atmospheric transmission and density, mirror positions, sizes and reflectivities, camera shadowing and triggering, quantum efficiency and pulse responses. Due to the comprehensive and detailed nature of these hardware simulations, the resultant images can be considered \textquoteleft realistic camera images'. For the EAS Simulation, the night sky background was also included by sim\textunderscore telarray, further obscuring the DC pixel.
 
-The HESS telescope has both a high gain Channel 0 and a low gain Channel 1. The Sim\textunderscore telarray simulated value of SOMETHING? for each channel were recorded. The pedestal and gain for each channel were also recorded, and from this, Intensity in the pixel channel was found.
+\begin{figure}
+\newgeometry{a4paper, portrait, margin=1.0in}
+\centering
+\begin{minipage}{0.45\textwidth}
+\centering
+\includegraphics[trim=80 120 80 150,clip,width=\textwidth]{graphDC}
+\caption{A typical camera image without the EAS shower. The DC light is visible in every telescope, indicated by the yellow arrow. The shower direction is represented by the white circle. The largest telescope is CT5, but the relative image sizes are not done to scale}
+\label{fig:DCtelimage}
+\end{minipage}\hfill
+\begin{minipage}{0.45\textwidth}
+\centering
+\includegraphics[trim=80 120 80 150,clip,width=\textwidth]{graphfull}
+\caption{The same shower as in \ref{fig:DCtelimage} is shown here with the inclusion of the EAS shower. The DC light is pixels are again denoted by an orange circle. The white star represents the BDT-selected DC pixel, while the white cross represents the shower center of gravity.}
+\label{fig:cutdistribution2}
+\end{minipage}
+\restoregeometry
+\end{figure}
+
+The HESS telescope has both a high gain Channel 0 and a low gain Channel 1. The Sim\textunderscore telarray value of SOMETHING? for each channel were recorded. The pedestal and gain for each channel were also recorded, and from this, Intensity in the pixel channel was found.
 
 \[ Intensity = (Count - Pedestal)\times Gain \]
 
-In the case of many iron core events, Channel 0 will reach its maximum value and become saturated. Thus Channel 0 ceases to be useful for discriminating between high energy DC and non-DC pixels. Consequently, Channel 0 Intensities neglected while Channel 1 Intensities were used in all later analysis. This variable will henceforth be referred to simply as $Intensity$.
+In the case of many iron core events, Channel 0 will reach its maximum value and become saturated. Thus Channel 0 ceases to be useful for discriminating between high energy DC and non-DC pixels. Consequently, Channel 0 Intensities were neglected while Channel 1 Intensities were used in all later analysis. This variable $Intensity$ will henceforth be used referred to Channel 1 Intensity.
 
-In addition to the $Intensity$ of each pixel, the Sim\textunderscore telarray package derives various Hillas whole-image parameters. These include the image width and length measured in degrees, from which the aspect ratio $A.R = \frac{width}{length}$ was calculated. Further, the reconstructed shower direction and the shower center of gravity were calculated as positions in azimuth and zenith. Additionally the calculated energy and distance to core $r_{core}$ were recorded.
+The Sim\textunderscore telarray package derives various Hillas whole-image parameters. These include the image width and length measured in degrees, from which the aspect ratio $A.R = \frac{width}{length}$ was calculated. The reconstructed shower direction and the shower center of gravity were also calculated, as positions in azimuth and zenith. Additionally the estimated energy and distance from each telescope to core, $r_{core}$,  were recorded.
 
-For every pixel, the location within the image was determined from a standard HESS layout. The variables $ \Delta_{C.o.G}$, $\Delta_{Direction}$ and $\Delta_{Line}$ were defined as the distance from the pixel to the shower center of gravity, shower direction, and the line joining those two points. Furthermore, the nearest neigbouring pixel IDs were calculated for every pixel position, enabling the count in each neighbouring pixel to be found. From this, two further pixel variables were defined. The largest neighbouring intensity $Intensity_{N.N.max}$ was found, and the ratio $ Q_{DC} = \frac{Intensity}{Intensity_{N.N.max}} $ was derived. In addition the Nearest Neighbour Mean Count was recorded. These variables were recorded in every pixel entry, and together the pixel entries formed a complete dataset for each camera image.
+For every pixel, in addition to the $Intensity$, its location within the telescope image was determined from a standard HESS layout. The variables $ \Delta_{C.o.G}$, $\Delta_{Direction}$ and $\Delta_{Line}$ were defined as the distance from the pixel to the shower center of gravity, shower direction, and the line joining those two points. Furthermore, the nearest neigbouring pixel IDs were calculated for every pixel position, enabling the $Intensity$ in each neighbouring pixel to be found. The largest neighbouring intensity $Intensity_{N.N.max}$ was identified, and the ratio $ Q_{DC} = \frac{Intensity_{N.N.max}}{Intensity} $ was derived. In addition, the Nearest Neighbour Mean Intensity was recorded. 
 
 \section{DC Pixel Identification}  
 The original method used by the HESS collaboration \cite{hess07} was initially replicated, for which a number of cuts were applied to each image dataset.
@@ -53,40 +71,59 @@ The original method used by the HESS collaboration \cite{hess07} was initially r
     \toprule
     Variable & Cut\\
     \midrule
-     $Q_{DC}$ & \textgreater 1.3 \\
      $ \Delta_{C.o.G}$ & \textgreater 0.17 \\
      $ \Delta_{C.o.G}$ & \textless 0.91 \\
      $\Delta_{Direction}$ & \textless 0.45 \\
      $\Delta_{Line}$ & \textless 0.23 \\
      Aspect Ratio & \textless 0.75 \\
+     $Q_{DC}$ & \textless 0.14$ \times \log(\frac{I_{tot}}{161 \times \cos \theta})$ \\
     \bottomrule
   \end{tabular}
 \end{table}
 
-From the subset of pixels satisfying these conditions, the remaining pixel with the largest $Q_{DC}$ was selected as the DC pixel. In the original analysis, an additional cut $r_{core} \textgreater 0.4$ was applied. However, the uncertainty in determining the core position through Hillas Analysis is typically of the order of $\pm 30m$. Consequently, this particular cut was omitted, along with the Impact Parameter cuts. For every image, the total image amplitude $I_{tot}$ was found. A cut was also placed requiring $Q_{DC} < 0.14 \times \log(\dfrac{I_{tot}}{(161 \times \cos \theta)})$ where $\theta$ was the zenith angle. The result was compared with the true DC pixel, identified from the hadron-only image, to test the accuracy of this cut. Out of 400 events, it was fount that only 55\% of these events contained a clear DC signal, as defined by requiring the DC pixel to have $Intensity_{DC} > 150$ in the hadron-only image. SOMETHING! Of this subset of 'DC events', 17\% events passed all of the required cuts. The $Q_{DC}$ was found to be 100\% accurate in identifying the DC pixel in those passing events, as shown in \ref{fig:cutdistribution}.
+From the subset of pixels satisfying these conditions, the remaining pixel with the smallest $Q_{DC}$ was selected as the DC pixel candidate. In the original analysis, an additional cut $r_{core} \textgreater 0.4$ was applied. However, the uncertainty in determining the core position through Hillas Analysis is typically of the order of $\pm 30m$. Consequently, this particular cut was omitted, along with the Impact Parameter cuts. For every image, the total image amplitude $I_{tot}$ was used alongside the zenith angle $\theta$ to determine a unique $Q_{DC}$ cut. 
+
+The candidates were checked against the true DC pixels from the hadron-only image. Out of 400 events, it was fount that only 55\% of the hadron-free events contained a clear DC signal, as defined by requiring the DC pixel to have $Intensity_{DC} > 150$. This represents a reasonable target number for DC identification. SOMETHING! Of all events, 17\% passed the required cuts. The $Q_{DC}$ was found to be 68\% accurate in identifying the DC pixel in those passing events, as shown in \ref{fig:cutdistribution}. These values served as a benchmark for BDT performance.
 
 \begin{figure}
 \begin{center}
 \includegraphics[width=\textwidth]{cutdistribution1None}
-\caption{The DC signal in the shower-free pixel is shown in the top left, with a broad gaussian distribution with the tail of the night-sky background extending up to appproximately 5000. Events below this are unlikely to be identified correctly because the DEC light is too faint. In the top right- the distribution of the dataset is shown, once all the non-$Q_{DC}$ cuts have been applied. In the bottom left, the BDT score distribution is shown before any cuts. On the bottom right, we see the same distribution after both signal and BDT score cuts are applied. All green events are ones in which the DC pixel has been correctly identified, while red events are ones that have been incorrectly identified.}
+\caption{The true $Intensity_{DC}$ in the EAS-free image is shown in the top left, with a broad exponential decay in count as DC intensity increases. Sim\textunderscore telarray requires a minimum of 20 photoelectrons in order for a telescope to be triggered, meaning that only events with a true $Intensity_{DC}>20$ photoelectrons can be studied.  In the top right- the distribution of the dataset is shown, once all $Q_{DC}$ cuts have been applied. In the bottom left, the $P_{signal}$ (BDT score) distribution is shown before any cuts. On the bottom right, we see the same distribution after both $DC_{Count}$ and $P_{signal}$ cuts are applied. All green events are ones in which the DC pixel has been correctly identified, while red events are ones that have been incorrectly identified. We desire both a large number of green events, and a good degree separability of red and green events.}
 \label{fig:cutdistribution}
 \end{center}
 \end{figure} 
 
-As an alternative to use of $Q_{DC}$, a new method of DC pixel identification was developed as part of this analysis by using a BDT trained with the Scikit Learn Python package. A set of 2000 simulated events was selected, and randomly split through use of the python random.random() function into two subsets for training and testing. The variable $DC_{Count} = Count-Mean_{N.N}$ was defined as an approximate \textquoteleft DC signal', if the pixel were to be selected as the DC candidate. For every pixel in the 2000 simulated events HESS 1 images, an entry was formed of $Q_{DC}$, $ \Delta_{C.o.G}$, $\Delta_{Direction}$, $\Delta_{Line}$, Channel1, Channel0, $DC_{Count}$ and $Mean_{N.N}$. A score of 0 was assigned to every pixel to indicate background, with the exception of those that were identified as the DC pixel through the Shower-Free simulation. If the DC count in the shower-free simulation was larger than 300, the pixel was included with a score of 1, identifying it as a signal pixel. Pure DC pixels below the threshold cut of 300 were deemed to be too faint to reconstruct, so these entries were omitted from the training set.
+For this analysis, a BDT was trained with the Scikit Learn Python package. A set of 2000 simulated events was selected, and randomly split through use of the python random.random() function into two subsets for training and testing. The variable $DC_{Count} = Count-Mean_{N.N}$ was defined as an rough guess of the \textquoteleft DC signal' component in the pixel. Within the subset of training events, every triggered HESS 1 image was used. For each of the 3.6 million triggered image pixels, an entry was formed of the variables listed in table \ref{tab:table2}. A score of 0 was assigned to every pixel to indicate background, with the exception of those that were identified as the true DC pixel through the Shower-Free simulation. These pixels were included with a score of 1, identifying it as a signal pixel. Having created a dataset, the BDT was then trained with a maximum depth of 5, and 100 trees generated.
 
-Having created a dataset, the BDT was then trained with a maximum depth of 5, and 100 trees generated. It was found that the BDT was 100 \% accurate for the entire training dataset, with a breakdown of 100 \% for the training background and 99 \% accurate with the training signal. When the trained BDT was applied to the testing pixels, it was found to be 99.99 \%  accurate for the entire training dataset, with a breakdown of 100 \% for the testing background and 99 \% accurate with the testing signal. This indicates that the BDT was not significantly overtrained, which would otherwise be manifested by a large divergence in accuracy between testing and training data.
+\begin{table}[h!]
+  \centering
+  \caption{Relative Feature Importance in BDT training}
+  \label{tab:table2}
+  \begin{tabular}{ccc}
+    \toprule
+    Variable & Relative Importance\\
+    \midrule
+    $DC_{Count}$ & 0.38\\
+    $Mean_{N.N}$ & 0.22\\
+    $\Delta_{Direction}$ & 0.15\\
+    $Q_{DC}$ & 0.11\\
+    $raw_{Q}$ & 0.06\\
+    $\Delta_{Line}$ & 0.04\\
+    $Intensity$ & 0.04\\
+    \bottomrule
+  \end{tabular}
+\end{table}
 
-Having trained the BDT successfully, it was then applied to the same dataset as for the classic QDC identification. In each camera image, the event with the largest BDT score was deemed to be \textquoteleft most signal-like', and thus selected as the DC pixel candidate. A cut was applied, requiring $Probability_{signal} > 0.5$ for the DC candidate to be accepted. 
+The relative importance of each \textquoteleft feature' is automatically calculated by the Scikit Learn package, and is also recorded in table \ref{tab:table2}. The variable $DC_{Count}$ was consistently the most importance variable across many combinations of included variables and BDT training parameters. It was found that, under the conditions listed above, the BDT was 99.94 \% accurate for the entire training dataset, and 99.93 \%  accurate for the testing dataset. This indicates that the BDT was not significantly overtrained, which would otherwise be manifested by a large divergence in accuracy between testing and training data.
 
-With this cut applied, out of 1200 events, 46\% events passed all of the required cuts. The BDT was found to be 85 \% accurate in identifying the DC pixel in those passing events.
+Having trained the BDT successfully, it was then applied to the same separate dataset as for the classic QDC identification. In each camera image, the event with the largest BDT score was deemed to be \textquoteleft most signal-like', and thus selected as the DC pixel candidate. A cut was applied, requiring $P_{signal} > 0.5$ for the DC candidate to be accepted. A second cut requiring $DC_{Count} > 200$ removed many incorrectly identified events. 
 
-In \ref{fig:cutdistribution}, a plot of true vs. reconstructed DC count is shown, obtained by comparing the BDT selected pixel to the hadron-only DC pixel. The black line indicates the optimal 1:1 ratio that we are aiming for. It is seen that there the vast majority of misidentified events have a small $candidate_{DC count}$, forming a red line in the region $candidate_{DC count} \approx 0$. To remove these misidentified events, we can apply a second cut requiring $candidate_{DC count} > 300$.
+Application of this combined cut greatly increases the successful identification rate. Of the 2000 events, 84\% of events passed all of the required cuts. The BDT was found to be 90 \% accurate in identifying the DC pixel in those passing events. This represents a very significant improvement in DC pixel identification over the previous QDC method, and corresponds to a fivefold increase in the number of HESS data events that can be studied using the LPD method.
 
-Application of this combined cut greatly increases the successful identification rate. Of the 2000 events, 84\% of events passed all of the required cuts. The BDT was found to be 90 \% accurate in identifying the DC pixel in those passing events. This represents a very significant improvement in DC pixel identification over the previous QDC method, and corresponds to a fivefold increase in the number of HESS data events that can be studied using the LPD method. Use of this BDT method is thus assumed throughout the rest of this analysis.
+HESS2!
 
 \section{Conclusion}
-Basically it just worked really well.
+The use of BDT identification has been shown to be superior to the traditional $Q_{DC}$ method, by providing five times as many correctly identified events, once cuts have been applied. Furthermore, the resultant sample has only half the contamination of the $Q_{DC}$ method, with 15\% of the sample being incorrectly identified events rather than 30\% for $Q_{DC}$.
 
 \bibliographystyle{plain}
 \bibliography{report}
