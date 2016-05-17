@@ -21,6 +21,7 @@ offset="0"
 parser = argparse.ArgumentParser()
 parser.add_argument("-rn", "--runnumber", default="1")
 parser.add_argument("-jid", "--jobID", default="2842781")
+parser.add_argument("-bdt", "--findBDT", default=True)
 
 cfg = parser.parse_args()
 		
@@ -150,7 +151,7 @@ for category in ["DC", "full"]:
 				tel.findintensities()
 				print tel.hillas.image_size_amplitude_
 			
-			currentsimulation.extractpixelhillas()
+			currentsimulation.extractpixelhillas(cfg.findBDT)
 	
 	else:
 		print "No files for some reason..."

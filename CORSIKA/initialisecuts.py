@@ -6,11 +6,11 @@ dlinecut = 0.23
 radiuscut = 40
 c1cut = 2500
 
-cut = 0.50
+cut = 0.40
 ucut = 1.01
-QDCcut = 1.3
+QDCcut = 0.8
 DCcut = 150
-signalcut = 200
+signalcut = 150
 
 def run(): 
 	return arcut, ddireccut, dcogl, dcogu, dlinecut, radiuscut, c1cut

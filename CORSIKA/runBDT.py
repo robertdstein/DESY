@@ -39,7 +39,7 @@ bdtfilename = bdttargetfolder + "hess2bdtdata.p"
 if not cfg.reextract:
 	pass
 else:
-	rextract_for_BDT = "qsub -t 1-200:1 extractpixelsoncluster.sh " + cfg.BDTID
+	rextract_for_BDT = "qsub -t 1-200:1 extractpixelsoncluster.sh " + cfg.BDTID + " False"
 	print time.asctime(time.localtime()), rextract_for_BDT, "\n"
 	os.system(rextract_for_BDT)
 	wait()
@@ -58,7 +58,7 @@ statsfilename = statstargetfolder + "datastats.pkl"
 if not cfg.train and not cfg.recombine:
 	pass
 else:
-	execute = "qsub -t 1-200:1 extractpixelsoncluster.sh " + cfg.testID
+	execute = "qsub -t 1-200:1 extractpixelsoncluster.sh " + cfg.testID + " True"
 	print time.asctime(time.localtime()), execute, "\n"
 	os.system(execute)
 	

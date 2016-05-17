@@ -213,14 +213,14 @@ class simulation:
 			value = float(values[i])
 			setattr(self.shower, writename, value)
 			
-	def extractpixelhillas(self):
+	def extractpixelhillas(self, findBDT):
 		"""Using the general shower azimuth and altitude, the hillas parameters
 		for each image are calculated. 
 		""" 
 		if hasattr(self.shower, 'shower_azimuth_') and hasattr(self.shower, 'shower_altitude_'):
 			for index in self.triggerIDs:
 				tel = self.images[index]
-				tel.generatepixelhillasparameters(self.shower.shower_azimuth_, self.shower.shower_altitude_)
+				tel.generatepixelhillasparameters(self.shower.shower_azimuth_, self.shower.shower_altitude_, findBDT)
 		else:
 			print "No Shower Azimuth and Altitude"
 			
@@ -231,7 +231,7 @@ class simulation:
 		figure = plt.figure()
 		for i in range(len(self.images)):
 			tel = self.images[i]
-			tel.plotimage(i)
+			tel.plotimage(i, self.simcategory)
 		figure.set_size_inches(10, 20)
 		plt.subplots_adjust(wspace=0, hspace=0)
 		plt.savefig(run_dir + "/graph" + str(runnumber)+ self.simcategory + ".pdf")
@@ -390,7 +390,7 @@ class telescopeimage:
 			pixelentry.nnc1s = nnc1s
 			pixelentry.rawnnc1s = rawnnc1s
 	
-	def plotimage(self, i):
+	def plotimage(self, i, simcategory):
 		"""Plots each telescope image in a pdf file. The intensity of each pixel
 		is illustated in a colour scale, and the x/y axis are swapped to match the
 		graphical output of Simtelarray. In addition, the Shower Direction, Center of Gravity
@@ -410,19 +410,32 @@ class telescopeimage:
 		plt.scatter(y, x, s=self.plotscale, c=color, linewidth='0', marker="H", zorder=1, vmin=-1, vmax = 800)
 		if not self.trigger:
 			plt.annotate("Not \n Triggered", xy=(0.2, 0.5), xycoords="axes fraction", zorder=2, color='w', fontsize=(0.3*self.plotscale))
-		if hasattr(self.hillas, "image_cog_y_"):
-			plt.scatter(self.hillas.image_cog_y_, self.hillas.image_cog_x_, c='w', s=100, marker="x")
-		if hasattr(self.hillas, "showery"):
-			plt.scatter(self.hillas.showery, self.hillas.showerx, c='w', s=100, marker="o")
-		if self.QDCID != None:
-			QDCpixel = self.getQDCpixel()
-			plt.scatter(QDCpixel.y, QDCpixel.x, facecolors='none', edgecolors="r", s=(self.plotscale*1.2), marker="o", linewidth=2, zorder=4)
-		if self.BDTID != None:
-			BDTpixel = self.getBDTpixel()
-			plt.scatter(BDTpixel.y, BDTpixel.x, facecolors='none', edgecolors="white", s=(self.plotscale*1.2), marker="*", linewidth=2, zorder=3)	
+		
+		if simcategory == "full":
+			if hasattr(self.hillas, "showery"):
+				plt.scatter(self.hillas.showery, self.hillas.showerx, c='w', s=100, marker="o")			
+			if hasattr(self.hillas, "image_cog_y_"):
+				plt.scatter(self.hillas.image_cog_y_, self.hillas.image_cog_x_, c='w', s=100, marker="x")
+			if self.QDCID != None:
+				QDCpixel = self.getQDCpixel()
+				plt.scatter(QDCpixel.y, QDCpixel.x, facecolors='none', edgecolors="r", s=(self.plotscale*1.2), marker="o", linewidth=2, zorder=4)
+			if self.BDTID != None:
+				BDTpixel = self.getBDTpixel()
+				plt.scatter(BDTpixel.y, BDTpixel.x, facecolors='none', edgecolors="white", s=(self.plotscale*1.2), marker="*", linewidth=2, zorder=3)	
+		
 		if self.trueDC != None:
 			truepixel = self.gettruepixel()
-			plt.scatter(truepixel.y, truepixel.x, facecolors='none', edgecolors="orange", s=(self.plotscale*1.2), marker="o", linewidth=2, zorder=3)
+			print truepixel.ID
+			if simcategory == "full":	
+				plt.scatter(truepixel.y, truepixel.x, facecolors='none', edgecolors="orange", s=(self.plotscale*1.2), marker="o", linewidth=2, zorder=3)
+			elif simcategory == "DC":
+				plt.annotate("",
+				            xy=(truepixel.y+0.05, truepixel.x+0.05), xycoords='data',
+				            xytext=(0.0, 0.0), textcoords='data',
+				            size=20, va="center", ha="center",
+				            arrowprops=dict(arrowstyle="simple",
+				                            connectionstyle="arc3,rad=-0.2", color="yellow"), 
+				            )
 		plt.xlim(-self.angularwidth, self.angularwidth)
 		plt.ylim(-self.angularwidth, self.angularwidth)
 		plt.axis('off')
@@ -551,7 +564,7 @@ class telescopeimage:
 		else:
 			raise Exception("No BDT pixel!")
 		
-	def generatepixelhillasparameters(self, showerazimuth, showeraltitude):
+	def generatepixelhillasparameters(self, showerazimuth, showeraltitude, findBDT):
 		"""Uses the general shower azimuth and altitude to form the various Hillas parameters.
 		Firstly the nearest neighbour entries are found. Then the image-specific shower direction is found.
 		This is recorded as self.hillas.showerx/y. In addition the aspect ration is found.
@@ -590,7 +603,8 @@ class telescopeimage:
 				
 		self.findQDCpixel()
 		self.findrawQDCpixel()
-		self.findBDTpixel()
+		if findBDT:
+			self.findBDTpixel()
 		
 	def assignpixelscore(self):
 		"""The pixelentry.truescore value is assigned as 0 for every pixel in the
@@ -676,15 +690,18 @@ class pixel:
 		
 		if float(self.channel1.intensity) != float(0):
 			self.QDC = math.fabs(max([ abs(i) for i in self.nnc1s])/self.channel1.intensity)
-			self.rawQDC = math.fabs(max([ abs(i) for i in self.rawnnc1s])/self.channel1.count)
-			self.nnmean = np.mean(self.nnc1s)
-			self.signalguess = self.channel1.intensity-self.nnmean
-			self.nnmax = np.max(self.nnc1s)
-			self.nnmin = np.min(self.nnc1s)
-			nns=0
-			for neighbour in self.nnc1s:
-				nns += (neighbour**2)
-			self.nnrms = math.sqrt(nns/float(len(self.nnc1s)))
+		else:
+			self.QDC=float("inf")
+		
+		self.rawQDC = math.fabs(max([ abs(i) for i in self.rawnnc1s])/self.channel1.count)
+		self.nnmean = np.mean(self.nnc1s)
+		self.signalguess = self.channel1.intensity-self.nnmean
+		self.nnmax = np.max(self.nnc1s)
+		self.nnmin = np.min(self.nnc1s)
+		nns=0
+		for neighbour in self.nnc1s:
+			nns += (neighbour**2)
+		self.nnrms = math.sqrt(nns/float(len(self.nnc1s)))
 		
 class channelentry:
 	"""One channel entry in a pixel.
