@@ -32,6 +32,14 @@ def wait():
 		i+=1
 		proc = subprocess.Popen('qstat', stdout=subprocess.PIPE)
 		tmp = str(proc.stdout.read())
+		
+delerrors = "rm -rf /d6/rstein/cluster_error/*"
+deloutput = "rm -rf /d6/rstein/cluster_output/*"
+
+print delerrors
+os.system(delerrors)
+print deloutput
+os.system(deloutput)
 
 bdttargetfolder = "/nfs/astrop/d6/rstein/data/" + cfg.BDTID + "/bdtpickle/"
 bdtfilename = bdttargetfolder + "hess2bdtdata.p"

@@ -603,8 +603,12 @@ class telescopeimage:
 				
 		self.findQDCpixel()
 		self.findrawQDCpixel()
-		if findBDT:
+		print "FindBDT is", findBDT,
+		if findBDT == "True":
+			print True
 			self.findBDTpixel()
+		else:
+			print False
 		
 	def assignpixelscore(self):
 		"""The pixelentry.truescore value is assigned as 0 for every pixel in the

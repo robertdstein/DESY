@@ -89,10 +89,7 @@ for cardname in cards:
 	print
 	print "Now starting CORSIKA run number" + str(cfg.runnumber)
 	print
-	# during runtime everything is written in temp_dir (on cluster a local disk)
 	logfile_name = os.path.join(Direc, "run" + str(cfg.runnumber) + str(cardname) + "-simulation.log")
-	#if os.path.exists(logfile_name):
-	#	os.system("rm " + logfile_name)
 	
 	
 	print "Corsika Directory: " + corsika_dir
@@ -101,40 +98,9 @@ for cardname in cards:
 	os.system("cat %s"%inputcard_name)
 	#Starting Corsika
 	q1 = "./" + corsika_exe + " < " + inputcard_name + " > " + logfile_name
-	#q1 = "./" + corsika_exe + " < " + inputcard_name
 	print q1
 	os.system(q1)
 	
 	print "Output is written to " + Direc
-	
-	#~ filetypes = ["-iact.corsika.gz", "-simulation.log"]
-	#~ 
-	#~ for suffix in filetypes:
-		#~ filename = os.path.join(cfg.tempdir, "run" + str(cfg.runnumber) + str(cardname)+ suffix)
-		#~ if os.path.isfile(filename):
-			#~ q = "mv " + filename + " " + Direc
-			#~ os.system(q)
-			#~ print q
-			#~ 
-	#~ width = 6-len(str(cfg.runnumber))
-	#~ IDno = (width*str(0)) + str(cfg.runnumber)
-	#~ print IDno
-			#~ 
-	#~ filename = os.path.join(cfg.tempdir, "CER" + IDno)
-	#~ if os.path.isfile(filename):
-		#~ q = "mv " + filename + " " + Direc
-		#~ os.system(q)
-		#~ print q
-		#~ 
-	#~ filecore = "DAT" + IDno
-	#~ filetypes = ["", ".long", ".dbase"]
-	#~ for suffix in filetypes:
-		#~ filename = os.path.join(cfg.tempdir, filecore + suffix )
-		#~ if os.path.isfile(filename):
-			#~ q = "mv " + filename + " " + Direc
-			#~ os.system(q)
-			#~ print q
-	#~ 
-	#~ print "Output is copied into " + Direc
 
 

@@ -12,42 +12,6 @@ parser.add_argument("-jid", "--jobID", default="2567181")
 
 cfg = parser.parse_args()
 
-hess1rgrpath = '/nfs/astrop/d6/rstein/BDTpickle/hess1signalregressor.p'
-hess2rgrpath = '/nfs/astrop/d6/rstein/BDTpickle/hess2signalregressor.p'
-if os.path.isfile(hess1rgrpath):
-	hess1rgr = pickle.load(open(hess1rgrpath, "r"))
-else:
-	print "No hess1 pickle!"
-if os.path.isfile(hess2rgrpath):
-	hess2rgr = pickle.load(open(hess2rgrpath, "r"))
-else:
-	print "No hess2 pickle!"
-	
-signalbdtvariables = []
-with open('/nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/CORSIKA/signalBDTvariables.csv', 'rb') as csvfile:
-	reader = csv.reader(csvfile, delimiter=',', quotechar='|')
-	for row in reader:
-		signalbdtvariables.append(row[0])
-print signalbdtvariables
-
-def makeBDTentry(pixelentry):
-	bdtentry =[]
-	for variable in signalbdtvariables:
-		varsplit = variable.split('.')
-		suffix = pixelentry
-		if len(varsplit) > 1:
-			for name in varsplit[:-1]:
-				 suffix = getattr(suffix, name)
-			varname = varsplit[-1]
-		else:
-			varname = variable
-		if hasattr(suffix, varname):
-			newval = getattr(suffix, varname)
-			bdtentry.append(newval)
-		else:
-			return None
-	return bdtentry
-
 filepath = "/nfs/astrop/d6/rstein/data/"
 i = 1
 j = 100
@@ -95,8 +59,6 @@ passedcsignals= [[[], []], [[], []]]
 passedDCsignals = [[[], []], [[], []]]
 rejectedcsignals = [[[], []], [[], []]]
 rejectedDCsignals =[[[], []], [[], []]]
-
-
 
 targetfolder = filepath + cfg.jobID +"/"
 
@@ -161,7 +123,7 @@ while (i < j):
 					if DCcount > DCcut:
 						DCpasstotal[plotindex] += 1
 					
-					if fulltel.BDTID == trueID:
+					if fulltel.trueDC == trueID:
 						result = 1
 						rightscores[plotindex].append(fullBDT.bdtscore)
 						rightsignals[plotindex].append(candidatesignal)

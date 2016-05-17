@@ -8,6 +8,15 @@ import cPickle as pickle
 
 from telescopeclasses import *
 
+def isfloat(value):
+	try:
+		float(value)
+		return True
+	except ValueError:
+		return False
+	except TypeError:
+		return False
+
 parser = argparse.ArgumentParser()
 parser.add_argument("-jid", "--jobID", default="2842781")
 
@@ -61,7 +70,13 @@ def makeBDTentry(pixelentry):
 			varname = variable
 		if hasattr(suffix, varname):
 			newval = getattr(suffix, varname)
-			bdtentry.append(newval)
+			if isfloat(newval):
+				if float(newval) != float("inf"):
+					bdtentry.append(newval)
+				else:
+					return None, None
+			else:
+					return None, None
 		else:
 			return None, None
 	return bdtentry, pixelentry.truescore

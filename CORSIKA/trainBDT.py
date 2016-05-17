@@ -56,13 +56,20 @@ for i in range(len(categories)):
 	for i in range(len(trainset)):
 		bdtentry = trainset[i]
 		truescore = trainscoreset[i]
+		
+		add = True
+		for val in bdtentry:
+			if float(val) == float("inf"):
+				add = False
+				
+		if add:
 
-		full.append(bdtentry)
-		fullscore.append(truescore)
-
-		if float(truescore) == float(1):
-			sig.append(bdtentry)
-			sigscore.append(1.)
+			full.append(bdtentry)
+			fullscore.append(truescore)
+	
+			if float(truescore) == float(1):
+				sig.append(bdtentry)
+				sigscore.append(1.)
 	
 	print time.asctime(time.localtime()), "Datasets produced!"
 	
