@@ -4,45 +4,45 @@ The top-level auxiliary file: bdtarticle.aux
 The style file: plain.bst
 Database file #1: report.bib
 Warning--empty journal in Heck98
-You've used 3 entries,
+You've used 4 entries,
             2118 wiz_defined-function locations,
-            517 strings with 4451 characters,
-and the built_in function-call counts, 937 in all, are:
-= -- 87
-> -- 48
+            524 strings with 4820 characters,
+and the built_in function-call counts, 1717 in all, are:
+= -- 152
+> -- 131
 < -- 0
-+ -- 19
-- -- 16
-* -- 65
-:= -- 172
-add.period$ -- 9
-call.type$ -- 3
-change.case$ -- 16
++ -- 52
+- -- 48
+* -- 147
+:= -- 313
+add.period$ -- 12
+call.type$ -- 4
+change.case$ -- 35
 chr.to.int$ -- 0
-cite$ -- 4
-duplicate$ -- 32
-empty$ -- 69
-format.name$ -- 16
-if$ -- 186
+cite$ -- 5
+duplicate$ -- 43
+empty$ -- 97
+format.name$ -- 48
+if$ -- 327
 int.to.chr$ -- 0
-int.to.str$ -- 3
-missing$ -- 3
-newline$ -- 18
-num.names$ -- 6
-pop$ -- 14
+int.to.str$ -- 4
+missing$ -- 4
+newline$ -- 23
+num.names$ -- 8
+pop$ -- 31
 preamble$ -- 1
-purify$ -- 13
+purify$ -- 31
 quote$ -- 0
-skip$ -- 23
+skip$ -- 30
 stack$ -- 0
-substring$ -- 54
-swap$ -- 2
+substring$ -- 90
+swap$ -- 3
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 12
+type$ -- 16
 warning$ -- 1
-while$ -- 8
-width$ -- 4
-write$ -- 33
+while$ -- 12
+width$ -- 5
+write$ -- 44
 (There was 1 warning)
