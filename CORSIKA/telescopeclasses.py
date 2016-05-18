@@ -523,6 +523,7 @@ class telescopeimage:
 			for i in range(len(self.pixels)):
 				pixelentry = self.pixels[i]
 				bdtentry=[]
+				include=True
 				for variable in bdtvariables:
 					varsplit = variable.split('.')
 					suffix = pixelentry
@@ -534,13 +535,16 @@ class telescopeimage:
 						varname = variable
 					if hasattr(suffix, varname):
 						newval = getattr(suffix, varname)
-						bdtentry.append(newval)
+						if newval != None:
+							bdtentry.append(newval)
+						else:
+							include=False
 					else:
 						raise Exception("No variable named " +variable)
-				if self.size == "HESS2" and os.path.isfile(hess2picklepath):
+				if self.size == "HESS2" and os.path.isfile(hess2picklepath) and include:
 					bdtvalues = hess2clf.predict_proba([bdtentry])[0]
 					bdtscore = bdtvalues[1]
-				elif self.size == "HESS1" and os.path.isfile(hess1picklepath):
+				elif self.size == "HESS1" and os.path.isfile(hess1picklepath) and include:
 					bdtvalues = hess1clf.predict_proba([bdtentry])[0]
 					bdtscore = bdtvalues[1]
 				else:
@@ -695,7 +699,7 @@ class pixel:
 		if float(self.channel1.intensity) != float(0):
 			self.QDC = math.fabs(max([ abs(i) for i in self.nnc1s])/self.channel1.intensity)
 		else:
-			self.QDC=float("inf")
+			self.QDC=None
 		
 		self.rawQDC = math.fabs(max([ abs(i) for i in self.rawnnc1s])/self.channel1.count)
 		self.nnmean = np.mean(self.nnc1s)
