@@ -1,6 +1,8 @@
 channel1.intensity
 QDC
 ddirec
+rawQDC
 dline
 nnmean
 signalguess
+image_size_amplitude_

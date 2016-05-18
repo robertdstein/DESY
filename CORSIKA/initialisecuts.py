@@ -6,7 +6,7 @@ dlinecut = 0.23
 radiuscut = 40
 c1cut = 2500
 
-cut = 0.40
+cut = 0.50
 ucut = 1.01
 QDCcut = 0.8
 DCcut = 150

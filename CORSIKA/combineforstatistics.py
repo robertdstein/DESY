@@ -50,10 +50,10 @@ def makeBDTentry(pixelentry):
 			return None
 	return bdtentry
 
-for sigfit in [None, "rgr"]:
+for sigfit in [None]:
 	filepath = "/nfs/astrop/d6/rstein/data/"
 	i = 1
-	j = 200
+	j = 2000
 	totalimages = [0, 0]
 	DCpasstotal = [0, 0]
 	correctimages =[0, 0]
@@ -72,6 +72,13 @@ for sigfit in [None, "rgr"]:
 	
 	combinedtotal = [0, 0]
 	combinedcorrect = [0, 0]
+	
+	fulltotal = [0, 0]
+	fullcorrect = [0, 0]
+	
+	oldcombinedtotal = [0, 0]
+	oldcombinedcorrect = [0, 0]
+	
 	
 	cut, ucut, QDCcut, DCcut, signalcut = ic.runforstats()
 	
@@ -220,36 +227,44 @@ for sigfit in [None, "rgr"]:
 								if float(ucut) > float(fullBDT.bdtscore) > float(cut):
 									totalcut[plotindex] += 1
 							
-							if (k > minmultiplicity):
-								passcut = False
-								
-								if float(result) == float(1):
-									if float(ucut) > float(fullBDT.bdtscore) > float(cut):
-										if float(candidatesignal) > float(signalcut):
-											passcut = True
-											k+=1
-											combinedcorrect[plotindex] += 1
-											combinedtotal[plotindex] += 1
-											combinedright[plotindex].append(fullBDT.bdtscore)
-								elif float(result) == float(0):
-									if float(ucut) > float(fullBDT.bdtscore) > float(cut):
-										
-										if float(candidatesignal) > float(signalcut):
-											k+=1	
-											passcut = True	
-											combinedtotal[plotindex] += 1
-											combinedwrong[plotindex].append(fullBDT.bdtscore)
+							
+							passcut = False
+							
+							if float(result) == float(1):
+								if float(ucut) > float(fullBDT.bdtscore) > float(cut):
+									if float(candidatesignal) > float(signalcut):
+										passcut = True
+										k+=1
+										combinedcorrect[plotindex] += 1
+										combinedtotal[plotindex] += 1
+										combinedright[plotindex].append(fullBDT.bdtscore)
+										if (k > minmultiplicity):
+											fullcorrect[plotindex] += 1
+											fulltotal[plotindex] += 1
 											
-								if passcut:
-									passed[plotindex][result].append(difference)
-									passeddiff[plotindex].append(absd)
-									passedcsignals[plotindex][result].append(candidatesignal/DCcount)
-									passedDCsignals[plotindex][result].append(DCcount)
-								else:
-									rejected[plotindex][result].append(difference)
-									rejecteddiff[plotindex].append(absd)
-									rejectedcsignals[plotindex][result].append(candidatesignal/DCcount)
-									rejectedDCsignals[plotindex][result].append(DCcount)	
+											
+							elif float(result) == float(0):
+								if float(ucut) > float(fullBDT.bdtscore) > float(cut):
+									
+									if float(candidatesignal) > float(signalcut):
+										k+=1	
+										passcut = True	
+										combinedtotal[plotindex] += 1
+										combinedwrong[plotindex].append(fullBDT.bdtscore)
+										if (k > minmultiplicity):
+											fulltotal[plotindex] += 1
+											
+										
+							if passcut:
+								passed[plotindex][result].append(difference)
+								passeddiff[plotindex].append(absd)
+								passedcsignals[plotindex][result].append(candidatesignal/DCcount)
+								passedDCsignals[plotindex][result].append(DCcount)
+							else:
+								rejected[plotindex][result].append(difference)
+								rejecteddiff[plotindex].append(absd)
+								rejectedcsignals[plotindex][result].append(candidatesignal/DCcount)
+								rejectedDCsignals[plotindex][result].append(DCcount)	
 									
 					if toplot and (fulltel.QDCID != None):
 							
@@ -258,13 +273,16 @@ for sigfit in [None, "rgr"]:
 						if fulltel.QDCID == trueID:
 							oldcorrectimages[plotindex] += 1
 							oldright[plotindex].append(fullQDC.rawQDC)
+							oldcorrectcut[plotindex] += 1
+							oldtotalcut[plotindex] += 1
 							if l > minmultiplicity:		
-								oldcorrectcut[plotindex] += 1
-								oldtotalcut[plotindex] += 1
+								oldcombinedcorrect[plotindex] += 1
+								oldcombinedtotal[plotindex] += 1
 						else:
 							oldwrong[plotindex].append(fullQDC.QDC)
+							oldtotalcut[plotindex] += 1	
 							if l > minmultiplicity:
-								oldtotalcut[plotindex] += 1	
+								oldcombinedtotal[plotindex] += 1
 	
 		if (int(float(i)*100/float(j)) - float(i)*100/float(j)) ==0:
 			print p+1
@@ -280,9 +298,7 @@ for sigfit in [None, "rgr"]:
 			message = []
 		
 			message += "\n \n", 
-			message += "We have", str(mtotal), "events.", str(mpass), "events having a multiplicity > 3 using BDT cuts, \n and", str(lpass), "events having a multiplicity > 3 using QDC cuts \n"
-			message += "We define a target pixel as one in which the DC pixel has a shower-free intensity of", str(DCcut), "or more. \n"
-			message += "Of", str(totalimages[i]), "identified pixels, we have", str(DCpasstotal[i]), "target pixels, which we would hope to identify. \n"
+			message += "We have", str(mtotal), "events. Of these, there are", str(totalimages[i]), "triggered images. \n"
 			
 			message += "In total,", str(oldcorrectimages[i]), "pixels are correctly identified using QDC method."
 			if DCpasstotal[i] > 0:
@@ -292,31 +308,41 @@ for sigfit in [None, "rgr"]:
 			if DCpasstotal[i] > 0:
 				message += "Method Identified", str('{0:.1f}'.format(float(100.*correctimages[i]/totalimages[i]))), "% of all images. \n \n "
 			
-			message += "Our QDC cut requires QDC < 0.14 log( Itot / 161 cos(theta)), and multiplicity > ", str(minmultiplicity), ". \n"
-			message += "We have", str(oldtotalcut[i]), "images passing this cut. \n "
+			message += "Our QDC cut requires QDC < 0.14 log( Itot / 161 cos(theta)), leaving", str(oldtotalcut[i]), "images. \n "
 			message += "Of these,", str(oldcorrectcut[i]), "are correctly identified images. \n "
 			if oldtotalcut[i] > 0:
 				message += "Successful ID rate after cut is", str('{0:.1f}'.format(float(100.*oldcorrectcut[i]/oldtotalcut[i]))),  "% "
-				message += "Fraction of target pixels correctly identified is", str('{0:.1f}'.format(float(100.*oldcorrectcut[i]/totalimages[i]))), "% \n \n"
+				message += "Fraction of target pixels correctly identified is", str('{0:.1f}'.format(float(100.*oldcorrectcut[i]/totalimages[i]))), "% \n"
+			else:
+				message += " \n"
+			
+			message += "Additionally requiring multiplicity > ", str(minmultiplicity), ", we have", str(oldcombinedtotal[i]), "images . \n "
+			message += "Of these,", str(oldcombinedcorrect[i]), "are correctly identified images. \n "
+			if oldcombinedtotal[i] > 0:
+				message += "Successful ID rate after cut is", str('{0:.1f}'.format(float(100.*oldcombinedcorrect[i]/oldcombinedtotal[i]))),  "% "
+				message += "Fraction of target pixels correctly identified is", str('{0:.1f}'.format(float(100.*oldcombinedcorrect[i]/totalimages[i]))), "% \n \n"
 			else:
 				message += " \n"
 				
-			message += "Our BDT cut requires Signal Probability >", str(cut), ". \n "
-			message += "We have", str(totalcut[i]), "pixels passing this cut. "
-			message += "Of these,", str(correctcut[i]), "are correctly identified pixels.\n  "
+			message += "Our BDT cut requires Signal Probability >", str(cut), ", we have", str(totalcut[i]), "images. \n"
+			message += "Of these,", str(correctcut[i]), "are correctly identified images.\n  "
 			if totalcut[i] > 0:
 				message += "Successful ID rate after cut is", str('{0:.1f}'.format(float(100.*correctcut[i]/totalcut[i]))), "% "
-				message += "Fraction of target pixels correctly identified is", str('{0:.1f}'.format(float(100.*correctcut[i]/totalimages[i]))), "% \n \n"
+				message += "Fraction of target pixels correctly identified is", str('{0:.1f}'.format(float(100.*correctcut[i]/totalimages[i]))), "% \n"
 			else:
 				message += " \n"
 				
-			message += "We check for pixels that have Signal Probability >", str(cut), "and signal > ", str(signalcut), ", and multiplicity > " + str(minmultiplicity) + ". \n"
-			message += "We check for events that have a multiplicity >", str(minmultiplicity), ". \n"
-			message += "We have", str(combinedtotal[i]), "pixels passing this cut. "
-			message += "Of these,", str(combinedcorrect[i]), "are correctly identified pixels. \n "
+			message += "Additionally requiring signal > ", str(signalcut), ", we have", str(combinedtotal[i]), "images. \n"
+			message += "Of these,", str(combinedcorrect[i]), "are correctly identified images. \n "
 			if combinedtotal[i] > 0:
 				message += "Successful ID rate after cut is", str('{0:.1f}'.format(float(100.*combinedcorrect[i]/combinedtotal[i]))), "% "
-				message += "Fraction of target pixels correctly identified is", str('{0:.1f}'.format(float(100.*combinedcorrect[i]/totalimages[i]))), "% \n \n"
+				message += "Fraction of target pixels correctly identified is", str('{0:.1f}'.format(float(100.*combinedcorrect[i]/totalimages[i]))), "% \n"
+				
+			message += "Additionally requiring multiplicity > ", str(minmultiplicity), ", we have", str(fulltotal[i]), "images . \n "
+			message += "Of these,", str(fullcorrect[i]), "are correctly identified images. \n "
+			if combinedtotal[i] > 0:
+				message += "Successful ID rate after cut is", str('{0:.1f}'.format(float(100.*fullcorrect[i]/fulltotal[i]))), "% "
+				message += "Fraction of target pixels correctly identified is", str('{0:.1f}'.format(float(100.*fullcorrect[i]/totalimages[i]))), "% \n \n"
 					
 			toprint = ' '.join(message)
 			print toprint
