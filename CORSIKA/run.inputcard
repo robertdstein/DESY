@@ -6,11 +6,10 @@ NSHOW   1                            number of showers
 *
 PRMPAR  5626                             Primary particle type: 1 Gamma, 14 proton, 402 Helium
 ESLOPE  -2.7                             slope of primary energy spectrum
-ERANGE 6000   106000                 Energy range (GeV)	
-OBSLEV  1800.E2
+ERANGE 56000   56000                 Energy range (GeV)	
 
-THETAP  0  2                        range of zenith angle (degree)
-PHIP    -2  2                    range of azimuth angle (degree): from South if PHIP=ARRANG
+THETAP  0  0                        range of zenith angle (degree)
+PHIP    0  0                    range of azimuth angle (degree): from South if PHIP=ARRANG
 *
 * [ Site specific options ]
 *
@@ -37,7 +36,7 @@ TELESCOPE     0     0    0  1650       Tel. 5, huge central phase 2 telescope
 *
 * [Interaction flags]
 *
-FIXHEI  0.  0                          first interaction height & target
+FIXHEI  25000.E2  0                    first interaction height & target
 FIXCHI  0.                             starting altitude (g/cm**2)
 ELMFLG  T   T                          em. interaction flags (NKG,EGS)
 RADNKG  200.E2                         outer radius for NKG lat.dens.determ.

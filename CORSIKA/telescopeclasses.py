@@ -416,12 +416,12 @@ class telescopeimage:
 				plt.scatter(self.hillas.showery, self.hillas.showerx, c='w', s=100, marker="o")			
 			if hasattr(self.hillas, "image_cog_y_"):
 				plt.scatter(self.hillas.image_cog_y_, self.hillas.image_cog_x_, c='w', s=100, marker="x")
-			if self.QDCID != None:
-				QDCpixel = self.getQDCpixel()
-				plt.scatter(QDCpixel.y, QDCpixel.x, facecolors='none', edgecolors="r", s=(self.plotscale*1.2), marker="o", linewidth=2, zorder=4)
-			if self.BDTID != None:
-				BDTpixel = self.getBDTpixel()
-				plt.scatter(BDTpixel.y, BDTpixel.x, facecolors='none', edgecolors="white", s=(self.plotscale*1.2), marker="*", linewidth=2, zorder=3)	
+			#~ if self.QDCID != None:
+				#~ QDCpixel = self.getQDCpixel()
+				#~ plt.scatter(QDCpixel.y, QDCpixel.x, facecolors='none', edgecolors="r", s=(self.plotscale*1.2), marker="o", linewidth=2, zorder=4)
+			#~ if self.BDTID != None:
+				#~ BDTpixel = self.getBDTpixel()
+				#~ plt.scatter(BDTpixel.y, BDTpixel.x, facecolors='none', edgecolors="white", s=(self.plotscale*1.2), marker="*", linewidth=2, zorder=3)	
 		
 		if self.trueDC != None:
 			truepixel = self.gettruepixel()

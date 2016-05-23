@@ -14,13 +14,13 @@
 \maketitle
 
 \begin{abstract}
-When Cosmic Rays travel through the atmosphere, the primary particle will often emit some Cherenkov light before the much brighter Extended Air Shower is generated. Unlike the broader shower component of telescope images, all of the Direct Cherenkov light will usually be concentrated in a single pixel. A new method for identifying these Direct Cherenkov pixels was developed, relying on machine learning. A set of Cosmic Ray telescope images were simulated, both with and without the Extended Air Shower background, for use in classifier training. With reference to the background-free telescope images, the Direct Cherenkov pixel in each corresponding full-shower telescope image could be reliably identified. A Boosted Decision Tree to identify these Direct Cherenkov pixels was trained, using data from the full-shower training images. The Boosted Decision Tree performance was then tested on a second set of full-shower telescope images, and compared to existing methods of Direct Cherenkov pixel identification.
+When Cosmic Rays travel through the atmosphere, the primary particle will often emit some Direct Cherenkov light before the much brighter Extended Air Shower is generated. Unlike the broader air shower component of telescope images, all of the Direct Cherenkov light will usually be concentrated in a single pixel. A new method for identifying these Direct Cherenkov pixels was developed, relying on supervised machine learning. A set of Cosmic Ray telescope images were simulated, both with and without the Extended Air Shower background, for use in classifier training. With reference to the background-free telescope images, the Direct Cherenkov pixel in each corresponding full-shower telescope image could be reliably identified. A Boosted Decision Tree to identify these Direct Cherenkov pixels was trained, using data from the full-shower training images. The Boosted Decision Tree performance was then tested on a second set of full-shower telescope images, and compared to existing methods of Direct Cherenkov pixel identification.
 \end{abstract}
 
 \section{Introduction}
-A Cosmic Ray will often emit Direct Cherenkov (DC) light in the upper atmosphere, before generating an Extended Air Shower (EAS) through interaction with the lower atmosphere. Analysis of the DC light from a shower can indicate primary particle energy, charge and position. It is consequently very useful to identify and measure the quantity and direction of DC light emission, for use in event reconstruction. There are numerous Telescope Arrays which currently image Cherenkov Light emission from Cosmic Rays in the atmosphere, including the HESS, MAGIC and VERITAS Experiments. In these telescope images, the DC light is usually concentrated in a single  \textquoteleft DC pixel'. Identifying this pixel is challenging, because the brighter EAS Cherenkov light background often overlaps with the DC pixel. 
+A Cosmic Ray will often emit Direct Cherenkov (DC) light in the upper atmosphere, before generating an Extended Air Shower (EAS) through interaction with the lower atmosphere. Analysis of the DC light from a shower can indicate primary particle energy, charge and position. It is consequently very useful to measure the quantity and direction of DC light emission, for use in event reconstruction. There are numerous Telescope Arrays which currently image Cherenkov Light emission from Cosmic Rays in the atmosphere, including the HESS, MAGIC and VERITAS Experiments. In these telescope images, the DC light is usually concentrated in a single  \textquoteleft DC pixel'. Identifying this pixel is challenging, because the brighter EAS Cherenkov light background often overlaps with the DC pixel. 
 
-At present, the DC pixel candidate can be identified by applying a number of cuts to pixels in an image, such as those used by the HESS collaboration \cite{hess07}. The variable $Q_{DC}$ is defined as the ratio of the largest neighbouring pixel intensity to the intensity of a given pixel, and from the subset of pixels passing these cuts, the DC candidate is simply the pixel with the smallest $Q_{DC}$. Despite a good degree of accuracy, this method is very inefficient, leaving the majority of events having no DC candidate from the $Q_{DC}$ method. A better method would aim to increase the number of correctly identified events, while still enabling cuts which discriminate well between correctly and incorrectly identified events.
+At present, the DC pixel candidate can be identified by applying a number of cuts to pixels in an image, such as those used by the HESS collaboration \cite{hess07}. The variable $Q_{DC} = \frac{Intensity_{N.N.max}}{Intensity}$ is defined as the ratio of the largest neighbouring pixel intensity to the intensity of a given pixel, and from the subset of pixels passing these cuts, the DC candidate is simply the pixel with the smallest $Q_{DC}$. Despite a good degree of accuracy, this method is very inefficient, leaving the majority of events with no DC candidate. An improved method would aim to increase the number of correctly identified events, while still enabling cuts which discriminate well between correctly and incorrectly identified events.
 
 Classifiers provides an alternative method of identification, making use of supervised machine learning to find structure in datasets. To train a classifier, we require a set of training data entries containing several variables, as well as the correct class for each of the entries in the dataset. Once trained, a classifier can be used to predict the class for any such data entry. In this case, the classifier must learn to distinguish between non-DC and DC pixels. 
 
@@ -80,13 +80,13 @@ As a basis for comparison, the original HESS cuts listed in \ref{tab:table1} wer
   \end{tabular}
 \end{table}
 
-The candidates were checked against the true DC pixels identified in the EAS-free images. Of 2000 testing events it was found that there were 6000 triggered images. Of these images, 5.2\% passed the required cuts. The $Q_{DC}$ was found to be 86.2\% accurate in identifying the DC pixel in those passing images, as shown in \ref{fig:cutdistribution}. These values served as a benchmark for BDT performance. 
+The candidates were checked against the true DC pixels identified in the EAS-free images. From the testing sample, 5.2\% of all images were correctly identified and passed the cuts. The $Q_{DC}$ accurate in identifying DC pixels which passed the cuts, as shown in \ref{fig:cutdistribution}. These values served as a benchmark for BDT performance. 
 
 The BDT was trained with the Scikit Learn Python package \cite{scikit-learn}. Using the training set of 2000 CORSIKA events, and randomly split through use of the Python random.random() function into two further subsets, one for learning and one to check overtraining. Within the subset of learning events, every HESS 1 image was used, provided it was triggered in both EAS-free and full-shower simulations. For each of the 1.7 million triggered image pixels, an entry was formed of the variables listed in table \ref{tab:table2}. A class of 0 was assigned to every non-DC pixel, and a class of 1 was assigned to every DC pixel. Having created a dataset, the BDT was then trained with a maximum depth of 8, and 100 trees generated.
 
 \begin{table}[h!]
   \centering
-  \caption{Relative Feature Importance in BDT training}
+  \caption{Relative Feature Importance in HESS-1 BDT training}
   \label{tab:table2}
   \begin{tabular}{ccc}
     \toprule
@@ -107,7 +107,7 @@ The relative importance of each \textquoteleft feature' is automatically calcula
 
 Having trained the BDT successfully, it was then applied to the same test dataset as for the classic QDC identification. In each camera image, the event with the largest BDT score was deemed to be \textquoteleft most signal-like', and thus selected as the DC pixel candidate. A cut was applied, requiring $P_{signal} > 0.5$ for the DC candidate to be accepted. A second cut requiring $DC_{Count} > 150$ removed many incorrectly identified events. 
 
-Application of this combined cut greatly increases the successful identification rate. Of the 2000 events, 37.8\% of images passed all of the required cuts. The BDT was found to be 86.0\% accurate in identifying the DC pixel in those passing events. This represents a very significant improvement in pixel identification efficiency, at the cost of a negligible increase in the fraction of incorrectly identified pixels.
+Application of this combined cut greatly increases the successful identification rate. From the testing sample, 37.8\% of all images were correctly identified and passed the cuts. The BDT was found to be 86.0\% accurate in identifying DC pixels which passed the cuts. This represents a very significant improvement in pixel identification efficiency, at the cost of a negligible decrease in accuracy after cuts.
 
 \begin{figure}
 \begin{center}
@@ -117,10 +117,32 @@ Application of this combined cut greatly increases the successful identification
 \end{center}
 \end{figure}
 
-HESS2!
+\section{HESS-2 BDT}
+The original HESS study predated the construction of the larger CT5 telescope, and thus focused exclusively in the four HESS-1 telescopes. Although the cuts in \ref{tab:table1} were not optimised for the differing pixel size and angular viewing region of CT5, they were replicated to provide a basis for comparison. Based on CT5 images from the training sample, an increased 5.7\% of DC pixels were correctly identified and passed the cut. However, this represented only 34.8\% of DC pixels passing the cuts, a much worsened efficiency. Although we can assume that better optimised CT5 cuts could remove many of the misidentified events, it is unlikely that any significant improvement in the fraction of correctly identified DC pixels would be possible. Thus, this is still a valid benchmark for comparative BDT performance. 
+
+Due to the distinct nature of the CT5 telescope, direct application of the HESS1 BDT results in a worsening of performance, leading to just X \% of correctly identified events passing the cut with a resultant accuracy of Y \%. To improve pixel identification, a separate HESS-2 BDT was instead trained with the same variables as above. The relative features are listed in \ref{tab:table3}. Ultimately just 23.2 \% of pixels were correctly identified and accepted, forming only 73.2 \% of the total accepted events. Part of this performance discrepancy can be explained by the HESS2 learning dataset, which has just one DC pixel per event rather than the four HESS1 DC pixels. Additionally, HESS 2 images will have roughly 2600 non-DC pixels per event, versus 3600 DC pixels per event for HESS 1 images.
+
+\begin{table}[h!]
+  \centering
+  \caption{Relative Feature Importance in HESS-2 BDT training}
+  \label{tab:table3}
+  \begin{tabular}{ccc}
+    \toprule
+    Variable & Relative Importance\\
+    \midrule
+    $DC_{Count}$ & 0.38\\
+    $Mean_{N.N}$ & 0.22\\
+    $\Delta_{Direction}$ & 0.15\\
+    $Q_{DC}$ & 0.11\\
+    $raw_{Q}$ & 0.06\\
+    $\Delta_{Line}$ & 0.04\\
+    $Intensity$ & 0.04\\
+    \bottomrule
+  \end{tabular}
+\end{table}  
 
 \section{Conclusion}
-The use of BDT identification has been shown to be superior to the traditional $Q_{DC}$ method, by providing five times as many correctly identified events, once cuts have been applied. Furthermore, the resultant sample has only half the contamination of the $Q_{DC}$ method, with 15\% of the sample being incorrectly identified events rather than 30\% for $Q_{DC}$.
+The use of BDT identification has been shown to be superior to the traditional $Q_{DC}$ method, by providing many more correctly identified DC pixels withoput a corresponding loss of accuracy. In the case of HESS 1, this represented a sevenfold increase in the expected number of DC pixels. BDT performance improves with increasing training data size, so there is no reason not to think that the successful ID rate for pixels could continue to be increased further. Adoption of BDT identification for DC pixel could prove invaluable to future event reconstruction for large Cherenkov Telescopes, both currently operating, and those planned for the future. 
 
 \bibliographystyle{plain}
 \bibliography{report}

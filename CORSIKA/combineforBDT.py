@@ -89,7 +89,7 @@ while (i < j):
 		for hess1pixel in hess1pixels:
 			bdtentry, truescore = makeBDTentry(hess1pixel)
 			if (bdtentry != None) and (truescore != None):
-				if random.random() > 0.5:
+				if random.random() < 0.9:
 					hess1trainset.append(bdtentry)
 					hess1trainscores.append(truescore)
 				else:
@@ -98,7 +98,7 @@ while (i < j):
 		for hess2pixel in hess2pixels:
 			bdtentry, truescore = makeBDTentry(hess2pixel)
 			if (bdtentry != None) and (truescore != None):
-				if random.random() > 0.5:
+				if random.random() < 0.9:
 					hess2trainset.append(bdtentry)
 					hess2trainscores.append(truescore)
 				else:

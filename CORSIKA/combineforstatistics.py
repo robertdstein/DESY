@@ -50,7 +50,7 @@ def makeBDTentry(pixelentry):
 			return None
 	return bdtentry
 
-for sigfit in [None]:
+for sigfit in [None, "rgr"]:
 	filepath = "/nfs/astrop/d6/rstein/data/"
 	i = 1
 	j = 2000

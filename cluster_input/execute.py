@@ -1,7 +1,5 @@
 #!/bin/env python
 
-n = "X"
-
 import initialise as i
 numberofhours, mincount, reconstructiongridwidth, orientation, eff, flux, area, solidangle, selectionefficiency = i.run()
 
@@ -16,9 +14,14 @@ import simulate as s
 import batchprocessing as bp
 import batchreconstruction as br
 
-sourcedata="executedefault" + str(n)
-processdata="executeprocess" + str(n)
-reconstructdata="executereconstructed" + str(n)
+parser = argparse.ArgumentParser()
+parser.add_argument("-n", "--number", default=1)
+
+cfg = parser.parse_args()
+
+sourcedata="executedefault" + str(cfg.number)
+processdata="executeprocess" + str(cfg.number)
+reconstructdata="executereconstructed" + str(cfg.number)
 
 
 detectedflux = float(flux)*float(area)*float(solidangle)*float(selectionefficiency)

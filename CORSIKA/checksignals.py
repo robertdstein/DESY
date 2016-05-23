@@ -12,27 +12,9 @@ parser.add_argument("-jid", "--jobID", default="2567181")
 
 cfg = parser.parse_args()
 
-def makeBDTentry(pixelentry):
-	bdtentry =[]
-	for variable in signalbdtvariables:
-		varsplit = variable.split('.')
-		suffix = pixelentry
-		if len(varsplit) > 1:
-			for name in varsplit[:-1]:
-				 suffix = getattr(suffix, name)
-			varname = varsplit[-1]
-		else:
-			varname = variable
-		if hasattr(suffix, varname):
-			newval = getattr(suffix, varname)
-			bdtentry.append(newval)
-		else:
-			return None
-	return bdtentry
-
 filepath = "/nfs/astrop/d6/rstein/data/"
 i = 1
-j = 20
+j = 100
 totalimages = [0, 0]
 DCpasstotal = [0, 0]
 correctimages =[0, 0]
@@ -128,62 +110,62 @@ while (i < j):
 				
 				fullBDT = fulltel.getpixel(trueID)
 				
-				print trueID, fullBDT.bdtscore
-				
-				candidatesignal = fullBDT.channel1.intensity
+				if fullBDT.bdtscore != None:
+											
+					candidatesignal = fullBDT.channel1.intensity
+						
 					
+					difference = (candidatesignal - DCcount)
+					absd = math.fabs(difference)
 				
-				difference = (candidatesignal - DCcount)
-				absd = math.fabs(difference)
-			
-				totalimages[plotindex] += 1
-				
-				if DCcount > DCcut:
-					DCpasstotal[plotindex] += 1
-				
-				if fulltel.trueDC == trueID:
-					result = 1
-					rightscores[plotindex].append(fullBDT.bdtscore)
-					rightsignals[plotindex].append(candidatesignal)
-				elif fulltel.BDTID == None:
-					print "None!!!"
-				else:
-					result = 0
-					wrongscores[plotindex].append(fullBDT.bdtscore)
-					wrongsignals[plotindex].append(candidatesignal)
-				
-				passcut = False
-				
-				if float(result) == float(1):
-					correctimages[plotindex] += 1
-					right[plotindex].append(fullBDT.bdtscore)
-					if float(ucut) > float(fullBDT.bdtscore) > float(cut):
-						correctcut[plotindex] += 1
-						totalcut[plotindex] += 1
-						if float(candidatesignal) > float(signalcut):
-							passcut = True	
-							combinedcorrect[plotindex] += 1
-							combinedtotal[plotindex] += 1
-							combinedright[plotindex].append(fullBDT.bdtscore)
-				elif float(result) == float(0):
-					wrong[plotindex].append(fullBDT.bdtscore)
-					if float(ucut) > float(fullBDT.bdtscore) > float(cut):
-						totalcut[plotindex] += 1
-						if float(candidatesignal) > float(signalcut):	
-							passcut = True	
-							combinedtotal[plotindex] += 1
-							combinedwrong[plotindex].append(fullBDT.bdtscore)
-				
-				if passcut:
-					passed[plotindex][result].append(difference)
-					passeddiff[plotindex].append(absd)
-					passedcsignals[plotindex][result].append(candidatesignal)
-					passedDCsignals[plotindex][result].append(DCcount)
-				else:
-					rejected[plotindex][result].append(difference)
-					rejecteddiff[plotindex].append(absd)
-					rejectedcsignals[plotindex][result].append(candidatesignal)
-					rejectedDCsignals[plotindex][result].append(DCcount)			
+					totalimages[plotindex] += 1
+					
+					if DCcount > DCcut:
+						DCpasstotal[plotindex] += 1
+					
+					if fulltel.trueDC == trueID:
+						result = 1
+						rightscores[plotindex].append(fullBDT.bdtscore)
+						rightsignals[plotindex].append(candidatesignal)
+					elif fulltel.BDTID == None:
+						print "None!!!"
+					else:
+						result = 0
+						wrongscores[plotindex].append(fullBDT.bdtscore)
+						wrongsignals[plotindex].append(candidatesignal)
+					
+					passcut = False
+					
+					if float(result) == float(1):
+						correctimages[plotindex] += 1
+						right[plotindex].append(fullBDT.bdtscore)
+						if float(ucut) > float(fullBDT.bdtscore) > float(cut):
+							correctcut[plotindex] += 1
+							totalcut[plotindex] += 1
+							if float(candidatesignal) > float(signalcut):
+								passcut = True	
+								combinedcorrect[plotindex] += 1
+								combinedtotal[plotindex] += 1
+								combinedright[plotindex].append(fullBDT.bdtscore)
+					elif float(result) == float(0):
+						wrong[plotindex].append(fullBDT.bdtscore)
+						if float(ucut) > float(fullBDT.bdtscore) > float(cut):
+							totalcut[plotindex] += 1
+							if float(candidatesignal) > float(signalcut):	
+								passcut = True	
+								combinedtotal[plotindex] += 1
+								combinedwrong[plotindex].append(fullBDT.bdtscore)
+					
+					if passcut:
+						passed[plotindex][result].append(difference)
+						passeddiff[plotindex].append(absd)
+						passedcsignals[plotindex][result].append(candidatesignal)
+						passedDCsignals[plotindex][result].append(DCcount)
+					else:
+						rejected[plotindex][result].append(difference)
+						rejecteddiff[plotindex].append(absd)
+						rejectedcsignals[plotindex][result].append(candidatesignal)
+						rejectedDCsignals[plotindex][result].append(DCcount)			
 
 	if (int(float(i)*100/float(j)) - float(i)*100/float(j)) ==0:
 		print p+1
@@ -199,14 +181,12 @@ for i in [0, 1]:
 		colors =['r', 'g']
 
 		ax2 = plt.subplot(2,2,2)
-		if len(rejected[i][0]) > 0:
-			plt.hist([rejected[i][0], rejected[i][1]], color=colors, stacked=True, bins=50)
+		plt.hist([rejected[i][0], rejected[i][1]], color=colors, stacked=True, bins=50)
 		plt.title("DC pixel error for rejected events")
 		plt.xlabel("Difference from true count")
 		
 		ax1 = plt.subplot(221, sharex=ax2)
-		if len(passed[i][0]) > 0:
-			plt.hist(passed[i], color=colors, stacked=True, bins=50)
+		plt.hist(passed[i], color=colors, stacked=True, bins=50)
 		plt.title("DC pixel error for events passing cuts")
 		plt.xlabel("Difference from true count")
 
@@ -218,16 +198,14 @@ for i in [0, 1]:
 		
 		ax4 = plt.subplot(2,2,4)
 		for j in range(2):
-			if len(rejectedDCsignals[i][j]) > 0:
-				plt.scatter( rejectedDCsignals[i][j],rejectedcsignals[i][j], color=colors[j], marker="o")
+			plt.scatter( rejectedDCsignals[i][j],rejectedcsignals[i][j], color=colors[j], marker="o")
 		plt.plot([0,2500], [0, 2500], color="k")
 		plt.title("True vs. reconstructed signal for rejected events")
 		plt.ylabel("Total pixel intensity")
 		
 		ax3 = plt.subplot(223, sharex = ax4, sharey=ax4)
 		for j in range(2):
-			if len(passedDCsignals[i][j]) > 0:
-				plt.scatter( passedDCsignals[i][j],passedcsignals[i][j], color=colors[j], marker="o")
+			plt.scatter( passedDCsignals[i][j],passedcsignals[i][j], color=colors[j], marker="o")
 		plt.plot([0,2500], [0, 2500], color="k")
 		plt.xlabel("True signal")
 		plt.title("True vs. reconstructed signal for accepted events")
@@ -246,28 +224,27 @@ for i in [0, 1]:
 			alldiff.sort()
 			
 			nentries = len(allevents)
-			if nentries > 4:
-				halfinteger = int(0.5*nentries)
-				lowerinteger = int(0.16*nentries)
-				upperinteger = int(0.84*nentries)
-				integer68 = int(0.68*nentries)
-				
-				lower = allevents[lowerinteger]
-				upper = allevents[upperinteger]
-				
-				toprint= "Mean = " + str('{0:.1f}'.format(np.mean(allevents)))
-				toprint += ". Median = " + str('{0:.1f}'.format(allevents[halfinteger])) + "\n"
-				toprint += "Lower = " + str('{0:.1f}'.format(lower))
-				toprint += ". Upper = " + str('{0:.1f}'.format(upper)) + "\n"
-				toprint += "Sigma = " + str('{0:.1f}'.format(0.5*(upper-lower))) + "\n"
-				
-				toprint += "Mean absolute difference = "+ str('{0:.1f}'.format(np.mean(alldiff))) + "\n"
-				toprint += "Median absolute difference = " + str('{0:.1f}'.format(alldiff[halfinteger])) + "\n"
-				toprint += "Sigma = " + str('{0:.1f}'.format(alldiff[integer68])) + "\n"
-				
-				eval("ax" + str(k) + ".annotate(toprint, xy=(0.02, 0.75), xycoords='axes fraction',  fontsize=10)")
-				
-				print k, toprint
+			halfinteger = int(0.5*nentries)
+			lowerinteger = int(0.16*nentries)
+			upperinteger = int(0.84*nentries)
+			integer68 = int(0.68*nentries)
+			
+			lower = allevents[lowerinteger]
+			upper = allevents[upperinteger]
+			
+			toprint= "Mean = " + str('{0:.1f}'.format(np.mean(allevents)))
+			toprint += ". Median = " + str('{0:.1f}'.format(allevents[halfinteger])) + "\n"
+			toprint += "Lower = " + str('{0:.1f}'.format(lower))
+			toprint += ". Upper = " + str('{0:.1f}'.format(upper)) + "\n"
+			toprint += "Sigma = " + str('{0:.1f}'.format(0.5*(upper-lower))) + "\n"
+			
+			toprint += "Mean absolute difference = "+ str('{0:.1f}'.format(np.mean(alldiff))) + "\n"
+			toprint += "Median absolute difference = " + str('{0:.1f}'.format(alldiff[halfinteger])) + "\n"
+			toprint += "Sigma = " + str('{0:.1f}'.format(alldiff[integer68])) + "\n"
+			
+			eval("ax" + str(k) + ".annotate(toprint, xy=(0.02, 0.75), xycoords='axes fraction',  fontsize=10)")
+			
+			print k, toprint
 			
 			k+=1
 		

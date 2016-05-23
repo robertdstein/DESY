@@ -49,5 +49,5 @@
 
 . /nfs/astrop/d1/hhsoft/64bit_crf/ini_python2.7.8_64bit_crf.sh
 
-python /d6/rstein/Hamburg-Cosmic-Rays/cluster_input/execute$SGE_TASK_ID.py
+python /d6/rstein/Hamburg-Cosmic-Rays/cluster_input/execute.py -n $SGE_TASK_ID
 #cp $TMPDIR/* /d6/rstein/Hamburg-Cosmic-Rays/cluster_output
