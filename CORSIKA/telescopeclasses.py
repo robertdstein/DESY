@@ -412,8 +412,8 @@ class telescopeimage:
 			plt.annotate("Not \n Triggered", xy=(0.2, 0.5), xycoords="axes fraction", zorder=2, color='w', fontsize=(0.3*self.plotscale))
 		
 		if simcategory == "full":
-			if hasattr(self.hillas, "showery"):
-				plt.scatter(self.hillas.showery, self.hillas.showerx, c='w', s=100, marker="o")			
+			#~ if hasattr(self.hillas, "showery"):
+				#~ plt.scatter(self.hillas.showery, self.hillas.showerx, c='w', s=100, marker="o")			
 			if hasattr(self.hillas, "image_cog_y_"):
 				plt.scatter(self.hillas.image_cog_y_, self.hillas.image_cog_x_, c='w', s=100, marker="x")
 			#~ if self.QDCID != None:
@@ -426,16 +426,14 @@ class telescopeimage:
 		if self.trueDC != None:
 			truepixel = self.gettruepixel()
 			print truepixel.ID
-			if simcategory == "full":	
-				plt.scatter(truepixel.y, truepixel.x, facecolors='none', edgecolors="orange", s=(self.plotscale*1.2), marker="o", linewidth=2, zorder=3)
-			elif simcategory == "DC":
-				plt.annotate("",
-				            xy=(truepixel.y+0.05, truepixel.x+0.05), xycoords='data',
-				            xytext=(0.0, 0.0), textcoords='data',
-				            size=20, va="center", ha="center",
-				            arrowprops=dict(arrowstyle="simple",
-				                            connectionstyle="arc3,rad=-0.2", color="yellow"), 
-				            )
+			plt.scatter(truepixel.y, truepixel.x, facecolors='none', edgecolors="white", s=(self.plotscale*1.2), marker="o", linewidth=2, zorder=3)
+			plt.annotate("",
+			            xy=(truepixel.y+0.05, truepixel.x+0.05), xycoords='data',
+			            xytext=(-0.5, 0.0), textcoords='data',
+			            size=20, va="center", ha="center",
+			            arrowprops=dict(arrowstyle="simple",
+			                            connectionstyle="arc3,rad=-0.2", color="white"), 
+			            )
 		plt.xlim(-self.angularwidth, self.angularwidth)
 		plt.ylim(-self.angularwidth, self.angularwidth)
 		plt.axis('off')

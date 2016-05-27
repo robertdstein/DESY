@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2015.11.27)  18 MAY 2016 15:39
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2015.11.27)  27 MAY 2016 18:37
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -230,9 +230,9 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <6> on input line 14.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 23.
+(Font)              <7> on input line 22.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 23.
+(Font)              <5> on input line 22.
 [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
@@ -278,52 +278,52 @@ Package geometry Warning: `portrait': not available in `\newgeometry'; skipped.
 <graphs/graphDC.pdf, id=15, 722.7pt x 1445.4pt>
 File: graphs/graphDC.pdf Graphic file (type pdf)
  <use graphs/graphDC.pdf>
-Package pdftex.def Info: graphs/graphDC.pdf used on input line 43.
+Package pdftex.def Info: graphs/graphDC.pdf used on input line 40.
 (pdftex.def)             Requested size: 203.83417pt x 425.86113pt.
 
 <graphs/graphfull.pdf, id=17, 722.7pt x 1445.4pt>
 File: graphs/graphfull.pdf Graphic file (type pdf)
  <use graphs/graphfull.pdf>
-Package pdftex.def Info: graphs/graphfull.pdf used on input line 49.
+Package pdftex.def Info: graphs/graphfull.pdf used on input line 46.
 (pdftex.def)             Requested size: 203.83417pt x 425.86113pt.
 
 
-LaTeX Warning: Command \textgreater invalid in math mode on input line 63.
+LaTeX Warning: Command \textgreater invalid in math mode on input line 58.
 
-LaTeX Font Info:    Try loading font information for OML+cmr on input line 63.
+LaTeX Font Info:    Try loading font information for OML+cmr on input line 58.
 (/usr/share/texlive/texmf-dist/tex/latex/base/omlcmr.fd
 File: omlcmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OML/cmr/m/n' in size <10> not available
-(Font)              Font shape `OML/cmm/m/it' tried instead on input line 63.
+(Font)              Font shape `OML/cmm/m/it' tried instead on input line 58.
 
 
-LaTeX Warning: Command \textgreater invalid in math mode on input line 63.
-
-
-LaTeX Warning: `!h' float specifier changed to `!ht'.
+LaTeX Warning: Command \textgreater invalid in math mode on input line 58.
 
 [2] [3
 
 
  <./graphs/graphDC.pdf> <./graphs/graphfull.pdf>]
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
 <graphs/cutdistribution1None.pdf, id=44, 1084.05pt x 1084.05pt>
 File: graphs/cutdistribution1None.pdf Graphic file (type pdf)
 
 <use graphs/cutdistribution1None.pdf>
-Package pdftex.def Info: graphs/cutdistribution1None.pdf used on input line 114
+Package pdftex.def Info: graphs/cutdistribution1None.pdf used on input line 122
 .
 (pdftex.def)             Requested size: 452.9679pt x 452.96558pt.
- [4] [5 <./graphs/cutdistribution1None.pdf>] (./bdtarticle.bbl) [6] (./bdtartic
+ (./bdtarticle.bbl [4] [5 <./graphs/cutdistribution1None.pdf>]) [6] (./bdtartic
 le.aux) ) 
 Here is how much of TeX's memory you used:
  2120 strings out of 494976
  30478 string characters out of 6179136
- 99320 words of memory out of 5000000
+ 99353 words of memory out of 5000000
  5327 multiletter control sequences out of 15000+600000
  8233 words of font info for 29 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 38i,10n,29p,1057b,356s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 38i,10n,29p,1358b,356s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.p
 fb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></us
 r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/shar
@@ -336,9 +336,9 @@ blic/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/ams
 fonts/cm/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm
 /cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7
 .pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb>
-Output written on bdtarticle.pdf (6 pages, 222618 bytes).
+Output written on bdtarticle.pdf (6 pages, 220410 bytes).
 PDF statistics:
- 144 PDF objects out of 1000 (max. 8388607)
+ 145 PDF objects out of 1000 (max. 8388607)
  65 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  28 words of extra memory for PDF output out of 10000 (max. 10000000)

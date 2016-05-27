@@ -90,7 +90,8 @@ for sigfit in [None, "rgr"]:
 	
 	combinedright = [[], []]
 	combinedwrong = [[], []]
-	DCcounts =[[], []]
+	rightDCcounts =[[], []]
+	wrongDCcounts=[[],[]]
 	rightscores =[[], []]
 	wrongscores = [[], []]
 	rightsignals =[[], []]
@@ -178,8 +179,6 @@ for sigfit in [None, "rgr"]:
 						toplot = hessstatus[1]
 					else:
 						raise Exception("Telescope.size error, size is " +fulltel.size) 
-	
-					DCcounts[plotindex].append(DCcount)
 					
 					if DCcount > DCcut:
 						DCpasstotal[plotindex] += 1
@@ -190,9 +189,10 @@ for sigfit in [None, "rgr"]:
 						fullBDT = fulltel.getBDTpixel()
 						
 						if (fullBDT.bdtscore != None):
+							simplesignal = fullBDT.channel1.intensity - fullBDT.nnmean
 							
 							if sigfit == None:							
-								candidatesignal = fullBDT.channel1.intensity - fullBDT.nnmean
+								candidatesignal = simplesignal
 							elif sigfit == "rgr":
 								bdtentry = makeBDTentry(fullBDT)
 								if (fulltel.size=="HESS1") and (bdtentry != None):
@@ -205,12 +205,13 @@ for sigfit in [None, "rgr"]:
 								raise Exception("sigfit is "+sigfit)
 								
 							
-							difference = (candidatesignal - DCcount)
+							difference = (candidatesignal - DCcount)/DCcount
 							absd = math.fabs(difference)
 
 							if fulltel.BDTID == trueID:
 								result = 1
 								correctimages[plotindex] += 1
+								rightDCcounts[plotindex].append(DCcount)
 								rightscores[plotindex].append(fullBDT.bdtscore)
 								rightsignals[plotindex].append(candidatesignal)
 								right[plotindex].append(fullBDT.bdtscore)
@@ -221,6 +222,7 @@ for sigfit in [None, "rgr"]:
 								print "None!!!"
 							else:
 								result = 0
+								wrongDCcounts[plotindex].append(DCcount)
 								wrongscores[plotindex].append(fullBDT.bdtscore)
 								wrongsignals[plotindex].append(candidatesignal)
 								wrong[plotindex].append(fullBDT.bdtscore)
@@ -232,7 +234,7 @@ for sigfit in [None, "rgr"]:
 							
 							if float(result) == float(1):
 								if float(ucut) > float(fullBDT.bdtscore) > float(cut):
-									if float(candidatesignal) > float(signalcut):
+									if float(simplesignal) > float(signalcut):
 										passcut = True
 										k+=1
 										combinedcorrect[plotindex] += 1
@@ -246,7 +248,7 @@ for sigfit in [None, "rgr"]:
 							elif float(result) == float(0):
 								if float(ucut) > float(fullBDT.bdtscore) > float(cut):
 									
-									if float(candidatesignal) > float(signalcut):
+									if float(simplesignal) > float(signalcut):
 										k+=1	
 										passcut = True	
 										combinedtotal[plotindex] += 1
@@ -311,68 +313,102 @@ for sigfit in [None, "rgr"]:
 			message += "Our QDC cut requires QDC < 0.14 log( Itot / 161 cos(theta)), leaving", str(oldtotalcut[i]), "images. \n "
 			message += "Of these,", str(oldcorrectcut[i]), "are correctly identified images. \n "
 			if oldtotalcut[i] > 0:
-				message += "Successful ID rate after cut is", str('{0:.1f}'.format(float(100.*oldcorrectcut[i]/oldtotalcut[i]))),  "% "
-				message += "Fraction of target pixels correctly identified is", str('{0:.1f}'.format(float(100.*oldcorrectcut[i]/totalimages[i]))), "% \n"
+				message += "Successful ID rate after cut is", str('{0:.1f}'.format(float(100.*oldcorrectcut[i]/oldtotalcut[i]))),  "% \n"
+				message += "Fraction of pixels correctly identified is", str('{0:.1f}'.format(float(100.*oldcorrectcut[i]/totalimages[i]))), "% \n"
+				message += "Fraction of pixels incorrectly identified is", str('{0:.1f}'.format(float(100.*(oldtotalcut[i]-oldcorrectcut[i])/totalimages[i]))), "% \n"
 			else:
 				message += " \n"
 			
 			message += "Additionally requiring multiplicity > ", str(minmultiplicity), ", we have", str(oldcombinedtotal[i]), "images . \n "
 			message += "Of these,", str(oldcombinedcorrect[i]), "are correctly identified images. \n "
 			if oldcombinedtotal[i] > 0:
-				message += "Successful ID rate after cut is", str('{0:.1f}'.format(float(100.*oldcombinedcorrect[i]/oldcombinedtotal[i]))),  "% "
-				message += "Fraction of target pixels correctly identified is", str('{0:.1f}'.format(float(100.*oldcombinedcorrect[i]/totalimages[i]))), "% \n \n"
+				message += "Successful ID rate after cut is", str('{0:.1f}'.format(float(100.*oldcombinedcorrect[i]/oldcombinedtotal[i]))),  "% \n"
+				message += "Fraction of pixels correctly identified is", str('{0:.1f}'.format(float(100.*(oldcombinedcorrect[i])/totalimages[i]))), "% \n "
+				message += "Fraction of pixels incorrectly identified is", str('{0:.1f}'.format(float(100.*(oldcombinedtotal[i]-oldcombinedcorrect[i])/totalimages[i]))), "% \n \n"
 			else:
 				message += " \n"
 				
 			message += "Our BDT cut requires Signal Probability >", str(cut), ", we have", str(totalcut[i]), "images. \n"
 			message += "Of these,", str(correctcut[i]), "are correctly identified images.\n  "
 			if totalcut[i] > 0:
-				message += "Successful ID rate after cut is", str('{0:.1f}'.format(float(100.*correctcut[i]/totalcut[i]))), "% "
-				message += "Fraction of target pixels correctly identified is", str('{0:.1f}'.format(float(100.*correctcut[i]/totalimages[i]))), "% \n"
+				message += "Successful ID rate after cut is", str('{0:.1f}'.format(float(100.*correctcut[i]/totalcut[i]))), "% \n"
+				message += "Fraction of pixels correctly identified is", str('{0:.1f}'.format(float(100.*(correctcut[i])/totalimages[i]))), "% \n"
+				message += "Fraction of pixels incorrectly identified is", str('{0:.1f}'.format(float(100.*(totalcut[i]-correctcut[i])/totalimages[i]))), "% \n"
 			else:
 				message += " \n"
 				
 			message += "Additionally requiring signal > ", str(signalcut), ", we have", str(combinedtotal[i]), "images. \n"
 			message += "Of these,", str(combinedcorrect[i]), "are correctly identified images. \n "
 			if combinedtotal[i] > 0:
-				message += "Successful ID rate after cut is", str('{0:.1f}'.format(float(100.*combinedcorrect[i]/combinedtotal[i]))), "% "
-				message += "Fraction of target pixels correctly identified is", str('{0:.1f}'.format(float(100.*combinedcorrect[i]/totalimages[i]))), "% \n"
+				message += "Successful ID rate after cut is", str('{0:.1f}'.format(float(100.*combinedcorrect[i]/combinedtotal[i]))), "% \n"
+				message += "Fraction of pixels correctly identified is", str('{0:.1f}'.format(float(100.*(combinedcorrect[i])/totalimages[i]))), "% \n"
+				message += "Fraction of pixels incorrectly identified is", str('{0:.1f}'.format(float(100.*(combinedtotal[i]-combinedcorrect[i])/totalimages[i]))), "% \n"
 				
 			message += "Additionally requiring multiplicity > ", str(minmultiplicity), ", we have", str(fulltotal[i]), "images . \n "
 			message += "Of these,", str(fullcorrect[i]), "are correctly identified images. \n "
 			if combinedtotal[i] > 0:
-				message += "Successful ID rate after cut is", str('{0:.1f}'.format(float(100.*fullcorrect[i]/fulltotal[i]))), "% "
-				message += "Fraction of target pixels correctly identified is", str('{0:.1f}'.format(float(100.*fullcorrect[i]/totalimages[i]))), "% \n \n"
+				message += "Successful ID rate after cut is", str('{0:.1f}'.format(float(100.*fullcorrect[i]/fulltotal[i]))), "% \n"
+				message += "Fraction of pixels correctly identified is", str('{0:.1f}'.format(float(100.*fullcorrect[i]/totalimages[i]))), "% \n"
+				message += "Fraction of pixels incorrectly identified is", str('{0:.1f}'.format(float(100.*(fulltotal[i]-fullcorrect[i])/totalimages[i]))), "% \n \n"
 					
 			toprint = ' '.join(message)
 			print toprint
 			
+			def format(val, pos):
+			    if val > 0.5:
+			        return "DC pixel"
+			    else:
+			        return "non-DC pixel"
 
 			for rows in [2, 3]:
 			
-				ax1 = plt.subplot(rows,2,1)
-				plt.title("Signal in pure DC pixel without shower")
-				plt.hist(DCcounts[i], bins=100)
+				ax1 = plt.subplot(rows,2,2)
+				plt.title("Signal in pure DC pixel without shower", y=1.15)
+				plt.hist([rightDCcounts[i],wrongDCcounts[i]], color=['g', 'silver'], label=["Correct", "Incorrect"], stacked=True, bins=50)
 				plt.xlabel("DC pixel intensity")
 				
-				ax2 = plt.subplot(rows,2,2)
+				
+				ax3 = plt.subplot(rows,2,1)
+				plt.title("Distribution of BDT-reconstructed Events", y=1.15)
+				plt.hist([right[i], wrong[i]], color=['g', 'silver'], stacked=True, bins=25)
+				plt.xlabel("BDT score")
+				
+				ax3up = ax3.twiny()
+
+				ax3up.xaxis.set_major_locator(plt.MaxNLocator(1))
+				
+				ax3up.xaxis.set_minor_locator(plt.NullLocator())
+				
+				ax3up.xaxis.set_major_formatter(plt.FuncFormatter(format))
+				ax3up.tick_params(direction='out', pad=5)
+				
+				ax4 = plt.subplot(rows,2,3)
+				plt.title("Distribution of BDT-reconstructed Events, after Score and Signal cuts", y=1.15)
+				plt.hist([combinedright[i], combinedwrong[i]], color=['g', 'silver'], stacked=True, bins=25)
+				plt.xlabel("BDT score")
+				
+				ax4up = ax4.twiny()
+
+				ax4up.xaxis.set_major_locator(plt.MaxNLocator(1))
+				
+				ax4up.xaxis.set_minor_locator(plt.NullLocator()) 
+  
+				ax4up.xaxis.set_major_formatter(plt.FuncFormatter(format))
+				ax4up.tick_params(direction='out', pad=5)
+				
+				
+				ax2 = plt.subplot(rows,2,4)
 				
 				if len(oldright[i]) > 0:
-					plt.title("Distribution of QDC-reconstructed Events")
-					plt.hist([oldright[i], oldwrong[i]], color=['g', 'r'], stacked=True, bins=50)
+					plt.title("Distribution of QDC-reconstructed Events", y=1.15)
+					plt.hist([oldright[i], oldwrong[i]], color=['g', 'silver'], stacked=True, bins=20)
 					plt.xlabel("QDC value")
 				
-				ax3 = plt.subplot(rows,2,3)
-				plt.title("Distribution of BDT-reconstructed Events")
-				plt.hist([right[i], wrong[i]], color=['g', 'r'], stacked=True, bins=50)
-				plt.xlabel("BDT score")
-				
-				ax4 = plt.subplot(rows,2,4)
-				plt.title("Distribution of BDT-reconstructed Events, after cuts")
-				plt.hist([combinedright[i], combinedwrong[i]], color=['g', 'r'], stacked=True, bins=50)
-				plt.xlabel("BDT score")
-				
 				figure = plt.gcf() # get current figure
+				handles, labels = ax1.get_legend_handles_labels()
+				figure.legend(handles, labels, loc="topright")
+				
+				plt.subplots_adjust(hspace = 0.5)
 				if (rows == 2) and (sigfit==None):
 					figure.set_size_inches(15, 15)
 					plt.savefig("/nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/report/graphs/cutdistribution" + str(i+1) +str(sigfit)+".pdf")
@@ -381,13 +417,13 @@ for sigfit in [None, "rgr"]:
 
 					ax5 = plt.subplot(3,2,5)
 					plt.axis('off')
-					plt.annotate(toprint, xy=(0.0, 0.0), xycoords="axes fraction",  fontsize=10)
+					plt.annotate(toprint, xy=(0.0, 0.0), xycoords="axes fraction",  fontsize=8)
 					
 					
 					ax6 = plt.subplot(3, 2, 6)
-					plt.title("Distribution of BDT-reconstructed Events, after cuts")
+					plt.title("Distribution of BDT-reconstructed Events, after cuts", y=1.15)
 					plt.scatter(rightscores[i], rightsignals[i], color='g')
-					plt.scatter(wrongscores[i], wrongsignals[i], color='r')
+					plt.scatter(wrongscores[i], wrongsignals[i], color='silver', edgecolor="k")
 					plt.axvline(cut, color='k', ls ="--")
 					plt.axhline(signalcut, color='k', ls ="--")
 					plt.xlabel("BDT score")
@@ -398,45 +434,50 @@ for sigfit in [None, "rgr"]:
 					plt.savefig("/nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/CORSIKA/graphs/statshess" + str(i+1) +str(sigfit)+".pdf")
 			
 				plt.close()
+			
+			colors =['r', 'g']	
+			for columns in [1, 2]:
+			
+				ax1 = plt.subplot(2,columns,1)
+				plt.hist(passed[i], color=colors, stacked=True, bins=50)
+				plt.title("DC pixel error for events passing cuts")
+				plt.xlabel("Difference from true count")	
 				
-			colors =['r', 'g']
-	
-			ax2 = plt.subplot(2,2,2)
-			plt.hist([rejected[i][0], rejected[i][1]], color=colors, stacked=True, bins=50)
-			plt.title("DC pixel error for rejected events")
-			plt.xlabel("Difference from true count")
-			
-			ax1 = plt.subplot(221, sharex=ax2)
-			plt.hist(passed[i], color=colors, stacked=True, bins=50)
-			plt.title("DC pixel error for events passing cuts")
-			plt.xlabel("Difference from true count")
-	
-			linear = np.linspace(1, 3000, 1000)
-			plotcut = []
-			for entry in linear:
-				plotcut.append(signalcut/entry)
-			
-			
-			ax4 = plt.subplot(2,2,4)
-			for j in range(2):
-				plt.scatter( rejectedDCsignals[i][j],rejectedcsignals[i][j], color=colors[j], marker="o")
-			plt.axhline(1, color='k')
-			plt.plot(linear, plotcut, color='k', linestyle='--')
-			plt.xlabel("True signal")
-			plt.title("True vs. reconstructed signal for rejected events")
-			plt.ylabel("Candidate reconstructed signal / True signal")
-			
-			ax3 = plt.subplot(223, sharex = ax4, sharey=ax4)
-			for j in range(2):
-				plt.scatter( passedDCsignals[i][j],passedcsignals[i][j], color=colors[j], marker="o")
-			plt.axhline(1, color='k')
-			plt.plot(linear, plotcut, color='k', linestyle='--')
-			ax3.fill_between(linear, 0, plotcut, alpha=0.2)
-			plt.xlabel("True signal")
-			plt.title("True vs. reconstructed signal for accepted events")
-			plt.ylabel("Candidate reconstructed signal / True signal")
-			ax3.set_ylim([0,5])
-			ax3.set_xlim(left=0)
+				linear = np.linspace(1, 3000, 1000)
+				plotcut = []
+				for entry in linear:
+					plotcut.append(signalcut/entry)
+				
+				if columns == 2:
+					ax2 = plt.subplot(2,2,2, sharex=ax1)
+					plt.hist([rejected[i][0], rejected[i][1]], color=colors, stacked=True, bins=50)
+					plt.title("DC pixel error for rejected events")
+					plt.xlabel("Difference from true count")
+
+					ax4 = plt.subplot(2,2,4)
+					for j in range(2):
+						plt.scatter( rejectedDCsignals[i][j],rejectedcsignals[i][j], color=colors[j], marker="o")
+					plt.axhline(1, color='k')
+					plt.plot(linear, plotcut, color='k', linestyle='--')
+					plt.xlabel("True signal")
+					plt.title("True vs. reconstructed signal for rejected events")
+					plt.ylabel("Candidate reconstructed signal / True signal")
+					
+					ax3 = plt.subplot(223, sharex = ax4, sharey=ax4)
+					
+				elif columns == 1:
+					ax3 = plt.subplot(212)
+				
+				for j in range(2):
+					plt.scatter( passedDCsignals[i][j],passedcsignals[i][j], color=colors[j], marker="o")
+				plt.axhline(1, color='k')
+				plt.plot(linear, plotcut, color='k', linestyle='--')
+				ax3.fill_between(linear, 0, plotcut, alpha=0.2)
+				plt.xlabel("True signal")
+				plt.title("True vs. reconstructed signal for accepted events")
+				plt.ylabel("Candidate reconstructed signal / True signal")
+				ax3.set_ylim([0,5])
+				ax3.set_xlim(left=0)
 			
 			k=1
 			
@@ -459,15 +500,15 @@ for sigfit in [None, "rgr"]:
 				lower = allevents[lowerinteger]
 				upper = allevents[upperinteger]
 				
-				toprint= "Mean = " + str('{0:.1f}'.format(np.mean(allevents)))
-				toprint += ". Median = " + str('{0:.1f}'.format(allevents[halfinteger])) + "\n"
-				toprint += "Lower = " + str('{0:.1f}'.format(lower))
-				toprint += ". Upper = " + str('{0:.1f}'.format(upper)) + "\n"
-				toprint += "Sigma = " + str('{0:.1f}'.format(0.5*(upper-lower))) + "\n"
+				toprint= "Mean = " + str('{0:.2f}'.format(np.mean(allevents)))
+				toprint += ". Median = " + str('{0:.2f}'.format(allevents[halfinteger])) + "\n"
+				toprint += "Lower = " + str('{0:.2f}'.format(lower))
+				toprint += ". Upper = " + str('{0:.2f}'.format(upper)) + "\n"
+				toprint += "Sigma = " + str('{0:.2f}'.format(0.5*(upper-lower))) + "\n"
 				
-				toprint += "Mean absolute difference = "+ str('{0:.1f}'.format(np.mean(alldiff))) + "\n"
-				toprint += "Median absolute difference = " + str('{0:.1f}'.format(alldiff[halfinteger])) + "\n"
-				toprint += "Sigma = " + str('{0:.1f}'.format(alldiff[integer68])) + "\n"
+				toprint += "Mean absolute difference = "+ str('{0:.2f}'.format(np.mean(alldiff))) + "\n"
+				toprint += "Median absolute difference = " + str('{0:.2f}'.format(alldiff[halfinteger])) + "\n"
+				toprint += "Sigma = " + str('{0:.2f}'.format(alldiff[integer68])) + "\n"
 				
 				eval("ax" + str(k) + ".annotate(toprint, xy=(0.02, 0.75), xycoords='axes fraction',  fontsize=10)")
 				
@@ -483,7 +524,7 @@ for sigfit in [None, "rgr"]:
 			print "Saving to", saveto
 			
 			plt.savefig(saveto)
-			if sigfit == None:
+			if j > 500:
 				plt.savefig("/nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/report/graphs/DCcounterrorhess" + str(i+1) + str(sigfit)+".pdf")
 			plt.close()
 	

@@ -78,6 +78,8 @@ else:
 	rgrcommand = "python trainextrapolation.py -jid " + cfg.BDTID
 	print time.asctime(time.localtime()), rgrcommand, "\n"
 	os.system(rgrcommand)
+	lpdcommand = "python lpdforfixedenergy.py"
+	os.system(lpdcommand)
 	
 stats_combine_command = "python combineforstatistics.py -jid " + cfg.testID
 print time.asctime(time.localtime()), stats_combine_command, "\n"

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2015.11.27)  18 MAY 2016 17:09
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2015.11.27)  27 MAY 2016 18:37
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -289,69 +289,93 @@ File: graphs/cutdistribution1None.pdf Graphic file (type pdf)
 Package pdftex.def Info: graphs/cutdistribution1None.pdf used on input line 197
 .
 (pdftex.def)             Requested size: 452.9679pt x 452.96558pt.
+ [11] [12 <./graphs/cutdistribution1None.pdf>]
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <12> on input line 216.
+(Font)              <12> on input line 241.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <8> on input line 216.
+(Font)              <8> on input line 241.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <6> on input line 216.
- [11] [12 <./graphs/cutdistribution1None.pdf>] <graphs/DCcounterrorhess1.pdf, i
-d=115, 1445.4pt x 1445.4pt>
-File: graphs/DCcounterrorhess1.pdf Graphic file (type pdf)
+(Font)              <6> on input line 241.
+ <graphs/simtelerror1.pdf, id=116, 1445.4pt x 1445.4pt>
+File: graphs/simtelerror1.pdf Graphic file (type pdf)
 
-<use graphs/DCcounterrorhess1.pdf>
-Package pdftex.def Info: graphs/DCcounterrorhess1.pdf used on input line 226.
+<use graphs/simtelerror1.pdf>
+Package pdftex.def Info: graphs/simtelerror1.pdf used on input line 250.
 (pdftex.def)             Requested size: 452.9679pt x 452.96558pt.
 
-<graphs/hessheight.png, id=116, 722.7pt x 1084.05pt>
+
+LaTeX Warning: Command \textgreater invalid in math mode on input line 256.
+
+
+LaTeX Warning: Command \textgreater invalid in math mode on input line 256.
+
+[13] [14 <./graphs/simtelerror1.pdf>]
+<graphs/corsikalpd1.pdf, id=159, 1445.4pt x 1445.4pt>
+File: graphs/corsikalpd1.pdf Graphic file (type pdf)
+
+<use graphs/corsikalpd1.pdf>
+Package pdftex.def Info: graphs/corsikalpd1.pdf used on input line 262.
+(pdftex.def)             Requested size: 452.9679pt x 452.96558pt.
+
+<graphs/DCcounterrorhess1None.pdf, id=160, 1445.4pt x 1445.4pt>
+File: graphs/DCcounterrorhess1None.pdf Graphic file (type pdf)
+
+<use graphs/DCcounterrorhess1None.pdf>
+Package pdftex.def Info: graphs/DCcounterrorhess1None.pdf used on input line 29
+6.
+(pdftex.def)             Requested size: 452.9679pt x 452.96558pt.
+
+<graphs/hessheight.png, id=161, 722.7pt x 1084.05pt>
 File: graphs/hessheight.png Graphic file (type png)
 
 <use graphs/hessheight.png>
-Package pdftex.def Info: graphs/hessheight.png used on input line 239.
+Package pdftex.def Info: graphs/hessheight.png used on input line 309.
 (pdftex.def)             Requested size: 420.31314pt x 630.45189pt.
-
-<graphs/hess.png, id=117, 1046.91125pt x 924.45375pt>
+ [15] [16 <./graphs/corsikalpd1.pdf>] [17 <./graphs/DCcounterrorhess1None.pdf>]
+ [18 <./graphs/hessheight.png>]
+<graphs/hess.png, id=274, 1046.91125pt x 924.45375pt>
 File: graphs/hess.png Graphic file (type png)
  <use graphs/hess.png>
-Package pdftex.def Info: graphs/hess.png used on input line 250.
+Package pdftex.def Info: graphs/hess.png used on input line 320.
 (pdftex.def)             Requested size: 407.66833pt x 359.97127pt.
 
-[13] [14 <./graphs/DCcounterrorhess1.pdf>] [15 <./graphs/hessheight.png>]
-[16 <./graphs/hess.png>]
-<graphs/optimiselayout.png, id=187, 1445.4pt x 1084.05pt>
+[19 <./graphs/hess.png>]
+<graphs/optimiselayout.png, id=278, 1445.4pt x 1084.05pt>
 File: graphs/optimiselayout.png Graphic file (type png)
 
 <use graphs/optimiselayout.png>
-Package pdftex.def Info: graphs/optimiselayout.png used on input line 269.
+Package pdftex.def Info: graphs/optimiselayout.png used on input line 339.
 (pdftex.def)             Requested size: 407.66833pt x 305.74846pt.
- (./draft1.bbl [17 <./graphs/optimiselayout.png>]) [18] (./draft1.aux) ) 
+ [20 <./graphs/optimiselayout.png>]
+(./draft1.bbl) [21] (./draft1.aux) ) 
 Here is how much of TeX's memory you used:
- 2164 strings out of 494976
- 31563 string characters out of 6179136
- 98295 words of memory out of 5000000
- 5361 multiletter control sequences out of 15000+600000
+ 2178 strings out of 494976
+ 31907 string characters out of 6179136
+ 99332 words of memory out of 5000000
+ 5373 multiletter control sequences out of 15000+600000
  9154 words of font info for 32 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 38i,9n,29p,1228b,265s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/s
-hare/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/t
-exlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive
-/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf
--dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/
-fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texlive/texmf-dist/fonts/
-type1/public/amsfonts/cm/cmmi5.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
-ublic/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/a
-msfonts/cm/cmmi8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts
-/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr
-12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb>
-</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/sh
-are/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/te
-xlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/t
-exmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb>
-Output written on draft1.pdf (19 pages, 1337578 bytes).
+ 38i,9n,29p,1518b,265s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/share/texlive/texmf-dist/fonts/type1/
+public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public
+/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfo
+nts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm
+/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi1
+2.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb><
+/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/sh
+are/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/tex
+live/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/te
+xmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dis
+t/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts
+/type1/public/amsfonts/cm/cmr5.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
+ublic/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/am
+sfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts
+/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmt
+i10.pfb>
+Output written on draft1.pdf (22 pages, 1530435 bytes).
 PDF statistics:
- 246 PDF objects out of 1000 (max. 8388607)
- 102 compressed objects within 2 object streams
+ 339 PDF objects out of 1000 (max. 8388607)
+ 123 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
- 51 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 61 words of extra memory for PDF output out of 10000 (max. 10000000)
 

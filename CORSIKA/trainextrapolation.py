@@ -42,7 +42,7 @@ def makeBDTentry(pixelentry):
 	return bdtentry
 
 categories = ["hess2","hess1"]
-learningrates = [0.003, 0.005]
+learningrates = [0.002, 0.007]
 
 for i in range(len(categories)):
 	

@@ -15,13 +15,15 @@
 \contentsline {subsection}{\numberline {5.3}Classic DC Identification}{10}
 \contentsline {subsection}{\numberline {5.4}Boosted Decision Tree DC Identification}{11}
 \contentsline {subsection}{\numberline {5.5}Composite Event Selection}{11}
-\contentsline {subsection}{\numberline {5.6}Error in calculated $Count_{DC}$}{13}
-\contentsline {section}{\numberline {6}HESS-type Event Reconstruction}{13}
-\contentsline {subsection}{\numberline {6.1}First Interaction and Energy Saturation}{13}
-\contentsline {subsection}{\numberline {6.2}Extended Air Shower Background}{13}
-\contentsline {subsection}{\numberline {6.3}Reconstructed Charge Resolution}{13}
-\contentsline {section}{\numberline {7}Optimised Telescope Array}{17}
-\contentsline {subsection}{\numberline {7.1}Count Rates}{17}
-\contentsline {subsection}{\numberline {7.2}Saturation Region Energies}{17}
-\contentsline {subsection}{\numberline {7.3}High Speed Telescopes}{17}
-\contentsline {section}{\numberline {8}Conclusion}{18}
+\contentsline {subsection}{\numberline {5.6}HESS-2 BDT}{13}
+\contentsline {subsection}{\numberline {5.7}Error in calculated $Count_{DC}$}{13}
+\contentsline {subsection}{\numberline {5.8}Regression BDT for $DC_{Count}$}{15}
+\contentsline {section}{\numberline {6}HESS-type Event Reconstruction}{15}
+\contentsline {subsection}{\numberline {6.1}First Interaction and Energy Saturation}{15}
+\contentsline {subsection}{\numberline {6.2}Extended Air Shower Background}{19}
+\contentsline {subsection}{\numberline {6.3}Reconstructed Charge Resolution}{19}
+\contentsline {section}{\numberline {7}Optimised Telescope Array}{20}
+\contentsline {subsection}{\numberline {7.1}Count Rates}{20}
+\contentsline {subsection}{\numberline {7.2}Saturation Region Energies}{20}
+\contentsline {subsection}{\numberline {7.3}High Speed Telescopes}{20}
+\contentsline {section}{\numberline {8}Conclusion}{21}
