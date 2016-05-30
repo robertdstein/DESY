@@ -6,21 +6,28 @@ F.~Aharonian et~al.
   cosmic rays}.
 \newblock {\em Phys. Rev.}, D75:042004, 2007.
 
-\bibitem{Bernlohr08}
-Konrad Bernlohr.
-\newblock {Simulation of Imaging Atmospheric Cherenkov Telescopes with CORSIKA
-  and sim\textunderscore telarray}.
-\newblock {\em Astropart. Phys.}, 30:149--158, 2008.
+\bibitem{kieda01}
+D.~B. Kieda, S.~P. Swordy, and S.~P. Wakely.
+\newblock {A high resolution method for measuring cosmic ray composition beyond
+  10-TeV}.
+\newblock {\em Astropart. Phys.}, 15:287--303, 2001.
 
 \bibitem{Heck98}
 D.~Heck, G.~Schatz, T.~Thouw, J.~Knapp, and J.~N. Capdevielle.
 \newblock {CORSIKA: A Monte Carlo code to simulate extensive air showers}.
 \newblock 1998.
 
-\bibitem{kieda01}
-D.~B. Kieda, S.~P. Swordy, and S.~P. Wakely.
-\newblock {A high resolution method for measuring cosmic ray composition beyond
-  10-TeV}.
-\newblock {\em Astropart. Phys.}, 15:287--303, 2001.
+\bibitem{Bernlohr08}
+Konrad Bernlohr.
+\newblock {Simulation of Imaging Atmospheric Cherenkov Telescopes with CORSIKA
+  and sim\textunderscore telarray}.
+\newblock {\em Astropart. Phys.}, 30:149--158, 2008.
+
+\bibitem{scikit-learn}
+F.~Pedregosa, G.~Varoquaux, A.~Gramfort, V.~Michel, B.~Thirion, O.~Grisel,
+  M.~Blondel, P.~Prettenhofer, R.~Weiss, V.~Dubourg, J.~Vanderplas, A.~Passos,
+  D.~Cournapeau, M.~Brucher, M.~Perrot, and E.~Duchesnay.
+\newblock Scikit-learn: Machine learning in {P}ython.
+\newblock {\em Journal of Machine Learning Research}, 12:2825--2830, 2011.
 
 \end{thebibliography}

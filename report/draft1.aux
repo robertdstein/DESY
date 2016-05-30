@@ -15,53 +15,69 @@
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Log Likelihood Minimisation}{7}}
 \@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces The integrated interaction lengths increases as height decreases. Thus the decay probability follows a exponentially increasing distribution. The mean first interaction height for all events is roughly 40km above sea level.}}{8}}
 \newlabel{fig:generalheight}{{3}{8}}
-\citation{Heck98}
+\citation{hess07}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Extracting Charge Resolution}{9}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Iterative Scanning Minimisation}{9}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.4}Boosted Decision Trees}{9}}
 \@writefile{toc}{\contentsline {section}{\numberline {5}DC Pixel Identification}{9}}
+\citation{Heck98}
 \citation{Bernlohr08}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Image Simulation}{10}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces A typical camera image without the EAS shower. The DC light is visible in every telescope, indicated by the white arrow. The DC pixel is circled in white. The largest telescope image is from CT5, but was not used in analysis.}}{11}}
+\newlabel{fig:DCtelimage}{{4}{11}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces The same shower as in 4\hbox {} is shown here with the inclusion of the EAS shower. The DC light is pixels indicated with a white arrow and circle. The shower center of gravity is marked by a white cross.}}{11}}
+\newlabel{fig:cutdistribution2}{{5}{11}}
 \citation{hess07}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}CORSIKA}{10}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Sim\textunderscore telarray}{10}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Classic DC Identification}{10}}
-\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Cuts applied to image pixel sets}}{11}}
-\newlabel{tab:qdccuts}{{1}{11}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.4}Boosted Decision Tree DC Identification}{11}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.5}Composite Event Selection}{11}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces The DC signal in the shower-free pixel is shown in the top left, with a broad gaussian distribution with the tail of the night-sky background extending up to appproximately 5000. Events below this are unlikely to be identified correctly because the DEC light is too faint. In the top right- the distribution of the dataset is shown, once all the non-$Q_{DC}$ cuts have been applied. In the bottom left, the BDT score distribution is shown before any cuts. On the bottom right, we see the same distribution after both signal and BDT score cuts are applied. All green events are ones in which the DC pixel has been correctly identified, while red events are ones that have been incorrectly identified.}}{12}}
-\newlabel{fig:cutdistribution}{{4}{12}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.6}HESS-2 BDT}{13}}
-\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Relative Feature Importance in HESS-2 Classifier BDT training}}{13}}
-\newlabel{tab:hess2classifier}{{2}{13}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.7}Error in calculated $Count_{DC}$}{13}}
-\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces The fractional difference in total Image Intensity between the two simulations is shown in the graph above. A clear symmetric Gaussian is observed, with a mean of 0.00, and a standard deviation of 0.06. Below, the two intensities are plotted against one another. The distribution does not deviate significantly from the ideal 1:1 correspondence illustrated with the black line.}}{14}}
-\newlabel{fig:simtelerror}{{5}{14}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.8}Regression BDT for $DC_{Count}$}{15}}
-\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Relative Feature Importance in HESS-1 Regressor BDT training}}{15}}
-\newlabel{tab:hess1regressor}{{3}{15}}
-\@writefile{toc}{\contentsline {section}{\numberline {6}HESS-type Event Reconstruction}{15}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.1}First Interaction and Energy Saturation}{15}}
-\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces The fractional difference in total Image Intensity between the two simulations is shown in the graph above. A clear symmetric Gaussian is observed, with a mean of 0.00, and a standard deviation of 0.06. Below, the two intensities are plotted against one another. The distribution does not deviate significantly from the ideal 1:1 correspondence illustrated with the black line.}}{16}}
-\newlabel{fig:corsikalpd}{{6}{16}}
-\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces The difference between true and reconstructed DC signal for events passing the cuts is shown in the top left. In the top right the same is shown for events which were rejected. The true DC signals for events which passed the cuts is plotted against the reconstructed signals in the lower left, and for rejected events in the lower right. As in 4\hbox {}, in all plots a green event is one in which the DC pixel has been correctly identified, while a red event is one that has been incorrectly identified.}}{17}}
-\newlabel{fig:dcdiff}{{7}{17}}
-\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces The mean first interaction height for all Cherenkov Events is 40km???. The mean first interaction height for 4 telescope events in the HESS array is 23km}}{18}}
-\newlabel{fig:Hessheight}{{8}{18}}
-\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces A 4-camera HESS event. The shower direction is marked with a white cross, and the DC pixel is indicated with a white arrow. The shower axis passes through the shower direction, the DC pixel, and the center of the Extensive Air Shower region lying beyond the DC pixel.}}{19}}
-\newlabel{fig:hess}{{9}{19}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}Extended Air Shower Background}{19}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.3}Reconstructed Charge Resolution}{19}}
-\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces A simulation of 50 hours of run time for various grid spacing for a 3x3 telescope array. Although raw count rate increases with increasing grid width, the \textquoteleft good count' rate of events observed by sufficient telescopes falls rapidly with increasing grid width}}{20}}
-\newlabel{fig:optmiselayout}{{10}{20}}
-\@writefile{toc}{\contentsline {section}{\numberline {7}Optimised Telescope Array}{20}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.1}Count Rates}{20}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.2}Saturation Region Energies}{20}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.3}High Speed Telescopes}{20}}
+\citation{scikit-learn}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Classic DC Pixel Identification}{12}}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Cuts applied to image pixel sets, used by HESS collaboration \cite  {hess07}}}{12}}
+\newlabel{tab:table1}{{1}{12}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Boosted Decision Tree DC Identification}{12}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces The DC signal in the shower-free pixel is shown in the top left, with a broad gaussian distribution with the tail of the night-sky background extending up to appproximately 5000. Events below this are unlikely to be identified correctly because the DEC light is too faint. In the top right- the distribution of the dataset is shown, once all the non-$Q_{DC}$ cuts have been applied. In the bottom left, the BDT score distribution is shown before any cuts. On the bottom right, we see the same distribution after both signal and BDT score cuts are applied. All green events are ones in which the DC pixel has been correctly identified, while red events are ones that have been incorrectly identified.}}{13}}
+\newlabel{fig:cutdistribution}{{6}{13}}
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Relative Feature Importance in HESS-1 BDT training}}{14}}
+\newlabel{tab:hess1classifier}{{2}{14}}
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Comparison of $Q_{DC}$ and HESS 1 BDT Performance}}{14}}
+\newlabel{tab:qdcbdtcomparison1}{{3}{14}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.4}HESS-2 BDT}{14}}
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Relative Feature Importance in HESS-2 Classifier BDT training}}{15}}
+\newlabel{tab:hess2classifier}{{4}{15}}
+\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces Comparison of $Q_{DC}$ and HESS 2 BDT Performance}}{15}}
+\newlabel{tab:qdcbdtcomparison2}{{5}{15}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.5}Determining $True_{DC}$}{15}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.6}Error in calculated $DC_{count}$}{15}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.7}Regression BDT for $DC_{Count}$}{16}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces The fractional difference in total Image Intensity between the two simulations is shown in the graph above. A clear symmetric Gaussian is observed, with a mean of 0.00, and a standard deviation of 0.06. Below, the two intensities are plotted against one another. The distribution does not deviate significantly from the ideal 1:1 correspondence illustrated with the black line.}}{17}}
+\newlabel{fig:simtelerror}{{7}{17}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces The LPDs are shown above for $True_{DC}$, the simple guess $DC_{Count}$, and the regressor calculated $DC_{rgr}$. An exponential is fit to the $True_{DC}$ distribution, and the 68\% fractional deviation is shown in green. The same curve is shown on the two derived DC values, with the new fractional deviation being much greater.}}{18}}
+\newlabel{fig:corsikalpd}{{8}{18}}
+\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces Relative Feature Importance in HESS-1 Regressor BDT training}}{19}}
+\newlabel{tab:hess1regressor}{{6}{19}}
+\@writefile{lot}{\contentsline {table}{\numberline {7}{\ignorespaces Relative Feature Importance in HESS-2 Regressor BDT training}}{19}}
+\newlabel{tab:hess2regressor}{{7}{19}}
+\@writefile{lot}{\contentsline {table}{\numberline {8}{\ignorespaces Fractional error from fitted 56-TeV LPD distribution, accounting for $\sigma _{STA}$}}{19}}
+\newlabel{tab:lpderror}{{8}{19}}
+\@writefile{toc}{\contentsline {section}{\numberline {6}HESS-type Event Reconstruction}{19}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.1}First Interaction and Energy Saturation}{19}}
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces The difference between true and reconstructed DC signal for events passing the cuts is shown in the top left. In the top right the same is shown for events which were rejected. The true DC signals for events which passed the cuts is plotted against the reconstructed signals in the lower left, and for rejected events in the lower right. As in 6\hbox {}, in all plots a green event is one in which the DC pixel has been correctly identified, while a red event is one that has been incorrectly identified.}}{20}}
+\newlabel{fig:dcdiff}{{9}{20}}
 \bibstyle{unsrt}
 \bibdata{report}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}Extended Air Shower Background}{21}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.3}Reconstructed Charge Resolution}{21}}
+\@writefile{toc}{\contentsline {section}{\numberline {7}Optimised Telescope Array}{21}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.1}Count Rates}{21}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.2}Saturation Region Energies}{21}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.3}High Speed Telescopes}{21}}
+\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces The mean first interaction height for all Cherenkov Events is 40km???. The mean first interaction height for 4 telescope events in the HESS array is 23km}}{22}}
+\newlabel{fig:Hessheight}{{10}{22}}
+\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces A 4-camera HESS event. The shower direction is marked with a white cross, and the DC pixel is indicated with a white arrow. The shower axis passes through the shower direction, the DC pixel, and the center of the Extensive Air Shower region lying beyond the DC pixel.}}{23}}
+\newlabel{fig:hess}{{11}{23}}
+\@writefile{lof}{\contentsline {figure}{\numberline {12}{\ignorespaces A simulation of 50 hours of run time for various grid spacing for a 3x3 telescope array. Although raw count rate increases with increasing grid width, the \textquoteleft good count' rate of events observed by sufficient telescopes falls rapidly with increasing grid width}}{24}}
+\newlabel{fig:optmiselayout}{{12}{24}}
 \bibcite{hess07}{1}
-\bibcite{Bernlohr08}{2}
+\bibcite{kieda01}{2}
 \bibcite{Heck98}{3}
-\bibcite{kieda01}{4}
-\@writefile{toc}{\contentsline {section}{\numberline {8}Conclusion}{21}}
+\bibcite{Bernlohr08}{4}
+\bibcite{scikit-learn}{5}
+\@writefile{toc}{\contentsline {section}{\numberline {8}Conclusion}{25}}

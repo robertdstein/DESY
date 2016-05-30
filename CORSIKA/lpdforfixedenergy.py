@@ -55,7 +55,7 @@ filepath = "/nfs/astrop/d6/rstein/data/"
 
 
 
-j=100
+j=2000
 i=0
 
 distances=[[],[]]
@@ -100,9 +100,7 @@ while (i < j):
 				DCtel = DCsim.images[index]
 				fulltel =  fullsim.images[index]
 				trueID = DCtel.trueDC
-				DCtrue = DCtel.getpixel(trueID)
-				DCcount = DCtrue.channel1.intensity
-				
+
 				if fulltel.BDTID != None:
 					fullBDT = fulltel.getBDTpixel()
 								
@@ -134,7 +132,7 @@ while (i < j):
 								raise Exception("Telescope.size error, size is " +fulltel.size)
 							
 							distances[plotindex].append(fulltel.hillas.core_distance_to_telescope)
-							truesignals[plotindex].append(DCcount)
+							truesignals[plotindex].append(DCtel.hillas.image_size_amplitude_)
 							signals[plotindex].append(simplecandidatesignal)
 							rgrsignals[plotindex].append(candidatesignal)
 
@@ -148,7 +146,7 @@ mpl.use('Agg')
 import matplotlib.pyplot as plt
 
 for i in [0, 1]:
-	print "HESS"+str(i)
+	print "HESS"+str(i+1)
 	figure = plt.gcf() # get current figure
 	figure.set_size_inches(20, 20)
 	

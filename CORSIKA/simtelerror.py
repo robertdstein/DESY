@@ -51,27 +51,29 @@ while (i < j):
 				fullpix = fulltel.gettruepixel()
 				
 				if DCpix.ID == fullpix.ID:
-					DCcount = DCpix.channel1.intensity
-					candidatesignal = fullpix.channel1.intensity
 					
-					if fulltel.size == "HESS1":
-						plotindex = 0
-					elif fulltel.size == "HESS2":
-						plotindex = 1
-					else:
-						raise Exception("Telescope.size error, size is " +fulltel.size) 
-					
-					
-					if (candidatesignal != None) and (DCcount != None):
+					if hasattr(DCtel.hillas, "image_size_amplitude_") and hasattr(fulltel.hillas, "image_size_amplitude_"):
+						DCcount = DCtel.hillas.image_size_amplitude_
+						candidatesignal = fulltel.hillas.image_size_amplitude_
 						
-						mean = 0.5*(candidatesignal + DCcount)
-						if mean > float(signalcut):
-								
-							difference = (DCcount - candidatesignal)/(0.5*(DCcount+candidatesignal))
+						if fulltel.size == "HESS1":
+							plotindex = 0
+						elif fulltel.size == "HESS2":
+							plotindex = 1
+						else:
+							raise Exception("Telescope.size error, size is " +fulltel.size) 
+						
+						
+						if (candidatesignal != None) and (DCcount != None):
 							
-							one[plotindex].append(DCcount)
-							two[plotindex].append(candidatesignal)
-							diff[plotindex].append(difference)
+							mean = 0.5*(candidatesignal + DCcount)
+							if mean > float(signalcut):
+									
+								difference = (DCcount - candidatesignal)/(0.5*(DCcount+candidatesignal))
+								
+								one[plotindex].append(DCcount)
+								two[plotindex].append(candidatesignal)
+								diff[plotindex].append(difference)
 
 	if (int(float(i)*100/float(j)) - float(i)*100/float(j)) ==0:
 		print p+1

@@ -10,20 +10,19 @@
 \contentsline {subsection}{\numberline {4.3}Iterative Scanning Minimisation}{9}
 \contentsline {subsection}{\numberline {4.4}Boosted Decision Trees}{9}
 \contentsline {section}{\numberline {5}DC Pixel Identification}{9}
-\contentsline {subsection}{\numberline {5.1}CORSIKA}{10}
-\contentsline {subsection}{\numberline {5.2}Sim\textunderscore telarray}{10}
-\contentsline {subsection}{\numberline {5.3}Classic DC Identification}{10}
-\contentsline {subsection}{\numberline {5.4}Boosted Decision Tree DC Identification}{11}
-\contentsline {subsection}{\numberline {5.5}Composite Event Selection}{11}
-\contentsline {subsection}{\numberline {5.6}HESS-2 BDT}{13}
-\contentsline {subsection}{\numberline {5.7}Error in calculated $Count_{DC}$}{13}
-\contentsline {subsection}{\numberline {5.8}Regression BDT for $DC_{Count}$}{15}
-\contentsline {section}{\numberline {6}HESS-type Event Reconstruction}{15}
-\contentsline {subsection}{\numberline {6.1}First Interaction and Energy Saturation}{15}
-\contentsline {subsection}{\numberline {6.2}Extended Air Shower Background}{19}
-\contentsline {subsection}{\numberline {6.3}Reconstructed Charge Resolution}{19}
-\contentsline {section}{\numberline {7}Optimised Telescope Array}{20}
-\contentsline {subsection}{\numberline {7.1}Count Rates}{20}
-\contentsline {subsection}{\numberline {7.2}Saturation Region Energies}{20}
-\contentsline {subsection}{\numberline {7.3}High Speed Telescopes}{20}
-\contentsline {section}{\numberline {8}Conclusion}{21}
+\contentsline {subsection}{\numberline {5.1}Image Simulation}{10}
+\contentsline {subsection}{\numberline {5.2}Classic DC Pixel Identification}{12}
+\contentsline {subsection}{\numberline {5.3}Boosted Decision Tree DC Identification}{12}
+\contentsline {subsection}{\numberline {5.4}HESS-2 BDT}{14}
+\contentsline {subsection}{\numberline {5.5}Determining $True_{DC}$}{15}
+\contentsline {subsection}{\numberline {5.6}Error in calculated $DC_{count}$}{15}
+\contentsline {subsection}{\numberline {5.7}Regression BDT for $DC_{Count}$}{16}
+\contentsline {section}{\numberline {6}HESS-type Event Reconstruction}{19}
+\contentsline {subsection}{\numberline {6.1}First Interaction and Energy Saturation}{19}
+\contentsline {subsection}{\numberline {6.2}Extended Air Shower Background}{21}
+\contentsline {subsection}{\numberline {6.3}Reconstructed Charge Resolution}{21}
+\contentsline {section}{\numberline {7}Optimised Telescope Array}{21}
+\contentsline {subsection}{\numberline {7.1}Count Rates}{21}
+\contentsline {subsection}{\numberline {7.2}Saturation Region Energies}{21}
+\contentsline {subsection}{\numberline {7.3}High Speed Telescopes}{21}
+\contentsline {section}{\numberline {8}Conclusion}{25}

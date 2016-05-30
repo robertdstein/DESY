@@ -50,10 +50,10 @@ hess1trainscores = []
 hess2testscores = []
 hess2trainscores = []
 
-hess1candidatepixels = []
-hess2candidatepixels = []
-hess1DCsignals = []
-hess2DCsignals = []
+#~ hess1candidatepixels = []
+#~ hess2candidatepixels = []
+#~ hess1DCsignals = []
+#~ hess2DCsignals = []
 
 targetpath = targetfolder +  "run" + str(i) + "/pickle/eventdata.p"
 
@@ -104,20 +104,20 @@ while (i < j):
 				else:
 					hess2testset.append(bdtentry)
 					hess2testscores.append(truescore)
-		for index in event.simulations.DC.triggerIDs:
-			DCtel =  event.simulations.DC.images[index]
-			fulltel = event.simulations.full.images[index]
-			if fulltel.trueDC != None:
-				DCpixel = DCtel.getpixel(DCtel.trueDC)
-				fullpixel = fulltel.gettruepixel()
-				if fulltel.size == "HESS1":
-					hess1candidatepixels.append(fullpixel)
-					hess1DCsignals.append(DCpixel.channel1.intensity)
-				elif fulltel.size == "HESS2":
-					hess2candidatepixels.append(fullpixel)
-					hess2DCsignals.append(DCpixel.channel1.intensity)
-				else:
-					raise Exception("Name error with size " + fulltel.size)
+		#~ for index in event.simulations.DC.triggerIDs:
+			#~ DCtel =  event.simulations.DC.images[index]
+			#~ fulltel = event.simulations.full.images[index]
+			#~ if fulltel.trueDC != None:
+				#~ DCpixel = DCtel.getpixel(DCtel.trueDC)
+				#~ fullpixel = fulltel.gettruepixel()
+				#~ if fulltel.size == "HESS1":
+					#~ hess1candidatepixels.append(fullpixel)
+					#~ hess1DCsignals.append(DCtel.image_size_amplitude_)
+				#~ elif fulltel.size == "HESS2":
+					#~ hess2candidatepixels.append(fullpixel)
+					#~ hess2DCsignals.append(DCtel.image_size_amplitude_)
+				#~ else:
+					#~ raise Exception("Name error with size " + fulltel.size)
 					
 					
 	if (int(float(i)*100/float(j)) - float(i)*100/float(j)) ==0:
@@ -136,7 +136,7 @@ pickle.dump(hess1trainscores,  open(pickle_dump_dir+"/hess1trainbdtscores.p", "w
 pickle.dump(hess1testscores,  open(pickle_dump_dir+"/hess1testbdtscores.p", "wb"))
 pickle.dump(hess2trainscores,  open(pickle_dump_dir+"/hess2trainbdtscores.p", "wb"))
 pickle.dump(hess2testscores,  open(pickle_dump_dir+"/hess2testbdtscores.p", "wb"))
-pickle.dump(hess1candidatepixels,  open(pickle_dump_dir+"/hess1candidatepixels.p", "wb"))
-pickle.dump(hess2candidatepixels,  open(pickle_dump_dir+"/hess2candidatepixels.p", "wb"))
-pickle.dump(hess1DCsignals,  open(pickle_dump_dir+"/hess1DCsignals.p", "wb"))
-pickle.dump(hess2DCsignals,  open(pickle_dump_dir+"/hess2DCsignals.p", "wb"))
+#~ pickle.dump(hess1candidatepixels,  open(pickle_dump_dir+"/hess1candidatepixels.p", "wb"))
+#~ pickle.dump(hess2candidatepixels,  open(pickle_dump_dir+"/hess2candidatepixels.p", "wb"))
+#~ pickle.dump(hess1DCsignals,  open(pickle_dump_dir+"/hess1DCsignals.p", "wb"))
+#~ pickle.dump(hess2DCsignals,  open(pickle_dump_dir+"/hess2DCsignals.p", "wb"))

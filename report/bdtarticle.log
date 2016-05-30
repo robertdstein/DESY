@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2015.11.27)  27 MAY 2016 18:37
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2015.11.27)  30 MAY 2016 15:54
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -300,43 +300,43 @@ LaTeX Font Info:    Font shape `OML/cmr/m/n' in size <10> not available
 
 LaTeX Warning: Command \textgreater invalid in math mode on input line 58.
 
-[2] [3
-
-
- <./graphs/graphDC.pdf> <./graphs/graphfull.pdf>]
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<graphs/cutdistribution1None.pdf, id=44, 1084.05pt x 1084.05pt>
+[2] [3
+
+
+ <./graphs/graphDC.pdf> <./graphs/graphfull.pdf>] [4]
+<graphs/cutdistribution1None.pdf, id=47, 1084.05pt x 1084.05pt>
 File: graphs/cutdistribution1None.pdf Graphic file (type pdf)
 
 <use graphs/cutdistribution1None.pdf>
-Package pdftex.def Info: graphs/cutdistribution1None.pdf used on input line 122
+Package pdftex.def Info: graphs/cutdistribution1None.pdf used on input line 131
 .
 (pdftex.def)             Requested size: 452.9679pt x 452.96558pt.
- (./bdtarticle.bbl [4] [5 <./graphs/cutdistribution1None.pdf>]) [6] (./bdtartic
-le.aux) ) 
+ (./bdtarticle.bbl) [5] [6 <./graphs/cutdistribution1None.pdf>] (./bdtarticle.a
+ux) ) 
 Here is how much of TeX's memory you used:
  2120 strings out of 494976
- 30478 string characters out of 6179136
- 99353 words of memory out of 5000000
+ 30488 string characters out of 6179136
+ 100353 words of memory out of 5000000
  5327 multiletter control sequences out of 15000+600000
  8233 words of font info for 29 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 38i,10n,29p,1358b,356s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.p
-fb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></us
-r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/shar
-e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/share/texli
-ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texm
-f-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/
-fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/t
-ype1/public/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/pu
-blic/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/ams
-fonts/cm/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm
-/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7
-.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb>
-Output written on bdtarticle.pdf (6 pages, 220410 bytes).
+ 38i,10n,29p,1611b,356s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb><
+/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></usr/sh
+are/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/te
+xlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/share/texlive/t
+exmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-di
+st/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/font
+s/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1
+/public/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public
+/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfont
+s/cm/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cms
+y10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb
+></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb>
+Output written on bdtarticle.pdf (6 pages, 223387 bytes).
 PDF statistics:
  145 PDF objects out of 1000 (max. 8388607)
  65 compressed objects within 1 object stream

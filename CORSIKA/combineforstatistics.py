@@ -50,7 +50,7 @@ def makeBDTentry(pixelentry):
 			return None
 	return bdtentry
 
-for sigfit in [None, "rgr"]:
+for sigfit in ["rgr", None]:
 	filepath = "/nfs/astrop/d6/rstein/data/"
 	i = 1
 	j = 2000
@@ -169,122 +169,120 @@ for sigfit in [None, "rgr"]:
 					
 					trueID = DCtel.trueDC
 					DCtrue = DCtel.getpixel(trueID)
-					DCcount = DCtrue.channel1.intensity
-					
-					if fulltel.size == "HESS1":
-						plotindex = 0
-						toplot = hessstatus[0]
-					elif fulltel.size == "HESS2":
-						plotindex = 1
-						toplot = hessstatus[1]
-					else:
-						raise Exception("Telescope.size error, size is " +fulltel.size) 
-					
-					if DCcount > DCcut:
-						DCpasstotal[plotindex] += 1
-					
-					totalimages[plotindex] += 1
-					
-					if toplot and (fulltel.BDTID != None):
-						fullBDT = fulltel.getBDTpixel()
+					if hasattr(DCtel.hillas, "image_size_amplitude_"):
+						DCcount = DCtel.hillas.image_size_amplitude_
 						
-						if (fullBDT.bdtscore != None):
-							simplesignal = fullBDT.channel1.intensity - fullBDT.nnmean
-							
-							if sigfit == None:							
-								candidatesignal = simplesignal
-							elif sigfit == "rgr":
-								bdtentry = makeBDTentry(fullBDT)
-								if (fulltel.size=="HESS1") and (bdtentry != None):
-									candidatesignal = hess1rgr.predict([bdtentry])[0]
-								elif (fulltel.size=="HESS2") and (bdtentry != None):
-									candidatesignal = hess2rgr.predict([bdtentry])[0]
-								elif bdtentry == None:
-									candidatesignal = 0
-							else:
-								raise Exception("sigfit is "+sigfit)
-								
-							
-							difference = (candidatesignal - DCcount)/DCcount
-							absd = math.fabs(difference)
-
-							if fulltel.BDTID == trueID:
-								result = 1
-								correctimages[plotindex] += 1
-								rightDCcounts[plotindex].append(DCcount)
-								rightscores[plotindex].append(fullBDT.bdtscore)
-								rightsignals[plotindex].append(candidatesignal)
-								right[plotindex].append(fullBDT.bdtscore)
-								if float(ucut) > float(fullBDT.bdtscore) > float(cut):
-									correctcut[plotindex] += 1
-									totalcut[plotindex] += 1
-							elif fulltel.BDTID == None:
-								print "None!!!"
-							else:
-								result = 0
-								wrongDCcounts[plotindex].append(DCcount)
-								wrongscores[plotindex].append(fullBDT.bdtscore)
-								wrongsignals[plotindex].append(candidatesignal)
-								wrong[plotindex].append(fullBDT.bdtscore)
-								if float(ucut) > float(fullBDT.bdtscore) > float(cut):
-									totalcut[plotindex] += 1
-							
-							
-							passcut = False
-							
-							if float(result) == float(1):
-								if float(ucut) > float(fullBDT.bdtscore) > float(cut):
-									if float(simplesignal) > float(signalcut):
-										passcut = True
-										k+=1
-										combinedcorrect[plotindex] += 1
-										combinedtotal[plotindex] += 1
-										combinedright[plotindex].append(fullBDT.bdtscore)
-										if (k > minmultiplicity):
-											fullcorrect[plotindex] += 1
-											fulltotal[plotindex] += 1
-											
-											
-							elif float(result) == float(0):
-								if float(ucut) > float(fullBDT.bdtscore) > float(cut):
-									
-									if float(simplesignal) > float(signalcut):
-										k+=1	
-										passcut = True	
-										combinedtotal[plotindex] += 1
-										combinedwrong[plotindex].append(fullBDT.bdtscore)
-										if (k > minmultiplicity):
-											fulltotal[plotindex] += 1
-											
-										
-							if passcut:
-								passed[plotindex][result].append(difference)
-								passeddiff[plotindex].append(absd)
-								passedcsignals[plotindex][result].append(candidatesignal/DCcount)
-								passedDCsignals[plotindex][result].append(DCcount)
-							else:
-								rejected[plotindex][result].append(difference)
-								rejecteddiff[plotindex].append(absd)
-								rejectedcsignals[plotindex][result].append(candidatesignal/DCcount)
-								rejectedDCsignals[plotindex][result].append(DCcount)	
-									
-					if toplot and (fulltel.QDCID != None):
-							
-						fullQDC = fulltel.getQDCpixel()
-							
-						if fulltel.QDCID == trueID:
-							oldcorrectimages[plotindex] += 1
-							oldright[plotindex].append(fullQDC.rawQDC)
-							oldcorrectcut[plotindex] += 1
-							oldtotalcut[plotindex] += 1
-							if l > minmultiplicity:		
-								oldcombinedcorrect[plotindex] += 1
-								oldcombinedtotal[plotindex] += 1
+						if fulltel.size == "HESS1":
+							plotindex = 0
+							toplot = hessstatus[0]
+						elif fulltel.size == "HESS2":
+							plotindex = 1
+							toplot = hessstatus[1]
 						else:
-							oldwrong[plotindex].append(fullQDC.QDC)
-							oldtotalcut[plotindex] += 1	
-							if l > minmultiplicity:
-								oldcombinedtotal[plotindex] += 1
+							raise Exception("Telescope.size error, size is " +fulltel.size) 
+						
+						if DCcount > DCcut:
+							DCpasstotal[plotindex] += 1
+						
+						totalimages[plotindex] += 1
+						
+						if toplot and (fulltel.BDTID != None):
+							fullBDT = fulltel.getBDTpixel()
+							
+							if (fullBDT.bdtscore != None):
+								simplesignal = fullBDT.channel1.intensity - fullBDT.nnmean
+								
+								if sigfit == None:							
+									candidatesignal = simplesignal
+								elif sigfit == "rgr":
+									bdtentry = makeBDTentry(fullBDT)
+									if (fulltel.size=="HESS1") and (bdtentry != None):
+										candidatesignal = hess1rgr.predict([bdtentry])[0]
+									elif (fulltel.size=="HESS2") and (bdtentry != None):
+										candidatesignal = hess2rgr.predict([bdtentry])[0]
+									elif bdtentry == None:
+										candidatesignal = 0
+								else:
+									raise Exception("sigfit is "+sigfit)
+									
+								
+								difference = (candidatesignal - DCcount)/DCcount
+								absd = math.fabs(difference)
+	
+								if fulltel.BDTID == trueID:
+									result = 1
+									correctimages[plotindex] += 1
+									rightDCcounts[plotindex].append(DCcount)
+									rightscores[plotindex].append(fullBDT.bdtscore)
+									rightsignals[plotindex].append(candidatesignal)
+									right[plotindex].append(fullBDT.bdtscore)
+									if float(ucut) > float(fullBDT.bdtscore) > float(cut):
+										correctcut[plotindex] += 1
+										totalcut[plotindex] += 1
+								elif fulltel.BDTID == None:
+									print "None!!!"
+								else:
+									result = 0
+									wrongDCcounts[plotindex].append(DCcount)
+									wrongscores[plotindex].append(fullBDT.bdtscore)
+									wrongsignals[plotindex].append(candidatesignal)
+									wrong[plotindex].append(fullBDT.bdtscore)
+									if float(ucut) > float(fullBDT.bdtscore) > float(cut):
+										totalcut[plotindex] += 1
+								
+								
+								passcut = False
+								
+								if float(result) == float(1):
+									if float(ucut) > float(fullBDT.bdtscore) > float(cut):
+										if float(simplesignal) > float(signalcut):
+											passcut = True
+											combinedcorrect[plotindex] += 1
+											combinedtotal[plotindex] += 1
+											combinedright[plotindex].append(fullBDT.bdtscore)
+											if (k > minmultiplicity):
+												fullcorrect[plotindex] += 1
+												fulltotal[plotindex] += 1
+												
+												
+								elif float(result) == float(0):
+									if float(ucut) > float(fullBDT.bdtscore) > float(cut):
+										if float(simplesignal) > float(signalcut):
+											passcut = True	
+											combinedtotal[plotindex] += 1
+											combinedwrong[plotindex].append(fullBDT.bdtscore)
+											if (k > minmultiplicity):
+												fulltotal[plotindex] += 1
+												
+											
+								if passcut:
+									passed[plotindex][result].append(difference)
+									passeddiff[plotindex].append(absd)
+									passedcsignals[plotindex][result].append(candidatesignal/DCcount)
+									passedDCsignals[plotindex][result].append(DCcount)
+								else:
+									rejected[plotindex][result].append(difference)
+									rejecteddiff[plotindex].append(absd)
+									rejectedcsignals[plotindex][result].append(candidatesignal/DCcount)
+									rejectedDCsignals[plotindex][result].append(DCcount)	
+										
+						if toplot and (fulltel.QDCID != None):
+								
+							fullQDC = fulltel.getQDCpixel()
+								
+							if fulltel.QDCID == trueID:
+								oldcorrectimages[plotindex] += 1
+								oldright[plotindex].append(fullQDC.rawQDC)
+								oldcorrectcut[plotindex] += 1
+								oldtotalcut[plotindex] += 1
+								if l > minmultiplicity:		
+									oldcombinedcorrect[plotindex] += 1
+									oldcombinedtotal[plotindex] += 1
+							else:
+								oldwrong[plotindex].append(fullQDC.QDC)
+								oldtotalcut[plotindex] += 1	
+								if l > minmultiplicity:
+									oldcombinedtotal[plotindex] += 1
 	
 		if (int(float(i)*100/float(j)) - float(i)*100/float(j)) ==0:
 			print p+1
@@ -406,7 +404,7 @@ for sigfit in [None, "rgr"]:
 				
 				figure = plt.gcf() # get current figure
 				handles, labels = ax1.get_legend_handles_labels()
-				figure.legend(handles, labels, loc="topright")
+				figure.legend(handles, labels, loc="upper right")
 				
 				plt.subplots_adjust(hspace = 0.5)
 				if (rows == 2) and (sigfit==None):
@@ -435,11 +433,12 @@ for sigfit in [None, "rgr"]:
 			
 				plt.close()
 			
-			colors =['r', 'g']	
+			colors =['silver', 'g']
+			edgecolors=["k","None"]
 			for columns in [1, 2]:
 			
 				ax1 = plt.subplot(2,columns,1)
-				plt.hist(passed[i], color=colors, stacked=True, bins=50)
+				plt.hist(passed[i], color=colors, stacked=True, bins=20)
 				plt.title("DC pixel error for events passing cuts")
 				plt.xlabel("Difference from true count")	
 				
@@ -450,13 +449,13 @@ for sigfit in [None, "rgr"]:
 				
 				if columns == 2:
 					ax2 = plt.subplot(2,2,2, sharex=ax1)
-					plt.hist([rejected[i][0], rejected[i][1]], color=colors, stacked=True, bins=50)
+					plt.hist([rejected[i][0], rejected[i][1]], color=colors, stacked=True, bins=20)
 					plt.title("DC pixel error for rejected events")
 					plt.xlabel("Difference from true count")
 
 					ax4 = plt.subplot(2,2,4)
 					for j in range(2):
-						plt.scatter( rejectedDCsignals[i][j],rejectedcsignals[i][j], color=colors[j], marker="o")
+						plt.scatter( rejectedDCsignals[i][j],rejectedcsignals[i][j], color=colors[j], edgecolor=edgecolors[j], marker="o")
 					plt.axhline(1, color='k')
 					plt.plot(linear, plotcut, color='k', linestyle='--')
 					plt.xlabel("True signal")
@@ -469,7 +468,7 @@ for sigfit in [None, "rgr"]:
 					ax3 = plt.subplot(212)
 				
 				for j in range(2):
-					plt.scatter( passedDCsignals[i][j],passedcsignals[i][j], color=colors[j], marker="o")
+					plt.scatter( passedDCsignals[i][j],passedcsignals[i][j], color=colors[j], edgecolor=edgecolors[j], marker="o")
 				plt.axhline(1, color='k')
 				plt.plot(linear, plotcut, color='k', linestyle='--')
 				ax3.fill_between(linear, 0, plotcut, alpha=0.2)
@@ -478,6 +477,13 @@ for sigfit in [None, "rgr"]:
 				plt.ylabel("Candidate reconstructed signal / True signal")
 				ax3.set_ylim([0,5])
 				ax3.set_xlim(left=0)
+			
+			figure = plt.gcf() # get current figure
+			figure.set_size_inches(20, 20)
+			handles, labels = ax3.get_legend_handles_labels()
+			figure.legend(handles, labels, loc="upper right")
+			
+			plt.savefig("/nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/report/graphs/DCcounterrorhess" + str(i+1) + str(sigfit)+".pdf")
 			
 			k=1
 			
@@ -510,21 +516,17 @@ for sigfit in [None, "rgr"]:
 				toprint += "Median absolute difference = " + str('{0:.2f}'.format(alldiff[halfinteger])) + "\n"
 				toprint += "Sigma = " + str('{0:.2f}'.format(alldiff[integer68])) + "\n"
 				
-				eval("ax" + str(k) + ".annotate(toprint, xy=(0.02, 0.75), xycoords='axes fraction',  fontsize=10)")
+				eval("ax" + str(k) + ".annotate(toprint, xy=(0.6, 0.75), xycoords='axes fraction',  fontsize=10)")
 				
 				print k, toprint
 				
 				k+=1
-			
-			figure = plt.gcf() # get current figure
-			figure.set_size_inches(20, 20)
 			
 			saveto = "/nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/CORSIKA/graphs/errorstatshess" + str(i+1) +str(sigfit)+".pdf"
 			
 			print "Saving to", saveto
 			
 			plt.savefig(saveto)
-			if j > 500:
-				plt.savefig("/nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/report/graphs/DCcounterrorhess" + str(i+1) + str(sigfit)+".pdf")
+
 			plt.close()
 	
