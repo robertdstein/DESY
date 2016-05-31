@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2015.11.27)  30 MAY 2016 21:21
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2015.11.27)  31 MAY 2016 12:41
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -381,6 +381,17 @@ File: graphs/corsikalpd1.pdf Graphic file (type pdf)
 Package pdftex.def Info: graphs/corsikalpd1.pdf used on input line 346.
 (pdftex.def)             Requested size: 452.9679pt x 452.96558pt.
 
+<graphs/corsikalpd2.pdf, id=150, 1445.4pt x 1445.4pt>
+File: graphs/corsikalpd2.pdf Graphic file (type pdf)
+
+<use graphs/corsikalpd2.pdf>
+Package pdftex.def Info: graphs/corsikalpd2.pdf used on input line 354.
+(pdftex.def)             Requested size: 452.9679pt x 452.96558pt.
+
+
+LaTeX Warning: Reference `fig:corsikalpd' on page 16 undefined on input line 36
+5.
+
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
@@ -390,46 +401,47 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[16] [17 <./graphs/simtelerror1.pdf>] [18 <./graphs/corsikalpd1.pdf>]
-<graphs/DCcounterrorhess1rgr.pdf, id=240, 1445.4pt x 1445.4pt>
+[16] [17 <./graphs/simtelerror1.pdf>] [18 <./graphs/corsikalpd1.pdf>] [19 <./gr
+aphs/corsikalpd2.pdf>]
+<graphs/DCcounterrorhess1rgr.pdf, id=301, 1445.4pt x 1445.4pt>
 File: graphs/DCcounterrorhess1rgr.pdf Graphic file (type pdf)
 
 <use graphs/DCcounterrorhess1rgr.pdf>
-Package pdftex.def Info: graphs/DCcounterrorhess1rgr.pdf used on input line 425
+Package pdftex.def Info: graphs/DCcounterrorhess1rgr.pdf used on input line 433
 .
 (pdftex.def)             Requested size: 452.9679pt x 452.96558pt.
- [19] [20 <./graphs/DCcounterrorhess1rgr.pdf>] <graphs/hessheight.png, id=293, 
+ [20] [21 <./graphs/DCcounterrorhess1rgr.pdf>] <graphs/hessheight.png, id=354, 
 722.7pt x 1084.05pt>
 File: graphs/hessheight.png Graphic file (type png)
 
 <use graphs/hessheight.png>
-Package pdftex.def Info: graphs/hessheight.png used on input line 438.
+Package pdftex.def Info: graphs/hessheight.png used on input line 446.
 (pdftex.def)             Requested size: 420.31314pt x 630.45189pt.
 
-<graphs/hess.png, id=294, 1046.91125pt x 924.45375pt>
+<graphs/hess.png, id=355, 1046.91125pt x 924.45375pt>
 File: graphs/hess.png Graphic file (type png)
  <use graphs/hess.png>
-Package pdftex.def Info: graphs/hess.png used on input line 449.
+Package pdftex.def Info: graphs/hess.png used on input line 457.
 (pdftex.def)             Requested size: 407.66833pt x 359.97127pt.
 
-<graphs/optimiselayout.png, id=295, 1445.4pt x 1084.05pt>
+<graphs/optimiselayout.png, id=356, 1445.4pt x 1084.05pt>
 File: graphs/optimiselayout.png Graphic file (type png)
 
 <use graphs/optimiselayout.png>
-Package pdftex.def Info: graphs/optimiselayout.png used on input line 468.
+Package pdftex.def Info: graphs/optimiselayout.png used on input line 476.
 (pdftex.def)             Requested size: 407.66833pt x 305.74846pt.
- (./draft1.bbl [21] [22 <./graphs/hessheight.png>] [23 <./graphs/hess.png>] [24
- <./graphs/optimiselayout.png>]) [25]
+ (./draft1.bbl [22] [23 <./graphs/hessheight.png>] [24 <./graphs/hess.png>] [25
+ <./graphs/optimiselayout.png>]) [26]
 (./draft1.aux)
 
 LaTeX Warning: There were undefined references.
 
  ) 
 Here is how much of TeX's memory you used:
- 2197 strings out of 494976
- 32281 string characters out of 6179136
- 102400 words of memory out of 5000000
- 5390 multiletter control sequences out of 15000+600000
+ 2204 strings out of 494976
+ 32437 string characters out of 6179136
+ 104410 words of memory out of 5000000
+ 5396 multiletter control sequences out of 15000+600000
  9154 words of font info for 32 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  38i,10n,29p,1518b,356s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -448,10 +460,10 @@ mr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb
 hare/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/t
 exlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/
 texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb>
-Output written on draft1.pdf (26 pages, 1576914 bytes).
+Output written on draft1.pdf (27 pages, 1655807 bytes).
 PDF statistics:
- 367 PDF objects out of 1000 (max. 8388607)
- 138 compressed objects within 2 object streams
+ 428 PDF objects out of 1000 (max. 8388607)
+ 146 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
- 83 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 88 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -8,7 +8,7 @@ from telescopeclasses import *
 from matplotlib import rc
 
 parser = argparse.ArgumentParser()
-parser.add_argument("-jid", "--jobID", default="56tev-lpd")
+parser.add_argument("-jid", "--jobID", default="26tev-lpd")
 
 cfg = parser.parse_args()
 
@@ -63,8 +63,7 @@ signals=[[],[]]
 rgrsignals=[[],[]]
 rgrdiffs=[[],[]]
 simplediffs=[[],[]]
-truesignals1=[[],[]]
-truesignals2=[[],[]]
+truesignals=[[],[]]
 
 cut, ucut, QDCcut, DCcut, signalcut = ic.runforstats()
 
@@ -96,18 +95,33 @@ while (i < j):
 		if hasattr(event.simulations, "DC") and hasattr(event.simulations, "full"):
 			DCsim =event.simulations.DC
 			fullsim = event.simulations.full
-
+			
+			IDs=[0,1,2,3,4]
+			
 			for index in DCsim.triggerIDs:
-				DCtel = DCsim.images[index]
 				fulltel =  fullsim.images[index]
-				trueID = DCtel.trueDC
-				DCpixel = DCtel.gettruepixel()
 
 				if fulltel.BDTID != None:
 					fullBDT = fulltel.getBDTpixel()
 								
 					simplecandidatesignal = fullBDT.channel1.intensity -fullBDT.nnmean
-
+					
+					if float(ucut) > float(fullBDT.bdtscore) > float(cut):
+						if float(simplecandidatesignal) > float(signalcut):
+							IDs.remove(index)
+			
+			if len(IDs) == 1:
+				print IDs
+				fulltel =  fullsim.images[IDs[0]]
+				DCtel = DCsim.images[IDs[0]]
+				trueID = DCtel.trueDC
+				
+				if fulltel.BDTID != None:
+			
+					fullBDT = fulltel.getBDTpixel()
+									
+					simplecandidatesignal = fullBDT.channel1.intensity -fullBDT.nnmean
+				
 					bdtentry = makeBDTentry(fullBDT)
 					if (fulltel.size=="HESS1") and (bdtentry != None):
 						candidatesignal = hess1rgr.predict([bdtentry])[0]
@@ -115,29 +129,25 @@ while (i < j):
 						candidatesignal = hess2rgr.predict([bdtentry])[0]
 					elif bdtentry == None:
 						candidatesignal = 0
+		
+					if fulltel.BDTID == trueID:
+						result = 1
+					elif fulltel.BDTID == None:
+						print "None!!!"
+					else:
+						result = 0
 						
-					if float(ucut) > float(fullBDT.bdtscore) > float(cut):
-						if float(simplecandidatesignal) > float(signalcut):
-
-							if fulltel.BDTID == trueID:
-								result = 1
-							elif fulltel.BDTID == None:
-								print "None!!!"
-							else:
-								result = 0
-								
-							if fulltel.size == "HESS1":
-								plotindex = 0
-							elif fulltel.size == "HESS2":
-								plotindex = 1
-							else:
-								raise Exception("Telescope.size error, size is " +fulltel.size)
-							
-							distances[plotindex].append(fulltel.hillas.core_distance_to_telescope)
-							truesignals1[plotindex].append(DCtel.hillas.image_size_amplitude_)
-							truesignals2[plotindex].append(DCpixel.channel1.intensity)
-							signals[plotindex].append(simplecandidatesignal)
-							rgrsignals[plotindex].append(candidatesignal)
+					if fulltel.size == "HESS1":
+						plotindex = 0
+					elif fulltel.size == "HESS2":
+						plotindex = 1
+					else:
+						raise Exception("Telescope.size error, size is " +fulltel.size)
+					
+					distances[plotindex].append(fulltel.hillas.core_distance_to_telescope)
+					truesignals[plotindex].append(DCtel.hillas.image_size_amplitude_)
+					signals[plotindex].append(simplecandidatesignal)
+					rgrsignals[plotindex].append(candidatesignal)
 
 
 	if (int(float(i)*100/float(j)) - float(i)*100/float(j)) ==0:
@@ -153,15 +163,14 @@ for i in [0, 1]:
 	figure = plt.gcf() # get current figure
 	figure.set_size_inches(20, 20)
 	
-	ax1=plt.subplot(4,1,1)
+	ax1=plt.subplot(3,1,1)
 	
-	plt.scatter(distances[i], truesignals1[i])
+	plt.scatter(distances[i], truesignals[i])
 	plt.xlabel("Core distance to telescope (m)")
 	plt.ylabel("Photoelectrons")
 	ax1.set_xlim(left=0)
 	ax1.set_ylim(bottom=10)
-	#~ ax1.set_yscale("log")
-	plt.title("True LPD (Amplitude)")
+	plt.title("True LPD")
 	
 	d=[]
 	s=[]
@@ -169,7 +178,7 @@ for i in [0, 1]:
 	for k in range(len(distances[i])):
 		value = distances[i][k]
 		if value < 90:
-			lpdval = truesignals1[i][k]
+			lpdval = truesignals[i][k]
 			d.append(value)
 			s.append(math.log(lpdval))
 	
@@ -216,10 +225,10 @@ for i in [0, 1]:
 	plt.plot(d, lpd, color='k')
 	plt.fill_between(d, l, u, color='g', alpha=0.25)
 	
-	for j in range(0,3):
+	for j in range(0,2):
 		
-		sigset = [truesignals2, signals, rgrsignals][j]
-		diffname = ["True LPD (Max Intensity)", "Simple Estimate LPD", "Regressor Estimate LPD"][j]
+		sigset = [signals, rgrsignals][j]
+		diffname = ["Simple", "Regressor"][j]
 		
 		diffs=[]
 		
@@ -244,7 +253,7 @@ for i in [0, 1]:
 		sigma = diffs[integer68]
 		print diffname, lower, diffs[halfinteger], sigma, upper, sigma
 		
-		ax=plt.subplot(4,1,j+2, sharex=ax1, sharey=ax1)
+		ax=plt.subplot(3,1,j+2, sharex=ax1, sharey=ax1)
 		
 		plt.scatter(distances[i], sigset[i])
 		
@@ -263,13 +272,13 @@ for i in [0, 1]:
 		plt.ylabel("Photoelectrons")
 		ax.set_xlim(left=0)
 		ax.set_ylim(bottom=10)
-		plt.title(diffname)
+		plt.title(diffname+ " Estimate LPD")
 
-	saveto = "/nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/CORSIKA/graphs/lpd" + str(i+1)+ ".pdf"
+	saveto = "/nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/CORSIKA/graphs/fifthlpd" + str(i+1)+ ".pdf"
 	
 	print "Saving to", saveto
 	
 	plt.savefig(saveto)
-	plt.savefig("/nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/report/graphs/corsikalpd" + str(i+1)+ ".pdf")
+	plt.savefig("/nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/report/graphs/fifthlpd" + str(i+1)+ ".pdf")
 	plt.close()
 	

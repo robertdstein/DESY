@@ -317,7 +317,7 @@ The CT5 performance was improved for the new classifier, with 24.0 \% of pixels 
 \end{table}
 
 \subsection{Determining $True_{DC}$}
-yeah stuff and such....
+Determining the value off $True_{DC}$ is important for 
 
 \textbf{Let's define $Intensity_{N.N.max}$!}
  
@@ -344,8 +344,16 @@ The same exercise was repeated using the value of $DC_{Count}$ for the BDT candi
 \begin{figure}
 \begin{center}
 \includegraphics[width=\textwidth]{corsikalpd1}
-\caption{The LPDs are shown above for $True_{DC}$, the simple guess $DC_{Count}$, and the regressor calculated $DC_{rgr}$. An exponential is fit to the $True_{DC}$ distribution, and the 68\% fractional deviation is shown in green. The same curve is shown on the two derived DC values, with the new fractional deviation being much greater.}
-\label{fig:corsikalpd}
+\caption{The two LPDs shown above are estimates of HESS1 $True_{DC}$ calculated via $I_{tot}$, as well as for the maximum pixel $Intensity$. The two full-shower calculated LPDSs are shown underneath, with the simple guess $DC_{Count}$, and the regressor calculated $DC_{rgr}$. An exponential is fit to the $True_{DC}$ distribution, and the 68\% fractional deviation is shown in green. The same curve is shown on the two derived DC values, with the new fractional deviation being much greater.}
+\label{fig:corsikalpd1}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=\textwidth]{corsikalpd2}
+\caption{The two LPDs shown above are estimates of HESS2 $True_{DC}$ calculated via $I_{tot}$, as well as for the maximum pixel $Intensity$. The two full-shower calculated LPDSs are shown underneath, with the simple guess $DC_{Count}$, and the regressor calculated $DC_{rgr}$. An exponential is fit to the $True_{DC}$ distribution, and the 68\% fractional deviation is shown in green. The same curve is shown on the two derived DC values, with the new fractional deviation being much greater.}
+\label{fig:corsikalpd2}
 \end{center}
 \end{figure}
 

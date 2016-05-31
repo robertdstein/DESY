@@ -9,7 +9,7 @@ import cPickle as pickle
 from telescopeclasses import *
 
 parser = argparse.ArgumentParser()
-parser.add_argument("-jid", "--jobID", default="6051560")
+parser.add_argument("-jid", "--jobID", default="regressorset")
 
 cfg = parser.parse_args()
 
