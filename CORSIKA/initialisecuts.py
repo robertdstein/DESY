@@ -12,8 +12,13 @@ QDCcut = 0.8
 DCcut = 150
 signalcut = 150
 
+minarcut = 0.40
+
 def run(): 
 	return arcut, ddireccut, dcogl, dcogu, dlinecut, radiuscut, c1cut
 	
 def runforstats():
 	return cut, ucut, QDCcut, DCcut, signalcut
+	
+def runar():
+	return minarcut

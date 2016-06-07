@@ -8,7 +8,7 @@ from telescopeclasses import *
 from matplotlib import rc
 
 parser = argparse.ArgumentParser()
-parser.add_argument("-jid", "--jobID", default="2567181")
+parser.add_argument("-jid", "--jobID", default="testdata")
 
 cfg = parser.parse_args()
 
@@ -53,8 +53,9 @@ def makeBDTentry(pixelentry):
 for sigfit in ["rgr", None]:
 	filepath = "/nfs/astrop/d6/rstein/data/"
 	i = 1
-	j = 2000
+	j = 5000
 	totalimages = [0, 0]
+	triggeredimages = [0, 0]
 	DCpasstotal = [0, 0]
 	correctimages =[0, 0]
 	totalcut=[0, 0]
@@ -76,11 +77,15 @@ for sigfit in ["rgr", None]:
 	fulltotal = [0, 0]
 	fullcorrect = [0, 0]
 	
+	finaltotal = [0, 0]
+	finalcorrect = [0, 0]
+		
 	oldcombinedtotal = [0, 0]
 	oldcombinedcorrect = [0, 0]
 	
 	
 	cut, ucut, QDCcut, DCcut, signalcut = ic.runforstats()
+	arcut = ic.runar()
 	
 	right = [[], []]
 	wrong = [[], []]
@@ -107,8 +112,6 @@ for sigfit in ["rgr", None]:
 	rejectedcsignals = [[[], []], [[], []]]
 	rejectedDCsignals =[[[], []], [[], []]]
 	
-	mpass=0
-	lpass=0
 	mtotal=0
 	
 	
@@ -142,147 +145,150 @@ for sigfit in ["rgr", None]:
 				fullsim = event.simulations.full
 				
 				k=0
+				kar=0
 				l=0
 				
-				for index in DCsim.triggerIDs:
-					fulltel =  fullsim.images[index]
-					
+				for fulltel in fullsim.images:
 					if fulltel.BDTID != None:
 						fullBDT = fulltel.getBDTpixel()
 						candidatesignal = fullBDT.channel1.intensity - fullBDT.nnmean
 						if float(ucut) > float(fullBDT.bdtscore) > float(cut):
 								if float(candidatesignal) > float(signalcut):
 									k+=1
+									if float(fulltel.hillas.aspect_ratio_) > arcut:
+										kar +=1
 					
 					if fulltel.QDCID != None:
 						l+=1
-						
-				if l > minmultiplicity:
-					lpass += 1
-				if k > minmultiplicity:
-					mpass += 1					
-				mtotal +=1						
+										
+				mtotal +=1
+				totalimages[0] += 4
+				totalimages[1] += 1
 				
-				for index in DCsim.triggerIDs:
-					DCtel = DCsim.images[index]
+				for index in fullsim.triggerIDs:
 					fulltel =  fullsim.images[index]
 					
-					trueID = DCtel.trueDC
-					DCtrue = DCtel.getpixel(trueID)
-					if hasattr(DCtel.hillas, "image_size_amplitude_"):
-						DCcount = DCtel.hillas.image_size_amplitude_
+					if fulltel.size == "HESS1":
+						plotindex = 0
+						toplot = hessstatus[0]
+					elif fulltel.size == "HESS2":
+						plotindex = 1
+						toplot = hessstatus[1]
+					else:
+						raise Exception("Telescope.size error, size is " +fulltel.size)
 						
-						if fulltel.size == "HESS1":
-							plotindex = 0
-							toplot = hessstatus[0]
-						elif fulltel.size == "HESS2":
-							plotindex = 1
-							toplot = hessstatus[1]
-						else:
-							raise Exception("Telescope.size error, size is " +fulltel.size) 
 						
-						if DCcount > DCcut:
-							DCpasstotal[plotindex] += 1
+					DCcount=0
+					if index in DCsim.triggerIDs:
+						DCtel = DCsim.images[index]
+						trueID = DCtel.trueDC
+						if hasattr(DCtel.hillas, "image_size_amplitude_"):
+							DCcount = DCtel.hillas.image_size_amplitude_
+							triggeredimages[plotindex] += 1	
+					
+					if toplot and (fulltel.BDTID != None):
+						fullBDT = fulltel.getBDTpixel()
 						
-						totalimages[plotindex] += 1
-						
-						if toplot and (fulltel.BDTID != None):
-							fullBDT = fulltel.getBDTpixel()
+						if (fullBDT.bdtscore != None):
+							simplesignal = fullBDT.channel1.intensity - fullBDT.nnmean
 							
-							if (fullBDT.bdtscore != None):
-								simplesignal = fullBDT.channel1.intensity - fullBDT.nnmean
+							if sigfit == None:							
+								candidatesignal = simplesignal
+							elif sigfit == "rgr":
+								bdtentry = makeBDTentry(fullBDT)
+								if (fulltel.size=="HESS1") and (bdtentry != None):
+									candidatesignal = hess1rgr.predict([bdtentry])[0]
+								elif (fulltel.size=="HESS2") and (bdtentry != None):
+									candidatesignal = hess2rgr.predict([bdtentry])[0]
+								elif bdtentry == None:
+									candidatesignal = 0
+							else:
+								raise Exception("sigfit is "+sigfit)
 								
-								if sigfit == None:							
-									candidatesignal = simplesignal
-								elif sigfit == "rgr":
-									bdtentry = makeBDTentry(fullBDT)
-									if (fulltel.size=="HESS1") and (bdtentry != None):
-										candidatesignal = hess1rgr.predict([bdtentry])[0]
-									elif (fulltel.size=="HESS2") and (bdtentry != None):
-										candidatesignal = hess2rgr.predict([bdtentry])[0]
-									elif bdtentry == None:
-										candidatesignal = 0
-								else:
-									raise Exception("sigfit is "+sigfit)
-									
-								
+							if DCcount > 0:
 								difference = (candidatesignal - DCcount)/DCcount
 								absd = math.fabs(difference)
-	
-								if fulltel.BDTID == trueID:
-									result = 1
-									correctimages[plotindex] += 1
-									rightDCcounts[plotindex].append(DCcount)
-									rightscores[plotindex].append(fullBDT.bdtscore)
-									rightsignals[plotindex].append(candidatesignal)
-									right[plotindex].append(fullBDT.bdtscore)
-									if float(ucut) > float(fullBDT.bdtscore) > float(cut):
-										correctcut[plotindex] += 1
-										totalcut[plotindex] += 1
-								elif fulltel.BDTID == None:
-									print "None!!!"
-								else:
-									result = 0
-									wrongDCcounts[plotindex].append(DCcount)
-									wrongscores[plotindex].append(fullBDT.bdtscore)
-									wrongsignals[plotindex].append(candidatesignal)
-									wrong[plotindex].append(fullBDT.bdtscore)
-									if float(ucut) > float(fullBDT.bdtscore) > float(cut):
-										totalcut[plotindex] += 1
-								
-								
-								passcut = False
-								
-								if float(result) == float(1):
-									if float(ucut) > float(fullBDT.bdtscore) > float(cut):
-										if float(simplesignal) > float(signalcut):
+							else:
+								difference=None
+								absd = None
+
+							if fulltel.BDTID == trueID:
+								result = 1
+								correctimages[plotindex] += 1
+								rightDCcounts[plotindex].append(DCcount)
+								rightscores[plotindex].append(fullBDT.bdtscore)
+								rightsignals[plotindex].append(candidatesignal)
+								right[plotindex].append(fullBDT.bdtscore)
+								if float(ucut) > float(fullBDT.bdtscore) > float(cut):
+									correctcut[plotindex] += 1
+									totalcut[plotindex] += 1
+							elif fulltel.BDTID == None:
+								print "None!!!"
+							else:
+								result = 0
+								wrongDCcounts[plotindex].append(DCcount)
+								wrongscores[plotindex].append(fullBDT.bdtscore)
+								wrongsignals[plotindex].append(candidatesignal)
+								wrong[plotindex].append(fullBDT.bdtscore)
+								if float(ucut) > float(fullBDT.bdtscore) > float(cut):
+									totalcut[plotindex] += 1
+
+							passcut = False
+							
+							if float(result) == float(1):
+								if float(ucut) > float(fullBDT.bdtscore) > float(cut):
+									if float(simplesignal) > float(signalcut):
+										combinedcorrect[plotindex] += 1
+										combinedtotal[plotindex] += 1
+										combinedright[plotindex].append(fullBDT.bdtscore)
+										if (k > minmultiplicity):
+											fullcorrect[plotindex] += 1
+											fulltotal[plotindex] += 1
+										if (kar > minmultiplicity) and (float(fulltel.hillas.aspect_ratio_) > arcut):
+											finalcorrect[plotindex] += 1
+											finaltotal[plotindex] += 1
 											passcut = True
-											combinedcorrect[plotindex] += 1
-											combinedtotal[plotindex] += 1
-											combinedright[plotindex].append(fullBDT.bdtscore)
-											if (k > minmultiplicity):
-												fullcorrect[plotindex] += 1
-												fulltotal[plotindex] += 1
-												
-												
-								elif float(result) == float(0):
-									if float(ucut) > float(fullBDT.bdtscore) > float(cut):
-										if float(simplesignal) > float(signalcut):
-											passcut = True	
-											combinedtotal[plotindex] += 1
-											combinedwrong[plotindex].append(fullBDT.bdtscore)
-											if (k > minmultiplicity):
-												fulltotal[plotindex] += 1
-												
 											
+							elif float(result) == float(0):
+								if float(ucut) > float(fullBDT.bdtscore) > float(cut):
+									if float(simplesignal) > float(signalcut):
+										combinedtotal[plotindex] += 1
+										combinedwrong[plotindex].append(fullBDT.bdtscore)
+										if (k > minmultiplicity):
+											fulltotal[plotindex] += 1
+										if (kar > minmultiplicity) and (float(fulltel.hillas.aspect_ratio_) > arcut):
+											finaltotal[plotindex] += 1
+											passcut = True
+											
+							if difference != None:			
 								if passcut:
 									passed[plotindex][result].append(difference)
 									passeddiff[plotindex].append(absd)
 									passedcsignals[plotindex][result].append(candidatesignal/DCcount)
 									passedDCsignals[plotindex][result].append(DCcount)
-								else:
+								elif (k > minmultiplicity):
 									rejected[plotindex][result].append(difference)
 									rejecteddiff[plotindex].append(absd)
 									rejectedcsignals[plotindex][result].append(candidatesignal/DCcount)
 									rejectedDCsignals[plotindex][result].append(DCcount)	
-										
-						if toplot and (fulltel.QDCID != None):
-								
-							fullQDC = fulltel.getQDCpixel()
-								
-							if fulltel.QDCID == trueID:
-								oldcorrectimages[plotindex] += 1
-								oldright[plotindex].append(fullQDC.rawQDC)
-								oldcorrectcut[plotindex] += 1
-								oldtotalcut[plotindex] += 1
-								if l > minmultiplicity:		
-									oldcombinedcorrect[plotindex] += 1
-									oldcombinedtotal[plotindex] += 1
-							else:
-								oldwrong[plotindex].append(fullQDC.QDC)
-								oldtotalcut[plotindex] += 1	
-								if l > minmultiplicity:
-									oldcombinedtotal[plotindex] += 1
+									
+					if toplot and (fulltel.QDCID != None):
+							
+						fullQDC = fulltel.getQDCpixel()
+							
+						if fulltel.QDCID == trueID:
+							oldcorrectimages[plotindex] += 1
+							oldright[plotindex].append(fullQDC.rawQDC)
+							oldcorrectcut[plotindex] += 1
+							oldtotalcut[plotindex] += 1
+							if l > minmultiplicity:		
+								oldcombinedcorrect[plotindex] += 1
+								oldcombinedtotal[plotindex] += 1
+						else:
+							oldwrong[plotindex].append(fullQDC.QDC)
+							oldtotalcut[plotindex] += 1	
+							if l > minmultiplicity:
+								oldcombinedtotal[plotindex] += 1
 	
 		if (int(float(i)*100/float(j)) - float(i)*100/float(j)) ==0:
 			print p+1
@@ -298,14 +304,15 @@ for sigfit in ["rgr", None]:
 			message = []
 		
 			message += "\n \n", 
-			message += "We have", str(mtotal), "events. Of these, there are", str(totalimages[i]), "triggered images. \n"
+			message += "We have", str(mtotal), "events. Of these, there are", str(totalimages[i]), "total images, including", str(triggeredimages[i]), "images triggered with DC light."
+			message += "In total,", str('{0:.1f}'.format(float(100.*triggeredimages[i]/totalimages[i]))), "% of all images have DC light to reconstruct. \n"
 			
 			message += "In total,", str(oldcorrectimages[i]), "pixels are correctly identified using QDC method."
-			if DCpasstotal[i] > 0:
+			if totalimages[i] > 0:
 				message += "Method Identified", str('{0:.1f}'.format(float(100.*oldcorrectimages[i]/totalimages[i]))), "% of all images. \n"
 			
 			message += "In total,", str(correctimages[i]), "pixels are correctly identified using BDT method."
-			if DCpasstotal[i] > 0:
+			if totalimages[i] > 0:
 				message += "Method Identified", str('{0:.1f}'.format(float(100.*correctimages[i]/totalimages[i]))), "% of all images. \n \n "
 			
 			message += "Our QDC cut requires QDC < 0.14 log( Itot / 161 cos(theta)), leaving", str(oldtotalcut[i]), "images. \n "
@@ -342,12 +349,21 @@ for sigfit in ["rgr", None]:
 				message += "Fraction of pixels correctly identified is", str('{0:.1f}'.format(float(100.*(combinedcorrect[i])/totalimages[i]))), "% \n"
 				message += "Fraction of pixels incorrectly identified is", str('{0:.1f}'.format(float(100.*(combinedtotal[i]-combinedcorrect[i])/totalimages[i]))), "% \n"
 				
-			message += "Additionally requiring multiplicity > ", str(minmultiplicity), ", we have", str(fulltotal[i]), "images . \n "
+			message += "Additionally requiring multiplicity > ", str(minmultiplicity), " we have", str(fulltotal[i]), "images . \n "
 			message += "Of these,", str(fullcorrect[i]), "are correctly identified images. \n "
-			if combinedtotal[i] > 0:
+			if fulltotal[i] > 0:
 				message += "Successful ID rate after cut is", str('{0:.1f}'.format(float(100.*fullcorrect[i]/fulltotal[i]))), "% \n"
 				message += "Fraction of pixels correctly identified is", str('{0:.1f}'.format(float(100.*fullcorrect[i]/totalimages[i]))), "% \n"
 				message += "Fraction of pixels incorrectly identified is", str('{0:.1f}'.format(float(100.*(fulltotal[i]-fullcorrect[i])/totalimages[i]))), "% \n \n"
+				
+			message += "Additionally requiring Aspect ratio >", str(arcut)," we have", str(finaltotal[i]), "images . \n "
+			message += "Of these,", str(finalcorrect[i]), "are correctly identified images. \n "
+			if fulltotal[i] > 0:
+				message += "Successful ID rate after cut is", str('{0:.1f}'.format(float(100.*finalcorrect[i]/finaltotal[i]))), "% \n"
+				message += "Fraction of pixels correctly identified is", str('{0:.1f}'.format(float(100.*finalcorrect[i]/totalimages[i]))), "% \n"
+				message += "Fraction of pixels incorrectly identified is", str('{0:.1f}'.format(float(100.*(finaltotal[i]-finalcorrect[i])/totalimages[i]))), "% \n \n"
+				
+				 
 					
 			toprint = ' '.join(message)
 			print toprint
@@ -407,9 +423,9 @@ for sigfit in ["rgr", None]:
 				figure.legend(handles, labels, loc="upper right")
 				
 				plt.subplots_adjust(hspace = 0.5)
-				if (rows == 2) and (sigfit==None):
+				if (rows == 2):
 					figure.set_size_inches(15, 15)
-					plt.savefig("/nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/report/graphs/cutdistribution" + str(i+1) +str(sigfit)+".pdf")
+					plt.savefig("/nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/report/graphs/hess" + str(i+1) +"stats"+ str(cfg.jobID)+".pdf")
 					
 				elif rows ==3:
 
@@ -429,7 +445,7 @@ for sigfit in ["rgr", None]:
 								
 					figure = plt.gcf() # get current figure
 					figure.set_size_inches(20, 15)
-					plt.savefig("/nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/CORSIKA/graphs/statshess" + str(i+1) +str(sigfit)+".pdf")
+					plt.savefig("/nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/CORSIKA/graphs/hess" + str(i+1) +"stats"+str(cfg.jobID)+".pdf")
 			
 				plt.close()
 			
@@ -438,7 +454,8 @@ for sigfit in ["rgr", None]:
 			for columns in [1, 2]:
 			
 				ax1 = plt.subplot(2,columns,1)
-				plt.hist(passed[i], color=colors, stacked=True, bins=20)
+				if (len(passed[i][0]) > 0) and (len(passed[i][1]) > 0):
+					plt.hist(passed[i], color=colors, stacked=True, bins=20)
 				plt.title("DC pixel error for events passing cuts")
 				plt.xlabel("Difference from true count")	
 				
@@ -448,8 +465,9 @@ for sigfit in ["rgr", None]:
 					plotcut.append(signalcut/entry)
 				
 				if columns == 2:
-					ax2 = plt.subplot(2,2,2, sharex=ax1)
-					plt.hist([rejected[i][0], rejected[i][1]], color=colors, stacked=True, bins=20)
+					ax2 = plt.subplot(2,2,2)
+					if (len(rejected[i][0]) > 0) and (len(rejected[i][1]) > 0):
+						plt.hist([rejected[i][0], rejected[i][1]], color=colors, stacked=True, bins=20)
 					plt.title("DC pixel error for rejected events")
 					plt.xlabel("Difference from true count")
 
@@ -483,7 +501,7 @@ for sigfit in ["rgr", None]:
 			handles, labels = ax3.get_legend_handles_labels()
 			figure.legend(handles, labels, loc="upper right")
 			
-			plt.savefig("/nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/report/graphs/DCcounterrorhess" + str(i+1) + str(sigfit)+".pdf")
+			plt.savefig("/nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/report/graphs/DCcounterrorhess" + str(i+1) + str(sigfit)+str(cfg.jobID)+".pdf")
 			
 			k=1
 			
@@ -498,31 +516,32 @@ for sigfit in ["rgr", None]:
 				alldiff.sort()
 				
 				nentries = len(allevents)
-				halfinteger = int(0.5*nentries)
-				lowerinteger = int(0.16*nentries)
-				upperinteger = int(0.84*nentries)
-				integer68 = int(0.68*nentries)
-				
-				lower = allevents[lowerinteger]
-				upper = allevents[upperinteger]
-				
-				toprint= "Mean = " + str('{0:.2f}'.format(np.mean(allevents)))
-				toprint += ". Median = " + str('{0:.2f}'.format(allevents[halfinteger])) + "\n"
-				toprint += "Lower = " + str('{0:.2f}'.format(lower))
-				toprint += ". Upper = " + str('{0:.2f}'.format(upper)) + "\n"
-				toprint += "Sigma = " + str('{0:.2f}'.format(0.5*(upper-lower))) + "\n"
-				
-				toprint += "Mean absolute difference = "+ str('{0:.2f}'.format(np.mean(alldiff))) + "\n"
-				toprint += "Median absolute difference = " + str('{0:.2f}'.format(alldiff[halfinteger])) + "\n"
-				toprint += "Sigma = " + str('{0:.2f}'.format(alldiff[integer68])) + "\n"
-				
-				eval("ax" + str(k) + ".annotate(toprint, xy=(0.6, 0.75), xycoords='axes fraction',  fontsize=10)")
-				
-				print k, toprint
+				if nentries > 3:
+					halfinteger = int(0.5*nentries)
+					lowerinteger = int(0.16*nentries)
+					upperinteger = int(0.84*nentries)
+					integer68 = int(0.68*nentries)
+					
+					lower = allevents[lowerinteger]
+					upper = allevents[upperinteger]
+					
+					toprint= "Mean = " + str('{0:.2f}'.format(np.mean(allevents)))
+					toprint += ". Median = " + str('{0:.2f}'.format(allevents[halfinteger])) + "\n"
+					toprint += "Lower = " + str('{0:.2f}'.format(lower))
+					toprint += ". Upper = " + str('{0:.2f}'.format(upper)) + "\n"
+					toprint += "Sigma = " + str('{0:.2f}'.format(0.5*(upper-lower))) + "\n"
+					
+					toprint += "Mean absolute difference = "+ str('{0:.2f}'.format(np.mean(alldiff))) + "\n"
+					toprint += "Median absolute difference = " + str('{0:.2f}'.format(alldiff[halfinteger])) + "\n"
+					toprint += "Sigma = " + str('{0:.2f}'.format(alldiff[integer68])) + "\n"
+					
+					eval("ax" + str(k) + ".annotate(toprint, xy=(0.6, 0.75), xycoords='axes fraction',  fontsize=10)")
+					
+					print k, toprint
 				
 				k+=1
 			
-			saveto = "/nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/CORSIKA/graphs/errorstatshess" + str(i+1) +str(sigfit)+".pdf"
+			saveto = "/nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/CORSIKA/graphs/errorstatshess" + str(i+1) +str(sigfit)+str(cfg.jobID)+".pdf"
 			
 			print "Saving to", saveto
 			

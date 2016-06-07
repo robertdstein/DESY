@@ -66,7 +66,7 @@ for cardname in cards:
 	f_out.write("TELFIL " + iact_name + ":100:100:1              Telescope photon bunch output (eventio format)  \n")
 
 	if cardname == "DC":
-		f_out.write("ECUTS 0.3 1E7 1E7 0.003 \n")
+		f_out.write("ECUTS 400 1E7 1E7 0.003 \n")
 		
 	elif cardname == "full":
 		f_out.write("ECUTS 0.3 0.3 0.003 0.003 \n")

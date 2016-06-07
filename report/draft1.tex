@@ -168,7 +168,7 @@ To determine the true class of each pixel, a simulation was initially run with a
 With the sim\textunderscore telarray package, the expected HESS hardware response to each air shower was simulated. Among other things, the program accounts for atmospheric transmission and density, mirror positions, sizes and reflectivities, camera shadowing and triggering, quantum efficiency and pulse responses. For the full-shower image, the night sky background was also simulated by sim\textunderscore telarray. Due to the comprehensive and detailed nature of these hardware simulations, the resultant images can be considered \textquoteleft realistic'.  However, sim\textunderscore telarray introduces various sources of random noise to the simulation, leading to some divergence in the DC light between the EAS-free and full-shower images.
 
 \begin{figure}
-\newgeometry{a4paper, portrait, margin=1.0in}
+\newgeometry{a4paper, portrait, margin=1.5in}
 \centering
 \begin{minipage}{0.45\textwidth}
 \centering
@@ -187,7 +187,7 @@ With the sim\textunderscore telarray package, the expected HESS hardware respons
 
 The various pixel entry variables were found from the sim\textunderscore telarray output. The HESS telescope pixels have a high gain Channel 0 and a low gain Channel 1, with both voltages undergoing a Flash Analogue-to-Digital Conversion (FADC). The simulated value of the FADC Voltage for each channel was found. Using the pedestal and gain, the quantity $Intensity = (FADC - Pedestal)\times Gain $ was calculated for each channel. Due to possible saturation of the high gain FADC, only the low gain $Intensity$ was used. Sim\textunderscore telarray also derives various Hillas whole-image parameters. These include the image width and length measured in degrees, from which the aspect ratio $A.R = \frac{width}{length}$ was calculated. The reconstructed shower direction and the shower center of gravity were also calculated, as positions in azimuth and zenith. Additionally the estimated energy and distance from each telescope to core, $r_{core}$,  were found.
 
-For every pixel, in addition to the $Intensity$, its location within the telescope image was determined using the standard HESS layout. The variables $ \Delta_{C.o.G}$, $\Delta_{Direction}$ and $\Delta_{Line}$ were defined as the distance from the pixel to the shower center of gravity, shower direction, and the line joining those two points. Furthermore, the nearest neigbouring pixel IDs were calculated for every pixel position, enabling the $Intensity$ in each neighbouring pixel to be found. The largest neighbouring intensity was identified, and the ratio $Q_{DC} = \frac{Intensity_{N.N.max}}{Intensity}$ was derived. Similarly the largest neighbouring FADC was found, and the ratio $raw_{Q} = \frac{FADC_{N.N.max}}{FADC}$ was calculated. In addition, the Nearest Neighbour Mean Intensity $Mean_{N.N}$ was recorded. The variable $DC_{Signal} = Intensity-Mean_{N.N}$ was defined as an rough guess of the \textquoteleft DC signal' component in the pixel. Lastly the Image Amplitude $I_{tot}$, defined as the total image intensity after the default tail cuts have been applied to the image.
+For every pixel, in addition to the $Intensity$, its location within the telescope image was determined using the standard HESS layout. The variables $ \Delta_{C.o.G}$, $\Delta_{Direction}$ and $\Delta_{Line}$ were defined as the distance from the pixel to the shower center of gravity, shower direction, and the line joining those two points. Furthermore, the nearest neigbouring pixel IDs were calculated for every pixel position, enabling the $Intensity$ in each neighbouring pixel to be found. The largest neighbouring intensity was identified, and the ratio $Q_{DC} = \frac{Intensity_{N.N.max}}{Intensity}$ was derived. Similarly the largest neighbouring FADC was found, and the ratio $raw_{Q} = \frac{FADC_{N.N.max}}{FADC}$ was calculated. In addition, the Nearest Neighbour Mean Intensity $Mean_{N.N}$ was recorded, as well as the smallest neighbouring pixel intensity $Intensity_{N.N.min}$. The variable $DC_{Signal} = Intensity-Mean_{N.N}$ was defined as an rough guess of the \textquoteleft DC signal' component in the pixel. Lastly the Image Amplitude $I_{tot}$, defined as the total image intensity after the default tail cuts have been applied to the image.
 
 \subsection{Classic DC Pixel Identification}
 As a basis for comparison, the original HESS cuts listed in \ref{tab:table1} were replicated for the set of test data. For every image, the total image amplitude $I_{tot}$ was used alongside the zenith angle $\theta$ to determine a dynamic cut, $Q_{DC} < 0.14 \times \log(\frac{I_{tot}}{161 \times \cos \theta})$. Among those pixels passing all cuts, the one with the smallest $Q_{DC}$ was selected as the DC pixel candidate for the image. Because many images had no pixel that passed all cuts, the $Q_{DC}$ method was frequently unable to identify a DC pixel. In the original analysis, an additional cut $r_{core} \textgreater 40m$ was applied. However, the uncertainty in determining the core position through Hillas Analysis is typically of the order of $\pm 30m$. Consequently, this particular cut was omitted.
@@ -210,7 +210,7 @@ As a basis for comparison, the original HESS cuts listed in \ref{tab:table1} wer
   \end{tabular}
 \end{table}
 
-The candidates were checked against the true DC pixels identified in the EAS-free images. From the testing sample, 5.2\% of all images were correctly identified and passed the cuts. Once misidentified events were considered, the post-cuts sample was 86.2\% accurate, as shown in \ref{fig:cutdistribution}. These values served as a benchmark for BDT performance.
+The candidates were checked against the true DC pixels identified in the EAS-free images. From the testing sample, 1.8\% of all images were correctly identified and passed the cuts. Once misidentified events were considered, the post-cuts sample was 89.9\% accurate, as shown in Figure \ref{fig:cutdistribution}. These values served as a benchmark for BDT performance.
 
 \begin{figure}
 \begin{center}
@@ -245,11 +245,11 @@ As an alternative to use of $Q_{DC}$, a new method of DC pixel identification wa
 
 The relative importance of each \textquoteleft feature' is automatically calculated by the Scikit Learn package, and is also recorded in table \ref{tab:hess1classifier}. The variable $DC_{Count}$ was consistently the most importance variable across many combinations of included variables and BDT training parameters. It was found that, under the conditions listed above, the BDT was 99.94 \% accurate for the learning pixel subset, and 99.93 \%  accurate for the overtraining-check pixel subset. This indicates that the BDT was not significantly overtrained, which would otherwise be manifested by a large divergence in accuracy between learning and overtraining-check data.
 
-Having trained the BDT successfully, it was then applied to the same test dataset as for the classic $Q_{DC}$ identification. In each camera image, the event with the largest BDT score was deemed to be \textquoteleft most signal-like', and thus selected as the DC pixel candidate. A cut was applied, requiring $P_{signal} > 0.5$ for the DC candidate to be accepted. A second cut requiring $DC_{Count} > 150$ removed many incorrectly identified events. Application of this combined cut greatly increases the successful identification rate. From the testing sample, 37.3\% of all images were correctly identified and passed the cuts. The BDT was found to be 87.7\% accurate in identifying DC pixels which passed the cuts. This represents a very significant improvement in pixel identification efficiency, as well as a minor increase in accuracy after cuts. 
+Having trained the BDT successfully, it was then applied to the same test dataset as for the classic $Q_{DC}$ identification. In each camera image, the event with the largest BDT score was deemed to be \textquoteleft most signal-like', and thus selected as the DC pixel candidate. A cut was applied, requiring $P_{signal} > 0.5$ for the DC candidate to be accepted. A second cut requiring $DC_{Count} > 150$ removed many incorrectly identified events. Application of this combined cut greatly increases the successful identification rate. From the testing sample, 15.2\% of all images were correctly identified and passed the cuts. The BDT was found to be 90.2\% accurate in identifying DC pixels which passed the cuts. This represents a very significant improvement in pixel identification efficiency, as well as a minor increase in accuracy after cuts. 
 
-For LPD event reconstruction, we require events to have a telescope multiplicity $>3$. If we only consider events in which at least four DC pixels were identified, we can determine the high-multiplicity BDT performance. In this case, the fraction of correctly identified DC pixels falls to 16.8\%, while the fraction of incorrectly identified pixels passing the cuts falls to 1.8\%. The sample purity increases slightly to 90.3\%. The relatively high fraction of passing events, in excess of the random expectation of $0.372^{4}=1.9 \%$, suggests that DC pixel identification between different telescope images is strongly correlated. 
+For LPD event reconstruction, we require events to have a telescope multiplicity $>3$. If we only consider events in which at least four DC pixels were identified, we can determine the high-multiplicity BDT performance. In this case, the fraction of correctly identified DC pixels falls to 2.2\%, while the fraction of incorrectly identified pixels passing the cuts falls to 0.2\%. The sample purity increases slightly to 91.2\%. The relatively high fraction of passing events, in excess of the random expectation of $0.152^{4}=0.05\%$, suggests that DC pixel identification between different telescope images is strongly correlated. 
 
-However, out of 1245 triggered events, there were none in which the $Q_{DC}$ method identified four DC pixels. Using poissonian statistics, we can place an upper limit of $<0.24 \%$ on the rate of accepted, high-multiplicity $Q_{DC}$ events. Thus, as well as BDT accuracy slightly improving, the performance gap over the $Q_{DC}$ method is vastly increased for high-multiplicity events. The results are summarised in Table \ref{tab:qdcbdtcomparison1}. The BDT method represents a very significant improvement in DC pixel identification over the previous $Q_{DC}$ method, and corresponds to at least a fifty-fold increase in the number of HESS data events that can be studied using the LPD method. Use of this BDT method is thus assumed throughout the rest of this analysis.
+However, out of 18652 total images, there were none belonging to events in which the $Q_{DC}$ method identified four DC pixels. Using poissonian statistics, we can place an upper limit of $<0.02 \%$ on the rate of accepted, high-multiplicity $Q_{DC}$ events. Thus, as well as BDT accuracy slightly improving, the performance gap over the $Q_{DC}$ method is vastly increased for high-multiplicity events. The results are summarised in Table \ref{tab:qdcbdtcomparison1}. The BDT method represents a very significant improvement in DC pixel identification over the previous $Q_{DC}$ method, and corresponds to at least a fifty-fold increase in the number of HESS data events that can be studied using the LPD method. Use of this BDT method is thus assumed throughout the rest of this analysis.
 
 \begin{table}[h!]
   \centering
@@ -259,21 +259,21 @@ However, out of 1245 triggered events, there were none in which the $Q_{DC}$ met
     \toprule
     & $Q_{DC}$ & BDT\\
     \midrule
-    Pixels Accepted and Correctly Identified (\%) & 5.2 & 37.2\\
-   Pixels Accepted and Incorrectly Identified (\%) & 0.8 & 5.2\\
-    Sample Purity (\%) & 86.2 & 87.7 \\
+    Pixels Accepted and Correctly Identified (\%)  & 1.8 & 15.2\\
+   Pixels Accepted and Incorrectly Identified (\%)  & 0.2& 1.7\\
+    Sample Purity (\%)  & 89.9& 90.2 \\
     \midrule
-    High Multiplicity Pixels Accepted and Correctly Identified (\%) & $<0.24$ & 16.8\\
-    High Multiplicity Pixels Accepted and Incorrectly Identified (\%) & $<0.24$ & 1.8\\
-    Sample Purity (\%) & / & 90.3\\
+    High Multiplicity Pixels Accepted and Correctly Identified (\%) & $<0.02$ & 2.2\\
+    High Multiplicity Pixels Accepted and Incorrectly Identified (\%) & $<0.02$ & 0.2\\
+    Sample Purity (\%) & / & 91.2\\
     \bottomrule
   \end{tabular}
 \end{table}
 
 \subsection{HESS-2 BDT}
-The original HESS study predated the construction of the larger CT5 telescope, and thus focused exclusively in the four HESS-1 telescopes. Although the cuts in \ref{tab:qdccuts} were not optimised for the differing pixel size and angular viewing region of CT5, they were replicated to provide a basis for comparison. Based on CT5 images from the training sample, an increased 5.7\% of DC pixels were correctly identified and passed the required cut. A further 10 \% of all pixels passed the cuts, despite being misidentified. This represented a very heavy decrease in sample purity to just 38\%. We can assume that better optimised CT5 cuts could remove many of these misidentified events, though it is unlikely that any significant improvement in the number of correctly identified DC pixels would be possible. Thus, the number of DC pixels successfully identified using the $Q_{DC}$ method is still a valid benchmark for comparative BDT performance. A true accuracy rate closer to the HESS 1 rate of 86\% could be expected. 
+The original HESS study predated the construction of the larger CT5 telescope, and thus focused exclusively in the four HESS-1 telescopes. Although the cuts in \ref{tab:qdccuts} were not optimised for the differing pixel size and angular viewing region of CT5, they were replicated to provide a basis for comparison. Based on CT5 images from the training sample, an increased 5.6\% of DC pixels were correctly identified and passed the required cut. A further 11.3 \% of all pixels passed the cuts, despite being misidentified. This represented a very heavy decrease in sample purity to just 33.0\%. We can assume that better optimised CT5 cuts could remove many of these misidentified events, though it is unlikely that any significant improvement in the number of correctly identified DC pixels would be possible. Thus, the number of DC pixels successfully identified using the $Q_{DC}$ method is still a valid benchmark for comparative BDT performance. A true accuracy rate closer to the HESS 1 rate of 90\% could be expected. 
 
-Due to the distinctiveness of the CT5 telescope, direct application of the HESS1 classifier to the CT5 telescope yields poorer BDT performance, with just 14.8 \% of correctly identified events passing the cut and an accuracy of 71.7\%. To improve CT5 pixel identification, a separate HESS2 BDT was instead trained with the same variables as above. The relative feature importance is listed in Table \ref{tab:hess2classifier}. 
+Due to the distinctiveness of the CT5 telescope, direct application of the HESS1 classifier to the CT5 telescope yields poorer BDT performance, \textbf{with just 14.8 \% of correctly identified events passing the cut and an accuracy of 71.7\%}. To improve CT5 pixel identification, a separate HESS2 BDT was instead trained with the same variables as above. The relative feature importance is listed in Table \ref{tab:hess2classifier}. 
 
 \begin{table}[h!]
   \centering
@@ -295,7 +295,7 @@ Due to the distinctiveness of the CT5 telescope, direct application of the HESS1
   \end{tabular}
 \end{table}
 
-The CT5 performance was improved for the new classifier, with 24.0 \% of pixels being correctly identified and accepted, and an accuracy of 79.4\%. Despite this improvement, a clear gap emerged between the between the performance of HESS1 classifier on old telescopes, and the performance of the HESS2 classifier on CT5. Part of this discrepancy can be explained by the HESS2 learning dataset, which has just one DC pixel per event rather than the four HESS1 DC pixels. Additionally, HESS 2 images will have roughly 2600 non-DC pixels per event, versus 3600 DC pixels per event for HESS 1 images. The HESS2 classifier was thus trained on significantly fewer DC pixels, so we would expect to see the clear performance gap in comparison to the HESS1 classifier. In the case of the high-multiplicity events, the gap narrows somewhat. In total 9.4\% of pixels are correctly identified and accepted, although the accuracy rate is only increased to 81.0\%. As stated before, no $Q_{DC}$ event had four or more DC pixels identified, and thus the only conclusion to be drawn on the $Q_{DC} method$ is to place an upper limit of the event rate. 
+The CT5 performance was improved for the new classifier, with 17.9 \% of pixels being correctly identified and accepted, and an accuracy of 66.1\%. Despite this improvement, a clear gap emerged between the between the performance of HESS1 classifier on old telescopes, and the performance of the HESS2 classifier on CT5. Part of this discrepancy can be explained by the HESS2 learning dataset, which has just one DC pixel per event rather than the four HESS1 DC pixels. Additionally, HESS 2 images will have roughly 2600 non-DC pixels per event, versus 3600 DC pixels per event for HESS 1 images. The HESS2 classifier was thus trained on significantly fewer DC pixels, so we would expect to see the clear performance gap in comparison to the HESS1 classifier. In the case of the high-multiplicity events, the gap narrows somewhat. In total 1.9\% of pixels are correctly identified and accepted, although the accuracy rate is only increased to 80.7\%. As before, non-observation of a qualifying high-multiplicity $Q_{DC}$ event allows us to calculate a Poissonian upper limit. Out of 4663 HESS2 images, there were none belonging to events in which the $Q_{DC}$ method identified four DC pixels, limiting the rate to $<0.06\%$. 
 
 \begin{table}[h!]
   \centering
@@ -305,22 +305,65 @@ The CT5 performance was improved for the new classifier, with 24.0 \% of pixels 
     \toprule
     & $Q_{DC}$ & BDT\\
     \midrule
-    Pixels Accepted and Correctly Identified (\%) & 5.7 & 24.8\\
-   Pixels Accepted and Incorrectly Identified (\%) & 10.6 & 6.4\\
-    Sample Purity (\%) & 34.8 & 79.4 \\
+    Pixels Accepted and Correctly Identified (\%) & 5.6 & 17.9 \\
+   Pixels Accepted and Incorrectly Identified (\%) & 11.3 & 9.2 \\
+    Sample Purity (\%) & 33.0 & 66.1 \\
     \midrule
-    High Multiplicity Pixels Accepted and Correctly Identified (\%) & $<0.24$ & 9.4\\
-    High Multiplicity Pixels Accepted and Incorrectly Identified (\%) & $<0.24$ & 2.2\\
-    Sample Purity (\%) & / & 81.0\\
+    High Multiplicity Pixels Accepted and Correctly Identified (\%) & $<0.06$ & 1.9\\
+    High Multiplicity Pixels Accepted and Incorrectly Identified (\%) & $<0.06$ & 0.5\\
+    Sample Purity (\%) & / & 80.7\\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\subsection{Proton Background}
+It is important to discriminate between the heavy cosmic ray elements, such as iron, and the much more abundant proton events. Protons tend to emit negligible DC light, so will contaminate any data sample with events that cannot be reconstructed using the LPD method. To determine the acceptance rate for proton events, a simulation was conducted with 2000 proton events in CORSIKA. For HESS1, the raw acceptance rate was 15.1\% while the sample purity of 32.2\%. For HESS2, the raw acceptance rate was 58.6\% while the sample purity of 6.8\%. Although the HESS1 acceptance rate is relatively small, the proton flux is approximately ten times greater than iron flux. A mixed sample would have many more proton images than iron images. Once multiplicity cuts are applied, the acceptance rate falls steeply to just 2.9\%. With the factor 10 discrepancy in flux, the number of proton and iron images will be comparable. Of those passing the cuts, 24.5\% are correctly identified.  For HESS2, the comparable number is 21.7\% with multiplicity cuts. The sample purities are just 24.4\% and 7.7\% respectively. This poor performance motivates our desire to remove protons from our sample for analysis.
+
+We require an additional cut to remove the majority of these proton events. If we can eliminate one or two accepted proton images per event, then the remaining proton pixels will all be rejected by the multiplicity cuts. Hence, loose cuts can sharply reduce the acceptance rate of protons. In this case, as shown in Figure \ref{fig:aspectratio}, there is a fair degree of separation between proton and Iron Aspect Ratio for pixels which pass all cuts. We aim to remove proton pixels but not iron pixels. Applying a cut requiring Aspect Ratio $> 0.35$ eliminated all accepted proton events for HESS1 and HESS2. With 17792 total HESS1 images, just 6195 images were triggered by DC light. Of all 17792 images, there were none passing all of the required cuts. We can place a poissonian upper limit on the acceptance rate of $< 0.02 \%$. Of the for 4448 HESS2 images, just 2169 contained DC light. As no image passed all cuts, we place an upper limit of $< 0.07\%$. For HESS1 iron events, the total acceptance rate falls slightly from 2.4\% to 2.3\%, while the sample purity decreases slightly to 89.0\%. For HESS2, the total acceptance rate falls slightly from 2.4\% to 2.3 \%, while the sample purity decreases slightly to 79.8\%. Iron images form at least 90\% of a sample, because most proton images are at least one hundred times less likely to be accepted.
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=0.9\textwidth]{aspectratio}
+\caption{The aspect ratio of images in events which pass the multiplicity cut are shown. It is clear that the proton events have a strong tendency towards lower Aspect Ratios. We must remove the white proton pixels passing all other cuts, without removing dark green iron pixels passing all other cuts. A cut requiring Aspect Ratio $> 0.35$ should remove a large proportion of proton images without reducing the pass rate for iron nucleii.}
+\label{fig:aspectratio}
+\end{center}
+\end{figure}
+
+\begin{table}[h!]
+  \centering
+  \caption{Comparison of Proton and Iron Acceptance}
+  \label{tab:protonacceptance}
+  \begin{tabular}{ccc}
+    \toprule
+    & HESS1  & HESS2 \\
+    \midrule
+    Proton Pixels Accepted (\%) & 15.1 & 58.6\\
+    Sample Purity (\%) & 32.2 & 6.8 \\
+    \midrule
+    High Multiplicity Proton Pixels Accepted (\%) & 2.9 & 21.7\\
+    Sample Purity (\%) & 24.5 & 7.7 \\
+    \midrule
+    Proton Pixels Accepted after All Cuts(\%) & $< 0.02$ & $< 0.07$\\
+    Sample Purity (\%) & / & / \\
+    \midrule
+    Iron Pixels Accepted after All Cuts(\%) & 2.3 & 2.3\\
+    Sample Purity (\%) & 89.0 & 79.8 \\
     \bottomrule
   \end{tabular}
 \end{table}
 
 \subsection{Determining $True_{DC}$}
-Determining the value off $True_{DC}$ is important for 
+Determining the value off $True_{DC}$ is important for determining the error in our LPD measurements. However, there are two natural ways of quantifying $True_{DC}$. In the basic case, we can simply consider the EAS-free intensity $Intensity_{max}$ in the DC pixel. An alternative is to take the entire EAS-free image amplitude $I_{tot}$ as our $True_{DC}$ value. The use of Image Amplitude accounts for the fact that the DC light is almost always split between two or more pixels. Although in most cases, one pixel has the majority of the light, in extreme cases the light can be evenly split between two. As a result of the smaller angular region covered by each CT5 pixel, this happens much more frequently for HESS2 than for HESS1. A countervailing argument is the susceptibility of the Image Amplitude measurement to edge effects. A DC pixel lying near the image edge will be unaffected by this fact, but the total image amplitude may decline because dimmer pixels move over the image edge.
 
-\textbf{Let's define $Intensity_{N.N.max}$!}
- 
+To quantitatively compare the two methods, we can measure the error associated with both values of $True_{DC}$. A study of 2000 events was conducted, in which each cosmic ray was simulation without night sky background or EAS background. Each telescope image simulation was conducted twice, and difference between $I_{1}$ and $I_{2}$ was plotted as in \ref{fig:simtelerror}. The fractional difference from the mean Intensity of an image was defined as $\Delta = 2 \times \frac{I_{2} - I_{1}}{{I_{2} + I_{1}}}$. 
+
+For $I_{tot}$, it was found that the standard deviation in fractional difference was $\sigma_{Itot}=0.06$, meaning that there is an inherent error of 6 \% in measurements of $True_{DC}$. In later calculations of the error in Intensity, this fractional error can be subtracted in quadrature. The distribution did not vary between HESS1 and HESS2 telescopes. For the alternative $Intensity_{max}$ measurement, the standard deviation was $\sigma_{Imax}=0.09$ for HESS1 and $\sigma_{Imax}=0.12$, a clear increase. This implies that the $I_{tot}$ measurements are more reliable.
+
+For an alternative measurement of error in the LPD, a simulation of 2000 events was conducted with a fixed energy of 56TeV, and both Zenith and azimuth fixed to 0 degrees. The interaction height was fixed at 23km above sea level. The true distance to core was recorded from Sim\textunderscore telarray, and a graph was plotted of DC pixel intensity against core distance. As expected, a characteristic LPD is observed, as seen in Figure \ref{fig:corsikalpd1}. Due to the application of a signal cut to the BDT candidates, we are only able to see the LPD at around $r_{core} \textgreater 35m$, at which point the LPD intensity crosses the threshold of 150 p.e. From here, there is a clear LPD continuing up to around 100m. Above roughly 100m, the LPD becomes dominated by highly random hadron fragmentation, and thus ceases to be coherent.
+
+The region 35-90m is considered, and if an exponential if fitted to the LPD, then the fractional deviation $\Delta_{TrueDC} = \frac{signal_{fit} - True_{DC count}}{signal_{fit}}$ can be found. Using the 68th centile of all absolute fractional deviations $\Delta_{TrueDC}$, we find that the HESS LPD for $I_{tot}$ has an error of $\sigma_{Itot}=0.12$. Repeating for $Intensity_{max}$ calculated values, the resultant LPD had an error of $\sigma_{Imax} = 0.24$. Again, it is clear that the $I_{tot}$ value has a smaller associated error than $Intensity_{max}$.
+
+It is interesting to note that the values of $I_{max}$ and $DC_{count}$ are strongly correlated with one another. The mean fractional deviation between $I_{max}$ and $DC_{count}$ is relatively small, at 0.34. In the LPD plot, it becomes clear that the $I_{max}$ value, and thus the $DC_{count}$ value, consistently underestimates the quantity of DC light in an image. This is not surprising, and indicates the degree to which DC light is often split between multiple pixels. As this effect is clearly not negligible, we choose to define $True_{DC}=I_{tot}$ for the rest of this analysis.
 
 \subsection{Error in calculated $DC_{count}$}
 Having successfully identified the DC pixel in many events, we can find the error $\sigma_{LPD}$ in our calculated $candidate_{DC count}$, through comparison with the correct value $True_{DC}$. However, $True_{DC}$ also has an associated error $\sigma_{STA}$, originating in the use of internal random numbers for Sim\textunderscore telarray simulations. If we neglect to account for this $\sigma_{STA}$, our final $\sigma_{calculated}$ will be an overestimate that also includes the random fluctuation of $True_{DC}$ around the actual DC intensity. As we cannot directly measure the actual DC intensity, we must instead measure $\sigma_{TrueDC}$. 
@@ -337,7 +380,9 @@ A study of 2000 events was conducted, in which each cosmic ray was simulation wi
 \end{center}
 \end{figure} 
 
-To assess the error in the LPD, a simulation of 2000 events was conducted with a fixed energy of 56TeV, and both Zenith and azimuth fixed to 0 degrees. The true distance to core was recorded from Sim\textunderscore telarray, and a graph was plotted of DC pixel intensity against core distance. As expected, a characteristic LPD is observed. Due to the application of a signal cut to the BDT candidates, we are only able to see the LPD at around $r_{core} \textgreater 35m$, at which point the LPD intensity crosses the threshold of 150 p.e. From here, there is a clear LPD continuing up to around 100m. Above roughly 100m, the LPD becomes dominated by highly random hadron fragmentation, and thus ceases to be coherent. The region 35-90m is considered, and if an exponential if fitted to the LPD, then the fractional deviation $\Delta_{TrueDC} = \frac{signal_{fit} - True_{DC count}}{signal_{fit}}$ can be found. Using the 68th centile of all absolute fractional deviations $\Delta_{TrueDC}$, we find that the LPD for $True_{DC}$ has an error of $\sigma_{TrueDC}=0.12$. Taking account of $\sigma_{STA}$, we deduce that the true associated error in the LPD is $\sigma_{TrueLPD} = \sqrt{(\sigma_{TrueDC}^{2} - \sigma_{STA}^{2})} = 0.11$. Thus we conclude that, in an ideal case, any LPD calculated from full shower images would always have a minimum error of 11\%. This is reasonably high, and can be partially explained by the random nature of atmospheric conditions, among other things.
+STUFF!
+
+Taking account of $\sigma_{STA}$, we deduce that the true associated error in the LPD is $\sigma_{TrueLPD} = \sqrt{(\sigma_{TrueDC}^{2} - \sigma_{STA}^{2})} = 0.11$. Thus we conclude that, in an ideal case, any LPD calculated from full shower images would always have a minimum error of 11\%. This is reasonably high, and can be partially explained by the random nature of atmospheric conditions, among other things.
 
 The same exercise was repeated using the value of $DC_{Count}$ for the BDT candidate pixels in a full shower image, if the pixel had passed both the $DC_{Count}$ and $P_{signal}$ cuts. This provides a more reasonable estimate of the expected LPD error likely to be obtained experimentally, and includes the additional complication of having incorrectly identified pixels in the dataset. As before, the absolute fractional deviation of each pixel from the fit of the $True_{DC}$ LPD was found. Due to consistent underestimate of the $True_{DC}$ value using the simple $DC_{Count}$ method, the error was much larger, with $\sigma_{DCcount}=0.57$ and the $\sigma_{STA}$ being negligible in comparison. This representative error is extremely large, and will pose significant problems for event reconstruction.
 
@@ -352,13 +397,13 @@ The same exercise was repeated using the value of $DC_{Count}$ for the BDT candi
 \begin{figure}
 \begin{center}
 \includegraphics[width=\textwidth]{corsikalpd2}
-\caption{The two LPDs shown above are estimates of HESS2 $True_{DC}$ calculated via $I_{tot}$, as well as for the maximum pixel $Intensity$. The two full-shower calculated LPDSs are shown underneath, with the simple guess $DC_{Count}$, and the regressor calculated $DC_{rgr}$. An exponential is fit to the $True_{DC}$ distribution, and the 68\% fractional deviation is shown in green. The same curve is shown on the two derived DC values, with the new fractional deviation being much greater.}
+\caption{The same curves in Figure \ref{fig:corsikalpd1} are shown here for HESS2. Because the CT5 telescope has an area approximately six times larger than the HESS1 telescopes, the LPD is linearly scaled here by a factor of six compared to the HESS1 LPD. It is clear that all other methods of calculating the LPD underestimate the value of $True_{DC}$, as seen in the top plot.}
 \label{fig:corsikalpd2}
 \end{center}
 \end{figure}
 
 \subsection{Regression BDT for $DC_{Count}$}
-In order to reduce the LPD error, an alternative method of calculating the DC signal was developed. Supervised machine learning was again used to solve the problem, by training a BDT Regressor. As with Classifiers, Regressors are initially trained using individual data entries. Instead of the true classes for the entries, regressors require the true value of a continuous variable. Once trained, the regressor can be used to predict a value of the variable for a given data entry. In this case, the Regressor is trained to estimate the quantity of DC light $True_{DC}$ for a given pixel. Once a DC pixel has been identified, the regressor is applied to it. The regressor returns the calculated value of $DC_{rgr}$, an alternative estimate of the DC signal. 
+In order to reduce the LPD error, an alternative method of calculating the DC signal was developed. Supervised machine learning was again used to solve the problem, through training of a BDT Regressor. As with Classifiers, Regressors are initially trained using individual data entries. Instead of the true classes for the entries, regressors require the true value of a continuous variable. Once trained, the Regressor can be used to predict a value of the variable for a given data entry. In this case, the Regressor is trained to estimate the quantity of DC light $True_{DC}$ for a given pixel. Once a DC pixel has been identified, the Regressor is applied to it. The Regressor returns the calculated value of $DC_{rgr}$, an alternative estimate of the DC signal. 
 
 Accurate measurement of the value of $True_{DC}$ is hindered because the DC light can be split into multiple pixels. Instead of the brightest pixel intensity the total Image Amplitude in the EAS free image was used. However, for high altitude/zenith angles, the DC light may lie partially outside the telescope image. To account for this, a new training sample was simulated in CORSIKA with both zenith and azimuth angle fixed at 0. Despite intuitive expectation that regressor performance should worsen significantly when it was tested on the use 2000-event testing sample, the more accurate $True_{DC}$ values for the training more than compensated for this. 
 
@@ -402,26 +447,41 @@ The training set of data consisted of the true DC pixel in each full shower imag
   \end{tabular}
 \end{table} 
 
-Repeating the comparison for the HESS1 regressor, we find for $\sigma_{rgrfit} = 0.35$, a significant improvement over $\sigma_{DCcount}$. Taking into account $\sigma_{STA}$, we find that ultimately $\sigma_{rgr}=0.34$, a fairly large value that nonetheless should be acceptable in 4-telescope events. The comparative performance is recorded in Table \ref{tab:lpderror}.
+Repeating the comparison for the HESS1 regressor, we find for $\sigma_{rgrfit} = 0.35$, a significant improvement over $\sigma_{DCcount}$. Taking into account $\sigma_{STA}$, we find that ultimately $\sigma_{rgr1}=0.34$, a fairly large value that nonetheless should be acceptable in 4-telescope events. The comparative performance is recorded in Table \ref{tab:lpderror}. Instead of rejecting DC pixels which do not meet out $DC_{count}$ and $P_{signal}$ cuts, we can separately measure their deviation from the LPD. In this way, we can include the information from these DC pixels in later analysis, while accounting for the larger uncertainty in their LPD measurements. For images which do pass only the multiplicity cuts, but not the $P_{signal}$ or $DC_{count}$ cuts, we find that the regressor error is $\sigma_{rejected1}=0.32$. 
 
 \begin{table}[h!]
   \centering
-  \caption{Fractional error from fitted 56-TeV LPD distribution, accounting for $\sigma_{STA}$}
+  \caption{Fractional error from fitted 56-TeV LPD distribution up to $r_{core}=90$, accounting for $\sigma_{STA}$}
   \label{tab:lpderror}
   \begin{tabular}{ccc}
     \toprule
     & HESS1 & HESS2\\
     \midrule
-    $\sigma_{TrueDC}$ & 0.13 & 0.18\\
-    $\sigma_{DCcount}$ & 0.70 & 0.88\\
-    $\sigma_{rgr}$ & 0.36 & 0.50\\ 
+    $\sigma_{TrueDC}$ & 0.13 & 0.29\\
+    $\sigma_{DCcount}$ & 0.69 & 0.91\\
+    $\sigma_{rgr}$ & 0.27 & 0.53\\ 
+    $\sigma_{rejected}$ & 0.32 & 0.43\\ 
     \bottomrule
   \end{tabular}
-\end{table} 
+\end{table}
 
-To get a more accurate estimate of the error, the testing set of 2000 events with varying azimuth/zenith was again considered. The fractional difference $\Delta = \frac{ candidate_{DC count} - True_{DC count}}{True_{DC count}}$ was binned in a histogram format, as shown in \ref{fig:dcdiff}. It was observed that the mean was 0.09 and the median was -0.08, meaning the distribution was partially skewed. If the absolute deviation from the $True_{DC}$ value is considered, then 68\% of pixels have a fractional deviation less than 0.33. Accounting for $\sigma_{STA}$, we find that the $sigma_{LPD}=\sigma_{rgr1}=0.32$, an improvement over the fixed 56Tev directly incident simulation.
+To get a more accurate estimate of the error, the testing set of 2000 events with varying azimuth/zenith was again considered. The fractional difference \[  \Delta = \frac{ candidate_{DC count} - True_{DC count}}{True_{DC count}} \] was binned in a histogram format, as shown in Figure \ref{fig:dcdiff}. It was observed that the mean was 0.09 and the median was -0.08, meaning the distribution was partially skewed. If the absolute deviation from the $True_{DC}$ value is considered, then 68\% of pixels have a fractional deviation less than 0.33. Accounting for $\sigma_{STA}$, we find that the $sigma_{LPD}=\sigma_{rgr1}=0.32$, an improvement over the fixed 56Tev directly incident simulation. For the high-multiplicity rejected events, we find the regressor has an error of $\sigma_{rejected1}=0.41$.
 
-For HESS2, the mean was 0.22 while the median was -0.09, leading to an even more skewed distribution. However the 68\% absolute fractional deviation was 0.29, and with $sigma_{STA}$, we find that $sigma_{LPD}=\sigma_{rgr2}=0.29$, slightly better than for HESS1. The improved performance can be explained by the matching energy distribution for the training and testing datasets. Higher-energy events have more background EAS light without consequently increased DC light, meaning the signal becomes harder to extract. The testing dataset has predominantly low-energy events, with reduced background.
+For HESS2, the mean was 0.22 while the median was -0.09, leading to an even more skewed distribution. However the 68\% absolute fractional deviation was 0.29, and with $sigma_{STA}$, we find that $sigma_{LPD}=\sigma_{rgr2}=0.29$, slightly better than for HESS1. The improved performance can be explained by the matching energy distribution for the training and testing datasets. Higher-energy events have more background EAS light without consequently increased DC light, meaning the signal becomes harder to extract. The testing dataset has predominantly low-energy events, with reduced background. For the rejected events, we find that $\sigma_{rejected2}=0.63$, with $\sigma_{STA}$ being negligible.
+
+\begin{table}[h!]
+  \centering
+  \caption{Fractional error from $True_{DC}$ for all high-multiplicity test pixels}
+  \label{tab:altlpderror}
+  \begin{tabular}{ccc}
+    \toprule
+    & HESS1 & HESS2\\
+    \midrule
+    $\sigma_{rgr}$ & 0.32 & 0.29\\ 
+    $\sigma_{rejected}$ & 0.41 & 0.63\\ 
+    \bottomrule
+  \end{tabular}
+\end{table}
 
 We can parameterise the error by considering the energy and distance to the core for a selection of DC pixels. We find that, for a fixed energy...
 

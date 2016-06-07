@@ -4,9 +4,9 @@ NSHOW   1                            number of showers
 *
 * [ Primary particle options ]
 *
-PRMPAR  5626                             Primary particle type: 1 Gamma, 14 proton, 402 Helium
+PRMPAR  5626                         Primary particle type: 1 Gamma, 14 proton, 402 Helium
 ESLOPE  -2.7                             slope of primary energy spectrum
-ERANGE 46000   46000                 Energy range (GeV)	
+ERANGE  36000   136000                 Energy range (GeV)	
 OBSLEV  1800.E2
 
 THETAP  0  0                        range of zenith angle (degree)
@@ -37,7 +37,7 @@ TELESCOPE     0     0    0  1650       Tel. 5, huge central phase 2 telescope
 *
 * [Interaction flags]
 *
-FIXHEI  0.  0                          first interaction height & target
+FIXHEI  0  0                       first interaction height & target
 FIXCHI  0.                             starting altitude (g/cm**2)
 ELMFLG  T   T                          em. interaction flags (NKG,EGS)
 RADNKG  200.E2                         outer radius for NKG lat.dens.determ.
@@ -49,7 +49,7 @@ MAXPRT  0                              max. number of printed events
 ECTMAP  1.E6                           cut on gamma factor for printout
 STEPFC  1.0                            mult. scattering step length fact.
 TSTART  T                              needed for emission and scattering of primary
-CSCAT   1 5000. 5000.
+CSCAT   1 15000. 15000.
 
 *
 * [ Debugging and output options ]

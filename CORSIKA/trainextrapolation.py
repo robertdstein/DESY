@@ -10,7 +10,7 @@ import os
 from telescopeclasses import *
 
 parser = argparse.ArgumentParser()
-parser.add_argument("-jid", "--jobID", default="6051560")
+parser.add_argument("-jid", "--jobID", default="regressorset")
 
 cfg = parser.parse_args()
 
@@ -42,7 +42,7 @@ def makeBDTentry(pixelentry):
 	return bdtentry
 
 categories = ["hess2","hess1"]
-learningrates = [0.07, 0.18]
+learningrates = [0.02, 0.02]
 
 for i in range(len(categories)):
 	
@@ -85,7 +85,7 @@ for i in range(len(categories)):
 	
 	#Train the BDT (Gradient Boosting Classifier)  and save
 	
-	rgr = ensemble.GradientBoostingRegressor(n_estimators=1000, max_depth=3, learning_rate=learningrate)
+	rgr = ensemble.GradientBoostingRegressor(n_estimators=1000, max_depth=2, learning_rate=learningrate)
 	rgr.fit(np.array(full), np.array(scores))
 	
 	rgrpicklepath = '/nfs/astrop/d6/rstein/BDTpickle/' + category + 'signalregressor.p'

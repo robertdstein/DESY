@@ -55,6 +55,8 @@ while (i < j):
 					if hasattr(DCtel.hillas, "image_size_amplitude_") and hasattr(fulltel.hillas, "image_size_amplitude_"):
 						DCcount = DCtel.hillas.image_size_amplitude_
 						candidatesignal = fulltel.hillas.image_size_amplitude_
+						DCcount = DCtel.hillas.image_size_amplitude_
+						candidatesignal = fulltel.hillas.image_size_amplitude_
 						
 						if fulltel.size == "HESS1":
 							plotindex = 0

@@ -269,11 +269,13 @@ class telescopeimage:
 			self.angularwidth=1.675
 			self.imagewidth=105
 			self.plotscale =180
+			self.mirrorarea=614
 		elif self.size == "HESS1":
 			self.pixelfile = "hess1pixels.csv"
 			self.angularwidth=2.85
 			self.imagewidth=70
 			self.plotscale =100
+			self.mirrorarea=108
 		else:
 			raise NameError(self.size)
 		
@@ -562,7 +564,28 @@ class telescopeimage:
 		This is the 'BDT candidate pixel'.
 		"""
 		if self.BDTID != None:
-			return self.getpixel(self.BDTID)
+			pixelentry = self.getpixel(self.BDTID)
+			#~ bdtentry=[]
+			#~ for variable in bdtvariables:
+				#~ varsplit = variable.split('.')
+				#~ suffix = pixelentry
+				#~ if len(varsplit) > 1:
+					#~ for name in varsplit[:-1]:
+						 #~ suffix = getattr(suffix, name)
+					#~ varname = varsplit[-1]
+				#~ else:
+					#~ varname = variable
+				#~ if hasattr(suffix, varname):
+					#~ newval = getattr(suffix, varname)
+					#~ if newval != None:
+						#~ bdtentry.append(newval)
+					#~ else:
+						#~ include=False
+				#~ else:
+					#~ raise Exception("No variable named " +variable)
+			#~ print bdtvariables
+			#~ print bdtentry
+			return pixelentry
 		else:
 			raise Exception("No BDT pixel!")
 		

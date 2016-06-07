@@ -12,10 +12,10 @@ def run(Epn, height, sinphi, fit="linear", text=False):
 	
 	radius = (float(height)-1800)*math.tan(theta)/float(sinphi)
 	
-	if text:
-		print "Gamma", gamma
-		print "Beta is", beta
-		print "Cos Theta is", costheta
+	#~ if text:
+		#~ print "Gamma", gamma
+		#~ print "Beta is", beta
+		#~ print "Cos Theta is", costheta
 	
 	return radius, theta
 

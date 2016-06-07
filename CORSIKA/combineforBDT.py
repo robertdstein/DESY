@@ -18,14 +18,14 @@ def isfloat(value):
 		return False
 
 parser = argparse.ArgumentParser()
-parser.add_argument("-jid", "--jobID", default="2842781")
+parser.add_argument("-jid", "--jobID", default="traindata")
 
 cfg = parser.parse_args()
 
 filepath = "/nfs/astrop/d6/rstein/data/"
 
 i = 1
-j = 2000
+j = 5000
 
 targetfolder = filepath + cfg.jobID +"/"
 

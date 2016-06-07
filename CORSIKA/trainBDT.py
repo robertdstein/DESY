@@ -10,7 +10,7 @@ import os
 from telescopeclasses import *
 
 parser = argparse.ArgumentParser()
-parser.add_argument("-jid", "--jobID", default="2842781")
+parser.add_argument("-jid", "--jobID", default="traindata")
 
 cfg = parser.parse_args()
 

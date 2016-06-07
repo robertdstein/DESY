@@ -2,8 +2,8 @@ import os, argparse, subprocess, time
 import os.path
 
 parser = argparse.ArgumentParser()
-parser.add_argument("-bid", "--BDTID", default="2842781")
-parser.add_argument("-tid", "--testID", default="2567181")
+parser.add_argument("-bid", "--BDTID", default="traindata")
+parser.add_argument("-tid", "--testID", default="testdata")
 parser.add_argument("-t", "--train", action="store_true")
 parser.add_argument("-tr", "--trainregressor", action="store_true")
 parser.add_argument("-re", "--reextract", action="store_true")
