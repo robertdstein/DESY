@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2015.11.27)  7 JUN 2016 16:06
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2015.11.27)  9 JUN 2016 11:43
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -312,13 +312,13 @@ Package geometry Warning: `portrait': not available in `\newgeometry'; skipped.
 <graphs/graphDC.pdf, id=56, 722.7pt x 1445.4pt>
 File: graphs/graphDC.pdf Graphic file (type pdf)
  <use graphs/graphDC.pdf>
-Package pdftex.def Info: graphs/graphDC.pdf used on input line 175.
+Package pdftex.def Info: graphs/graphDC.pdf used on input line 171.
 (pdftex.def)             Requested size: 171.31288pt x 357.90971pt.
 
 <graphs/graphfull.pdf, id=58, 722.7pt x 1445.4pt>
 File: graphs/graphfull.pdf Graphic file (type pdf)
  <use graphs/graphfull.pdf>
-Package pdftex.def Info: graphs/graphfull.pdf used on input line 181.
+Package pdftex.def Info: graphs/graphfull.pdf used on input line 177.
 (pdftex.def)             Requested size: 171.31288pt x 357.90971pt.
 
 [10] [11
@@ -326,24 +326,24 @@ Package pdftex.def Info: graphs/graphfull.pdf used on input line 181.
 
  <./graphs/graphDC.pdf> <./graphs/graphfull.pdf>]
 
-LaTeX Warning: Command \textgreater invalid in math mode on input line 193.
+LaTeX Warning: Command \textgreater invalid in math mode on input line 189.
 
-LaTeX Font Info:    Try loading font information for OML+cmr on input line 193.
+LaTeX Font Info:    Try loading font information for OML+cmr on input line 189.
 
 (/usr/share/texlive/texmf-dist/tex/latex/base/omlcmr.fd
 File: omlcmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OML/cmr/m/n' in size <10> not available
-(Font)              Font shape `OML/cmm/m/it' tried instead on input line 193.
+(Font)              Font shape `OML/cmm/m/it' tried instead on input line 189.
 
 
-LaTeX Warning: Command \textgreater invalid in math mode on input line 193.
+LaTeX Warning: Command \textgreater invalid in math mode on input line 189.
 
 <graphs/cutdistribution1None.pdf, id=82, 1084.05pt x 1084.05pt>
 File: graphs/cutdistribution1None.pdf Graphic file (type pdf)
 
 <use graphs/cutdistribution1None.pdf>
-Package pdftex.def Info: graphs/cutdistribution1None.pdf used on input line 217
+Package pdftex.def Info: graphs/cutdistribution1None.pdf used on input line 213
 .
 (pdftex.def)             Requested size: 452.9679pt x 452.96558pt.
 
@@ -352,97 +352,101 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 [12] [13 <./graphs/cutdistribution1None.pdf>]
 
-LaTeX Warning: Reference `tab:qdccuts' on page 14 undefined on input line 274.
+LaTeX Warning: Reference `tab:qdccuts' on page 14 undefined on input line 264.
 
 [14] [15] <graphs/aspectratio.pdf, id=145, 722.7pt x 1084.05pt>
 File: graphs/aspectratio.pdf Graphic file (type pdf)
 
 <use graphs/aspectratio.pdf>
-Package pdftex.def Info: graphs/aspectratio.pdf used on input line 326.
+Package pdftex.def Info: graphs/aspectratio.pdf used on input line 340.
 (pdftex.def)             Requested size: 407.66833pt x 611.49692pt.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <12> on input line 355.
+(Font)              <12> on input line 369.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <8> on input line 355.
+(Font)              <8> on input line 369.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <6> on input line 355.
+(Font)              <6> on input line 369.
+ [16] [17 <./graphs/aspectratio.pdf>]
+
+LaTeX Warning: Command \textgreater invalid in math mode on input line 376.
 
 
-LaTeX Warning: Command \textgreater invalid in math mode on input line 362.
+LaTeX Warning: Command \textgreater invalid in math mode on input line 376.
 
-
-LaTeX Warning: Command \textgreater invalid in math mode on input line 362.
-
-[16] [17 <./graphs/aspectratio.pdf>]
-<graphs/simtelerror1.pdf, id=194, 722.7pt x 1445.4pt>
+<graphs/simtelerror1.pdf, id=193, 722.7pt x 1445.4pt>
 File: graphs/simtelerror1.pdf Graphic file (type pdf)
 
 <use graphs/simtelerror1.pdf>
-Package pdftex.def Info: graphs/simtelerror1.pdf used on input line 377.
+Package pdftex.def Info: graphs/simtelerror1.pdf used on input line 391.
 (pdftex.def)             Requested size: 315.22107pt x 630.45189pt.
-
-<graphs/corsikalpd1.pdf, id=195, 1445.4pt x 1445.4pt>
+ [18] [19 <./graphs/simtelerror1.pdf>]
+<graphs/corsikalpd1.pdf, id=238, 1445.4pt x 1445.4pt>
 File: graphs/corsikalpd1.pdf Graphic file (type pdf)
 
 <use graphs/corsikalpd1.pdf>
-Package pdftex.def Info: graphs/corsikalpd1.pdf used on input line 391.
+Package pdftex.def Info: graphs/corsikalpd1.pdf used on input line 405.
 (pdftex.def)             Requested size: 452.9679pt x 452.96558pt.
 
-<graphs/corsikalpd2.pdf, id=196, 1445.4pt x 1445.4pt>
+<graphs/corsikalpd2.pdf, id=239, 1445.4pt x 1445.4pt>
 File: graphs/corsikalpd2.pdf Graphic file (type pdf)
 
 <use graphs/corsikalpd2.pdf>
-Package pdftex.def Info: graphs/corsikalpd2.pdf used on input line 399.
+Package pdftex.def Info: graphs/corsikalpd2.pdf used on input line 413.
 (pdftex.def)             Requested size: 452.9679pt x 452.96558pt.
- [18] [19 <./graphs/simtelerror1.pdf>] [20 <./graphs/corsikalpd1.pdf>] [21 <./g
-raphs/corsikalpd2.pdf>]
 
-LaTeX Warning: Reference `fig:corsikalpd' on page 22 undefined on input line 41
-0.
 
-[22] <graphs/DCcounterrorhess1rgr.pdf, id=359, 1445.4pt x 1445.4pt>
+LaTeX Warning: Reference `fig:corsikalpd' on page 20 undefined on input line 42
+4.
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+[20] [21 <./graphs/corsikalpd1.pdf>] [22 <./graphs/corsikalpd2.pdf>]
+<graphs/DCcounterrorhess1rgr.pdf, id=359, 1445.4pt x 1445.4pt>
 File: graphs/DCcounterrorhess1rgr.pdf Graphic file (type pdf)
 
 <use graphs/DCcounterrorhess1rgr.pdf>
-Package pdftex.def Info: graphs/DCcounterrorhess1rgr.pdf used on input line 493
+Package pdftex.def Info: graphs/DCcounterrorhess1rgr.pdf used on input line 507
 .
 (pdftex.def)             Requested size: 452.9679pt x 452.96558pt.
-
-<graphs/hessheight.png, id=360, 722.7pt x 1084.05pt>
+ [23] [24 <./graphs/DCcounterrorhess1rgr.pdf>] <graphs/hessheight.png, id=409, 
+722.7pt x 1084.05pt>
 File: graphs/hessheight.png Graphic file (type png)
 
 <use graphs/hessheight.png>
-Package pdftex.def Info: graphs/hessheight.png used on input line 506.
+Package pdftex.def Info: graphs/hessheight.png used on input line 520.
 (pdftex.def)             Requested size: 420.31314pt x 630.45189pt.
 
-<graphs/hess.png, id=361, 1046.91125pt x 924.45375pt>
+<graphs/hess.png, id=410, 1046.91125pt x 924.45375pt>
 File: graphs/hess.png Graphic file (type png)
  <use graphs/hess.png>
-Package pdftex.def Info: graphs/hess.png used on input line 517.
+Package pdftex.def Info: graphs/hess.png used on input line 531.
 (pdftex.def)             Requested size: 407.66833pt x 359.97127pt.
 
-[23] [24 <./graphs/DCcounterrorhess1rgr.pdf>] [25 <./graphs/hessheight.png>]
-[26 <./graphs/hess.png>]
-<graphs/optimiselayout.png, id=418, 1445.4pt x 1084.05pt>
+<graphs/optimiselayout.png, id=411, 1445.4pt x 1084.05pt>
 File: graphs/optimiselayout.png Graphic file (type png)
 
 <use graphs/optimiselayout.png>
-Package pdftex.def Info: graphs/optimiselayout.png used on input line 536.
+Package pdftex.def Info: graphs/optimiselayout.png used on input line 550.
 (pdftex.def)             Requested size: 407.66833pt x 305.74846pt.
- [27 <./graphs/optimiselayout.png>]
-(./draft1.bbl) [28] (./draft1.aux)
+ (./draft1.bbl [25] [26 <./graphs/hessheight.png>] [27 <./graphs/hess.png>] [28
+ <./graphs/optimiselayout.png>]) [29]
+(./draft1.aux)
 
 LaTeX Warning: There were undefined references.
 
  ) 
 Here is how much of TeX's memory you used:
- 2212 strings out of 494976
- 32615 string characters out of 6179136
- 99439 words of memory out of 5000000
- 5403 multiletter control sequences out of 15000+600000
+ 2213 strings out of 494976
+ 32647 string characters out of 6179136
+ 101449 words of memory out of 5000000
+ 5404 multiletter control sequences out of 15000+600000
  9154 words of font info for 32 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 38i,10n,29p,1389b,374s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 38i,10n,29p,1796b,374s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></us
 r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/shar
 e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texl
@@ -458,10 +462,10 @@ mr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb
 hare/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/t
 exlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/
 texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb>
-Output written on draft1.pdf (29 pages, 1611291 bytes).
+Output written on draft1.pdf (30 pages, 1586715 bytes).
 PDF statistics:
- 479 PDF objects out of 1000 (max. 8388607)
- 156 compressed objects within 2 object streams
+ 482 PDF objects out of 1000 (max. 8388607)
+ 158 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
  93 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -53,7 +53,7 @@ def makeBDTentry(pixelentry):
 for sigfit in ["rgr", None]:
 	filepath = "/nfs/astrop/d6/rstein/data/"
 	i = 1
-	j = 5000
+	j = 10000
 	totalimages = [0, 0]
 	triggeredimages = [0, 0]
 	DCpasstotal = [0, 0]
@@ -305,63 +305,63 @@ for sigfit in ["rgr", None]:
 		
 			message += "\n \n", 
 			message += "We have", str(mtotal), "events. Of these, there are", str(totalimages[i]), "total images, including", str(triggeredimages[i]), "images triggered with DC light."
-			message += "In total,", str('{0:.1f}'.format(float(100.*triggeredimages[i]/totalimages[i]))), "% of all images have DC light to reconstruct. \n"
+			message += "In total,", str('{0:.2f}'.format(float(100.*triggeredimages[i]/totalimages[i]))), "% of all images have DC light to reconstruct. \n"
 			
 			message += "In total,", str(oldcorrectimages[i]), "pixels are correctly identified using QDC method."
 			if totalimages[i] > 0:
-				message += "Method Identified", str('{0:.1f}'.format(float(100.*oldcorrectimages[i]/totalimages[i]))), "% of all images. \n"
+				message += "Method Identified", str('{0:.2f}'.format(float(100.*oldcorrectimages[i]/totalimages[i]))), "% of all images. \n"
 			
 			message += "In total,", str(correctimages[i]), "pixels are correctly identified using BDT method."
 			if totalimages[i] > 0:
-				message += "Method Identified", str('{0:.1f}'.format(float(100.*correctimages[i]/totalimages[i]))), "% of all images. \n \n "
+				message += "Method Identified", str('{0:.2f}'.format(float(100.*correctimages[i]/totalimages[i]))), "% of all images. \n \n "
 			
 			message += "Our QDC cut requires QDC < 0.14 log( Itot / 161 cos(theta)), leaving", str(oldtotalcut[i]), "images. \n "
 			message += "Of these,", str(oldcorrectcut[i]), "are correctly identified images. \n "
 			if oldtotalcut[i] > 0:
-				message += "Successful ID rate after cut is", str('{0:.1f}'.format(float(100.*oldcorrectcut[i]/oldtotalcut[i]))),  "% \n"
-				message += "Fraction of pixels correctly identified is", str('{0:.1f}'.format(float(100.*oldcorrectcut[i]/totalimages[i]))), "% \n"
-				message += "Fraction of pixels incorrectly identified is", str('{0:.1f}'.format(float(100.*(oldtotalcut[i]-oldcorrectcut[i])/totalimages[i]))), "% \n"
+				message += "Successful ID rate after cut is", str('{0:.2f}'.format(float(100.*oldcorrectcut[i]/oldtotalcut[i]))),  "% \n"
+				message += "Fraction of pixels correctly identified is", str('{0:.2f}'.format(float(100.*oldcorrectcut[i]/totalimages[i]))), "% \n"
+				message += "Fraction of pixels incorrectly identified is", str('{0:.2f}'.format(float(100.*(oldtotalcut[i]-oldcorrectcut[i])/totalimages[i]))), "% \n"
 			else:
 				message += " \n"
 			
 			message += "Additionally requiring multiplicity > ", str(minmultiplicity), ", we have", str(oldcombinedtotal[i]), "images . \n "
 			message += "Of these,", str(oldcombinedcorrect[i]), "are correctly identified images. \n "
 			if oldcombinedtotal[i] > 0:
-				message += "Successful ID rate after cut is", str('{0:.1f}'.format(float(100.*oldcombinedcorrect[i]/oldcombinedtotal[i]))),  "% \n"
-				message += "Fraction of pixels correctly identified is", str('{0:.1f}'.format(float(100.*(oldcombinedcorrect[i])/totalimages[i]))), "% \n "
-				message += "Fraction of pixels incorrectly identified is", str('{0:.1f}'.format(float(100.*(oldcombinedtotal[i]-oldcombinedcorrect[i])/totalimages[i]))), "% \n \n"
+				message += "Successful ID rate after cut is", str('{0:.2f}'.format(float(100.*oldcombinedcorrect[i]/oldcombinedtotal[i]))),  "% \n"
+				message += "Fraction of pixels correctly identified is", str('{0:.2f}'.format(float(100.*(oldcombinedcorrect[i])/totalimages[i]))), "% \n "
+				message += "Fraction of pixels incorrectly identified is", str('{0:.2f}'.format(float(100.*(oldcombinedtotal[i]-oldcombinedcorrect[i])/totalimages[i]))), "% \n \n"
 			else:
 				message += " \n"
 				
 			message += "Our BDT cut requires Signal Probability >", str(cut), ", we have", str(totalcut[i]), "images. \n"
 			message += "Of these,", str(correctcut[i]), "are correctly identified images.\n  "
 			if totalcut[i] > 0:
-				message += "Successful ID rate after cut is", str('{0:.1f}'.format(float(100.*correctcut[i]/totalcut[i]))), "% \n"
-				message += "Fraction of pixels correctly identified is", str('{0:.1f}'.format(float(100.*(correctcut[i])/totalimages[i]))), "% \n"
-				message += "Fraction of pixels incorrectly identified is", str('{0:.1f}'.format(float(100.*(totalcut[i]-correctcut[i])/totalimages[i]))), "% \n"
+				message += "Successful ID rate after cut is", str('{0:.2f}'.format(float(100.*correctcut[i]/totalcut[i]))), "% \n"
+				message += "Fraction of pixels correctly identified is", str('{0:.2f}'.format(float(100.*(correctcut[i])/totalimages[i]))), "% \n"
+				message += "Fraction of pixels incorrectly identified is", str('{0:.2f}'.format(float(100.*(totalcut[i]-correctcut[i])/totalimages[i]))), "% \n"
 			else:
 				message += " \n"
 				
 			message += "Additionally requiring signal > ", str(signalcut), ", we have", str(combinedtotal[i]), "images. \n"
 			message += "Of these,", str(combinedcorrect[i]), "are correctly identified images. \n "
 			if combinedtotal[i] > 0:
-				message += "Successful ID rate after cut is", str('{0:.1f}'.format(float(100.*combinedcorrect[i]/combinedtotal[i]))), "% \n"
-				message += "Fraction of pixels correctly identified is", str('{0:.1f}'.format(float(100.*(combinedcorrect[i])/totalimages[i]))), "% \n"
-				message += "Fraction of pixels incorrectly identified is", str('{0:.1f}'.format(float(100.*(combinedtotal[i]-combinedcorrect[i])/totalimages[i]))), "% \n"
+				message += "Successful ID rate after cut is", str('{0:.2f}'.format(float(100.*combinedcorrect[i]/combinedtotal[i]))), "% \n"
+				message += "Fraction of pixels correctly identified is", str('{0:.2f}'.format(float(100.*(combinedcorrect[i])/totalimages[i]))), "% \n"
+				message += "Fraction of pixels incorrectly identified is", str('{0:.2f}'.format(float(100.*(combinedtotal[i]-combinedcorrect[i])/totalimages[i]))), "% \n"
 				
 			message += "Additionally requiring multiplicity > ", str(minmultiplicity), " we have", str(fulltotal[i]), "images . \n "
 			message += "Of these,", str(fullcorrect[i]), "are correctly identified images. \n "
 			if fulltotal[i] > 0:
-				message += "Successful ID rate after cut is", str('{0:.1f}'.format(float(100.*fullcorrect[i]/fulltotal[i]))), "% \n"
-				message += "Fraction of pixels correctly identified is", str('{0:.1f}'.format(float(100.*fullcorrect[i]/totalimages[i]))), "% \n"
-				message += "Fraction of pixels incorrectly identified is", str('{0:.1f}'.format(float(100.*(fulltotal[i]-fullcorrect[i])/totalimages[i]))), "% \n \n"
+				message += "Successful ID rate after cut is", str('{0:.2f}'.format(float(100.*fullcorrect[i]/fulltotal[i]))), "% \n"
+				message += "Fraction of pixels correctly identified is", str('{0:.2f}'.format(float(100.*fullcorrect[i]/totalimages[i]))), "% \n"
+				message += "Fraction of pixels incorrectly identified is", str('{0:.2f}'.format(float(100.*(fulltotal[i]-fullcorrect[i])/totalimages[i]))), "% \n \n"
 				
 			message += "Additionally requiring Aspect ratio >", str(arcut)," we have", str(finaltotal[i]), "images . \n "
 			message += "Of these,", str(finalcorrect[i]), "are correctly identified images. \n "
-			if fulltotal[i] > 0:
-				message += "Successful ID rate after cut is", str('{0:.1f}'.format(float(100.*finalcorrect[i]/finaltotal[i]))), "% \n"
-				message += "Fraction of pixels correctly identified is", str('{0:.1f}'.format(float(100.*finalcorrect[i]/totalimages[i]))), "% \n"
-				message += "Fraction of pixels incorrectly identified is", str('{0:.1f}'.format(float(100.*(finaltotal[i]-finalcorrect[i])/totalimages[i]))), "% \n \n"
+			if finaltotal[i] > 0:
+				message += "Successful ID rate after cut is", str('{0:.2f}'.format(float(100.*finalcorrect[i]/finaltotal[i]))), "% \n"
+				message += "Fraction of pixels correctly identified is", str('{0:.2f}'.format(float(100.*finalcorrect[i]/totalimages[i]))), "% \n"
+				message += "Fraction of pixels incorrectly identified is", str('{0:.2f}'.format(float(100.*(finaltotal[i]-finalcorrect[i])/totalimages[i]))), "% \n \n"
 				
 				 
 					

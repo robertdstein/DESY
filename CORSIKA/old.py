@@ -57,7 +57,7 @@ def makeBDTentry(pixelentry):
 
 filepath = "/nfs/astrop/d6/rstein/data/"
 
-j=50
+j=200
 i=0
 
 accepteddistances=[[],[]]
@@ -145,11 +145,12 @@ while (i < j):
 							candidatesignal = hess2rgr.predict([bdtentry])[0]/fulltel.mirrorarea
 						elif bdtentry == None:
 							candidatesignal = 0
-													
-						if (float(ucut) > float(fullBDT.bdtscore) > float(cut)) and (float(simplecandidatesignal) > float(signalcut)) and (float(fulltel.hillas.aspect_ratio_) > arcut):
-							truedistances[plotindex].append(fulltel.hillas.core_distance_to_telescope)
-							truesignals1[plotindex].append(DCtel.hillas.image_size_amplitude_/fulltel.mirrorarea)
-							truesignals2[plotindex].append(DCpixel.channel1.intensity/fulltel.mirrorarea)						
+							
+						truedistances[plotindex].append(fulltel.hillas.core_distance_to_telescope)
+						truesignals1[plotindex].append(DCtel.hillas.image_size_amplitude_/fulltel.mirrorarea)
+						truesignals2[plotindex].append(DCpixel.channel1.intensity/fulltel.mirrorarea)
+							
+						if (float(ucut) > float(fullBDT.bdtscore) > float(cut)) and (float(simplecandidatesignal) > float(signalcut)) and (float(fulltel.hillas.aspect_ratio_) > arcut):						
 							accepteddistances[plotindex].append(fulltel.hillas.core_distance_to_telescope)
 							signals[plotindex].append(simplecandidatesignal/fulltel.mirrorarea)
 							rgrsignals[plotindex].append(candidatesignal)
@@ -214,11 +215,7 @@ for i in [0, 1]:
 		elif value > rmax:
 			extrad.append(value)
 			extras.append(math.log(expval))
-			
-	extraA, extralogC = np.polyfit(extrad, extras, 1)
-	extraC = math.exp(extralogC)
-	print extraA, extralogC, extraC
-			
+				
 	def f1(x, p1, p2, p3, p4):
 		if x < rmax:
 			return p1*np.exp(p2*x) + p3
@@ -231,7 +228,6 @@ for i in [0, 1]:
 	popt, pcov = curve_fit(vf1, np.array(d), np.array(s), p0=np.array(p0), maxfev = 100000000)
 	print popt
 
-	
 	def fit(x):
 		return vf1(x, popt[0], popt[1], popt[2], popt[3])
 	
@@ -305,11 +301,6 @@ for i in [0, 1]:
 	pd = mpatches.Rectangle((0, 0), 1, 1, fc="r",alpha=0.25)
 	
 	figure.legend([fd, pd], ["Fractional Deviation from True Fit","Expected Poissonian Error"], loc="upper right")
-	
-	message = "Sigma 1: " + str('{0:.2f}'.format(truesigmas[0])) + " \n"
-	if len(truesigmas) > 1:
-		message += "Sigma 2: " + str('{0:.2f}'.format(truesigmas[1])) + " \n"
-	plt.annotate(message, xy=(0.9, 0.6), xycoords="axes fraction",  fontsize=15)
 			
 	truesigma=truesigmas[0]
 	
@@ -329,7 +320,7 @@ for i in [0, 1]:
 		else:
 			pdist=accepteddistances[i]
 			plot=True
-			
+		
 		fitdistances=[]
 		fitsignals=[]
 		for l in range(len(sigset[i])):
@@ -347,16 +338,15 @@ for i in [0, 1]:
 		print "Fitted LPD scale:", newpopt
 		
 		def scaledlpd(x):
-			return vf(x, newpopt[0])
+			#~ return vf(x, newpopt[0])
+			return vf(x, 1)
 		
 		alldiffs=[[],[]]
 		allfracdiffs=[[],[]]
-		
-		for l in range(len(sigset[i])):
+		for l in range(len(fitsignals)):
 			sig = sigset[i][l]
 			dist = pdist[l]
 			fitsig = scaledlpd(dist)
-			truefitsig = fit(dist)
 			if fitsig > mindensity:	
 				diff = (sig-fitsig)
 				fracdiff=math.fabs((sig-fitsig)/fitsig)	
@@ -366,7 +356,10 @@ for i in [0, 1]:
 				else:
 					alldiffs[1].append(diff)
 					allfracdiffs[1].append(fracdiff)
+			
 					
+		print len(sigset[i]), len(alldiffs[0]), len(alldiffs[1])			
+		
 		fracsigmas=[]
 		
 		for m in range (len(alldiffs)):
@@ -392,8 +385,8 @@ for i in [0, 1]:
 				
 				#~ print m, diffname, lower, diffs[halfinteger], diffs[integer68], upper, sigma, fracsigma, 
 				
-				if fracsigma > truesigmas[m]:
-					effsigma = math.sqrt(fracsigma**2 - truesigmas[m]**2)
+				#~ if fracsigma > truesigmas[m]:
+					#~ effsigma = math.sqrt(fracsigma**2 - truesigmas[m]**2)
 					#~ print effsigma
 				#~ else:
 					#~ print ""
@@ -407,51 +400,42 @@ for i in [0, 1]:
 			
 			plt.scatter(pdist, sigset[i])
 			
-			u=[]
-			l=[]
-			pu=[]
-			pl=[]
 			currentlpd=[]
 			currentdistances=[]
-			for m in range(len(lpd)):
-				dist = alldistances[m]
-				sig = lpd[m]
+			u=[]
+			l=[]
+			pdist.sort()
+						
+			for dist in alldistances:
 				sig = scaledlpd(dist)
 				if sig > mindensity:
 					currentlpd.append(sig)
 					currentdistances.append(dist)
-					llpd = sig*(1-fracsigma)
-					ulpd = sig*(1+fracsigma)
-					if llpd < 0:
-						llpd=mindensity
+					
 					if (dist > rmax) and len(fracsigmas)> 1:
 						fracsigma=fracsigmas[1]
 					else:
 						fracsigma=fracsigmas[0]
+					
+					llpd = sig*(1-fracsigma)
+					if llpd < 0:
+						llpd=mindensity
+					ulpd = sig*(1+fracsigma)
+	
 					l.append(llpd)
 					u.append(ulpd)
-					up = sig + (math.sqrt(sig)/sqarea)
-					pu.append(up)
-					lp = sig - (math.sqrt(sig)/sqarea)
-					if lp < 0:
-						lp=mindensity
-					pl.append(lp)
+					
 		
-			plt.plot(currentdistances, currentlpd, color='k')
-			plt.fill_between(currentdistances, l, u, color='g', alpha=0.25)
-			plt.fill_between(currentdistances, pl, pu, color='r', alpha=0.25)
+			plt.plot(alldistances, lpd, color='k')
+			plt.fill_between(alldistances, l, u, color='g', alpha=0.25)
+			ax.fill_between(alldistances, pl, pu, color='r', alpha=0.25)
 			
 			plt.xlabel("Core distance to telescope (m)")
 			plt.ylabel("Photoelectron Density (m^-2)")
 			ax.set_xlim(left=0)
 			ax.set_ylim(bottom=mindensity)
 			plt.title(diffname)
-			message = "Scale: " + str('{0:.2f}'.format(newpopt[0])) + " \n"
-			message += "Sigma 1: " + str('{0:.2f}'.format(fracsigmas[0])) + " \n"
-			if len(fracsigmas) > 1:
-				message += "Sigma 2: " + str('{0:.2f}'.format(fracsigmas[1])) + " \n"
-			plt.annotate(message, xy=(0.9, 0.7), xycoords="axes fraction",  fontsize=15)
-
+			plt.annotate("Scale:" + str('{0:.2f}'.format(newpopt[0])), xy=(0.8, 0.9), xycoords="axes fraction",  fontsize=15)
 
 	saveto = "/nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/CORSIKA/graphs/lpd" + str(i+1)+ ".pdf"
 	
@@ -462,3 +446,4 @@ for i in [0, 1]:
 	plt.savefig(saveto)
 	plt.savefig("/nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/report/graphs/corsikalpd" + str(i+1)+ ".pdf")
 	plt.close()
+	

@@ -159,11 +159,7 @@ Classifiers provide an alternative method of identification, making use of super
 The CORSIKA package \cite{Heck98} was used to generate Cosmic Ray events, and the Sim\textunderscore telarray package  \cite{Bernlohr08} was used to generate corresponding HESS array telescope images.  Simulation with EAS background was used to produce training pixel sets, while corresponding simulation without EAS background was used to find the true DC pixel in each training image. As part of a new method developed for this analysis, a Boosted Decision Tree (BDT) classifier was trained with the data to identify DC pixels. Once trained, the BDT was applied to a separate \textquoteleft testing' set of simulated telescope images. As before, the true DC pixel was determined from a second EAS-free simulation. Thus, the accuracy of BDT identification for test telescope images was calculated.
 
 \subsection{Image Simulation}
-The full simulation of air showers was performed using the CORSIKA package, with a standard atmospheric profile derived from measurements conducted at the HESS site in Namibia. In total, 2000 training events and a further 2000 testing events were simulated. The simulated particles were $Fe^{56}$, within the Energy Range of $35-135$ TeV and a spectrum $\phi(E) \propto E^{-2.7}$. For each set of simulated event, 4 unique random number seeds were used to generate the shower. An altitude of 1800m was assumed, again corresponding to the HESS site. The simulated zenith angle ranged from $0\degree < \theta < 2 \degree$, while the simulated azimuth angle ranges from $-2\degree < \phi < 2 \degree$. The four smaller HESS-phase-1 telescopes were arranged in a cross along the x/y axis with the larger HESS-phase-2 \textquoteleft CT5' telescope placed at the center. The length of each cross arm was $85m$. The simulated target region of the cores was chosen to be a square centered on CT5, with each 300m-long side bisecting the x/y axis. 
-
-\textbf{Due to hardware differences between CT5 and the original HESS 1 telescopes, only images from HESS-phase-1 were considered.}
-
-To determine the true class of each pixel, a simulation was initially run with an energy cut of 10 PeV on all muons and electrons. Because this cut exceeded the primary particle energy, neither daughter muons and electrons, nor the photons they would have emitted, were simulated. Thus the hadronic Cherenkov Light from the primary particle and daughter fragments, but not the EAS light, was present in the camera image. A second identical \textquoteleft EAS Simulation' was run including the same random seeds, but without the energy cut on muons and electrons. This gave a complete EAS image including identical DC light.
+The full simulation of air showers was performed using the CORSIKA package, with a standard atmospheric profile derived from measurements conducted at the HESS site in Namibia. In total, 5000 training events and a further 10000 testing events were simulated. The simulated particles were $Fe^{56}$, within the Energy Range of $35-135$ TeV and a spectrum $\phi(E) \propto E^{-2.7}$. For each set of simulated event, 4 unique random number seeds were used to generate the shower. An altitude of 1800m was assumed, again corresponding to the HESS site. The simulated zenith angle ranged from $0\degree < \theta < 2 \degree$, while the simulated azimuth angle ranges from $-2\degree < \phi < 2 \degree$. The four smaller HESS-phase-1 telescopes were arranged in a cross along the x/y axis with the larger HESS-phase-2 \textquoteleft CT5' telescope placed at the center. The length of each cross arm was $85m$. The simulated target region of the cores was chosen to be a square centered on CT5, with each 300m-long side bisecting the x/y axis.Due to hardware differences between CT5 and the original HESS 1 telescopes, we analyse HESS1 and HESS2 images separately. To determine the true class of each pixel, a simulation was initially run with an energy cut of 10 PeV on all muons and electrons. Because this cut exceeded the primary particle energy, neither daughter muons and electrons, nor the photons they would have emitted, were simulated. Thus the hadronic Cherenkov Light from the primary particle and daughter fragments, but not the EAS light, was present in the camera image. A second identical \textquoteleft EAS Simulation' was run including the same random seeds, but without the energy cut on muons and electrons. This gave a complete EAS image including identical DC light.
 
 With the sim\textunderscore telarray package, the expected HESS hardware response to each air shower was simulated. Among other things, the program accounts for atmospheric transmission and density, mirror positions, sizes and reflectivities, camera shadowing and triggering, quantum efficiency and pulse responses. For the full-shower image, the night sky background was also simulated by sim\textunderscore telarray. Due to the comprehensive and detailed nature of these hardware simulations, the resultant images can be considered \textquoteleft realistic'.  However, sim\textunderscore telarray introduces various sources of random noise to the simulation, leading to some divergence in the DC light between the EAS-free and full-shower images.
 
@@ -189,8 +185,8 @@ The various pixel entry variables were found from the sim\textunderscore telarra
 
 For every pixel, in addition to the $Intensity$, its location within the telescope image was determined using the standard HESS layout. The variables $ \Delta_{C.o.G}$, $\Delta_{Direction}$ and $\Delta_{Line}$ were defined as the distance from the pixel to the shower center of gravity, shower direction, and the line joining those two points. Furthermore, the nearest neigbouring pixel IDs were calculated for every pixel position, enabling the $Intensity$ in each neighbouring pixel to be found. The largest neighbouring intensity was identified, and the ratio $Q_{DC} = \frac{Intensity_{N.N.max}}{Intensity}$ was derived. Similarly the largest neighbouring FADC was found, and the ratio $raw_{Q} = \frac{FADC_{N.N.max}}{FADC}$ was calculated. In addition, the Nearest Neighbour Mean Intensity $Mean_{N.N}$ was recorded, as well as the smallest neighbouring pixel intensity $Intensity_{N.N.min}$. The variable $DC_{Signal} = Intensity-Mean_{N.N}$ was defined as an rough guess of the \textquoteleft DC signal' component in the pixel. Lastly the Image Amplitude $I_{tot}$, defined as the total image intensity after the default tail cuts have been applied to the image.
 
-\subsection{Classic DC Pixel Identification}
-As a basis for comparison, the original HESS cuts listed in \ref{tab:table1} were replicated for the set of test data. For every image, the total image amplitude $I_{tot}$ was used alongside the zenith angle $\theta$ to determine a dynamic cut, $Q_{DC} < 0.14 \times \log(\frac{I_{tot}}{161 \times \cos \theta})$. Among those pixels passing all cuts, the one with the smallest $Q_{DC}$ was selected as the DC pixel candidate for the image. Because many images had no pixel that passed all cuts, the $Q_{DC}$ method was frequently unable to identify a DC pixel. In the original analysis, an additional cut $r_{core} \textgreater 40m$ was applied. However, the uncertainty in determining the core position through Hillas Analysis is typically of the order of $\pm 30m$. Consequently, this particular cut was omitted.
+\subsection{Classic HESS1 DC Pixel Identification}
+As a basis for comparison, the original HESS cuts listed in Table \ref{tab:table1} were replicated for the set of test data. For every HESS1 image, the total image amplitude $I_{tot}$ was used alongside the zenith angle $\theta$ to determine a dynamic cut, $Q_{DC} < 0.14 \times \log(\frac{I_{tot}}{161 \times \cos \theta})$. Among those pixels passing all cuts, the one with the smallest $Q_{DC}$ was selected as the DC pixel candidate for the image. Because many images had no pixel that passed all cuts, the $Q_{DC}$ method was frequently unable to identify a DC pixel. In the original analysis, an additional cut $r_{core} \textgreater 40m$ was applied. However, the uncertainty in determining the core position through Hillas Analysis is typically of the order of $\pm 30m$. Consequently, this particular cut was omitted.
 
 \begin{table}[h!]
   \centering
@@ -210,7 +206,7 @@ As a basis for comparison, the original HESS cuts listed in \ref{tab:table1} wer
   \end{tabular}
 \end{table}
 
-The candidates were checked against the true DC pixels identified in the EAS-free images. From the testing sample, 1.8\% of all images were correctly identified and passed the cuts. Once misidentified events were considered, the post-cuts sample was 89.9\% accurate, as shown in Figure \ref{fig:cutdistribution}. These values served as a benchmark for BDT performance.
+The candidates were checked against the true DC pixels identified in the EAS-free images. From the testing sample, 1.81\% of all HESS1 images were correctly identified and passed the cuts. Once misidentified events were considered, the post-cuts sample was 77.8\% accurate, as shown in Figure \ref{fig:cutdistribution}. These values will serve as a useful benchmark for BDT performance. Increasing the acceptance rate will be essential for enabling spectroscopic analysis of cosmic rays, by providing more events to analyse.
 
 \begin{figure}
 \begin{center}
@@ -221,7 +217,7 @@ The candidates were checked against the true DC pixels identified in the EAS-fre
 \end{figure}
 
 \subsection{Boosted Decision Tree DC Identification}
-As an alternative to use of $Q_{DC}$, a new method of DC pixel identification was developed as part of this analysis by using a BDT trained with the Scikit Learn Python package \cite{scikit-learn}. Using the training set of 2000 CORSIKA events, and randomly split further, with 90\% in a learning subset and 10\% in a subset to check for overtraining. Within the learning subset, every HESS 1 image was used, provided it was triggered in both EAS-free and full-shower simulations. For each of the 4.7 million triggered image pixels, an entry was formed with the variables listed in table \ref{tab:hess1classifier}. A class of 0 was assigned to every non-DC pixel, and a class of 1 was assigned to every DC pixel. Having created a dataset, the BDT was then trained with a maximum depth of 8, and with 100 trees generated. The data was provided in the form of individual pixel entries, rather than as discrete sets for images or events.
+As an alternative to use of $Q_{DC}$, a new method of DC pixel identification was developed as part of this analysis by using a BDT trained with the Scikit Learn Python package \cite{scikit-learn}. Using the training set of 2000 CORSIKA events, and randomly split further, with 90\% in a learning subset and 10\% in a subset to check for overtraining. Within the learning subset, every HESS 1 image was used, provided it was triggered in both EAS-free and full-shower simulations. For each of the triggered image pixels, an entry was formed with the variables listed in table \ref{tab:hess1classifier}. A class of 0 was assigned to every non-DC pixel, and a class of 1 was assigned to every DC pixel. Having created a dataset, the BDT was then trained with a maximum depth of 8, and with 100 trees generated. The data was provided in the form of individual pixel entries, rather than as discrete sets for images or events.
 
 \begin{table}[h!]
   \centering
@@ -231,11 +227,11 @@ As an alternative to use of $Q_{DC}$, a new method of DC pixel identification wa
     \toprule
     Variable & Relative Importance\\
     \midrule
-    $DC_{Count}$ & 0.34\\
-    $Mean_{N.N}$ & 0.26\\
-    $\Delta_{Direction}$ & 0.11\\
-    Image Amplitude & 0.10\\
-    $Q_{DC}$ & 0.10\\
+    $DC_{Count}$ & 0.33\\
+    $Mean_{N.N}$ & 0.24\\
+    $Q_{DC}$ & 0.14\\
+    $\Delta_{Direction}$ & 0.12\\
+    Image Amplitude & 0.07\\
     $raw_{Q}$ & 0.05\\
     $\Delta_{Line}$ & 0.02\\
     $Intensity$ & 0.02\\
@@ -243,13 +239,11 @@ As an alternative to use of $Q_{DC}$, a new method of DC pixel identification wa
   \end{tabular}
 \end{table}
 
-The relative importance of each \textquoteleft feature' is automatically calculated by the Scikit Learn package, and is also recorded in table \ref{tab:hess1classifier}. The variable $DC_{Count}$ was consistently the most importance variable across many combinations of included variables and BDT training parameters. It was found that, under the conditions listed above, the BDT was 99.94 \% accurate for the learning pixel subset, and 99.93 \%  accurate for the overtraining-check pixel subset. This indicates that the BDT was not significantly overtrained, which would otherwise be manifested by a large divergence in accuracy between learning and overtraining-check data.
+The relative importance of each \textquoteleft feature' is automatically calculated by the Scikit Learn package, and is also recorded in table \ref{tab:hess1classifier}. The variable $DC_{Count}$ was consistently the most importance variable across many combinations of included variables and BDT training parameters. It was found that, under the conditions listed above, the BDT was 99.94 \% accurate for the learning pixel subset, and 99.94 \%  accurate for the overtraining-check pixel subset. This indicates that the BDT was not significantly overtrained, which would otherwise be manifested by a large divergence in accuracy between learning and overtraining-check data.
 
-Having trained the BDT successfully, it was then applied to the same test dataset as for the classic $Q_{DC}$ identification. In each camera image, the event with the largest BDT score was deemed to be \textquoteleft most signal-like', and thus selected as the DC pixel candidate. A cut was applied, requiring $P_{signal} > 0.5$ for the DC candidate to be accepted. A second cut requiring $DC_{Count} > 150$ removed many incorrectly identified events. Application of this combined cut greatly increases the successful identification rate. From the testing sample, 15.2\% of all images were correctly identified and passed the cuts. The BDT was found to be 90.2\% accurate in identifying DC pixels which passed the cuts. This represents a very significant improvement in pixel identification efficiency, as well as a minor increase in accuracy after cuts. 
+Having trained the BDT successfully, it was then applied to the same test dataset as for the classic $Q_{DC}$ identification. In each camera image, the event with the largest BDT score was deemed to be \textquoteleft most signal-like', and thus selected as the DC pixel candidate. A cut was applied, requiring $P_{signal} > 0.5$ for the DC candidate to be accepted. A second cut requiring $DC_{Count} > 150$ removed many incorrectly identified events. Application of this combined cut greatly increases the successful identification rate. From the testing sample, 16.01\% of all images were correctly identified and passed the cuts. The BDT was found to be 79.2\% accurate in identifying DC pixels which passed the cuts. This represents a very significant improvement in pixel identification efficiency, as well as a minor increase in accuracy after cuts. 
 
-For LPD event reconstruction, we require events to have a telescope multiplicity $>3$. If we only consider events in which at least four DC pixels were identified, we can determine the high-multiplicity BDT performance. In this case, the fraction of correctly identified DC pixels falls to 2.2\%, while the fraction of incorrectly identified pixels passing the cuts falls to 0.2\%. The sample purity increases slightly to 91.2\%. The relatively high fraction of passing events, in excess of the random expectation of $0.152^{4}=0.05\%$, suggests that DC pixel identification between different telescope images is strongly correlated. 
-
-However, out of 18652 total images, there were none belonging to events in which the $Q_{DC}$ method identified four DC pixels. Using poissonian statistics, we can place an upper limit of $<0.02 \%$ on the rate of accepted, high-multiplicity $Q_{DC}$ events. Thus, as well as BDT accuracy slightly improving, the performance gap over the $Q_{DC}$ method is vastly increased for high-multiplicity events. The results are summarised in Table \ref{tab:qdcbdtcomparison1}. The BDT method represents a very significant improvement in DC pixel identification over the previous $Q_{DC}$ method, and corresponds to at least a fifty-fold increase in the number of HESS data events that can be studied using the LPD method. Use of this BDT method is thus assumed throughout the rest of this analysis.
+The results are summarised in Table \ref{tab:qdcbdtcomparison1}. The BDT method represents a clear improvement in DC pixel identification over the previous $Q_{DC}$ method, and corresponds to a fifteen-fold increase in identified pixels. 
 
 \begin{table}[h!]
   \centering
@@ -259,21 +253,15 @@ However, out of 18652 total images, there were none belonging to events in which
     \toprule
     & $Q_{DC}$ & BDT\\
     \midrule
-    Pixels Accepted and Correctly Identified (\%)  & 1.8 & 15.2\\
-   Pixels Accepted and Incorrectly Identified (\%)  & 0.2& 1.7\\
-    Sample Purity (\%)  & 89.9& 90.2 \\
-    \midrule
-    High Multiplicity Pixels Accepted and Correctly Identified (\%) & $<0.02$ & 2.2\\
-    High Multiplicity Pixels Accepted and Incorrectly Identified (\%) & $<0.02$ & 0.2\\
-    Sample Purity (\%) & / & 91.2\\
+    Pixels Accepted and Correctly Identified (\%)  & 1.81 & 16.01\\
+   Pixels Accepted and Incorrectly Identified (\%)  & 0.52& 4.22\\
+    Sample Purity (\%)  & 77.8 & 79.2 \\
     \bottomrule
   \end{tabular}
 \end{table}
 
 \subsection{HESS-2 BDT}
-The original HESS study predated the construction of the larger CT5 telescope, and thus focused exclusively in the four HESS-1 telescopes. Although the cuts in \ref{tab:qdccuts} were not optimised for the differing pixel size and angular viewing region of CT5, they were replicated to provide a basis for comparison. Based on CT5 images from the training sample, an increased 5.6\% of DC pixels were correctly identified and passed the required cut. A further 11.3 \% of all pixels passed the cuts, despite being misidentified. This represented a very heavy decrease in sample purity to just 33.0\%. We can assume that better optimised CT5 cuts could remove many of these misidentified events, though it is unlikely that any significant improvement in the number of correctly identified DC pixels would be possible. Thus, the number of DC pixels successfully identified using the $Q_{DC}$ method is still a valid benchmark for comparative BDT performance. A true accuracy rate closer to the HESS 1 rate of 90\% could be expected. 
-
-Due to the distinctiveness of the CT5 telescope, direct application of the HESS1 classifier to the CT5 telescope yields poorer BDT performance, \textbf{with just 14.8 \% of correctly identified events passing the cut and an accuracy of 71.7\%}. To improve CT5 pixel identification, a separate HESS2 BDT was instead trained with the same variables as above. The relative feature importance is listed in Table \ref{tab:hess2classifier}. 
+The original HESS study predated the construction of the larger CT5 telescope, and thus focused exclusively in the four HESS-1 telescopes. Although the cuts in \ref{tab:qdccuts} were not optimised for the differing pixel size and angular viewing region of CT5, they were replicated to provide a basis for comparison. Based on CT5 images from the training sample, an increased 5.6\% of DC pixels were correctly identified and passed the required cut. A further 11.3 \% of all pixels passed the cuts, despite being misidentified. This represented a very heavy decrease in sample purity to just 33.0\%. We can assume that better optimised CT5 cuts could remove many of these misidentified events, though it is unlikely that any significant improvement in the number of correctly identified DC pixels would be possible. Thus, the number of DC pixels successfully identified using the $Q_{DC}$ method is still a valid benchmark for comparative BDT performance. A true accuracy rate closer to the HESS 1 rate of 90\% could be expected. Due to the distinctiveness of the CT5 telescope, direct application of the HESS1 classifier to the CT5 telescope yields poorer BDT performance. To improve CT5 pixel identification, a separate HESS2 BDT was instead trained with the same variables as above. The relative feature importance is listed in Table \ref{tab:hess2classifier}. 
 
 \begin{table}[h!]
   \centering
@@ -283,19 +271,19 @@ Due to the distinctiveness of the CT5 telescope, direct application of the HESS1
     \toprule
     Variable & Relative Importance\\
     \midrule
-    $DC_{Count}$ & 0.27\\
-    $Mean_{N.N}$ & 0.14\\
-    $Q_{DC}$ & 0.12\\
-    $\Delta_{Direction}$ & 0.12\\
-    $\Delta_{Line}$ & 0.10\\
-    Image Amplitude & 0.09\\
-    $raw_{Q}$ & 0.07\\
+    $DC_{Count}$ & 0.32\\
+    $Mean_{N.N}$ & 0.24\\
+    $raw_{Q}$ & 0.09\\
+    $Q_{DC}$ & 0.08\\
+    $\Delta_{Direction}$ & 0.8\\
+    Image Amplitude & 0.07\\
     $Intensity$ & 0.06\\
+    $\Delta_{Line}$ & 0.04\\
     \bottomrule
   \end{tabular}
 \end{table}
 
-The CT5 performance was improved for the new classifier, with 17.9 \% of pixels being correctly identified and accepted, and an accuracy of 66.1\%. Despite this improvement, a clear gap emerged between the between the performance of HESS1 classifier on old telescopes, and the performance of the HESS2 classifier on CT5. Part of this discrepancy can be explained by the HESS2 learning dataset, which has just one DC pixel per event rather than the four HESS1 DC pixels. Additionally, HESS 2 images will have roughly 2600 non-DC pixels per event, versus 3600 DC pixels per event for HESS 1 images. The HESS2 classifier was thus trained on significantly fewer DC pixels, so we would expect to see the clear performance gap in comparison to the HESS1 classifier. In the case of the high-multiplicity events, the gap narrows somewhat. In total 1.9\% of pixels are correctly identified and accepted, although the accuracy rate is only increased to 80.7\%. As before, non-observation of a qualifying high-multiplicity $Q_{DC}$ event allows us to calculate a Poissonian upper limit. Out of 4663 HESS2 images, there were none belonging to events in which the $Q_{DC}$ method identified four DC pixels, limiting the rate to $<0.06\%$. 
+For the training events, the classifier was 99.97\% accurate, while for the overtraining check data, it was 99.96\% accurate. The classifier was thus not significantly overtrained. Applying the new classifier lede to an improvement in CT5 classification, with 17.9 \% of pixels being correctly identified and accepted, and an accuracy of 66.1\%. Despite this improvement, a clear gap emerged between the between the performance of HESS1 classifier on old telescopes, and the performance of the HESS2 classifier on CT5. Part of this discrepancy can be explained by the HESS2 learning dataset, which has just one DC pixel per event rather than the four HESS1 DC pixels. Additionally, HESS 2 images will have roughly 2600 non-DC pixels per event, versus 3600 DC pixels per event for HESS 1 images. The HESS2 classifier was thus trained on significantly fewer DC pixels, so we would expect to see the clear performance gap in comparison to the HESS1 classifier.  
 
 \begin{table}[h!]
   \centering
@@ -305,21 +293,47 @@ The CT5 performance was improved for the new classifier, with 17.9 \% of pixels 
     \toprule
     & $Q_{DC}$ & BDT\\
     \midrule
-    Pixels Accepted and Correctly Identified (\%) & 5.6 & 17.9 \\
-   Pixels Accepted and Incorrectly Identified (\%) & 11.3 & 9.2 \\
-    Sample Purity (\%) & 33.0 & 66.1 \\
+    Pixels Accepted and Correctly Identified (\%) & 5.59 & 18.52 \\
+   Pixels Accepted and Incorrectly Identified (\%) & 14.75 & 4.44 \\
+    Sample Purity (\%) & 27.5 & 80.6 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\subsection{High Multiplicity Events}
+For LPD event reconstruction, we require at least four measurements of the DC light. We define the telescope multiplicity of an event as the number of DC pixels which are identified and pass all cuts. Telescope multiplicity measures both HESS1 and HESS2 pixels. A \textquoteleft high-multiplicity event' is one in which we have telescope multiplicity $>3$. If we only consider high-multiplicity events, we can determine the $Q_{DC}$ performance for use in LPD reconstruction. After applying this cut, there were was just one single high-multiplicity event found using the $Q_{DC}$ method. This meant that just 0.01\% of all pixels were accepted, although with a sample purity of 100\%. Because the final sample consisted of just three HESS1 pixels, and one HESS2 pixel, the associated Poissonian error in acceptance rates and accuracy rates will be extremely large.
+
+Through we application of the two HESS classifiers, we can find the comparative high-multiplicity BDT performance. If we only consider high-multiplicity BDT events, the fraction of correctly identified HESS1 DC pixels falls to 2.2\%, while the fraction of incorrectly identified pixels passing the cuts falls to 0.2\%. The sample purity increases slightly to 91.2\%. In the case of the high-multiplicity HESS2 images, the BDT performance gap narrows somewhat. In total 1.9\% of pixels are correctly identified and accepted, although the accuracy rate is only increased to 80.7\%. The relatively high fraction of passing events is in excess of the random expectation of $0.16^{4}=0.07\%$ and $0.19^{4}=0.13\%$ for HESS1 and HESS2. This suggests that DC pixel identification between different telescope images is strongly correlated. The same is true for the $Q_{DC}$ high multiplicity rates. As well as general BDT accuracy improving after high-multiplicity cuts, the performance gap over the $Q_{DC}$ method is vastly increased for high-multiplicity events. As a result of the two-hundred-fold increase in acceptance rate for high multiplicity events, the expected data sample size will increase dramatically. This should enable spectroscopic analysis of Cosmic Ray Elements to be conducted after a much shorter experimental run time that for the $Q_{DC}$ method.
+
+\begin{table}[h!]
+  \centering
+  \caption{Comparison of high-multiplicity performance Performance}
+  \label{tab:highmultiplicitycomparison}
+  \begin{tabular}{c|cc|cc}
+    \toprule
+    & \multicolumn{2}{c|}{HESS 1} & \multicolumn{2}{c}{HESS 2} \\
+    & $Q_{DC}$ & BDT & $Q_{DC}$ & BDT\\
     \midrule
-    High Multiplicity Pixels Accepted and Correctly Identified (\%) & $<0.06$ & 1.9\\
-    High Multiplicity Pixels Accepted and Incorrectly Identified (\%) & $<0.06$ & 0.5\\
-    Sample Purity (\%) & / & 80.7\\
+    High Multiplicity Pixels Accepted and Correctly Identified (\%)& 0.01 & 2.20 & 0.01 & 1.61\\
+    High Multiplicity Pixels Accepted and Incorrectly Identified (\%)  & 0.00 & 0.43 & 0.01 & 0.22\\
+    Sample Purity (\%)& 100.0 & 83.8 & 100.0 & 88.0\\
     \bottomrule
   \end{tabular}
 \end{table}
 
 \subsection{Proton Background}
-It is important to discriminate between the heavy cosmic ray elements, such as iron, and the much more abundant proton events. Protons tend to emit negligible DC light, so will contaminate any data sample with events that cannot be reconstructed using the LPD method. To determine the acceptance rate for proton events, a simulation was conducted with 2000 proton events in CORSIKA. For HESS1, the raw acceptance rate was 15.1\% while the sample purity of 32.2\%. For HESS2, the raw acceptance rate was 58.6\% while the sample purity of 6.8\%. Although the HESS1 acceptance rate is relatively small, the proton flux is approximately ten times greater than iron flux. A mixed sample would have many more proton images than iron images. Once multiplicity cuts are applied, the acceptance rate falls steeply to just 2.9\%. With the factor 10 discrepancy in flux, the number of proton and iron images will be comparable. Of those passing the cuts, 24.5\% are correctly identified.  For HESS2, the comparable number is 21.7\% with multiplicity cuts. The sample purities are just 24.4\% and 7.7\% respectively. This poor performance motivates our desire to remove protons from our sample for analysis.
+It is important to discriminate between the heavy cosmic ray elements, such as iron, and the much more abundant proton events. Protons tend to emit negligible DC light, so will contaminate any data sample with events that cannot be reconstructed using the LPD method. To determine the acceptance rate for proton events, a simulation was conducted with 5000 proton events in CORSIKA. For HESS1, the raw acceptance rate was 15.1\% while the sample purity of 32.2\%. For HESS2, the raw acceptance rate was 58.6\% while the sample purity of 6.8\%. Although the HESS1 acceptance rate is relatively small, the proton flux is approximately ten times greater than iron flux. A mixed sample would have many more proton images than iron images. Once multiplicity cuts are applied, the acceptance rate falls steeply to just 2.9\%. With the factor 10 discrepancy in flux, the number of proton and iron images will be comparable. Of those passing the cuts, 24.5\% are correctly identified.  For HESS2, the comparable number is 21.7\% with multiplicity cuts. The sample purities are just 24.4\% and 7.7\% respectively. This poor performance motivates our desire to remove protons from our sample for analysis.
 
-We require an additional cut to remove the majority of these proton events. If we can eliminate one or two accepted proton images per event, then the remaining proton pixels will all be rejected by the multiplicity cuts. Hence, loose cuts can sharply reduce the acceptance rate of protons. In this case, as shown in Figure \ref{fig:aspectratio}, there is a fair degree of separation between proton and Iron Aspect Ratio for pixels which pass all cuts. We aim to remove proton pixels but not iron pixels. Applying a cut requiring Aspect Ratio $> 0.35$ eliminated all accepted proton events for HESS1 and HESS2. With 17792 total HESS1 images, just 6195 images were triggered by DC light. Of all 17792 images, there were none passing all of the required cuts. We can place a poissonian upper limit on the acceptance rate of $< 0.02 \%$. Of the for 4448 HESS2 images, just 2169 contained DC light. As no image passed all cuts, we place an upper limit of $< 0.07\%$. For HESS1 iron events, the total acceptance rate falls slightly from 2.4\% to 2.3\%, while the sample purity decreases slightly to 89.0\%. For HESS2, the total acceptance rate falls slightly from 2.4\% to 2.3 \%, while the sample purity decreases slightly to 79.8\%. Iron images form at least 90\% of a sample, because most proton images are at least one hundred times less likely to be accepted.
+We require an additional cut to remove the majority of these proton events. If we can eliminate one or two accepted proton images per event, then the remaining proton pixels will all be rejected by the multiplicity cuts. Hence, loose cuts can sharply reduce the acceptance rate of protons. In this case, as shown in Figure \ref{fig:aspectratio}, there is a fair degree of separation between proton and Iron Aspect Ratio for pixels which pass all cuts. We aim to remove proton pixels but not iron pixels. Applying a cut requiring Aspect Ratio $> 0.35$ eliminated all accepted proton events for HESS1 and HESS2. With 17792 total HESS1 images, just 6195 images were triggered by DC light. Of all 17792 images, there were none passing all of the required cuts. We can place a poissonian upper limit on the acceptance rate of $< 0.02 \%$. Of the for 4448 HESS2 images, just 2169 contained DC light. As no image passed all cuts, we place an upper limit of $< 0.07\%$. 
+
+Using poissonian statistics, we can place a 95\% confidence upper limit on the rate of accepted, high-multiplicity $Q_{DC}$ events. By virtue of passing a multiplicity cut, the number of accepted pixels must be at least 4, or none. It is thus more appropriate to instead consider the total number of events for calculations of an upper limit. There were 4711 fully triggered events, of which none were \textquoteleft High multiplicity Events'. We find a value for the mean $\lambda$ such that the probability of not observing a high multiplicity event is less than 5\%.
+\[ P(n|\lambda)=\frac{e^{-\lambda}\lambda^{n}}{n!} \Longrightarrow P(0|\lambda)=\frac{e^{-\lambda}\lambda^{0}}{0!}=e^{-\lambda}=0.05
+\Longrightarrow
+\lambda = -\ln(0.05)=3.00\]
+
+Thus, we can conclude that if the mean was greater that if the mean $\lambda>3$, we would have expected to observe at least one event with a 95\% probability. As we did not observe an event, we conclude that the mean high multiplicity event rate is less than $\frac{3}{4711}=0.06\%$. 
+
+For HESS1 iron events, the total acceptance rate falls slightly from 2.4\% to 2.3\%, while the sample purity decreases slightly to 89.0\%. For HESS2, the total acceptance rate falls slightly from 2.4\% to 2.3 \%, while the sample purity decreases slightly to 79.8\%. Iron images form at least 75\% of a sample, because most proton images are at least one hundred times less likely to be accepted. Use of this BDT method is thus assumed throughout the rest of this analysis.
 
 \begin{figure}
 \begin{center}
@@ -337,17 +351,17 @@ We require an additional cut to remove the majority of these proton events. If w
     \toprule
     & HESS1  & HESS2 \\
     \midrule
-    Proton Pixels Accepted (\%) & 15.1 & 58.6\\
-    Sample Purity (\%) & 32.2 & 6.8 \\
+    Proton Pixels Accepted (\%) & 15.10 & 32.68\\
+    Sample Purity (\%) & 10.1 & 5.1 \\
     \midrule
-    High Multiplicity Proton Pixels Accepted (\%) & 2.9 & 21.7\\
-    Sample Purity (\%) & 24.5 & 7.7 \\
+    High Multiplicity Proton Pixels Accepted (\%) & 0.83 & 1.03\\
+    Sample Purity (\%) & 6.8 & 4.3 \\
     \midrule
-    Proton Pixels Accepted after All Cuts(\%) & $< 0.02$ & $< 0.07$\\
+    Proton Pixels Accepted after All Cuts(\%) & $< 0.06$ & $< 0.06$\\
     Sample Purity (\%) & / & / \\
     \midrule
-    Iron Pixels Accepted after All Cuts(\%) & 2.3 & 2.3\\
-    Sample Purity (\%) & 89.0 & 79.8 \\
+    Iron Pixels Accepted after All Cuts(\%) & 2.44 & 1.66\\
+    Sample Purity (\%) & 84.3 & 88.2 \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -504,7 +518,7 @@ The mean first interaction height for all Cherenkov Emitting Cosmic Rays in the 
 \begin{figure}
 \begin{center}
 \includegraphics[height=0.9\textheight]{hessheight}
-\caption{The mean first interaction height for all Cherenkov Events is 40km???. The mean first interaction height for 4 telescope events in the HESS array is 23km}
+\caption{The mean first interaction height for all Cherenkov Events is 40km???. Events in blue met the multiplicity threshold, with DC light in four telescopes. The mean first interaction height for four telescope events in the HESS array is 23km}
 \label{fig:Hessheight}
 \end{center}
 \end{figure}
