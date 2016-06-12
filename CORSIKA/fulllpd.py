@@ -100,6 +100,9 @@ for k in range(len(data)):
 		
 		ax1=plt.subplot(2,2,1+index+(k*2))
 		
+		print len(truedistances[index]), "points"
+		print truedistances[index], truesignals1[index]
+		
 		plt.scatter(truedistances[index], truesignals1[index])
 		plt.xlabel("Core distance to telescope (m)")
 		plt.ylabel("Photoelectron Density (m^-2)")

@@ -27,3 +27,7 @@ def run(tradius, rayradius, distance):
 		area=0
 
 	return area
+	
+def telarea(tradius):
+	rawarea = math.pi*(tradius**2)
+	return rawarea

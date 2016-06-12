@@ -47,10 +47,12 @@ def run(layout, rayxpos, rayypos, epsilon, rayradius, Epn, Z, height, phi, theta
 				
 				tradius = tr.run(category)
 				r, dangle = ce.run(rayradius, theta, phi, epsilon, xpos, ypos, rayxpos, rayypos)
-				sigcount, bkgcount= cs.run(tradius, r, rayxpos, rayypos, xpos, ypos, Epn, Z, eff)
+				sigcount, bkgcount, sigerror, bkgerror= cs.run(tradius, r, rayxpos, rayypos, xpos, ypos, Epn, Z, eff)
+				print "Height", height, "Rmax", r, "Signal", sigcount,"Background", bkgcount
 				
-				count = sigcount + bkgcount
-				recorded = random.gauss(count, math.sqrt(count))
+				recorded = random.gauss(sigcount, sigerror)
+				
+				bkgrecorded = random.gauss(bkgcount, bkgerror)
 				
 				recordeddangle = random.gauss(dangle, 0.01)
 				
@@ -89,7 +91,7 @@ def run(layout, rayxpos, rayypos, epsilon, rayradius, Epn, Z, height, phi, theta
 				elif text:
 					print j-1, "No Trigger!",  recorded, area, recondensity, threshold
 					
-				entry.append([int(metThreshold+1), category, xpos, ypos, recorded, rayxpos, rayypos, Epn, Z, height, phi, epsilon, Trigger, recordeddangle, recordedaltitude])
+				entry.append([int(metThreshold+1), category, xpos, ypos, recorded, bkgrecorded, rayxpos, rayypos, Epn, Z, height, phi, epsilon, Trigger, recordeddangle, recordedaltitude])
 				
 				if float(j) > float(mincount):
 					entrytype = "metThreshold"

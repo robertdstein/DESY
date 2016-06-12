@@ -1,25 +1,38 @@
 import random, math
 
-nsbkg = 7
-
-def run(distance, Epn, Z, rmax, eff):
+def run(distance, Epn, Z, rmax, eff, N=56):
+	
+	energy=Epn*N/1000
 	
 	if Epn < 0:
 		print distance, Epn, Z, rmax, eff
 	
-	scale = (50 * (10**-3)* Epn *eff)*(math.e**-0.5)
+	scale = (9.4*energy + -204.1)
+	exponent = -0.00004*energy + -0.00692
 	
-	if distance < 100:
-		bkgd = (math.e**(((Epn**0.25)/3.9)*((100-distance)/100)))*scale + (nsbkg*eff)
-	else:
-		bkgd = (nsbkg*eff)+(math.e**((100-distance)/20))*scale
+	bkgd = scale * math.e**(distance*exponent)
 	
-	if 10 < distance < rmax:
-		density = (Z**2)*((0.62*(math.e**(0.014*(distance-100))))-0.173)*eff
+	bkgerror = 0.15
+	
+	def f1(distance):
+		#~ print "Distance", distance, "Density", ((Z/26)**2)*(5.23*(math.exp(0.013*distance))-6.508)
+		return ((Z/26)**2)*(5.23*(math.exp(0.013*distance))-6.508)
+		
+	def f2(distance):
+		return f1(rmax)*math.exp(-rmax-(0.06*distance))
+	
+	if distance < rmax:
+		density = f1(distance)
+		dcerror=0.19
+		if density < 0:
+			density=0
 	else:
-		density = 0
+		density = f2(distance)
+		dcerror=0.85
 
-   	return density, bkgd
+	print "Density", density, "Distance", distance 
+
+   	return [density, dcerror], [bkgd, bkgerror]
    	
 def trigger():
 	return 1.5

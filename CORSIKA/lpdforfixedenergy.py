@@ -57,7 +57,7 @@ def makeBDTentry(pixelentry):
 
 filepath = "/nfs/astrop/d6/rstein/data/"
 
-j=50
+j=500
 i=0
 
 accepteddistances=[[],[]]
@@ -230,7 +230,11 @@ for i in [0, 1]:
 
 	popt, pcov = curve_fit(vf1, np.array(d), np.array(s), p0=np.array(p0), maxfev = 100000000)
 	print popt
-
+	
+	Line = "y1(x) =" + str('{0:.3f}'.format(popt[0])) + " e ^ ("+ str('{0:.3f}'.format(popt[1]))+"x) + " + str('{0:.3f}'.format(popt[2])) + "\n"
+	Line += "y2(x) = y1(rmax) * e ^ ("+ str('{0:.3f}'.format(popt[3]))+"x - rmax)"
+	print Line
+	plt.annotate(Line, xy=(0.05, 0.9), xycoords="axes fraction",  fontsize=15)
 	
 	def fit(x):
 		return vf1(x, popt[0], popt[1], popt[2], popt[3])

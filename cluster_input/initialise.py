@@ -3,8 +3,8 @@ import math
 sim="HESS"
 
 if sim == "HESS":
-	numberofhours = 30
-	mincount=4
+	numberofhours = 0.03
+	mincount=3
 	reconstructiongridwidth=301
 	orientation="five"
 	eff = 0.06

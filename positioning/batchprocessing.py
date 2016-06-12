@@ -11,6 +11,7 @@ def run(source, outputfile, mincount, detectorcount, text=False):
 			header.append("x "+str(i))
 			header.append("y "+str(i))
 			header.append("Count "+str(i))
+			header.append("Bkg Count "+str(i))
 			header.append("Telescope "+str(i))
 			header.append("Dangle "+str(i))
 			header.append("Altitude "+str(i))
@@ -39,16 +40,17 @@ def run(source, outputfile, mincount, detectorcount, text=False):
 					xpos = float(row[2])
 					ypos = float(row[3])
 					smearcount = float(row[4])
-					truex = row[5]
-					truey =row[6]
-					trueE = row[7]
-					trueZ = row[8]
-					trueheight = row[9]
-					phi = row[10]
-					epsilon=row[11]
-					Trigger = row[12]
-					smeardangle = row[13]
-					smearamplitude = row[14]
+					smearbkgcount = float(row[5])
+					truex = row[6]
+					truey =row[7]
+					trueE = row[8]
+					trueZ = row[9]
+					trueheight = row[10]
+					phi = row[11]
+					epsilon=row[12]
+					Trigger = row[13]
+					smeardangle = row[14]
+					smearamplitude = row[15]
 					
 					j+=1
 				
@@ -56,6 +58,7 @@ def run(source, outputfile, mincount, detectorcount, text=False):
 						a += [xpos]
 						a += [ypos]
 						a += [smearcount]
+						a += [smearbkgcount]
 						a += [category]
 						a += [smeardangle]
 						a += [smearamplitude]

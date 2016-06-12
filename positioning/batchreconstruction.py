@@ -17,15 +17,16 @@ def run(source, outputfile, detectorcount, rgw, eff):
 					i = 1
 				else:
 					a=[]
+					lena = 7
 					for j in range (0, detectorcount):
-						base = 6*j
-						a += [[row[base], row[base+1], row[base+2], row[base+3], row[base+4], row[base+5]]]
-					lim = 6*detectorcount
+						base = lena*j
+						a += [[row[base], row[base+1], row[base+2], row[base+3], row[base+4], row[base+5], row[base+6]]]
+					lim = lena*detectorcount
 					
-					phi = float(row[lim+6])
+					phi = float(row[lim+lena])
 					smearphi = phi + (math.radians(0.5)*(random.random()-0.5))
 
-					epsilon = float(row[lim+7])
+					epsilon = float(row[lim+lena+1])
 					smearepsilon = epsilon + (math.radians(0.5)*(random.random()-0.5))
 					
 					true = [row[lim], row[lim+1], row[lim+2], row[lim+3], row[lim+4], math.degrees(phi), math.degrees(epsilon)]
@@ -36,9 +37,10 @@ def run(source, outputfile, detectorcount, rgw, eff):
 							x0 = float(detection[0])
 							y0 = float(detection[1])
 							count = float(detection[2])
-							category = detection[3]
-							dangle = float(detection[4])
-							sum += ll.run(x,y,Epn,Z, height, x0,y0, count, category, eff, smearphi, smearepsilon)
+							bkgcount= float(detection[3])
+							category = detection[4]
+							dangle = float(detection[5])
+							sum += ll.run(x,y,Epn,Z, height, x0,y0, count, bkgcount, category, eff, smearphi, smearepsilon)
 						return sum
 					
 					truefval = f(float(row[lim]), float(row[lim+1]), float(row[lim+3]), float(row[lim+2]), float(row[lim+4]))

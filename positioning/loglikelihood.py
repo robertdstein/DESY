@@ -19,33 +19,28 @@ def expected(x,y,Epn,Z, height, x0,y0, category, raweff, phi, epsilon):
 	eff = raweff*frac/math.sin(phi)
 	
 	if rayradius > 0:
-		r, dangle = ce.run(rayradius, theta, phi, epsilon, x0, y0, x, y)
+		r=0
 		
-		expectedsig, expectedbkg= cs.run(tradius, r, x, y, x0, y0, Epn, Z, eff)
-		
-		expectedcount = int(expectedsig + expectedbkg)
+	r, dangle = ce.run(rayradius, theta, phi, epsilon, x0, y0, x, y)
 	
-	else:
-		expectedcount = 7.0
+	expectedsig, expectedbkg, dcerror, bkgerror= cs.run(tradius, r, x, y, x0, y0, Epn, Z, eff)
 	
-	return expectedcount
+	return expectedcount, expectedbkgcount, dcerror, bkgerror
 	
-def stirling(N):
-	lognfactorial = ((N*math.log(N))-N + (0.5*math.log(2*N*math.pi)))
-	return lognfactorial
+#~ def stirling(N):
+	#~ lognfactorial = ((N*math.log(N))-N + (0.5*math.log(2*N*math.pi)))
+	#~ return lognfactorial
 	
-def run(x,y,Epn,Z, height, x0,y0, count, category, eff, phi, epsilon):
+def run(x,y,Epn,Z, height, x0,y0, count, bkgcount, category, eff, phi, epsilon):
 	N = int(count)
-	expectedcount = expected(x,y,Epn,Z, height, x0,y0, category, eff, phi, epsilon)
+	Nbkg = int(bkgcount)
+	expectedcount, expectedbkgcount, dcerror, bkgerror = expected(x,y,Epn,Z, height, x0,y0, category, eff, phi, epsilon)
 	
 	if N == 0:
-		minusll = expectedcount
-	elif  expectedcount == 0:
-		minusll = 10**10
+		pass
 	else:
-		lognfactorial = stirling(N)
-		if expectedcount < 0:
-			print expectedcount
-		minusll = expectedcount - (N*math.log(float(expectedcount))) + lognfactorial
+		minusll = ((N-expectedcount)/(dcerror*N))**2
+		
+	minusll += ((Nbkg-expectedbkgcount)/(bkgerror*Nbkg))**2
 	
 	return minusll

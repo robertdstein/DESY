@@ -16,6 +16,8 @@ import matplotlib.patches as mpatches
 data=np.arange(36, 97, 10)
 print data
 
+nrows = len(data)-int(len(data)/2)
+print nrows
 
 
 areas = [108., 614.]
@@ -39,7 +41,7 @@ custom_options = {
 	'format': '%(progress)s%% [%(fill)s%(blank)s]'
 }
 
-for k in range(2):
+for k in range(3):
 	
 	Cvalues=[]
 	sigmas=[]
@@ -51,10 +53,13 @@ for k in range(2):
 		targetfolder = filepath + jobID +"/"
 		truesignals1=[[],[]]
 		truedistances=[[],[]]
+		energyindex = int((energy-26)/10)
 		p = ProgressBar(**custom_options)
 		print p
 		j=500
 		i=0
+		
+
 		
 		if k == 0:
 			gradient = -0.0095
@@ -116,108 +121,115 @@ for k in range(2):
 				diffval = logval-(gradient*value)
 				s.append(diffval)
 				sigs.append(logval)
+				
+			if k==0:			
+				A, logC = np.polyfit(truedistances[index], sigs, 1)
+				C = math.exp(logC)
+				print A, logC, C, C/(energy**2)
+				
+				Avalues.append(A)
 			
-			A, logC = np.polyfit(truedistances[index], sigs, 1)
-			C = math.exp(logC)
-			print A, logC, C, C/(energy**2)
+			elif k==1:
+				logC=np.mean(s)
+				C = np.exp(logC)
+				print logC, C, C/(energy**2)
+				
+				Cvalues.append(C)
+				
+			elif k==2:
+				C = Cfit(energy)
+				
+			if k > 0:
+				if k ==2:
+					ax=plt.subplot(nrows,2,energyindex)
+					plt.scatter(truedistances[index], truesignals1[index])	
+				
+				def fit(x):
+					return C*np.exp(x*gradient)
+		
+				lpd=[]
+				u=[]
+				l=[]
+				pu =[]
+				pl = []
 			
-			Avalues.append(A)
+				diffs = []
+				alldistances=[]
+				
+				sqarea = math.sqrt(areas[index])
+				
+				for n in range(len(truedistances[index])):
+					sig = truesignals1[index][n]
+					dist = truedistances[index][n]
+					fitsig = fit(dist)
+					diff = math.fabs((sig-fitsig)/fitsig)
+					diffs.append(diff)
 			
-			logC=np.mean(s)
-			C = np.exp(logC)
-			print logC, C, C/(energy**2)
-			
-			Cvalues.append(C)
+				diffs.sort()
+				print diffs
+				nentries = len(diffs)
+				distances=truedistances[index]
+				distances.sort()
+				if nentries > 3:
+					halfinteger = int(0.5*nentries)
+					lowerinteger = int(0.16*nentries)
+					upperinteger = int(0.84*nentries)
+					integer68 = int(0.68*nentries)
 					
-			def fit(x):
-				return C*np.exp(x*gradient)
+					lower = diffs[lowerinteger]
+					upper = diffs[upperinteger]
+					
+					truesigma = diffs[integer68]
+					fiterror= truesigma*C
+					sigmas.append(fiterror)
+					print "Actual", truesigma, "possonian", 
 		
-			lpd=[]
-			u=[]
-			l=[]
-			pu =[]
-			pl = []
-		
-			diffs = []
-			alldistances=[]
-			
-			sqarea = math.sqrt(areas[index])
-			
-			for n in range(len(truedistances[index])):
-				sig = np.exp(s[n])
-				dist = truedistances[index][n]
-				fitsig = fit(dist)
-				diff = math.fabs((sig-fitsig)/fitsig)
-				diffs.append(diff)
-		
-			diffs.sort()
-			nentries = len(diffs)
-			distances=truedistances[index]
-			distances.sort()
-			if nentries > 3:
-				halfinteger = int(0.5*nentries)
-				lowerinteger = int(0.16*nentries)
-				upperinteger = int(0.84*nentries)
-				integer68 = int(0.68*nentries)
+					psigmas = []
+					for dist in distances:
+						sig = fit(dist)
+						lpd.append(sig)
+						ulpd = sig*(1+truesigma)
+						u.append(ulpd)
+						llpd = sig*(1-truesigma)
+						l.append(llpd)
+						up = sig + (math.sqrt(sig)/sqarea)
+						pu.append(up)
+						lp = sig - (math.sqrt(sig)/sqarea)
+						pl.append(lp)
+						psigmas.append(1./(sqarea*math.sqrt(sig)))
 				
-				lower = diffs[lowerinteger]
-				upper = diffs[upperinteger]
+					psigmas.sort()
+					psigma = psigmas[integer68]
+					print psigma, "Fiterror", fiterror
+					
+					
+					if k ==2:
+					
+						plt.plot(distances, lpd, color='k')
+						plt.fill_between(distances, l, u, color='g', alpha=0.25)
+						ax.fill_between(distances, pl, pu, color='r', alpha=0.25)
+						message = "Sigma: " + str('{0:.2f}'.format(truesigma)) + " \n"
+						plt.annotate(message, xy=(0.6, 0.8), xycoords="axes fraction",  fontsize=15)
+						fd = mpatches.Rectangle((0, 0), 1, 1, fc="g",alpha=0.25)
+						pd = mpatches.Rectangle((0, 0), 1, 1, fc="r",alpha=0.25)
+						
+						figure = plt.gcf() # get current figure
+						figure.set_size_inches(20, 20)
+						figure.legend([fd, pd], ["Fractional Deviation from True Fit","Expected Poissonian Error"], loc="upper right")
+					
+						title= str(energy)+ " TeV HESS " + str(index+1)
+						plt.title(title)
+						
+						print len(truedistances[index]), "points"
+						print truedistances[index], truesignals1[index]
+						
+						
+						plt.xlabel("Core distance to telescope (m)")
+						plt.ylabel("Photoelectron Density (m^-2)")
+						ax.set_xlim(left=0)
+						ax.set_yscale("log")
+						plt.title(str(energy) + " TeV")
 				
-				truesigma = diffs[integer68]
-				fiterror= truesigma*C/math.sqrt(nentries)
-				sigmas.append(fiterror)
-				print "Actual", truesigma, "possonian", 
-	
-				psigmas = []
-				for dist in distances:
-					sig = fit(dist)
-					lpd.append(sig)
-					ulpd = sig*(1+truesigma)
-					u.append(ulpd)
-					llpd = sig*(1-truesigma)
-					l.append(llpd)
-					up = sig + (math.sqrt(sig)/sqarea)
-					pu.append(up)
-					lp = sig - (math.sqrt(sig)/sqarea)
-					pl.append(lp)
-					psigmas.append(1./(sqarea*math.sqrt(sig)))
-			
-				psigmas.sort()
-				psigma = psigmas[integer68]
-				print psigma, "Fiterror", fiterror
-				#~ ax1=plt.subplot(2,1,1)
-				#~ plt.plot(distances, lpd, color='k')
-				#~ plt.fill_between(distances, l, u, color='g', alpha=0.25)
-				#~ ax1.fill_between(distances, pl, pu, color='r', alpha=0.25)
-				#~ message = "Sigma: " + str('{0:.2f}'.format(truesigma)) + " \n"
-				#~ plt.annotate(message, xy=(0.6, 0.8), xycoords="axes fraction",  fontsize=15)
-				#~ fd = mpatches.Rectangle((0, 0), 1, 1, fc="g",alpha=0.25)
-				#~ pd = mpatches.Rectangle((0, 0), 1, 1, fc="r",alpha=0.25)
-				#~ 
-				#~ figure = plt.gcf() # get current figure
-				#~ figure.set_size_inches(20, 20)
-				#~ figure.legend([fd, pd], ["Fractional Deviation from True Fit","Expected Poissonian Error"], loc="upper right")
-			#~ 
-				#~ title= str(energy)+ " TeV HESS " + str(index+1)
-				#~ plt.title(title)
-				#~ 
-				#~ plt.scatter(truedistances[index], truesignals1[index])
-				#~ plt.xlabel("Core distance to telescope (m)")
-				#~ plt.ylabel("Photoelectron Density (m^-2)")
-				#~ ax1.set_xlim(left=0)
-				#~ ax1.set_yscale("log")
-				#~ plt.title("True LPD (Amplitude)")
-			#~ 
-				#~ saveto = "/nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/CORSIKA/graphs/lpdpowerlaw.pdf"
-				#~ 
-				#~ print "Saving to", saveto
-				#~ 
-				#~ plt.tight_layout()
-				#~ 
-				#~ plt.savefig(saveto)
-				#~ plt.savefig("/nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/report/graphs/lpdpowerlaw.pdf")
-				#~ plt.close()
-				#~ 
 	print data
 	print Cvalues
 	print sigmas
@@ -228,21 +240,22 @@ for k in range(2):
 	figure.set_size_inches(20, 20)
 	
 	if k==0:
-	
-		plt.subplot(2,1,1)
-		plt.scatter(data, Avalues)
-		plt.xlabel("Energy (Tev)")
-		plt.ylabel("Fitted Exponent")
+
 		Am, Ac = np.polyfit(data, Avalues, 1)
 		
 		def Afit(x):
 			return Am*x + Ac
+		plt.subplot(2,1,1)
+		plt.scatter(data, Avalues)
+		plt.xlabel("Energy (Tev)")
+		plt.ylabel("Fitted Exponent")
+		
 		plt.plot(data, Afit(data), color="k")
-		Line = "y =" + str('{0:.4f}'.format(Am)) + " x + " + str('{0:.1f}'.format(Ac))
+		Line = "y =" + str('{0:.5f}'.format(Am)) + " x + " + str('{0:.5f}'.format(Ac))
 		plt.annotate(Line, xy=(0.05, 0.9), xycoords="axes fraction",  fontsize=15)
 		
-	else:
-	
+	elif k==1:
+
 		plt.subplot(2,1,2)
 		plt.errorbar(data, Cvalues, yerr=sigmas, fmt='o')
 		plt.xlabel("Energy (Tev)")
@@ -256,13 +269,26 @@ for k in range(2):
 		Line = "y =" + str('{0:.1f}'.format(Cm)) + " x + " + str('{0:.1f}'.format(Cc))
 		plt.annotate(Line, xy=(0.05, 0.9), xycoords="axes fraction",  fontsize=15)
 		
+		figure = plt.gcf() # get current figure
+		figure.set_size_inches(20, 20)
+		
 		saveto = "/nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/CORSIKA/graphs/lpdpowerlaw.pdf"
+		
+		print "Saving to", saveto
+		
+		plt.savefig(saveto)
+		plt.savefig("/nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/report/graphs/lpdpowerlaw.pdf")
+		plt.close()
+		
+	else:
+		saveto = "/nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/CORSIKA/graphs/fullshowerlpd.pdf"
 		
 		print "Saving to", saveto
 		
 		plt.tight_layout()
 		
 		plt.savefig(saveto)
-		plt.savefig("/nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/report/graphs/lpdpowerlaw.pdf")
+		plt.savefig("/nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/report/graphs/corsikafullshowerlpd.pdf")
 		plt.close()
+		
 	

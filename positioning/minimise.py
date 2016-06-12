@@ -20,8 +20,9 @@ def min(a, gridwidth, eff, phi, epsilon, detections):
 			x0 = float(detection[0])
 			y0 = float(detection[1])
 			count = float(detection[2])
-			category = detection[3]
-			sum += ll.run(x,y,Epn,Z, height, x0,y0, count, category, eff, phi, epsilon)
+			bkgcount = float(detection[3])
+			category = detection[4]
+			sum += ll.run(x,y,Epn,Z, height, x0,y0, count, bkgcount, category, eff, phi, epsilon)
 		return sum
 
 	
