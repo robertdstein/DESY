@@ -5,7 +5,7 @@ from scipy.optimize import curve_fit
 #Provides the Refractive Index for a given Height
 
 def expindex(height, fit=False, text=False):
-	with open('/d6/rstein/Hamburg-Cosmic-Rays/positioning/atmospheredata/atmprofile.csv', 'rb') as csvfile:
+	with open('/nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/positioning/atmospheredata/atmprofile.csv', 'rb') as csvfile:
 		reader = csv.reader(csvfile, delimiter=',', quotechar='|')
 		
 		#Provides starting values to avoid errors in extreme cases
@@ -46,7 +46,7 @@ def expindex(height, fit=False, text=False):
 #Provides a Height corresponding to a given Probability
 
 def runheight(prob, text=False):
-	with open('/d6/rstein/Hamburg-Cosmic-Rays/positioning/atmospheredata/atmprofile.csv', 'rb') as csvfile:
+	with open('/nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/positioning/atmospheredata/atmprofile.csv', 'rb') as csvfile:
 		reader = csv.reader(csvfile, delimiter=',', quotechar='|')
 		
 		#Provides starting values to avoid errors in extreme cases
@@ -100,7 +100,7 @@ def runlengths(prob):
 #Assumes absorbtion fraction at first interaction covers preceding emission too (this is reasonable as f~54% for almost all decay height)
 	
 def runabsorption(height, text=False):
-	with open('/d6/rstein/Hamburg-Cosmic-Rays/positioning/atmospheredata/atmprofile.csv', 'rb') as csvfile:
+	with open('/nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/positioning/atmospheredata/atmprofile.csv', 'rb') as csvfile:
 		reader = csv.reader(csvfile, delimiter=',', quotechar='|')
 		i=0
 		
@@ -131,7 +131,7 @@ def runabsorption(height, text=False):
 		return frac
 		
 def runindex(height, fit=False, text=False):
-	with open('/d6/rstein/Hamburg-Cosmic-Rays/positioning/atmospheredata/atmprofile.csv', 'rb') as csvfile:
+	with open('/nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/positioning/atmospheredata/atmprofile.csv', 'rb') as csvfile:
 		reader = csv.reader(csvfile, delimiter=',', quotechar='|')
 		
 		#Provides starting values to avoid errors in extreme cases

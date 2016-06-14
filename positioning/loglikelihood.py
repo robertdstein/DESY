@@ -9,6 +9,8 @@ import calculateellipse as ce
 import telescoperadius as tr
 import atmosphere as atm
 
+threshold = ld.trigger()
+
 def expected(x,y,Epn,Z, height, x0,y0, category, raweff, phi, epsilon):
 	
 	rayradius, theta = cr.run(Epn, height, math.sin(phi))
@@ -23,7 +25,7 @@ def expected(x,y,Epn,Z, height, x0,y0, category, raweff, phi, epsilon):
 		
 	r, dangle = ce.run(rayradius, theta, phi, epsilon, x0, y0, x, y)
 	
-	expectedsig, expectedbkg, dcerror, bkgerror= cs.run(tradius, r, x, y, x0, y0, Epn, Z, eff)
+	expectedcount, expectedbkgcount, dcerror, bkgerror= cs.run(tradius, r, x, y, x0, y0, Epn, Z, eff)
 	
 	return expectedcount, expectedbkgcount, dcerror, bkgerror
 	
@@ -34,13 +36,33 @@ def expected(x,y,Epn,Z, height, x0,y0, category, raweff, phi, epsilon):
 def run(x,y,Epn,Z, height, x0,y0, count, bkgcount, category, eff, phi, epsilon):
 	N = int(count)
 	Nbkg = int(bkgcount)
-	expectedcount, expectedbkgcount, dcerror, bkgerror = expected(x,y,Epn,Z, height, x0,y0, category, eff, phi, epsilon)
+	expectedcount, expectedbkgcount, dcerror, bkgerror = expected(x,y,Epn,Z, height, x0,y0, category, eff, phi, epsilon)\
 	
-	if N == 0:
-		pass
-	else:
-		minusll = ((N-expectedcount)/(dcerror*N))**2
+	minusll=0
+	
+	if expectedcount < 0:
+		expectedcount = 0
 		
-	minusll += ((Nbkg-expectedbkgcount)/(bkgerror*Nbkg))**2
+	if expectedbkgcount < 0:
+		expectedbkgcount = 0
+	dcsigma = dcerror*(expectedcount + 0.0001)
+	bkgsigma = bkgerror*(expectedbkgcount+0.0001)
+	
+		
+	#~ print "Likelihood", 
+	
+	if (N > 0):
+		minusll += math.log(dcsigma)
+		#~ print "DC", minusll,
+		minusll += ((N-expectedcount)/(math.sqrt(2)*dcsigma))**2
+		#~ print minusll,
+	
+	if Nbkg > 0:
+		minusll += math.log(bkgsigma)			
+		#~ print "Full", minusll,
+		minusll += ((Nbkg-expectedbkgcount)/(math.sqrt(2)*bkgsigma))**2
+		#~ print minusll,
+	
+	#~ print ""
 	
 	return minusll

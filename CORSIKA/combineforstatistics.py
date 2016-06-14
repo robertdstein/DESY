@@ -6,6 +6,9 @@ import numpy as np
 import cPickle as pickle
 from telescopeclasses import *
 from matplotlib import rc
+import matplotlib as mpl
+mpl.use('Agg')
+import matplotlib.pyplot as plt
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-jid", "--jobID", default="testdata")
@@ -294,10 +297,6 @@ for sigfit in ["rgr", None]:
 			print p+1
 		i+=1
 		
-	import matplotlib as mpl
-	mpl.use('Agg')
-	import matplotlib.pyplot as plt
-	
 	for i in [0, 1]:
 		if hessstatus[i]:
 			

@@ -58,6 +58,6 @@ def run(tradius, r, rayxpos, rayypos, xpos, ypos, Epn, Z, eff):
 	rawsigcount = rawarea * sigdensity
 	rawbkgcount = rawarea * bkgdensity
 
-	print int(rawsigcount), int(rawbkgcount), sigerror, bkgerror
-	return int(rawsigcount), int(rawbkgcount), sigerror, bkgerror
+	#~ print int(rawsigcount), int(rawbkgcount), sigerror, bkgerror
+	return rawsigcount, rawbkgcount, sigerror, bkgerror
 					

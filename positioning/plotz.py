@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import scipy.stats
 
-def run(source, detectorcount, mindetections, graph, cuts=None, allcounts=None):
+def run(source, detectorcount, mindetections, graph, cuts=None):
 
 	i=1
 
@@ -41,16 +41,11 @@ def run(source, detectorcount, mindetections, graph, cuts=None, allcounts=None):
 		k=0
 		
 		for j in range (detectorcount, mindetections -1, -1):
-			
-			if allcounts != None:
-				count = allcounts[detectorcount-j]
-				testcount = int(float(count)/4.) 
-			else:
-				testcount = 0
-				
+						
 			with open("/d6/rstein/Hamburg-Cosmic-Rays/positioning/reconstructeddata/"+ str(source) +".csv", 'rb') as csvfile:
 				reader = csv.reader(csvfile, delimiter=',', quotechar='|')
 				specificcount = []
+				differences = []
 				
 				full=0
 				passing=0
@@ -60,7 +55,7 @@ def run(source, detectorcount, mindetections, graph, cuts=None, allcounts=None):
 				bdtmin = cuts[k]
 
 				for row in reader:
-					if i < (2*testcount):
+					if i < 0:
 						i += 1
 					else:
 						detections = row[0]
@@ -85,6 +80,8 @@ def run(source, detectorcount, mindetections, graph, cuts=None, allcounts=None):
 									if float(classifier) < float(classifiermax):
 										passing += 1
 										specificcount.append(float(reconZ))
+										diff = math.fabs(float(reconZ)-26)
+										differences.append(diff)
 											
 				label = str(j) + " detections"
 
@@ -103,23 +100,14 @@ def run(source, detectorcount, mindetections, graph, cuts=None, allcounts=None):
 				
 				if float(total) > float(0):
 				
-					specificcount.sort()
+					meanz = np.mean(specificcount)
+					meansigma = np.mean(differences)
 					
-					interval = (float(0.5)/float(total))
-					probinside = 1-interval
-					sigmas = scipy.stats.norm(0, 1).ppf(probinside)
-					
-					lowerz = specificcount[0]
-					meanz = specificcount[int(total*0.5)]
-					upperz = specificcount[total-1]
-					meansigma = (float(upperz)-float(lowerz))/(2*sigmas)
-					
-					info += ('Lower bound = ' + str(lowerz) + " \n")
-					info += ('Upper bound = ' + str(upperz) + " \n")
-					info += ('Mean = ' + str(meanz) + " \n")
+					info += ('Mean = ' + str('{0:.2f}'.format(meanz)) + " \n")
 					
 					if float(meansigma) == float(0):
-						limitsigma = float(1)/(2*sigmas)
+						differences.append(1)
+						limitsigma = np.mean(differences)
 						info += ('Sigma < ' + str(limitsigma) + "\n")
 
 					else:
@@ -127,8 +115,10 @@ def run(source, detectorcount, mindetections, graph, cuts=None, allcounts=None):
 				
 				info += "\n"
 				
+				
 			k +=1
-					
+		print info	
+				
 		if fullcount != []:
 			
 			n, bins, _ = plt.hist(fullcount, bins=bincount, histtype='bar', range=zrange, label=labels, stacked=True)
@@ -161,7 +151,7 @@ def run(source, detectorcount, mindetections, graph, cuts=None, allcounts=None):
 	figure = plt.gcf() # get current figure
 	figure.set_size_inches(20, 15)
 	
-	plt.annotate(info, xy=(0.7, 0.4), xycoords="axes fraction",  fontsize=10)
+	plt.annotate(info, xy=(0.8, 0.8), xycoords="axes fraction",  fontsize=10)
 	plt.suptitle("True Z reconstruction", fontsize=20)
 	plt.legend()
 	

@@ -45,20 +45,21 @@ def min(a, gridwidth, eff, phi, epsilon, detections):
 	xsites = np.linspace(-150, 150, int(gridwidth))
 	ysites = np.linspace(-150, 150, int(gridwidth))
 	
-	eraw = np.linspace(0, 1, num=25)
+	eraw = np.linspace(0, 1, num=3)
 	R = eraw*0.0178
 	evals = ((1.7*R/321)+(3571**-1.7))**(-1/1.7)
 	hvals = np.linspace(20000, 30000, num=3)
+	hvals = [25000]
 	
 	zvalues = np.arange(20.,33.)
 	
-	minangle = 0
+	minangle = 0.0
 	j = 0
 	
-	while j < 8:
+	while j < 5:
 		coordinates = []
 		j = 0
-		minangle += 0.5
+		minangle += 0.1
 		for x in xsites:
 				for y in ysites:
 						n=0
@@ -66,7 +67,7 @@ def min(a, gridwidth, eff, phi, epsilon, detections):
 						for detection in a:
 							x0 = float(detection[0])
 							y0 = float(detection[1])
-							recordeddangle = float(detection[4])
+							recordeddangle = float(detection[5])
 							
 							dangle = ce.dangle(x0, y0, x, y)
 							
@@ -76,7 +77,7 @@ def min(a, gridwidth, eff, phi, epsilon, detections):
 						if n > (len(a)-1):
 							coordinates.append([x,y])
 							j+=1
-		if minangle > 10:
+		if minangle > 20:
 			j=10
 							
 	ehvals=[]

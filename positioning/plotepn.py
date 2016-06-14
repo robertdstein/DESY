@@ -53,7 +53,7 @@ def run(source, detectorcount, mindetections, graph, cuts, allcounts=None):
 						if float(bdtmin) < float(BDT):
 							if float(classifier) < float(1.5):
 								passing += 1
-								difference = (reconEPN-trueEPN)
+								difference = (reconEPN-trueEPN)/trueEPN
 								specificcount.append(difference)
 
 		total = len(specificcount)
@@ -87,9 +87,9 @@ def run(source, detectorcount, mindetections, graph, cuts, allcounts=None):
 		
 		k+=1
 	
-	plt.annotate(info, xy=(0.05, 0.4), xycoords="axes fraction",  fontsize=10)
+	plt.annotate(info, xy=(0.75, 0.4), xycoords="axes fraction",  fontsize=10)
 			
-	n, bins, _ = plt.hist(fullcount, bins=30, label=labels, histtype='bar', stacked=True)
+	n, bins, _ = plt.hist(fullcount, bins=15, label=labels, histtype='bar', stacked=True)
 	
 	mid = (bins[1:] + bins[:-1])*0.5
 	if isinstance(n[0], np.ndarray):
@@ -113,7 +113,7 @@ def run(source, detectorcount, mindetections, graph, cuts, allcounts=None):
 	plt.ylim(0, uplim)
 
 	plt.ylabel("Count")
-	plt.xlabel("Diference from True EPN (GeV)")
+	plt.xlabel("Frasctional Error in Epn")
 	plt.title("Reconstruction of Energy per Nucleon")
 	plt.legend()
 	

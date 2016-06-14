@@ -36,7 +36,7 @@ def run(layout, rayxpos, rayypos, epsilon, rayradius, Epn, Z, height, phi, theta
 		print "Rayradius is", rayradius
 
 	if rayradius > 0:
-		with open("/d6/rstein/Hamburg-Cosmic-Rays/positioning/orientations/"+ layout +".csv", 'rb') as csvfile:
+		with open("/nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/positioning/orientations/"+ layout +".csv", 'rb') as csvfile:
 			reader = csv.reader(csvfile, delimiter=',', quotechar='|')
 
 			for row in reader:
@@ -48,11 +48,11 @@ def run(layout, rayxpos, rayypos, epsilon, rayradius, Epn, Z, height, phi, theta
 				tradius = tr.run(category)
 				r, dangle = ce.run(rayradius, theta, phi, epsilon, xpos, ypos, rayxpos, rayypos)
 				sigcount, bkgcount, sigerror, bkgerror= cs.run(tradius, r, rayxpos, rayypos, xpos, ypos, Epn, Z, eff)
-				print "Height", height, "Rmax", r, "Signal", sigcount,"Background", bkgcount
+				#~ print "Height", height, "Rmax", r, "Distance", math.sqrt((rayxpos - xpos)**2 + (rayypos - ypos)**2),
 				
-				recorded = random.gauss(sigcount, sigerror)
+				recorded = int(random.gauss(sigcount, sigerror*sigcount))
 				
-				bkgrecorded = random.gauss(bkgcount, bkgerror)
+				bkgrecorded = int(random.gauss(bkgcount, bkgerror*bkgcount))
 				
 				recordeddangle = random.gauss(dangle, 0.01)
 				
@@ -65,8 +65,7 @@ def run(layout, rayxpos, rayypos, epsilon, rayradius, Epn, Z, height, phi, theta
 				else:
 					recordedaltitude = "None"
 
-				thresholdfrac = ld.trigger()
-				threshold = float(bkgcount)*thresholdfrac
+				threshold = ld.trigger()
 				
 				if graph:
 					if float(recorded) > 0:
@@ -82,15 +81,21 @@ def run(layout, rayxpos, rayypos, epsilon, rayradius, Epn, Z, height, phi, theta
 						print "Signal accounts for", sigcount, "Background accounts for", bkgcount
 				
 				
-				if float(sigcount) > float(threshold):
+				if float(recorded) > float(threshold):
 					j+=1
 					Trigger=True
 					if text:
 						print j-1, "Trigger Warning!",  recorded, area, recondensity, threshold
-				
-				elif text:
-					print j-1, "No Trigger!",  recorded, area, recondensity, threshold
+				else:
+					recorded=0
+					if text:
+						print j-1, "No Trigger!",  recorded, area, recondensity, threshold
+						
+				if float(bkgrecorded) < float(threshold):
+					bkgrecorded=0
 					
+				#~ print  "Signal", sigcount,"Recorded Signal", recorded, "Background", bkgcount,"Recorded Background", bkgrecorded, "multiplicity", j-1	
+				
 				entry.append([int(metThreshold+1), category, xpos, ypos, recorded, bkgrecorded, rayxpos, rayypos, Epn, Z, height, phi, epsilon, Trigger, recordeddangle, recordedaltitude])
 				
 				if float(j) > float(mincount):

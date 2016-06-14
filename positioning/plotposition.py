@@ -3,20 +3,13 @@ import csv
 import numpy as np
 import matplotlib.pyplot as plt
 
-def run(source, detectorcount, mindetections, graph, cuts, allcounts=None):
+def run(source, detectorcount, mindetections, graph, cuts):
 	fullcount=[]
 	labels=[]
 	info = ""
 	k=0
 	for j in range (detectorcount, mindetections -1, -1):
 		specificcount=[]
-		
-		if allcounts != None:
-			count = allcounts[detectorcount-j]
-			testcount = int(float(count)/4.) 
-					
-		else:
-			testcount = 0
 		
 		with open("/d6/rstein/Hamburg-Cosmic-Rays/positioning/reconstructeddata/"+ str(source) +".csv", 'rb') as csvfile:
 			reader = csv.reader(csvfile, delimiter=',', quotechar='|')
@@ -30,7 +23,7 @@ def run(source, detectorcount, mindetections, graph, cuts, allcounts=None):
 			bdtmin = cuts[k]
 
 			for row in reader:
-				if i < (2*testcount):
+				if i < 0:
 					i += 1
 				else:
 					detections = row[0]
@@ -84,7 +77,7 @@ def run(source, detectorcount, mindetections, graph, cuts, allcounts=None):
 	
 		k +=1
 	
-	plt.annotate(info, xy=(0.6, 0.3), xycoords="axes fraction",  fontsize=15)
+	plt.annotate(info, xy=(0.8, 0.6), xycoords="axes fraction",  fontsize=15)
 	
 	n, bins, _ = plt.hist(fullcount, bins=30, range=[0,30], label=labels, histtype='bar', stacked=True)
 

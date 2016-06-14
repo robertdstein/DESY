@@ -47,6 +47,7 @@ for k in range(3):
 	sigmas=[]
 
 	Avalues=[]
+	Aerrors=[]
 
 	for energy in data:
 		jobID= str(energy) + "tev-lpdfull"
@@ -123,11 +124,13 @@ for k in range(3):
 				sigs.append(logval)
 				
 			if k==0:			
-				A, logC = np.polyfit(truedistances[index], sigs, 1)
+				[A, logC], cov = np.polyfit(x=truedistances[index], y=sigs, deg=1, cov=True)
 				C = math.exp(logC)
-				print A, logC, C, C/(energy**2)
+				Avar = math.sqrt(cov[0][0])
+				print A, logC, C, C/(energy**2), cov, Avar
 				
 				Avalues.append(A)
+				Aerrors.append(Avar)
 			
 			elif k==1:
 				logC=np.mean(s)
@@ -246,7 +249,7 @@ for k in range(3):
 		def Afit(x):
 			return Am*x + Ac
 		plt.subplot(2,1,1)
-		plt.scatter(data, Avalues)
+		plt.errorbar(data, Avalues, yerr=Aerrors, fmt='o')
 		plt.xlabel("Energy (Tev)")
 		plt.ylabel("Fitted Exponent")
 		

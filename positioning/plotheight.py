@@ -53,7 +53,7 @@ def run(source, detectorcount, mindetections, graph, cuts, allcounts=None):
 						if float(bdtmin) < float(BDT):
 							if float(classifier) < float(1.5):
 								passing += 1
-								difference= float(reconHeight) - float(trueHeight)
+								difference= (float(reconHeight) - float(trueHeight))/float(trueHeight)
 								specificcount.append(difference)
 
 		fullcount.append(specificcount)
@@ -86,9 +86,9 @@ def run(source, detectorcount, mindetections, graph, cuts, allcounts=None):
 	
 		k +=1
 	
-	plt.annotate(info, xy=(0.1, 0.4), xycoords="axes fraction",  fontsize=10)
+	plt.annotate(info, xy=(0.8, 0.4), xycoords="axes fraction",  fontsize=10)
 	
-	n, bins, _ = plt.hist(fullcount, bins=15, range=[-12000,3000], label=labels, histtype='bar', stacked=True)
+	n, bins, _ = plt.hist(fullcount, bins=15, label=labels, histtype='bar', stacked=True)
 	
 	mid = (bins[1:] + bins[:-1])*0.5
 	if isinstance(n[0], np.ndarray):
@@ -111,7 +111,7 @@ def run(source, detectorcount, mindetections, graph, cuts, allcounts=None):
 	
 	plt.ylim(0, uplim)
 
-	plt.xlabel("Distance from True Height")
+	plt.xlabel("Fractional Height Error")
 	plt.ylabel("Count")
 	plt.title("Height Reconstruction")
 	plt.legend()

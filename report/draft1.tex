@@ -2,7 +2,7 @@
 \usepackage{graphicx}
 \graphicspath{ {graphs/} }
 \usepackage{geometry}
-\geometry{a4paper, portrait, margin=1.0in}
+\geometry{a4paper, portrait, margin=1.5in}
 \usepackage{gensymb}
 \usepackage{booktabs}
 \begin{document}
@@ -122,9 +122,11 @@ The Cherenkov Light, mostly emitted in the visible blue part of the EM spectrum,
 \section{LPD Event Reconstruction}
 
 \subsection{Log Likelihood Minimisation}
-In order to fully reconstruct an event, we need to find the x/y core position, the Energy per Nucleon, the first interaction height and the charge. However, if one telescope in a five-telescope array does not observe DC light, this data point can be used to constrain the core position. Thus, for the LDF method to be applied, we require a minimum of five telescopes, four or more of which must image the DC light. We consider the amount of DC light that each telescope receives to be Poissonian \[  P_{i} ( N_{i, Received} \mid X, Y, Z, height, Epn )  =  \frac{ e^{- \lambda_{i} } \times \lambda_{i} ^{N_{i}} }{N_{i}!} \]
+In order to fully reconstruct an event, we need to find the x/y core position, the Energy per Nucleon, the first interaction height and the charge. However, if one telescope in a five-telescope array does not observe DC light, this data point can be used to constrain the core position. Thus, for the LDF method to be applied, we require a minimum of five telescopes, four or more of which must image the DC light. We consider the amount of DC light that each telescope receives to be Gaussian, with an expectation of $\mu(X, Y, Z, height, Epn)$ and a standard deviation of $\sigma(\mu)$.
 
-In order to reduce computing time, we can use Stirling's Approximation $\ln( N! )  \approx  N \ln(N) - N + \frac{1}{2} \ln(2 \pi N)$. Pure night sky background requires that there be more that X photons in a DC pixel, and for this Stirling's Approximation has an error of just Y?. We then minimise the Log Likelihood function \[ - \ln(L) = - \sum_{i=1}^{n} \ln(P_{i}) \approx  \sum_{i=1}^{n} [\lambda _{i} - N_{i} \ln(\lambda _{i}) + N_{i} \ln(N_{i}) - N_{i} + \frac{1}{2} \ln(2 \pi N_{i})]  \] where n is the total number of telescopes in the array.
+\[  P_{i} ( N_{i, Received} \mid X, Y, Z, height, Epn )  =  \frac{1}{\sqrt{2 \sigma^{2} \pi}} \exp(-\frac{(N_{i, Received} - \mu)^{2}}{2 \sigma^{2}}) \]. 
+
+We then minimise the Log Likelihood function, assuming n is the total number of telescopes in the array. \[ - \ln(L) = - \sum_{i=1}^{n} \ln(P_{i}) =  \sum_{i=1}^{n} [ \frac{1}{2}\ln(2 \pi) + \ln(\sigma) + \frac{(N_{i, Received} - \mu)^{2}}{2 \sigma^{2}}]\] 
 
 \subsection{Extracting Charge Resolution}
 Having reconstructed many events, we can then derive the $\sigma_{Z}$ of the dataset, giving us a number to directly compare the quality of event reconstruction. However, a simple Gaussian 68\% method will yield only half integer values of $\sigma_{Z}$ and very frequently 0. This will be unhelpful for comparisons of minor modifications of reconstruction methods.
@@ -408,14 +410,6 @@ The same exercise was repeated using the value of $DC_{Count}$ for the BDT candi
 \end{center}
 \end{figure}
 
-\begin{figure}
-\begin{center}
-\includegraphics[width=\textwidth]{corsikalpd2}
-\caption{The same curves in Figure \ref{fig:corsikalpd1} are shown here for HESS2. Because the CT5 telescope has an area approximately six times larger than the HESS1 telescopes, the LPD is linearly scaled here by a factor of six compared to the HESS1 LPD. It is clear that all other methods of calculating the LPD underestimate the value of $True_{DC}$, as seen in the top plot.}
-\label{fig:corsikalpd2}
-\end{center}
-\end{figure}
-
 \subsection{Regression BDT for $DC_{Count}$}
 In order to reduce the LPD error, an alternative method of calculating the DC signal was developed. Supervised machine learning was again used to solve the problem, through training of a BDT Regressor. As with Classifiers, Regressors are initially trained using individual data entries. Instead of the true classes for the entries, regressors require the true value of a continuous variable. Once trained, the Regressor can be used to predict a value of the variable for a given data entry. In this case, the Regressor is trained to estimate the quantity of DC light $True_{DC}$ for a given pixel. Once a DC pixel has been identified, the Regressor is applied to it. The Regressor returns the calculated value of $DC_{rgr}$, an alternative estimate of the DC signal. 
 
@@ -499,14 +493,42 @@ For HESS2, the mean was 0.22 while the median was -0.09, leading to an even more
 
 We can parameterise the error by considering the energy and distance to the core for a selection of DC pixels. We find that, for a fixed energy...
 
-56 and 26 teV comparison. Sigma is a function of E???
+\begin{figure}
+\begin{center}
+\includegraphics[width=\textwidth]{DCcounterrorhess1rgrbigtestdata}
+\caption{The difference between true and reconstructed DC signal for events passing the cuts is shown in the top left. In the top right the same is shown for events which were rejected. The true DC signals for events which passed the cuts is plotted against the reconstructed signals in the lower left, and for rejected events in the lower right. As in \ref{fig:cutdistribution}, in all plots a green event is one in which the DC pixel has been correctly identified, while a red event is one that has been incorrectly identified.}
+\label{fig:dcdiff}
+\end{center}
+\end{figure}
 
+\subsection{Full-Shower LPD}
+Having restricted ourselves to high-multiplicity events, we reduce our data sample to mostly images in which air shower lies relatively close to the center of the telescope field of view. We can conclude that in many of our images, the air shower will lie mostly within the telescope image. In the same way as for DC light, we can look for the existence of a Characteristic LPD describing the Total Shower Intensity, where we define $I_{tot}$=Image Amplitude. The results for high-multiplicity events at various energies is shown in Figure \ref{fig:fullshowerlpd}.
 
 \begin{figure}
 \begin{center}
-\includegraphics[width=\textwidth]{DCcounterrorhess1rgr}
-\caption{The difference between true and reconstructed DC signal for events passing the cuts is shown in the top left. In the top right the same is shown for events which were rejected. The true DC signals for events which passed the cuts is plotted against the reconstructed signals in the lower left, and for rejected events in the lower right. As in \ref{fig:cutdistribution}, in all plots a green event is one in which the DC pixel has been correctly identified, while a red event is one that has been incorrectly identified.}
-\label{fig:dcdiff}
+\includegraphics[width=\textwidth]{corsikafullshowerlpd}
+\caption{The distribution of HESS 1 Image Amplitude is shown for various energies in the range 36-96 TeV. In each case, the exponential fit is indicated, along with the fractional deviation band in green.}
+\label{fig:fullshowerlpd}
+\end{center}
+\end{figure}
+
+For each energy, a clear exponential decay in Image Amplitude is observed. The data is fitted with a line of the form $y_{i} (x) =A_{i} \exp (K_{i} x)$. The fractional deviation from the fit is found in an analogous way to the DC LPD found in Figure \ref{fig:corsikalpd1}. Across all Energies, the mean fractional deviation from the fitted exponential was roughly 0.15. For the purposes of reconstruction, an exponential decay with a varying exponent and amplitude will not be particularly useful, because there are two degrees of freedom.
+
+In order to overcome this, we can instead parameterise the exponential fits. Across all energies, a fit is made and the exponent coefficients are recorded. A plot of the $K_{i}$ exponent values is then made, as shown in Figure  \ref{fig:powerlawlpd}. The K coefficients follow a clear linear distribution, to which a line is fitted. We obtain an equation to determine the exponent of each power law. 
+
+\[ K_{i} = K(E_{i}) = -0.00004 E_{i} + -0.00692 \]
+
+Having retrieved a law for K, each dataset is then fitted a second time. The exponent is determined by the Energy, leaving only one degree of freedom for the fit. The fitted Amplitudes $A_{i}$ are then recorded, and are also plotted in Figure \ref{fig:powerlawlpd}. A clear linear relationship is again observed. A straight line is fitted to the data, and we retrieve a second relationship describing the amplitude as a function of the Energy.
+
+\[ A_{i} = A(E_{i}) = 9.4 E_{i} + -204.1 \]
+
+Through combined use of the two equations, we can parameterise the entire Full-Shower LPD using only the Energy. These fitted LPDs are also plotted in Figure \ref{fig:fullshowerlpd}. The fractional deviation bands are also shown in green, with a mean fractional deviation of roughly 0.15 across the energies. The Full Shower LPDs continue to be large enough to trigger telescopes for several hundred meters. It is thus likely that, for high-multiplicity events, we will obtain an additional four or five data points from the Full Shower LPD. Although the Full Shower LPDs do not depend upon the charge of the primary particle, they will still enable the core position and energy to be effectively constrained. This in turn should reduce the uncertainty when determining the charge of the primary particle. 
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=\textwidth]{lpdpowerlaw}
+\caption{The fitted exponents $K_{i}$ are shown above, along with the equation of the Fitted Exponent Line K(E). Once the fitted exponents are used, the resultant amplitudes $A_{i}$ are shown below, along with the fitted Amplitude Line A(E).}
+\label{fig:powerlawlpd}
 \end{center}
 \end{figure}
 
@@ -525,14 +547,6 @@ The mean first interaction height for all Cherenkov Emitting Cosmic Rays in the 
 
 \subsection{Extended Air Shower Background}
 A typical HESS image is shown in \ref{fig:hess}, with the DC pixel visible. For HESS cameras, the Extended Air Shower (EAS) produced after the first interaction of the Cosmic Ray overlaps the DC pixel and thus provides background in the LDF. As the Energy of the Cosmic Ray increases, the EAS speads over a larger angular area, and at smaller radii, the EAS-DC-shower direction axis contracts, leading to more overlap. Thus the background in the DC pixel increases with decreasing radius and increasing Energy. In addition, we have a fixed night sky background with 7 photons $m^{-2}$. We thus parameterise the background with \[ \rho_{bkg}  = 7 + 5E\]. The modeled background LPD is shown as part of REF. It begins to dominate above roughly 1 TeV per Nucleon, particularly in the case of smaller radii. 
-
-\begin{figure}
-\begin{center}
-\includegraphics[width=0.9\textwidth]{hess}
-\caption{A 4-camera HESS event. The shower direction is marked with a white cross, and the DC pixel is indicated with a white arrow. The shower axis passes through the shower direction, the DC pixel, and the center of the Extensive Air Shower region lying beyond the DC pixel.}
-\label{fig:hess}
-\end{center}
-\end{figure}
 
 \subsection{Reconstructed Charge Resolution}
 In the preliminary HESS simulation, it was found that the 4 telescope event reconstruction had a charge resolution of $\sigma_{Z} = 1.4$. However, requiring that the BDT signal probability satisfied $P > 0.81$ removed $75 \%$ of events, while reducing the Charge resolution to $\sigma_{Z} = 0.9$ . With this cut, core position resolution was $d \approx 1.4 m $. For 5 telescope events, it was found that the charge resolution was also $\sigma_{Z} = 1.4$. However, requiring that the signal probability satisfied $P > 0.05$ removed $53 \%$ of events, including all wrongly reconstructed ones. This placed an upper limit on the charge resolution of $\sigma_{Z} < 0.35$ . With this cut, core position resolution was $d \approx 0.8 m $.

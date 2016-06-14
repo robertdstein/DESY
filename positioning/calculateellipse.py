@@ -36,11 +36,10 @@ def coeff(radius, theta, phi, epsilon):
 	major = 0.5*(ra+rp)
 	minor = math.sqrt(ra*rp)
 
-	if major < minor:
-		e = 0
-	
-	else:
+	if major > minor > 0:
 		e = math.sqrt(1-((minor/major)**2))
+	else:
+		e = 0
 	
 	return ra, rp, major, minor, e
 

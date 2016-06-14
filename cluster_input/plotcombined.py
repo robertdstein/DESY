@@ -36,19 +36,19 @@ with open(afspath + "/orientations/"+ orientation +".csv", 'rb') as csvfile:
 		rowcount +=1
 		
 reconstructdata = batchname + "_combined"
+traindata = batchname + "_trainingset"
 
-allcounts = cc.run(reconstructdata, rowcount, int(mincount))
-print allcounts
+#~ allcounts = cc.run(reconstructdata, rowcount, int(mincount))
+#~ print "All Counts", allcounts
 
-
-BDT.run(reconstructdata, rowcount, int(mincount), allcounts)
-
-llcuts = oz.run(reconstructdata + "_BDT", rowcount, int(mincount), graph=False, allcounts=allcounts)
-print llcuts
-pz.run(reconstructdata + "_BDT", rowcount, int(mincount), graph=False, cuts=None, allcounts=allcounts)	
-
-pl.run(reconstructdata+ "_BDT", rowcount, int(mincount), graph=False, cuts=llcuts, allcounts=allcounts)
-pz.run(reconstructdata+ "_BDT", rowcount, int(mincount), graph=False, cuts=llcuts, allcounts=allcounts)
-pp.run(reconstructdata+ "_BDT", rowcount, int(mincount), graph=False, cuts=llcuts, allcounts=allcounts)
-pe.run(reconstructdata+ "_BDT", rowcount, int(mincount), graph=False, cuts=llcuts, allcounts=allcounts)
-ph.run(reconstructdata+ "_BDT", rowcount, int(mincount), graph=False, cuts=llcuts, allcounts=allcounts)
+#~ BDT.run(traindata, reconstructdata, rowcount, int(mincount))
+#~ 
+#~ llcuts = oz.run(reconstructdata + "_BDT", rowcount, int(mincount), graph=False)
+#~ print "Log Likelihood Cuts", llcuts
+#~ pz.run(reconstructdata + "_BDT", rowcount, int(mincount), graph=False, cuts=None)	
+llcuts=[0,0]
+pl.run(reconstructdata+ "_BDT", rowcount, int(mincount), graph=False, cuts=llcuts)
+pz.run(reconstructdata+ "_BDT", rowcount, int(mincount), graph=False, cuts=llcuts)
+pp.run(reconstructdata+ "_BDT", rowcount, int(mincount), graph=False, cuts=llcuts)
+pe.run(reconstructdata+ "_BDT", rowcount, int(mincount), graph=False, cuts=llcuts)
+ph.run(reconstructdata+ "_BDT", rowcount, int(mincount), graph=False, cuts=llcuts)

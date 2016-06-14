@@ -19,23 +19,21 @@ def run(distance, Epn, Z, rmax, eff, N=56):
 		return ((Z/26)**2)*(5.23*(math.exp(0.013*distance))-6.508)
 		
 	def f2(distance):
-		return f1(rmax)*math.exp(-rmax-(0.06*distance))
+		return f1(rmax)*math.exp(-0.06*(distance-rmax))
 	
 	if distance < rmax:
 		density = f1(distance)
-		dcerror=0.19
+		dcerror=0.31
 		if density < 0:
 			density=0
 	else:
 		density = f2(distance)
-		dcerror=0.85
-
-	print "Density", density, "Distance", distance 
+		dcerror=1.31
 
    	return [density, dcerror], [bkgd, bkgerror]
    	
 def trigger():
-	return 1.5
+	return 20
 	
 def base(eff):
 	return nsbkg * eff

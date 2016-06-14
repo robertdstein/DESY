@@ -6,10 +6,10 @@ import loglikelihood as ll
 import calculateellipse as ce
 
 def run(source, outputfile, detectorcount, rgw, eff):
-	with open("/d6/rstein/Hamburg-Cosmic-Rays/positioning/reconstructeddata/" + str(outputfile) + ".csv", 'wb') as csvout:
+	with open("/nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/positioning/reconstructeddata/" + str(outputfile) + ".csv", 'wb') as csvout:
 		writer = csv.writer(csvout, delimiter=',', quotechar='|')
 		writer.writerow(["Detections","X","Y","Energy Per Nucleon","Z","Height","True X","True Y","True Energy per nucleon","True Z","True Height", "Phi", "Epsilon", "Guess Log Likelihood", "True Log Likelihood"])
-		with open("/d6/rstein/Hamburg-Cosmic-Rays/positioning/data/"+ str(source) +".csv", 'rb') as csvfile:
+		with open("/nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/positioning/data/"+ str(source) +".csv", 'rb') as csvfile:
 			reader = csv.reader(csvfile, delimiter=',', quotechar='|')
 			i = 0
 			for row in reader:
@@ -23,10 +23,10 @@ def run(source, outputfile, detectorcount, rgw, eff):
 						a += [[row[base], row[base+1], row[base+2], row[base+3], row[base+4], row[base+5], row[base+6]]]
 					lim = lena*detectorcount
 					
-					phi = float(row[lim+lena])
+					phi = float(row[lim+lena-1])
 					smearphi = phi + (math.radians(0.5)*(random.random()-0.5))
 
-					epsilon = float(row[lim+lena+1])
+					epsilon = float(row[lim+lena])
 					smearepsilon = epsilon + (math.radians(0.5)*(random.random()-0.5))
 					
 					true = [row[lim], row[lim+1], row[lim+2], row[lim+3], row[lim+4], math.degrees(phi), math.degrees(epsilon)]

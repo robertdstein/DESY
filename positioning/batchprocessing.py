@@ -4,7 +4,7 @@ import numpy as np
 import telescoperadius as tr
 
 def run(source, outputfile, mincount, detectorcount, text=False):
-	with open("/d6/rstein/Hamburg-Cosmic-Rays/positioning/data/" + str(outputfile) + ".csv", 'wb') as csvout:
+	with open("/nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/positioning/data/" + str(outputfile) + ".csv", 'wb') as csvout:
 		writer = csv.writer(csvout, delimiter=',', quotechar='|')
 		header = []
 		for i in range (1, detectorcount + 1):
@@ -27,7 +27,7 @@ def run(source, outputfile, mincount, detectorcount, text=False):
 		header.append("Theta")
 		writer.writerow(header)
 	
-		with open("/d6/rstein/Hamburg-Cosmic-Rays/positioning/output/"+ str(source) +".csv", 'rb') as csvfile:
+		with open("/nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/positioning/output/"+ str(source) +".csv", 'rb') as csvfile:
 			reader = csv.reader(csvfile, delimiter=',', quotechar='|')
 			i = 0
 			j = 0

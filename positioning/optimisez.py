@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
 import scipy.stats
 
-def run(source, detectorcount, mindetections, graph=False, allcounts=None):
+def run(source, detectorcount, mindetections, graph=False):
 
 	plt.figure()
 
@@ -13,111 +13,119 @@ def run(source, detectorcount, mindetections, graph=False, allcounts=None):
 
 	Z = 26
 	
-	BDTrange = np.linspace(0.0, 1.0, 1001)
+	BDTrange = np.linspace(-0.01, 1.0, 1001)
 	annotation = ""
 	
 	optimumcuts = []
 	
 	for j in range (detectorcount, mindetections -1, -1):
 			
-		count = allcounts[detectorcount-j]
+		print "Ndetections", j
+		lowestsigma = 5
+		optimumbdt = 0.0
+		optimumpassing = 1.0
 		
-		testcount = int(float(count)/4.) 
+		meansigmas=[]
 		
-		if int(testcount) > int(1):
+		bdtcuts =[]
+		
+		frac=0
+		
+		
+		for i in range(0, len(BDTrange)):
+			BDTcut = BDTrange[i]
 			
-			lowestsigma = 5
-			optimumbdt = 0.0
-			optimumpassing = 1.0
-			
-			meansigmas=[]
-			
-			bdtcuts =[]
-			
-			frac=0
-			
-			
-			for i in range(0, len(BDTrange)):
-				BDTcut = BDTrange[i]
+			currentsigma = 5
+			specificcount = []
+			sqvals=[]
+			differences=[]
+			with open("/d6/rstein/Hamburg-Cosmic-Rays/positioning/reconstructeddata/"+ str(source) +".csv", 'rb') as csvfile:
+				reader = csv.reader(csvfile, delimiter=',', quotechar='|')
+				full = 0
+				passing = 0
 				
-				currentsigma = 5
-				specificcount = []	
-				with open("/d6/rstein/Hamburg-Cosmic-Rays/positioning/reconstructeddata/"+ str(source) +".csv", 'rb') as csvfile:
-					reader = csv.reader(csvfile, delimiter=',', quotechar='|')
-					full = 0
-					passing = 0
-					
-					i=-1
-					for row in reader:
-						if testcount < i < (2*testcount):
-							detections = row[0]
-							reconx = row[1]
-							recony = row[2]
-							reconEPN = row[3]
-							reconZ = row[4]
-							reconHeight = row[5]
-							truex = row[6]
-							truey = row[7]
-							trueEPN = row[8]
-							trueZ = row[9]
-							trueHeight = row[10]
-							likelihood = row[13]
-							classifier=float(row[15])
-							BDT = float(row[16])
-							
-							if float(detections) == float(j):
-								if int(Z) == int(trueZ):
-									full += 1
-									if float(BDTcut) < float(BDT):
-										if float(classifier) < 2.5:
-											passing += 1
-											specificcount.append(float(reconZ))
+				i=-1
+				for row in reader:
+					if i == -1:
+						i=1
+					else:
+						detections = row[0]
+						reconx = row[1]
+						recony = row[2]
+						reconEPN = row[3]
+						reconZ = row[4]
+						reconHeight = row[5]
+						truex = row[6]
+						truey = row[7]
+						trueEPN = row[8]
+						trueZ = row[9]
+						trueHeight = row[10]
+						likelihood = row[13]
+						classifier=row[15]
+						BDT = float(row[16])
+						
+						if float(detections) == float(j):
+							if int(Z) == int(trueZ):
+								full += 1
+								if float(BDTcut) < float(BDT):
+									passing += 1
+									specificcount.append(float(reconZ))
+									diff = math.fabs(float(reconZ)-26)
+									sqvals.append(float(reconZ)**2)
+									differences.append(diff)
 						
 						else:
 							i += 1
-										
-					line = "Detections = " + str(j)
-					
-					total = passing
-					
-					if total > 0:
-					
-						frac = float(passing)/float(full)
-						
-						if float(frac) > float(0.05):
-							specificcount.sort()
-							
-							interval = (float(0.5)/float(total))
-							probinside = 1-interval
-							sigmas = scipy.stats.norm(0, 1).ppf(probinside)
-							
-							lowerz = specificcount[0]
-							upperz = specificcount[total-1]
-							meansigma = (float(upperz)-float(lowerz))/(2*sigmas)
-							
-							bdtcuts.append(BDTcut)
-							meansigmas.append(meansigma)
-								
-							if float(lowerz) > float(26):
-								pass
-							
-							elif float(upperz) < float(26):
-								pass
-						
-							elif float(meansigma) < float(lowestsigma):
-								lowestsigma=meansigma
-								optimumbdt=BDTcut
-								optimumpassing = passing
-								
-			if optimumpassing > 1:
-			
-				plt.plot(bdtcuts, meansigmas, label=line)
+									
+				line = "Detections = " + str(j)
 				
-				optimumfrac = float(optimumpassing)/float(full)
+				total = passing
+				
+				if total > 0:
+				
+					frac = float(passing)/float(full)
+					
+					if float(frac) > float(0.001):
+						#~ specificcount.sort()
+						#~ 
+						#~ interval = (float(0.5)/float(total))
+						#~ probinside = 1-interval
+						#~ sigmas = scipy.stats.norm(0, 1).ppf(probinside)
+						#~ 
+						#~ lowerz = specificcount[0]
+						#~ upperz = specificcount[total-1]
+						#~ lowerinteger = int(0.16*total)
+						#~ upperinteger = int(0.84*total)
+						#~ integer68 = int(0.68*total)
+				#~ 
+						#~ lowerz = specificcount[lowerinteger]
+						#~ upperz = specificcount[upperinteger]
+						#~ meansigma = (float(upperz)-float(lowerz))/(2*sigmas)
+						#~ meansigma = 0.5*(upperz-lowerz)
+						
+						meanz = np.mean(specificcount)
+						meanz2 = np.mean(sqvals)
+						var = meanz2 - (meanz**2)
+						
+						meansigma=math.sqrt(var)
+						
+						bdtcuts.append(BDTcut)
+						meansigmas.append(meansigma)
+							
+						if float(meansigma) < float(lowestsigma):
+							lowestsigma=meansigma
+							optimumbdt=BDTcut
+							optimumpassing = passing
+							
+		if optimumpassing > 1:
+		
+			plt.plot(bdtcuts, meansigmas, label=line)
 			
-				annotation += "Optimum Cut occurs with BDT > " + str(optimumbdt)+ " and with " + str(j) + " detections \n"
-				annotation += "This leaves " + str(optimumpassing) + " events , a fraction of " + str(optimumfrac) + "\n \n"
-			
+			optimumfrac = float(optimumpassing)/float(full)
+		
+			annotation += "Optimum Cut occurs with BDT > " + str(optimumbdt)+ " and with " + str(j) + " detections \n"
+			annotation += "This leaves " + str(optimumpassing) + " events , a fraction of " + str(optimumfrac) + "\n \n"
+		
 			optimumcuts.append(optimumbdt)
 
 		else:
@@ -132,7 +140,7 @@ def run(source, detectorcount, mindetections, graph=False, allcounts=None):
 	plt.gca().set_ylim(bottom=-0.05)
 	plt.gca().set_xlim(left=-0.05)
 	
-	plt.annotate(annotation, xy=(0.0, 0.8), xycoords="axes fraction",  fontsize=10)
+	plt.annotate(annotation, xy=(0.0, 0.9), xycoords="axes fraction",  fontsize=10)
 	
 	plt.legend()
 	plt.savefig('/d6/rstein/Hamburg-Cosmic-Rays/positioning/graphs/Zcuts.pdf')
