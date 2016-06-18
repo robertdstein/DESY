@@ -8,32 +8,12 @@ import calculateellipse as ce
 import countsimulation as cs
 import telescoperadius as tr
 				
-def run(layout, rayxpos, rayypos, epsilon, rayradius, Epn, Z, height, phi, theta, mincount, eff, metThreshold=0, graph=False, text=False):
+def run(layout, rayxpos, rayypos, epsilon, rayradius, Epn, Z, height, phi, theta, mincount, eff):
 	
 	j=1
 	
 	entry = []
 	entrytype = ""
-
-	if graph:
-		import matplotlib.pyplot as plt
-		from matplotlib.patches import Ellipse		
-		fig = plt.figure()
-		ra, rp, major, minor, e = ce.coeff(rayradius, theta, phi, epsilon)
-		distance = 0.5*(ra - rp)
-		xcentre = rayxpos - (distance*math.sin(epsilon))
-		ycentre = rayypos + (distance*math.cos(epsilon))
-		ring = Ellipse([xcentre, ycentre], width=2*minor, height=2*major, angle=math.degrees(epsilon))
-		ring.set_facecolor('b')
-		fig.gca().add_artist(ring)
-		fig.gca().plot(rayxpos,rayypos, 'wx')
-		fig.gca().plot(xcentre,ycentre, 'rx')
-	else:
-		fig=None
-	
-	if text:
-		print "Cosmic Ray centre at", rayxpos, rayypos
-		print "Rayradius is", rayradius
 
 	if rayradius > 0:
 		with open("/nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/positioning/orientations/"+ layout +".csv", 'rb') as csvfile:
@@ -48,7 +28,6 @@ def run(layout, rayxpos, rayypos, epsilon, rayradius, Epn, Z, height, phi, theta
 				tradius = tr.run(category)
 				r, dangle = ce.run(rayradius, theta, phi, epsilon, xpos, ypos, rayxpos, rayypos)
 				sigcount, bkgcount, sigerror, bkgerror= cs.run(tradius, r, rayxpos, rayypos, xpos, ypos, Epn, Z, eff)
-				#~ print "Height", height, "Rmax", r, "Distance", math.sqrt((rayxpos - xpos)**2 + (rayypos - ypos)**2),
 				
 				recorded = int(random.gauss(sigcount, sigerror*sigcount))
 				
@@ -67,29 +46,11 @@ def run(layout, rayxpos, rayypos, epsilon, rayradius, Epn, Z, height, phi, theta
 
 				threshold = ld.trigger()
 				
-				if graph:
-					if float(recorded) > 0:
-						circle = plt.Circle((xpos,ypos),tradius, color='r')
-					else:
-						circle = plt.Circle((xpos,ypos), tradius, color='k')
-					fig.gca().add_artist(circle)
-				
-				if text:
-						print "Radius of ring at this angle is", r
-						print "Position", xpos, ypos
-						print "Photon Count is", count, "smeared to", recorded
-						print "Signal accounts for", sigcount, "Background accounts for", bkgcount
-				
-				
 				if float(recorded) > float(threshold):
 					j+=1
 					Trigger=True
-					if text:
-						print j-1, "Trigger Warning!",  recorded, area, recondensity, threshold
 				else:
 					recorded=0
-					if text:
-						print j-1, "No Trigger!",  recorded, area, recondensity, threshold
 						
 				if float(bkgrecorded) < float(threshold):
 					bkgrecorded=0
@@ -106,9 +67,4 @@ def run(layout, rayxpos, rayypos, epsilon, rayradius, Epn, Z, height, phi, theta
 	else:
 		entrytype = "nonDC"
 
-	if graph:
-		plt.xlim(-200, 200)
-		plt.ylim(-200, 200)
-		plt.show()
-			
 	return entry, entrytype

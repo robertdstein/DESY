@@ -156,5 +156,3 @@ def run(eff, rowcount=5, mincount=4, text=False, graph=False, output="default", 
 	if graph:
 		plt.show()
 	plt.close()
-
-run(1)

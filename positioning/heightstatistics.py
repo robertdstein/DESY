@@ -12,6 +12,7 @@ import looptelescopes as lt
 import atmosphere as atm
 import cherenkovradius as cr
 from matplotlib.patches import Ellipse
+from classes import *
 
 def run(eff, rowcount, mincount=4, text=False, graph=False, output="default", layout="five", number=1, nh=1):
 	
@@ -91,52 +92,29 @@ def run(eff, rowcount, mincount=4, text=False, graph=False, output="default", la
 	wmT = []
 	
 	#Iterate over Energies
+	simset = simulationset(eff, layout, mincount=0)
 	
-
-	for i in range (0, int(number)):
-		
-		Rand = random.random()
-		height = atm.runheight(Rand, text)
-		
-		#As in generate.py, randomly generate all variables (expect Epn)
-		
-		xpos = (random.random()*300)-150
-		ypos = (random.random()*300)-150
+	simset.generate(number)
 	
-		Z= 26
-		
-		Re = random.random()*0.0178
-		Epn = ((1.7*Re/321)+(3571**-1.7))**(-1/1.7)
-		
-		weight = Epn ** (-1.7)
+	for sim in simset.simulations:
+		true = sim.true
+		height = true.height
+		multiplicity = int(true.truemultiplicity)
 		
 		hrange.append(height)
-	
-		zenith = random.random()*44
-	
-		phi = math.radians(68+zenith)
-	
-		epsilon = math.pi*random.random()*2
 		
-		radius, theta = cr.run(Epn, height, math.sin(phi), text=text)
-		
-		#Determine what category the event was
-		
-		entry, entrytype = lt.run(layout, xpos, ypos, epsilon, radius, Epn, Z, height, phi, theta, mincount, eff, 1, graph=False, text=False)
-		
-		#append the energy value to the appropriate category
-		
-		if entrytype == "metThreshold":
-			mT.append(height)
-			wmT.append(R)
-		elif entrytype == "belowThreshold":
-			bT.append(height)
-			wbT.append(R)
-		elif entrytype == "nonDC":
+		if multiplicity == int(0):
 			nDC.append(height)
-			wnDC.append(R)
+
+		elif multiplicity < int(mincount):
+			bT.append(height)
+
 		else:
-			print "ERROR OVER HERE!!!!"
+			mT.append(height)
+			
+	print mT
+	print bT
+	print nDC
 
 	#Create labels for each bin
 
@@ -169,7 +147,7 @@ def run(eff, rowcount, mincount=4, text=False, graph=False, output="default", la
 	ax4 = plt.subplot(313, sharex=ax2)
 	
 	tweights = np.ones_like(decayheights)/len(decayheights)
-	mcweights = np.ones_like(hrange)/len(hrange)
+	#~ mcweights = np.ones_like(hrange)/len(hrange)
 	
 	plt.hist([decayheights], weights=[tweights])
 	plt.ylabel('Fraction')
@@ -189,7 +167,7 @@ def run(eff, rowcount, mincount=4, text=False, graph=False, output="default", la
 	
 	ax5 = plt.subplot(211, sharex=ax2)
 	
-	plt.hist([mT, bT, nDC], bins=hbins, log=True, histtype='bar',range=limits, label=labels)
+	plt.hist([mT, bT, nDC], bins=20, log=True, histtype='bar', range=limits, label=labels)
 	
 	print "Overall mean first interaction height is", np.mean(hrange)
 	
@@ -205,7 +183,7 @@ def run(eff, rowcount, mincount=4, text=False, graph=False, output="default", la
 	
 	if len(mT) > 0:
 	
-		n, bins, _ = plt.hist([mT], label=labels)
+		n, bins, _ = plt.hist([mT], bins=10, label=labels)
 		
 		mid = (bins[1:] + bins[:-1])*0.5
 		errors = []

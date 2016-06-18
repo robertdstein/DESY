@@ -21,7 +21,7 @@ def run(raweff, rowcount, mincount=4, text=False, graph=False, output="default",
 		
 		for i in range (0, int(number)):
 			
-			rayxpos, rayypos, epsilon, rayradius, Epn, Z, height, phi, theta = g.run(text=text)
+			rayxpos, rayypos, epsilon, rayradius, Epn, Z, height, phi, theta = g.run()
 			
 			frac = atm.runabsorption(height)
 	

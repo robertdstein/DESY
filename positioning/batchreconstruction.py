@@ -47,5 +47,4 @@ def run(source, outputfile, detectorcount, rgw, eff):
 					guessx, guessy, guessEpn, guessZ, guessHeight, guessfval =m.min(a, rgw, eff, smearphi, smearepsilon, float(row[lim+5]))
 					print "True Values are", true, "(", truefval, ")"
 					
-					
 					writer.writerow([row[lim+5], guessx, guessy, guessEpn, guessZ, guessHeight, row[lim], row[lim+1], row[lim+2], row[lim+3], row[lim+4], row[lim+6], row[lim+7], guessfval, truefval])

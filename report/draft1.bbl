@@ -30,4 +30,12 @@ F.~Pedregosa, G.~Varoquaux, A.~Gramfort, V.~Michel, B.~Thirion, O.~Grisel,
 \newblock Scikit-learn: Machine learning in {P}ython.
 \newblock {\em Journal of Machine Learning Research}, 12:2825--2830, 2011.
 
+\bibitem{hessCT5}
+F.~{Krayzel}, G.~{Maurin}, L.~{Brunetti}, J.-M. {Dubois}, A.~{Fiasson},
+  L.~{Journet}, G.~{Lamanna}, T.~{Leflour}, B.~{Lieunard}, I.~{Monteiro},
+  S.~{Rosier-Lees}, and {for the H.~E.~S.~S.~Collaboration}.
+\newblock {Improved sensitivity of H.E.S.S.-II through the fifth telescope
+  focus system}.
+\newblock {\em ArXiv e-prints}, July 2013.
+
 \end{thebibliography}

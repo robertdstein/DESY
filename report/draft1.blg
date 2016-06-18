@@ -4,45 +4,45 @@ The top-level auxiliary file: draft1.aux
 The style file: unsrt.bst
 Database file #1: report.bib
 Warning--empty journal in Heck98
-You've used 5 entries,
+You've used 6 entries,
             1791 wiz_defined-function locations,
-            478 strings with 4482 characters,
-and the built_in function-call counts, 1297 in all, are:
-= -- 97
-> -- 90
+            484 strings with 4833 characters,
+and the built_in function-call counts, 1576 in all, are:
+= -- 109
+> -- 128
 < -- 0
-+ -- 32
-- -- 27
-* -- 105
-:= -- 232
-add.period$ -- 15
-call.type$ -- 5
-change.case$ -- 5
++ -- 45
+- -- 39
+* -- 133
+:= -- 289
+add.period$ -- 18
+call.type$ -- 6
+change.case$ -- 6
 chr.to.int$ -- 0
-cite$ -- 6
-duplicate$ -- 44
-empty$ -- 108
-format.name$ -- 27
-if$ -- 268
+cite$ -- 7
+duplicate$ -- 52
+empty$ -- 122
+format.name$ -- 39
+if$ -- 320
 int.to.chr$ -- 0
-int.to.str$ -- 5
-missing$ -- 5
-newline$ -- 28
-num.names$ -- 5
-pop$ -- 9
+int.to.str$ -- 6
+missing$ -- 6
+newline$ -- 33
+num.names$ -- 6
+pop$ -- 12
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 16
+skip$ -- 19
 stack$ -- 0
 substring$ -- 91
-swap$ -- 4
+swap$ -- 5
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
 warning$ -- 1
-while$ -- 10
-width$ -- 6
-write$ -- 55
+while$ -- 11
+width$ -- 7
+write$ -- 65
 (There was 1 warning)

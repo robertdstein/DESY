@@ -1,7 +1,7 @@
 #!/bin/env python
 
 import initialise as i
-numberofhours, mincount, reconstructiongridwidth, orientation, eff, flux, area, solidangle, selectionefficiency = i.run()
+numberofhours, mincount, gridwidth, layout, raweff, flux, area, solidangle, selectionefficiency, hmacceptance = i.run()
 
 import sys
 
@@ -13,6 +13,7 @@ import numpy as np
 import simulate as s
 import batchprocessing as bp
 import batchreconstruction as br
+from classes import *
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-n", "--number", default=1)
@@ -30,18 +31,13 @@ n = int(rateperhour*float(numberofhours))
 print time.asctime(time.localtime()),"Cosmic Ray Iron Flux is", flux, "Simulated Area is", area, "Field of View is", solidangle, "Detected Flux is", detectedflux
 print time.asctime(time.localtime()),"Rate per hour", rateperhour, "Simulated Hours", numberofhours, "Simulated Events", n 
 
-with open("/nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/positioning/orientations/"+ orientation +".csv", 'rb') as csvfile:
-	reader = csv.reader(csvfile, delimiter=',', quotechar='|')
-	rowcount = 0
-	for row in reader:
-		rowcount +=1
+simset = simulationset(raweff, layout, mincount, hmacceptance, gridwidth)
+simset.generate(n)
+simset.reconstructevents()
+simset.dump(cfg.number)
 
-s.run(eff, rowcount, mincount=mincount, text=False, graph=False, output=sourcedata, layout=orientation, number = n)
-bp.run(sourcedata, processdata, int(mincount), rowcount, text=False)
-br.run(processdata, reconstructdata, rowcount, reconstructiongridwidth, eff)
-
-message = str(time.asctime(time.localtime())) + " Completed simulation of " + str(n) + " events!"
-import os, sys
-import sendemail as se
-name = os.path.basename(__file__)
-se.send(name, message, False)
+#~ message = str(time.asctime(time.localtime())) + " Completed simulation of " + str(n) + " events!"
+#~ import os, sys
+#~ import sendemail as se
+#~ name = os.path.basename(__file__)
+#~ se.send(name, message, False)

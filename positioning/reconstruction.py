@@ -38,8 +38,8 @@ parser.add_argument("-rgw", "--reconstructiongridwidth", default=75)
 
 cfg = parser.parse_args()
 
-eff = 0.06
-selectionefficiency = 0.50
+eff = 1.0
+selectionefficiency = 1.0
 flux = 2.0 * (10**-4)
 area = 300**2
 solidangle = math.radians(5)

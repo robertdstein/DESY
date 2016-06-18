@@ -2,9 +2,9 @@
 \usepackage{graphicx}
 \graphicspath{ {graphs/} }
 \usepackage{geometry}
-\geometry{a4paper, portrait, margin=1.5in}
-\usepackage{gensymb}
+\geometry{a4paper, portrait, margin=1.0in}
 \usepackage{booktabs}
+\usepackage{textcomp}
 \begin{document}
 \begin{titlepage}
     \begin{center}
@@ -74,7 +74,7 @@ In order to reconstruct events using the LPD method, we require saturation of th
 \subsection{Cherenkov Emission}
 Cosmic Rays follow a well-defined power law where $ \frac{dN(E)}{dt} \propto E^{-\gamma} $ and experimentally $ \gamma = 2.7 \pm ? $. Consequently higher energy Cosmic Rays are heavily suppressed. The Energy Threshold for Cherenkov Light Emission as a function of height is illustrated in \ref{fig:generalenergy}. Once the Energy of a Cosmic Ray exceeds the local Cherenkov Energy Threshold of the atmosphere, the Nucleus will begin emitting a ring of Cherenkov Light. 
 
-Above threshold, Cherenkov Emission is determined by the Frank Tamm formula!!!!! A full simulation of the LPD was undertaken. Under the assumption of constant magnetic permittivity and a zenith angle of $90\degree$ we can use the approximate form \[ N_{photons} \approx (37000 \times Z^{2} \times \Delta_{h} \times \Delta_{E})\] where $\Delta_{h}$ is the vertical distance travelled in meters and $\Delta_{E}$ is the emission energy range in eV.
+Above threshold, Cherenkov Emission is determined by the Frank Tamm formula!!!!! A full simulation of the LPD was undertaken. Under the assumption of constant magnetic permittivity and a zenith angle of $90\textdegree$ we can use the approximate form \[ N_{photons} \approx (37000 \times Z^{2} \times \Delta_{h} \times \Delta_{E})\] where $\Delta_{h}$ is the vertical distance travelled in meters and $\Delta_{E}$ is the emission energy range in eV.
 
 If we divide the number of emitted photons by the area of the annulus between the ring radii at $h$ and $h - \Delta_{h}$, we retrieve the LDF shown in \ref{fig:lpd}, which varies with $ \rho_{DC}  = f(r) \times Z^{2}$ . Thus the amplitude of the LDF is proportional to the charge of the Cosmic Ray, enabling the Charge to be determined from the DC emission. This is the basis for charge reconstruction in the LDF method.
 
@@ -161,7 +161,7 @@ Classifiers provide an alternative method of identification, making use of super
 The CORSIKA package \cite{Heck98} was used to generate Cosmic Ray events, and the Sim\textunderscore telarray package  \cite{Bernlohr08} was used to generate corresponding HESS array telescope images.  Simulation with EAS background was used to produce training pixel sets, while corresponding simulation without EAS background was used to find the true DC pixel in each training image. As part of a new method developed for this analysis, a Boosted Decision Tree (BDT) classifier was trained with the data to identify DC pixels. Once trained, the BDT was applied to a separate \textquoteleft testing' set of simulated telescope images. As before, the true DC pixel was determined from a second EAS-free simulation. Thus, the accuracy of BDT identification for test telescope images was calculated.
 
 \subsection{Image Simulation}
-The full simulation of air showers was performed using the CORSIKA package, with a standard atmospheric profile derived from measurements conducted at the HESS site in Namibia. In total, 5000 training events and a further 10000 testing events were simulated. The simulated particles were $Fe^{56}$, within the Energy Range of $35-135$ TeV and a spectrum $\phi(E) \propto E^{-2.7}$. For each set of simulated event, 4 unique random number seeds were used to generate the shower. An altitude of 1800m was assumed, again corresponding to the HESS site. The simulated zenith angle ranged from $0\degree < \theta < 2 \degree$, while the simulated azimuth angle ranges from $-2\degree < \phi < 2 \degree$. The four smaller HESS-phase-1 telescopes were arranged in a cross along the x/y axis with the larger HESS-phase-2 \textquoteleft CT5' telescope placed at the center. The length of each cross arm was $85m$. The simulated target region of the cores was chosen to be a square centered on CT5, with each 300m-long side bisecting the x/y axis.Due to hardware differences between CT5 and the original HESS 1 telescopes, we analyse HESS1 and HESS2 images separately. To determine the true class of each pixel, a simulation was initially run with an energy cut of 10 PeV on all muons and electrons. Because this cut exceeded the primary particle energy, neither daughter muons and electrons, nor the photons they would have emitted, were simulated. Thus the hadronic Cherenkov Light from the primary particle and daughter fragments, but not the EAS light, was present in the camera image. A second identical \textquoteleft EAS Simulation' was run including the same random seeds, but without the energy cut on muons and electrons. This gave a complete EAS image including identical DC light.
+The full simulation of air showers was performed using the CORSIKA package, with a standard atmospheric profile derived from measurements conducted at the HESS site in Namibia. In total, 5000 training events and a further 10000 testing events were simulated. The simulated particles were $Fe^{56}$, within the Energy Range of $35-135$ TeV and a spectrum $\phi(E) \propto E^{-2.7}$. For each set of simulated event, 4 unique random number seeds were used to generate the shower. An altitude of 1800m was assumed, again corresponding to the HESS site. The simulated zenith angle ranged from $0\textdegree < \theta < 2 \textdegree$, while the simulated azimuth angle ranges from -2\textdegree $ < \phi < 2 \textdegree$. The four smaller HESS-phase-1 telescopes were arranged in a cross along the x/y axis with the larger HESS-phase-2 \textquoteleft CT5' telescope placed at the center. The length of each cross arm was $85m$. The simulated target region of the cores was chosen to be a square centered on CT5, with each 300m-long side bisecting the x/y axis.Due to hardware differences between CT5 and the original HESS 1 telescopes, we analyse HESS1 and HESS2 images separately. To determine the true class of each pixel, a simulation was initially run with an energy cut of 10 PeV on all muons and electrons. Because this cut exceeded the primary particle energy, neither daughter muons and electrons, nor the photons they would have emitted, were simulated. Thus the hadronic Cherenkov Light from the primary particle and daughter fragments, but not the EAS light, was present in the camera image. A second identical \textquoteleft EAS Simulation' was run including the same random seeds, but without the energy cut on muons and electrons. This gave a complete EAS image including identical DC light.
 
 With the sim\textunderscore telarray package, the expected HESS hardware response to each air shower was simulated. Among other things, the program accounts for atmospheric transmission and density, mirror positions, sizes and reflectivities, camera shadowing and triggering, quantum efficiency and pulse responses. For the full-shower image, the night sky background was also simulated by sim\textunderscore telarray. Due to the comprehensive and detailed nature of these hardware simulations, the resultant images can be considered \textquoteleft realistic'.  However, sim\textunderscore telarray introduces various sources of random noise to the simulation, leading to some divergence in the DC light between the EAS-free and full-shower images.
 
@@ -533,9 +533,29 @@ Through combined use of the two equations, we can parameterise the entire Full-S
 \end{figure}
 
 \section{HESS-type Event Reconstruction}
-With a simulation of the HESS Cherenkov 5-Telescope Array we can verify the effectiveness of the technique. 
+Having obtained a parameterisation of the LPD, and and assoiated error in the case of a HESS-type array, the Charge reconstruction Technique can be applied to a simpified Monte Carlo simulation of the HESS array, developed as part of this analysis. Conducting a Monte Carlo simulation using the Gaussian-smeared LPD, we can measure the effectiveness of the LPD-reconstruction technique.
+
+\subsection{Iron Flux and Energy}
+Iron nucleii, like all Cosmic Rays, follow a well-defined power law where $\phi(E) = \frac{dN(E)}{dt} = \phi_{0} E^{-\gamma} $ for some constant k. Using the SIBYLL model for Cosmic Ray Simulation, we assume that $ \gamma = 2.76 \pm 0.11 $ and $\phi_{0}=0.029 \pm 0.01 m^{-2} s^{-1} sr^{-1} TeV ^{-1}$ \cite{hess07}. Considering the same Energy Range of 35-135 TeV, we can calculate the integrated Iron Flux. 
+
+\[ F(35-135TeV) = \int_{35}^{135} \phi_{0} E^{-2.76} dE = \frac{\phi_{0}}{1.76}[35^{-1.76} - 135^{-1.76}] = 2.86 \times 10^{-5} m^{-2} s^{-1} sr^{-1}\]
+
+Within CORSIKA, a square simulation of 300 x 300m was simulated. We can consider an identical $90000 m^{2}$ target region for core position simulation. The HESS telescope additionally has a solid and field of view of 5 degrees (0.09 rad),meaning an expected telescope array Iron Flux of $F(35-135TeV) = 0.22 s^{-1}$. On the basis of efficiency calculations in DC pixel identification, it is clear that 2.2\% of Iron Ray events will produce high-multiplicity DC pixels accepted by the BDT. Thus, we will ultimately obtain an hourly flux of $F(35-135TeV) = 4.4 \times 10^{-4} s^{-1} = 1.58 h^{-1}$ high-multiplicity Iron events. 
+
+The full 5-telescope HESS array has been in operation since 2012 \cite{hessCT5}, and has thus had time to collect several years of data. Due to the requirement of night operation under favourable weather conditions, the HESS phase 2 experiment has collected approximately 5000 hours of data. On the basis of our high-multiplicity flux rate, we can assume that a rough expected event count would be roughly 7900 high-multiplicity iron events. The Monte Carlo simulations will be run with approximately this number of events.
+
+To accurately model the Cosmic Rays, the Energy Power Law must be simulated. To generate the random Energy value En(R) following the power law, a uniformly distributed random number R is generated. The value of R represents a random fraction of the total simulated flux $ F(R) = R \times F(35-135TeV) $, and can thus range from 0-1. Having determined the Integrated Flux corresponding to the random number, the Energy corresponding to this flux can be calculated. The energy E is defined as the lower bound of the integral which would produce the chosen integrated flux F. Thus R=0 corresponds to an Energy of 135TeV yielding no Integrated Flux, while R=1 would correspond to an Energy of 35TeV and the full Integrated Flux.
+
+\[ F(R) = F(En(R)-135TeV) = \int_{En(R)}^{135} \phi_{0} E^{-2.76} dE =\frac{\phi_{0}}{1.76}[En(R)^{-1.76} - 135^{-1.76}]= R \times F(35-135TeV)\] \[\Longrightarrow  En(R) = (\frac{1.76\times R \times F(35-135TeV)}{\phi_{0}} +135^{-1.76})^{\frac{-1}{1.76}} \]
+
 \subsection{First Interaction and Energy Saturation}
+Using the theoretical LPD found from the Frank-Tamm formula, we see that this LPD will have a very abrupt discontinuity. However, after the first atmospheric simulation, secondary DC light from daughter nucleii will also be produced. it is not possible to effectively distinguish this secondary DC light, so it will contribute to the smearing seen in Figure \ref{fig:corsikalpd1}. The first Interaction Height will determine the radius at which the LPD for a given Iron Nucleus will deviate from the ideal case. By considering the distribution of first interaction heights, we can consider the variation of the LPD. 
+
 The mean first interaction height for all Cherenkov Emitting Cosmic Rays in the atmosphere is 40km, and neglecting variations in atmospheric density profiles around the Earth, this can be considered independent of experimental array. However, the multiplicity of event is determined by equipment efficiencies, altitude and telescope layout. When the HESS layout is simulated, we find that the 4 telescope events have a mean height of $h \approx 23 \pm 5$ km, as shown in \ref{fig:Hessheight}.
+
+\subsection{Extended Air Shower Background}
+Having successfully parameterised the LPD using CORSIKA simulations, we can replicate it for out Monte Carlo simulation. We have found that the DC LPD is broadly independent of both height and Energy. 
+
 
 \begin{figure}
 \begin{center}
@@ -544,9 +564,6 @@ The mean first interaction height for all Cherenkov Emitting Cosmic Rays in the 
 \label{fig:Hessheight}
 \end{center}
 \end{figure}
-
-\subsection{Extended Air Shower Background}
-A typical HESS image is shown in \ref{fig:hess}, with the DC pixel visible. For HESS cameras, the Extended Air Shower (EAS) produced after the first interaction of the Cosmic Ray overlaps the DC pixel and thus provides background in the LDF. As the Energy of the Cosmic Ray increases, the EAS speads over a larger angular area, and at smaller radii, the EAS-DC-shower direction axis contracts, leading to more overlap. Thus the background in the DC pixel increases with decreasing radius and increasing Energy. In addition, we have a fixed night sky background with 7 photons $m^{-2}$. We thus parameterise the background with \[ \rho_{bkg}  = 7 + 5E\]. The modeled background LPD is shown as part of REF. It begins to dominate above roughly 1 TeV per Nucleon, particularly in the case of smaller radii. 
 
 \subsection{Reconstructed Charge Resolution}
 In the preliminary HESS simulation, it was found that the 4 telescope event reconstruction had a charge resolution of $\sigma_{Z} = 1.4$. However, requiring that the BDT signal probability satisfied $P > 0.81$ removed $75 \%$ of events, while reducing the Charge resolution to $\sigma_{Z} = 0.9$ . With this cut, core position resolution was $d \approx 1.4 m $. For 5 telescope events, it was found that the charge resolution was also $\sigma_{Z} = 1.4$. However, requiring that the signal probability satisfied $P > 0.05$ removed $53 \%$ of events, including all wrongly reconstructed ones. This placed an upper limit on the charge resolution of $\sigma_{Z} < 0.35$ . With this cut, core position resolution was $d \approx 0.8 m $.

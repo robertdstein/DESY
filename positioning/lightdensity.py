@@ -1,13 +1,13 @@
 import random, math
 
 def run(distance, Epn, Z, rmax, eff, N=56):
-	
+	rmax = 95
 	energy=Epn*N/1000
 	
 	if Epn < 0:
 		print distance, Epn, Z, rmax, eff
 	
-	scale = (9.4*energy + -204.1)
+	scale = 73.9 * math.exp(0.025*energy)
 	exponent = -0.00004*energy + -0.00692
 	
 	bkgd = scale * math.e**(distance*exponent)
@@ -23,12 +23,12 @@ def run(distance, Epn, Z, rmax, eff, N=56):
 	
 	if distance < rmax:
 		density = f1(distance)
-		dcerror=0.31
+		dcerror=0.15
 		if density < 0:
 			density=0
 	else:
 		density = f2(distance)
-		dcerror=1.31
+		dcerror=1.00
 
    	return [density, dcerror], [bkgd, bkgerror]
    	

@@ -2,52 +2,40 @@ import argparse, math, random
 import csv
 import numpy as np
 import matplotlib.pyplot as plt
+import cPickle as pickle
+from classes import *
 
-def run(source, detectorcount, mindetections, graph, cuts):
+def run(statsset, mindetections, cuts):
+	
+	datasimset = pickle.load(open(statsset, 'rb'))
+	detectorcount = datasimset[0].ndetectors
+	
 	fullcount=[]
 	labels=[]
 	info = ""
 	k=0
 	for j in range (detectorcount, mindetections -1, -1):
 		specificcount=[]
-		
-		with open("/d6/rstein/Hamburg-Cosmic-Rays/positioning/reconstructeddata/"+ str(source) +".csv", 'rb') as csvfile:
-			reader = csv.reader(csvfile, delimiter=',', quotechar='|')
-			specificcount = []
-			
-			full=0
-			passing=0
-			
-			i = -1
-			
-			bdtmin = cuts[k]
 
-			for row in reader:
-				if i < 0:
-					i += 1
-				else:
-					detections = row[0]
-					reconx = float(row[1])
-					recony = float(row[2])
-					reconEPN = row[3]
-					reconZ = row[4]
-					reconHeight = row[5]
-					truex = float(row[6])
-					truey = float(row[7])
-					trueEPN = row[8]
-					trueZ = row[9]
-					trueHeight = row[10]
-					likelihood = row[13]
-					classifier = float(row[15])
-					BDT = row[16]
-					
-					if int(detections) == int(j):
-						full += 1
-						if float(bdtmin) < float(BDT):
-							if float(classifier) < float(1.5):
-								passing += 1
-								distance = math.sqrt(((reconx-truex)**2)+(recony-truey)**2)
-								specificcount.append(distance)
+		full=0
+		passing=0
+		
+		bdtmin = cuts[k]
+
+		for simset in datasimset:
+			for sim in simset.simulations:	
+				recon = sim.reconstructed
+				observed = sim.detected
+				true = sim.true
+				
+
+				if int(observed.DCmultiplicity) == int(j):
+					full += 1
+					if recon.BDTscore != None:
+						if float(bdtmin) < float(recon.BDTscore):
+							passing += 1
+							distance = math.sqrt(((recon.rayxpos-true.rayxpos)**2)+(recon.rayypos-true.rayypos)**2)
+							specificcount.append(distance)
 
 		total = len(specificcount)
 		
@@ -120,9 +108,4 @@ def run(source, detectorcount, mindetections, graph, cuts):
 	path = '/d6/rstein/Hamburg-Cosmic-Rays/positioning/graphs/position.pdf'
 	plt.savefig(path)
 	print "saving to", path
-	
-	if graph:
-		plt.show()
-		
-	else:
-		plt.close()
+	plt.close()

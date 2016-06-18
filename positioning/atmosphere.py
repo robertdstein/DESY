@@ -159,13 +159,13 @@ def runindex(height, fit=False, text=False):
 				else:
 					
 					#Interpolates refractive Index given Index and Height step size from previous entry
-					
+					#~ print currentri, previousri, previoush, height, currenth, ri
 					gradient = (float(currentri)-float(previousri))/(float(currenth)-float(previoush))
 					deltah = height - previoush
 					
 					ri = previousri + (deltah*gradient) + 1
 					
-					#~ print currentri, previousri, previoush, height, currenth, ri
+					
 					
 					#~ m, c = np.polyfit([currenth, previoush], [currentri, previousri], 1)
 					

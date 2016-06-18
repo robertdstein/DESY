@@ -4,12 +4,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
 import scipy.stats
+import cPickle as pickle
 
-def run(source, detectorcount, mindetections, graph=False):
+def run(statsset, mindetections):
+
+	datasimset = pickle.load(open(statsset, 'rb'))
+	detectorcount = datasimset[0].ndetectors
 
 	plt.figure()
-
-	i=1
 
 	Z = 26
 	
@@ -18,10 +20,9 @@ def run(source, detectorcount, mindetections, graph=False):
 	
 	optimumcuts = []
 	
-	for j in range (detectorcount, mindetections -1, -1):
-			
+	for j in range (detectorcount, mindetections -1, -1):	
 		print "Ndetections", j
-		lowestsigma = 5
+		lowestsigma = 10
 		optimumbdt = 0.0
 		optimumpassing = 1.0
 		
@@ -31,101 +32,71 @@ def run(source, detectorcount, mindetections, graph=False):
 		
 		frac=0
 		
-		
 		for i in range(0, len(BDTrange)):
 			BDTcut = BDTrange[i]
-			
 			currentsigma = 5
 			specificcount = []
 			sqvals=[]
 			differences=[]
-			with open("/d6/rstein/Hamburg-Cosmic-Rays/positioning/reconstructeddata/"+ str(source) +".csv", 'rb') as csvfile:
-				reader = csv.reader(csvfile, delimiter=',', quotechar='|')
-				full = 0
-				passing = 0
-				
-				i=-1
-				for row in reader:
-					if i == -1:
-						i=1
-					else:
-						detections = row[0]
-						reconx = row[1]
-						recony = row[2]
-						reconEPN = row[3]
-						reconZ = row[4]
-						reconHeight = row[5]
-						truex = row[6]
-						truey = row[7]
-						trueEPN = row[8]
-						trueZ = row[9]
-						trueHeight = row[10]
-						likelihood = row[13]
-						classifier=row[15]
-						BDT = float(row[16])
-						
-						if float(detections) == float(j):
-							if int(Z) == int(trueZ):
-								full += 1
-								if float(BDTcut) < float(BDT):
-									passing += 1
-									specificcount.append(float(reconZ))
-									diff = math.fabs(float(reconZ)-26)
-									sqvals.append(float(reconZ)**2)
-									differences.append(diff)
-						
-						else:
-							i += 1
-									
-				line = "Detections = " + str(j)
-				
-				total = passing
-				
-				if total > 0:
-				
-					frac = float(passing)/float(full)
+			full = 0
+			passing = 0
+		
+			for simset in datasimset:
+				maxn = simset.ndetectors
+				for sim in simset.simulations:	
+					recon = sim.reconstructed
+					observed = sim.detected
+					true = sim.true
 					
-					if float(frac) > float(0.001):
-						#~ specificcount.sort()
-						#~ 
-						#~ interval = (float(0.5)/float(total))
-						#~ probinside = 1-interval
-						#~ sigmas = scipy.stats.norm(0, 1).ppf(probinside)
-						#~ 
-						#~ lowerz = specificcount[0]
-						#~ upperz = specificcount[total-1]
-						#~ lowerinteger = int(0.16*total)
-						#~ upperinteger = int(0.84*total)
-						#~ integer68 = int(0.68*total)
-				#~ 
-						#~ lowerz = specificcount[lowerinteger]
-						#~ upperz = specificcount[upperinteger]
-						#~ meansigma = (float(upperz)-float(lowerz))/(2*sigmas)
-						#~ meansigma = 0.5*(upperz-lowerz)
-						
-						meanz = np.mean(specificcount)
-						meanz2 = np.mean(sqvals)
-						var = meanz2 - (meanz**2)
-						
-						meansigma=math.sqrt(var)
-						
-						bdtcuts.append(BDTcut)
-						meansigmas.append(meansigma)
-							
+
+					if int(observed.DCmultiplicity) == int(j):
+					
+						if recon.BDTscore != None:
+
+							full += 1
+							if float(BDTcut) < float(recon.BDTscore):
+								passing += 1
+								specificcount.append(float(recon.Z))
+								diff = math.fabs(float(recon.Z)-26)
+								sqvals.append(float(recon.Z)**2)
+								differences.append(diff)
+					#~ 
+					#~ else:
+						#~ raise Exception("NO BDT SCORE ASSIGNED!!!")
+
+									
+			line = "Detections = " + str(j)
+			
+			total = passing
+			
+			if total > 0:
+			
+				frac = float(passing)/float(full)					
+				meanz = np.mean(specificcount)
+				meanz2 = np.mean(sqvals)
+				var = meanz2 - (meanz**2)
+				
+				meansigma=math.sqrt(var)
+				
+				bdtcuts.append(BDTcut)
+				meansigmas.append(meansigma)
+				
+				if float(frac) > float(0.05):
+					if float(24) < float(meanz) < float(28):
 						if float(meansigma) < float(lowestsigma):
 							lowestsigma=meansigma
 							optimumbdt=BDTcut
 							optimumpassing = passing
-							
-		if optimumpassing > 1:
-		
-			plt.plot(bdtcuts, meansigmas, label=line)
+						
+		plt.plot(bdtcuts, meansigmas, label=line)
 			
-			optimumfrac = float(optimumpassing)/float(full)
+		optimumfrac = float(optimumpassing)/float(full)
 		
-			annotation += "Optimum Cut occurs with BDT > " + str(optimumbdt)+ " and with " + str(j) + " detections \n"
-			annotation += "This leaves " + str(optimumpassing) + " events , a fraction of " + str(optimumfrac) + "\n \n"
+		annotation += "Optimum Cut occurs with BDT > " + str(optimumbdt)+ " and with " + str(j) + " detections \n"
+		annotation += "This leaves " + str(optimumpassing) + " events , a fraction of " + str(optimumfrac) + "\n"
+		annotation += "The resultant Sigma is " + str(lowestsigma) + "\n \n"		
 		
+		if optimumpassing > 1:
 			optimumcuts.append(optimumbdt)
 
 		else:
@@ -145,10 +116,8 @@ def run(source, detectorcount, mindetections, graph=False):
 	plt.legend()
 	plt.savefig('/d6/rstein/Hamburg-Cosmic-Rays/positioning/graphs/Zcuts.pdf')
 	
-	if graph:
-		plt.show()
-		
-	else:
-		plt.close()
+	print annotation
+
+	plt.close()
 	
 	return optimumcuts

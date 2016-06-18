@@ -43,13 +43,13 @@ def coeff(radius, theta, phi, epsilon):
 	
 	return ra, rp, major, minor, e
 
-def run(radius, theta, phi, epsilon, xpos, ypos, rayxpos, rayypos):
+def run(simulatedevent, xpos, ypos):
 	
-	ra, rp, major, minor, e = coeff(radius, theta, phi, epsilon)
+	ra, rp, major, minor, e = coeff(simulatedevent.rayradius, simulatedevent.theta, simulatedevent.phi, simulatedevent.epsilon)
 	
-	newdangle=dangle(xpos, ypos, rayxpos, rayypos)
+	newdangle=dangle(xpos, ypos, simulatedevent.rayxpos, simulatedevent.rayypos)
 
-	r = frad(newdangle + math.pi, major, e, epsilon)
+	r = frad(newdangle + math.pi, major, e, simulatedevent.epsilon)
 	
 	return r, newdangle
 	

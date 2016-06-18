@@ -13,7 +13,7 @@ mpl.use('Agg')
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 
-data=np.arange(36, 97, 10)
+data=np.arange(36, 57, 10)
 print data
 
 nrows = len(data)-int(len(data)/2)
@@ -41,23 +41,30 @@ custom_options = {
 	'format': '%(progress)s%% [%(fill)s%(blank)s]'
 }
 
-for k in range(3):
+for k in range(4):
 	
 	Cvalues=[]
 	sigmas=[]
 
 	Avalues=[]
 	Aerrors=[]
+	
+	hmax=[]
+
+	Cdeviation =[]
 
 	for energy in data:
 		jobID= str(energy) + "tev-lpdfull"
 		targetfolder = filepath + jobID +"/"
 		truesignals1=[[],[]]
 		truedistances=[[],[]]
+		hcurrent=[]
+		hdist=[]
+		hsigs=[]
 		energyindex = int((energy-26)/10)
 		p = ProgressBar(**custom_options)
 		print p
-		j=500
+		j=20
 		i=0
 		
 
@@ -76,6 +83,7 @@ for k in range(3):
 					fullsim = event.simulations.full
 					
 					IDs=0
+					interactionheight=None
 				
 					for fulltel in fullsim.images:	
 						if fulltel.BDTID != None:
@@ -87,11 +95,17 @@ for k in range(3):
 								if float(simplecandidatesignal) > float(signalcut):
 									if float(fulltel.hillas.aspect_ratio_) > arcut:
 										IDs+=1
-				
-					if IDs > 3:
+					
+					if DCsim.triggerIDs != []:
+						DCtel = DCsim.gettriggeredtelescope(0)
+						if hasattr(DCtel.hillas, "Hmax_"):
+							interactionheight = float(DCtel.hillas.Hmax_)
+									
+					if IDs > 0:
 		
-						for fulltel in fullsim.images:
-								
+						for l in range(len(fullsim.images)):
+							fulltel	= fullsim.images[l]
+							
 							if fulltel.size == "HESS1":
 								plotindex = 0
 							elif fulltel.size == "HESS2":
@@ -100,11 +114,31 @@ for k in range(3):
 								raise Exception("Telescope.size error, size is " +fulltel.size)
 			
 							truedistances[plotindex].append(fulltel.hillas.core_distance_to_telescope)
-							truesignals1[plotindex].append(fulltel.hillas.image_size_amplitude_/fulltel.mirrorarea)				
+							truesignals1[plotindex].append(fulltel.hillas.image_size_amplitude_/fulltel.mirrorarea)
+							
+							if interactionheight != None:
+								hsigs.append(fulltel.hillas.image_size_amplitude_/fulltel.mirrorarea)
+								hdist.append(fulltel.hillas.core_distance_to_telescope)
+								hcurrent.append(interactionheight)
 		
 			if (int(float(i)*100/float(j)) - float(i)*100/float(j)) ==0:
 				print p+1
 			i+=1
+			
+		if k==2:
+			print "hmax", hcurrent
+			for n in range(len(hdist)):
+				sig = hsigs[n]
+				dist = hdist[n]
+				fitsig = fit(dist)
+				diff = (sig-fitsig)/fitsig
+				Cdeviation.append(diff)
+			
+			hmax.extend(hcurrent)
+			
+			print "Len(hcurrent)", len(hcurrent), "Len(Hmax)", len(hmax), "Len(Cdev)", len(Cdeviation)
+			
+			
 		
 		for index in [0]:
 			print "HESS"+str(index+1)
@@ -139,17 +173,18 @@ for k in range(3):
 				
 				Cvalues.append(C)
 				
-			elif k==2:
+			elif k > 1:
 				C = Cfit(energy)
 				
+				
 			if k > 0:
-				if k ==2:
+				if k ==3:
 					ax=plt.subplot(nrows,2,energyindex)
 					plt.scatter(truedistances[index], truesignals1[index])	
 				
 				def fit(x):
 					return C*np.exp(x*gradient)
-		
+					
 				lpd=[]
 				u=[]
 				l=[]
@@ -206,7 +241,7 @@ for k in range(3):
 					print psigma, "Fiterror", fiterror
 					
 					
-					if k ==2:
+					if k ==3:
 					
 						plt.plot(distances, lpd, color='k')
 						plt.fill_between(distances, l, u, color='g', alpha=0.25)
@@ -248,18 +283,17 @@ for k in range(3):
 		
 		def Afit(x):
 			return Am*x + Ac
-		plt.subplot(2,1,1)
+		plt.subplot(3,1,1)
 		plt.errorbar(data, Avalues, yerr=Aerrors, fmt='o')
 		plt.xlabel("Energy (Tev)")
 		plt.ylabel("Fitted Exponent")
 		
 		plt.plot(data, Afit(data), color="k")
 		Line = "y =" + str('{0:.5f}'.format(Am)) + " x + " + str('{0:.5f}'.format(Ac))
-		plt.annotate(Line, xy=(0.05, 0.9), xycoords="axes fraction",  fontsize=15)
+		plt.annotate(Line, xy=(0.85, 0.9), xycoords="axes fraction",  fontsize=15)
 		
 	elif k==1:
-
-		plt.subplot(2,1,2)
+		plt.subplot(3,1,2)
 		plt.errorbar(data, Cvalues, yerr=sigmas, fmt='o')
 		plt.xlabel("Energy (Tev)")
 		plt.ylabel("Fitted Amplitude")
@@ -268,8 +302,57 @@ for k in range(3):
 		
 		def Cfit(x):
 			return Cm*x + Cc
+		
+		logcvals=[]
+		for cval in Cvalues:
+			logcvals.append(math.log(cval))
+		
+		cexponent, logcamplitude = np.polyfit(data, logcvals, 1)
+		camplitude = np.exp(logcamplitude)
+		
+		def Cfit(x):
+			return camplitude*np.exp(x*cexponent)
+			
 		plt.plot(data, Cfit(data), color="k")
-		Line = "y =" + str('{0:.1f}'.format(Cm)) + " x + " + str('{0:.1f}'.format(Cc))
+		plt.yscale("log")
+		Line = "y =" + str('{0:.1f}'.format(camplitude)) + " e ^ ( " + str('{0:.3f}'.format(cexponent)) + " x)"
+		plt.annotate(Line, xy=(0.05, 0.9), xycoords="axes fraction",  fontsize=15)
+		
+	elif k==2:
+		plt.subplot(3,1,3)
+		plt.scatter(hmax, Cdeviation)
+		plt.xlabel("First Interaction Height (m)")
+		plt.ylabel("Fitted Amplitude")
+		
+		print "Final!", hmax, Cdeviation
+		
+		Chm, Chc = np.polyfit(hmax, Cdeviation, 1)
+		
+		print "Fitted", Chm, Chc
+		print "Chm", Chm
+		
+		def Chfit(x):
+			return Chm*x + Chc
+		
+		logcvals=[]
+		for cval in Cvalues:
+			logcvals.append(math.log(cval))
+		
+		#~ cexponent, logcamplitude = np.polyfit(data, logcvals, 1)
+		#~ camplitude = np.exp(logcamplitude)
+		#~ 
+		#~ def Cfit(x):
+			#~ return camplitude*np.exp(x*cexponent)
+			
+		print "Fittted", hmax, Chfit(hmax) 
+		
+		chfitteddata=[]
+		for h in hmax:
+			chfitteddata.append(Chfit(h))
+			
+		plt.plot(hmax,chfitteddata, color="k")
+		#~ plt.yscale("log")
+		Line = "y =" + str('{0:.5f}'.format(Chm)) + " x + " + str('{0:.5f}'.format(Chc))
 		plt.annotate(Line, xy=(0.05, 0.9), xycoords="axes fraction",  fontsize=15)
 		
 		figure = plt.gcf() # get current figure
