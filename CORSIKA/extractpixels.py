@@ -151,10 +151,14 @@ for category in ["DC", "full"]:
 				tel.findintensities()
 				print tel.hillas.image_size_amplitude_
 			
-			currentsimulation.extractpixelhillas(cfg.findBDT)
+			
 	
 	else:
 		print "No files for some reason..."
+		
+event.simulationhillasparameters(cfg.findBDT)
+#~ DCpixel =event.simulations.full.images[0].getBDTpixel()
+#~ print vars(DCpixel.dchillasparams)
 
 if event.simulationcount > 0:
 	Pickle_dir = os.path.join(run_dir, "pickle")

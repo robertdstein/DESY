@@ -13,7 +13,7 @@ mpl.use('Agg')
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 
-data=np.arange(36, 57, 10)
+data=np.arange(36, 97, 10)
 print data
 
 nrows = len(data)-int(len(data)/2)
@@ -64,7 +64,7 @@ for k in range(4):
 		energyindex = int((energy-26)/10)
 		p = ProgressBar(**custom_options)
 		print p
-		j=20
+		j=500
 		i=0
 		
 
@@ -101,7 +101,7 @@ for k in range(4):
 						if hasattr(DCtel.hillas, "Hmax_"):
 							interactionheight = float(DCtel.hillas.Hmax_)
 									
-					if IDs > 0:
+					if IDs > 3:
 		
 						for l in range(len(fullsim.images)):
 							fulltel	= fullsim.images[l]

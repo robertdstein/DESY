@@ -2,9 +2,9 @@
 \usepackage{graphicx}
 \graphicspath{ {graphs/} }
 \usepackage{geometry}
-\geometry{a4paper, portrait, margin=1.0in}
+\geometry{a4paper, portrait, margin=1.5in}
+\usepackage{gensymb}
 \usepackage{booktabs}
-\usepackage{textcomp}
 \begin{document}
 \begin{titlepage}
     \begin{center}
@@ -74,7 +74,13 @@ In order to reconstruct events using the LPD method, we require saturation of th
 \subsection{Cherenkov Emission}
 Cosmic Rays follow a well-defined power law where $ \frac{dN(E)}{dt} \propto E^{-\gamma} $ and experimentally $ \gamma = 2.7 \pm ? $. Consequently higher energy Cosmic Rays are heavily suppressed. The Energy Threshold for Cherenkov Light Emission as a function of height is illustrated in \ref{fig:generalenergy}. Once the Energy of a Cosmic Ray exceeds the local Cherenkov Energy Threshold of the atmosphere, the Nucleus will begin emitting a ring of Cherenkov Light. 
 
-Above threshold, Cherenkov Emission is determined by the Frank Tamm formula!!!!! A full simulation of the LPD was undertaken. Under the assumption of constant magnetic permittivity and a zenith angle of $90\textdegree$ we can use the approximate form \[ N_{photons} \approx (37000 \times Z^{2} \times \Delta_{h} \times \Delta_{E})\] where $\Delta_{h}$ is the vertical distance travelled in meters and $\Delta_{E}$ is the emission energy range in eV.
+Above threshold, Cherenkov Emission is determined by the Frank Tamm formula \cite{ppreview}.  Under the assumption of constant magnetic permittivity and a zenith angle of $90\degree$, and with  the vertical distance travelled in meters $\Delta_{h}$ and the emission energy range in eV $\Delta_{E}$, we can find an approximate Cherenkov Emission formula.
+\[ \frac{d^{2}N_{photons}}{dEdh} = \frac{\alpha Z^{2}}{\hbar c} \sin^{2} \theta_{c}(E) \approx 370 Z^{2} \sin^{2} \theta_{c}(E)\, cm^{-1}eV^{-1} \]
+
+\[ N_{photons} \approx (37000 \times Z^{2} \times \Delta_{h} \times \Delta_{E}(E))\, m^{-1}eV^{-1}\]
+ 
+
+A full simulation of the LPD was undertaken, with the assumption that $\Delta_{E} \approx 0.7$ independent of Energy. Although this is certainly an oversimplification of the true picture, it will allow us to understand the variation of the LPD with height. A more rigorous LPD parameterisation will be found later to account for the dependence of $\Delta_{E}$ on the Energy. 
 
 If we divide the number of emitted photons by the area of the annulus between the ring radii at $h$ and $h - \Delta_{h}$, we retrieve the LDF shown in \ref{fig:lpd}, which varies with $ \rho_{DC}  = f(r) \times Z^{2}$ . Thus the amplitude of the LDF is proportional to the charge of the Cosmic Ray, enabling the Charge to be determined from the DC emission. This is the basis for charge reconstruction in the LDF method.
 
@@ -99,25 +105,13 @@ The Refractive Index of the atmosphere, and thus the Cherenkov angle $\theta_{C}
 Emission continues until the first interaction with the atmosphere, occurring at a randomly distributed height we call $h$. Then for a given Telescope Array altitude above sea level, simple trigonometry yields the radius of the LDF on the ground:
 \[ Radius(height = altitude_{array}) = \tan [\theta_{C}(h)] \times (h - altitude_{array})\]
 
-Thus the upper atmosphere emission contributes to the inner LDF, while the lower atmosphere emission contributes to the outer LDF. We can also see ground emission radius as a function of height in \ref{fig:generalenergy}. We find that the high-radius emission (occurring near the first interaction region) varies little between different high energies. We deem this to be \textquoteleft Saturated Emission\textquoteright.
+Thus the upper atmosphere emission contributes to the inner LDF, while the lower atmosphere emission contributes to the outer LDF. As the cosmic ray travels down through the atmosphere, Cherenkov Emission continuously illuminates new areas on the ground that were previously unlit, without re-illuminating inner regions. This is extremely useful, because it means that for all distances up to the maximum radius, the LPD will be completely independent of the emission height. One full parameterisation of the LPD will thus be valid for all heights, provided the maximum radius is known.
+
+We can also see ground emission radius as a function of height in \ref{fig:generalenergy}. We find that the high-radius emission (occurring near the first interaction region) varies little between different high energies. We deem this to be \textquoteleft Saturated Emission\textquoteright.
 
 To accurately quantify Saturated Emission, we can compare the photon density to the theoretical maximum photon density, corresponding to an infinite-energy particle with $\beta =1$. The illustrated maximum is useful as a reference, although because the atmosphere is not modelled beyond an altitude of 120km, the small-radius emission is not accurately simulated entirely correctly. However, real cosmic rays in the considered energy regime will all cross the emission threshold and begin emission at an altitude much lower than 120km, so can be considered accurately modelled. Absorption WAS/WAS NOT modelled.
 
 However, in the 4 telescope height region, the Cherenkov Threshold Energy is $ E_{Threshold} \approx 0.35$ TeV per Nucleon as shown in \ref{fig:lpd}! The saturation in for these heights occurs roughly at 0.7 TeV per Nucleon or something...
-
-\subsection{First Interaction Height}
-Cosmic Rays survival in from the top of the atmosphere follows an exponential decay with the number of 'interaction lengths' passed. The interaction length is dependent on the interaction cross section, which increases with density. Thus the number of interaction lengths increases exponentially as height decreases. The resultant decays occur most often at a height of $h \approx 40 \pm 10$ km , as seen in \ref{fig:generalheight}.
-
-\begin{figure}
-\begin{center}
-\includegraphics[height=0.9\textheight]{generalheight}
-\caption{The integrated interaction lengths increases as height decreases. Thus the decay probability follows a exponentially increasing distribution. The mean first interaction height for all events is roughly 40km above sea level.}
-\label{fig:generalheight}
-\end{center}
-\end{figure}
-
-\subsection{Atmospheric Absorption}
-The Cherenkov Light, mostly emitted in the visible blue part of the EM spectrum, experiences relatively little atmospheric absorption. The major of Rayleigh scattering-based atmospheric absorption occurs in the lower part of the troposphere, and thus the atmospheric absorption is almost independent of emission up to first interaction height.
 
 \section{LPD Event Reconstruction}
 
@@ -161,7 +155,7 @@ Classifiers provide an alternative method of identification, making use of super
 The CORSIKA package \cite{Heck98} was used to generate Cosmic Ray events, and the Sim\textunderscore telarray package  \cite{Bernlohr08} was used to generate corresponding HESS array telescope images.  Simulation with EAS background was used to produce training pixel sets, while corresponding simulation without EAS background was used to find the true DC pixel in each training image. As part of a new method developed for this analysis, a Boosted Decision Tree (BDT) classifier was trained with the data to identify DC pixels. Once trained, the BDT was applied to a separate \textquoteleft testing' set of simulated telescope images. As before, the true DC pixel was determined from a second EAS-free simulation. Thus, the accuracy of BDT identification for test telescope images was calculated.
 
 \subsection{Image Simulation}
-The full simulation of air showers was performed using the CORSIKA package, with a standard atmospheric profile derived from measurements conducted at the HESS site in Namibia. In total, 5000 training events and a further 10000 testing events were simulated. The simulated particles were $Fe^{56}$, within the Energy Range of $35-135$ TeV and a spectrum $\phi(E) \propto E^{-2.7}$. For each set of simulated event, 4 unique random number seeds were used to generate the shower. An altitude of 1800m was assumed, again corresponding to the HESS site. The simulated zenith angle ranged from $0\textdegree < \theta < 2 \textdegree$, while the simulated azimuth angle ranges from -2\textdegree $ < \phi < 2 \textdegree$. The four smaller HESS-phase-1 telescopes were arranged in a cross along the x/y axis with the larger HESS-phase-2 \textquoteleft CT5' telescope placed at the center. The length of each cross arm was $85m$. The simulated target region of the cores was chosen to be a square centered on CT5, with each 300m-long side bisecting the x/y axis.Due to hardware differences between CT5 and the original HESS 1 telescopes, we analyse HESS1 and HESS2 images separately. To determine the true class of each pixel, a simulation was initially run with an energy cut of 10 PeV on all muons and electrons. Because this cut exceeded the primary particle energy, neither daughter muons and electrons, nor the photons they would have emitted, were simulated. Thus the hadronic Cherenkov Light from the primary particle and daughter fragments, but not the EAS light, was present in the camera image. A second identical \textquoteleft EAS Simulation' was run including the same random seeds, but without the energy cut on muons and electrons. This gave a complete EAS image including identical DC light.
+The full simulation of air showers was performed using the CORSIKA package, with a standard atmospheric profile derived from measurements conducted at the HESS site in Namibia. In total, 5000 training events and a further 10000 testing events were simulated. The simulated particles were $Fe^{56}$, within the Energy Range of $35-135$ TeV and a spectrum $\phi(E) \propto E^{-2.7}$. For each set of simulated event, 4 unique random number seeds were used to generate the shower. An altitude of 1800m was assumed, again corresponding to the HESS site. The simulated zenith angle ranged from $0\degree < \theta < 2 \degree$, while the simulated azimuth angle ranges from $-2\degree < \phi < 2 \degree$. The four smaller HESS-phase-1 telescopes were arranged in a cross along the x/y axis with the larger HESS-phase-2 \textquoteleft CT5' telescope placed at the center. The length of each cross arm was $85m$. The simulated target region of the cores was chosen to be a square centered on CT5, with each 300m-long side bisecting the x/y axis.Due to hardware differences between CT5 and the original HESS 1 telescopes, we analyse HESS1 and HESS2 images separately. To determine the true class of each pixel, a simulation was initially run with an energy cut of 10 PeV on all muons and electrons. Because this cut exceeded the primary particle energy, neither daughter muons and electrons, nor the photons they would have emitted, were simulated. Thus the hadronic Cherenkov Light from the primary particle and daughter fragments, but not the EAS light, was present in the camera image. A second identical \textquoteleft EAS Simulation' was run including the same random seeds, but without the energy cut on muons and electrons. This gave a complete EAS image including identical DC light.
 
 With the sim\textunderscore telarray package, the expected HESS hardware response to each air shower was simulated. Among other things, the program accounts for atmospheric transmission and density, mirror positions, sizes and reflectivities, camera shadowing and triggering, quantum efficiency and pulse responses. For the full-shower image, the night sky background was also simulated by sim\textunderscore telarray. Due to the comprehensive and detailed nature of these hardware simulations, the resultant images can be considered \textquoteleft realistic'.  However, sim\textunderscore telarray introduces various sources of random noise to the simulation, leading to some divergence in the DC light between the EAS-free and full-shower images.
 
@@ -368,6 +362,8 @@ For HESS1 iron events, the total acceptance rate falls slightly from 2.4\% to 2.
   \end{tabular}
 \end{table}
 
+\section{HESS-type Event Reconstruction}
+
 \subsection{Determining $True_{DC}$}
 Determining the value off $True_{DC}$ is important for determining the error in our LPD measurements. However, there are two natural ways of quantifying $True_{DC}$. In the basic case, we can simply consider the EAS-free intensity $Intensity_{max}$ in the DC pixel. An alternative is to take the entire EAS-free image amplitude $I_{tot}$ as our $True_{DC}$ value. The use of Image Amplitude accounts for the fact that the DC light is almost always split between two or more pixels. Although in most cases, one pixel has the majority of the light, in extreme cases the light can be evenly split between two. As a result of the smaller angular region covered by each CT5 pixel, this happens much more frequently for HESS2 than for HESS1. A countervailing argument is the susceptibility of the Image Amplitude measurement to edge effects. A DC pixel lying near the image edge will be unaffected by this fact, but the total image amplitude may decline because dimmer pixels move over the image edge.
 
@@ -532,7 +528,7 @@ Through combined use of the two equations, we can parameterise the entire Full-S
 \end{center}
 \end{figure}
 
-\section{HESS-type Event Reconstruction}
+\subsection{Other Stuff Like}
 Having obtained a parameterisation of the LPD, and and assoiated error in the case of a HESS-type array, the Charge reconstruction Technique can be applied to a simpified Monte Carlo simulation of the HESS array, developed as part of this analysis. Conducting a Monte Carlo simulation using the Gaussian-smeared LPD, we can measure the effectiveness of the LPD-reconstruction technique.
 
 \subsection{Iron Flux and Energy}
@@ -544,12 +540,50 @@ Within CORSIKA, a square simulation of 300 x 300m was simulated. We can consider
 
 The full 5-telescope HESS array has been in operation since 2012 \cite{hessCT5}, and has thus had time to collect several years of data. Due to the requirement of night operation under favourable weather conditions, the HESS phase 2 experiment has collected approximately 5000 hours of data. On the basis of our high-multiplicity flux rate, we can assume that a rough expected event count would be roughly 7900 high-multiplicity iron events. The Monte Carlo simulations will be run with approximately this number of events.
 
-To accurately model the Cosmic Rays, the Energy Power Law must be simulated. To generate the random Energy value En(R) following the power law, a uniformly distributed random number R is generated. The value of R represents a random fraction of the total simulated flux $ F(R) = R \times F(35-135TeV) $, and can thus range from 0-1. Having determined the Integrated Flux corresponding to the random number, the Energy corresponding to this flux can be calculated. The energy E is defined as the lower bound of the integral which would produce the chosen integrated flux F. Thus R=0 corresponds to an Energy of 135TeV yielding no Integrated Flux, while R=1 would correspond to an Energy of 35TeV and the full Integrated Flux.
+To accurately model the Cosmic Rays, the Energy Power Law must be simulated. To generate the random Energy value En(R) following the power law, a uniformly distributed random number R is generated. The value of R represents a random fraction of the total simulated flux $ F(R) = R \times F(35-135TeV) $, and can thus range from 0-1. Having determined the Integrated Flux corresponding to the random number, the Energy corresponding to this flux can be calculated. The energy E is defined as the lower bound of the integral which would produce the chosen integrated flux F. Thus R=0 corresponds to an Energy of 135TeV yielding no Integrated Flux, while R=1 would correspond to an Energy of 35TeV and the full Integrated Flux. THus the simulated Cosmic Rays will obey the power law, with high-energy events being realistically suppressed.
 
 \[ F(R) = F(En(R)-135TeV) = \int_{En(R)}^{135} \phi_{0} E^{-2.76} dE =\frac{\phi_{0}}{1.76}[En(R)^{-1.76} - 135^{-1.76}]= R \times F(35-135TeV)\] \[\Longrightarrow  En(R) = (\frac{1.76\times R \times F(35-135TeV)}{\phi_{0}} +135^{-1.76})^{\frac{-1}{1.76}} \]
 
+\subsection{First Interaction Height}
+Cosmic Rays survival in from the top of the atmosphere follows an exponential decay with the number of 'interaction lengths' passed. 
+
+The mean free path $\ell$ of a Cosmic Ray is a function of atmospheric cross section and number density, which are themselves functions of  height, so that $\ell(h) = \frac{1}{\sigma(h) n(h)}$. It is instead easier to consider a new variable x, which we name the \textquoteleft Interaction Distance', so that the survival probability of a cosmic ray follows a simple exponential decay with the interaction distance passed. We thus define one Interaction Length, $x_{0}$ such that a cosmic ray traveling through one interaction length will have a non-interaction probability of $\frac{1}{e}$, and in general $P_{survival} \propto e^{\frac{-x}{x_{0}}}$ The geometric distance corresponding to one interaction length will vary as a function of height.
+
+The Interaction Length is inversely proportional to the interaction cross section, which is itself proportional to local atmospheric number density, so that $x_{0} \propto \frac{1}{n(h)}$. Thus, because the number density of the atmosphere increases with decreasing height, the local interaction length will be geometrically shortened as the height of the cosmic ray decreases. If we consider the Integrated Interaction Distance as the total number of interaction lengths passed by a Cosmic Ray from the top of the atmosphere to a given height h, we see in Figure \ref{fig:generalheight} that the total integrated interaction distance increases exponentially with increasing height. We use the standard HESS-based data tables also found in the CORSIKA software, containing information regarding the integrated interaction distance and refractive index over a range of heights. As a function of x, the corresponding local interaction rate $\Gamma_{interact}(x)$ will be a product of the survival probability and the probability of interacting $P_{interact}(x)= -\frac{dP_{survival}(x)}{dx}$. 
+
+\[ \Gamma_{interact}(x) = P_{interact} \times N_{survived} =  - \frac{dP_{survival}(x)}{dx} \times (N \times  P_{survival}) \]
+
+The fraction of surviving and interacting cosmic rays are shown in Figure \ref{fig:generalheight}, alongside the resultant distribution of interactions binned by height h rather than interaction length x. The height of each bin can be considered an average local value for $\Gamma_{interact}(h)$, and it is clear that the function $\Gamma_{interact}(h)$ peaks at a height of around 40km. This is thus the height region where most of our cosmic rays will interact with the atmosphere.
+
+\begin{figure}
+\begin{center}
+\includegraphics[height=0.9\textheight]{generalheight}
+\caption{The integrated interaction lengths increases as height decreases. Thus the decay probability follows a exponentially increasing distribution. The mean first interaction height for all events is roughly 40km above sea level.}
+\label{fig:generalheight}
+\end{center}
+\end{figure}
+
+To simulate the First Interaction Height, we assign a uniform random number R to each event, corresponding to the $P_{survival}$ at which the cosmic ray will interact. R can be interpreted fraction of events that will have interacted before the simulated cosmic ray does. It ranges from R=0 for interaction at the top of the Atmosphere to R=1 for an event reaching the ground. Having determined the fraction of events, we assume the survival probability is normalised. As with all exponential distributions, we see that the expectation value is equal to one Interaction Length.
+
+\[ P_{survival}(x) = k e^{\frac{-x}{x_{0}}} \Longrightarrow \int_{0}^{\infty} P_{survival}(x) dx = k x_{0} [ e^{0} - e ^ {- \infty}] = 1 \Longrightarrow k = \frac{1}{x_{0}}\]
+\[P_{half}(x) =\int_{0}^{x_{median}} k e^{\frac{-x}{x_{0}}} dx =[1 -e^{\frac{-x_{median}}{x_{0}}} ]= \frac{1}{2} \Longrightarrow {x_{median}} = x_{0} \ln (2)\]
+
+\[ <x> =  \int_{0}^{\infty} P_{survival}(x) dx = x_{0} = \frac{x_{median}}{\ln (2)} \]
+
+Thus, we can simply calculate $x_{0}$ as the expectation value of interaction length. This parameter is free-floating, and can only be determined through experimental study of Cosmic Rays. Experimental results indicate an approximate cross section of $\sigma_{Fe-air} = 2000mb$ and a corresponding thus $x_{0} \approx 12 g cm^{-2}$ \cite{Montanus2013}. 
+
+As with energy, we wish to simulate a realistic spectrum for the first interaction heights. We must thus convert the uniform random number R to an interaction distance X. Using the standard atmospheric tables, the corresponding height value can be found using exponential interpolation.
+
+\[ R = \int_{0}^{X} k e^{\frac{-x}{x_{0}}} dx = [1 -e^{\frac{-X}{x_{0}}}] \Longrightarrow X = -x_{0} \ln (1 - R) \] 
+
+But you lose the tail..
+
+As cited by the HESS study, a typical first interaction height is roughly 30km for a Cherenkov-Emitting event \cite{hess07}. With the assumed value of $x_{0}$, a simulation was conducted to determine the expected interaction heights for Cosmic Rays. It is found that the mean first interaction height of 36.9km and a median first interaction height of 35.2km for all cosmic rays. However, when Cherenkov-Emitting events are considered, we have both a median and mean first interaction height of 30.3km, which clearly agrees with our expectations.
+
+Another parameter exponentially interpolated using the data tables is the optical depth to the surface, $\tau$. The Cherenkov Light, mostly emitted in the visible blue part of the EM spectrum, experiences relatively little atmospheric absorption. The major of Rayleigh scattering-based atmospheric absorption occurs in the lower part of the troposphere, and thus the atmospheric absorption is almost independent of emission up to first interaction height. For a given emitted intensity $I_{0}$ we find that the corresponding I received on the ground decays exponentially with optical depth, so that $\frac{I}{I_{0}}=e^{-\tau}$ with $\tau=\int_{0}^{l}ds$. 
+
 \subsection{First Interaction and Energy Saturation}
-Using the theoretical LPD found from the Frank-Tamm formula, we see that this LPD will have a very abrupt discontinuity. However, after the first atmospheric simulation, secondary DC light from daughter nucleii will also be produced. it is not possible to effectively distinguish this secondary DC light, so it will contribute to the smearing seen in Figure \ref{fig:corsikalpd1}. The first Interaction Height will determine the radius at which the LPD for a given Iron Nucleus will deviate from the ideal case. By considering the distribution of first interaction heights, we can consider the variation of the LPD. 
+Using the theoretical LPD found from the Frank-Tamm formula, we see that this LPD will have a very abrupt discontinuity. 
 
 The mean first interaction height for all Cherenkov Emitting Cosmic Rays in the atmosphere is 40km, and neglecting variations in atmospheric density profiles around the Earth, this can be considered independent of experimental array. However, the multiplicity of event is determined by equipment efficiencies, altitude and telescope layout. When the HESS layout is simulated, we find that the 4 telescope events have a mean height of $h \approx 23 \pm 5$ km, as shown in \ref{fig:Hessheight}.
 

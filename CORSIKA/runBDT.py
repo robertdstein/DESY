@@ -3,7 +3,7 @@ import os.path
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-bid", "--BDTID", default="traindata")
-parser.add_argument("-tid", "--testID", default="testdata")
+parser.add_argument("-tid", "--testID", default="bigtestdata")
 parser.add_argument("-t", "--train", action="store_true")
 parser.add_argument("-tr", "--trainregressor", action="store_true")
 parser.add_argument("-re", "--reextract", action="store_true")
@@ -66,7 +66,7 @@ statsfilename = statstargetfolder + "datastats.pkl"
 if not cfg.train and not cfg.recombine:
 	pass
 else:
-	execute = "qsub -t 1-200:1 extractpixelsoncluster.sh " + cfg.testID + " True"
+	execute = "qsub -t 1-200:1 extractpixelsoncluster.sh " + cfg.testID + " False"
 	print time.asctime(time.localtime()), execute, "\n"
 	os.system(execute)
 	

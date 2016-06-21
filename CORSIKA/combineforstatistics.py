@@ -56,7 +56,7 @@ def makeBDTentry(pixelentry):
 for sigfit in ["rgr", None]:
 	filepath = "/nfs/astrop/d6/rstein/data/"
 	i = 1
-	j = 10000
+	j = 1000
 	totalimages = [0, 0]
 	triggeredimages = [0, 0]
 	DCpasstotal = [0, 0]

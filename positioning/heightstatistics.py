@@ -73,7 +73,7 @@ def run(eff, rowcount, mincount=4, text=False, graph=False, output="default", la
 	ax3 = plt.subplot(312, sharex=ax2)
 	
 	ax3.plot(survivalheights, Rrange, label="survived")
-	ax3.plot(decayheights, Rrange, label = "decayed")
+	ax3.plot(decayheights, Rrange, label = "interacted")
 	plt.ylabel('Fraction')
 	plt.xlabel('First Interaction Height', labelpad=0)
 	ax3.invert_xaxis()
@@ -90,6 +90,7 @@ def run(eff, rowcount, mincount=4, text=False, graph=False, output="default", la
 	wbT = []
 	mT = []
 	wmT = []
+	emith = []
 	
 	#Iterate over Energies
 	simset = simulationset(eff, layout, mincount=0)
@@ -108,13 +109,15 @@ def run(eff, rowcount, mincount=4, text=False, graph=False, output="default", la
 
 		elif multiplicity < int(mincount):
 			bT.append(height)
+			emith.append(height)
 
 		else:
 			mT.append(height)
+			emith.append(height)
 			
-	print mT
-	print bT
-	print nDC
+	print "High Multiplicity DC emission is", float(len(mT))/float(number)
+	print "Low Multiplicity DC emission is", float(len(bT))/float(number)
+	print "Non-DC emission is", float(len(nDC))/float(number)
 
 	#Create labels for each bin
 
@@ -162,6 +165,8 @@ def run(eff, rowcount, mincount=4, text=False, graph=False, output="default", la
 	fig.tight_layout()
 	fig.subplots_adjust(top=0.95)
 	
+	
+	plt.savefig('/d6/rstein/Hamburg-Cosmic-Rays/positioning/graphs/stats/generalheight.pdf')
 	plt.savefig('/d6/rstein/Hamburg-Cosmic-Rays/report/graphs/generalheight.png')
 	#Plot the unscaled histogram
 	
@@ -170,6 +175,28 @@ def run(eff, rowcount, mincount=4, text=False, graph=False, output="default", la
 	plt.hist([mT, bT, nDC], bins=20, log=True, histtype='bar', range=limits, label=labels)
 	
 	print "Overall mean first interaction height is", np.mean(hrange)
+	hrange.sort()
+	nhrange = len(hrange)
+	halfin = int(nhrange/2.)
+	hmedian = hrange[halfin]
+	print "Overall median first interaction height is", hmedian
+	
+	tscale = atm.runlengthswithh(hmedian)
+	print "Corresponding Median Interaction Lengths", tscale
+	texpectation = tscale/math.log(2)
+	print "Resultant Expectation Interaction Lengths", texpectation
+	
+	emith.sort()
+	ehrange = len(emith)
+	ehalfin = int(ehrange/2.)
+	ehmedian = emith[ehalfin]
+	
+	print "Cherenkov-Emission mean first interaction height is", np.mean(emith)
+	print "Cherenkov-Emission median first interaction height is", ehmedian
+	etscale = atm.runlengthswithh(ehmedian)
+	print "Corresponding Median Interaction Lengths", etscale
+	etexpectation = etscale/math.log(2)
+	print "Resultant Expectation Interaction Lengths", etexpectation
 	
 	plt.xlim(limits)
 	plt.ylabel('Recorded Count')

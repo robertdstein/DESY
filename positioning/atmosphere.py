@@ -91,10 +91,50 @@ def runheight(prob, text=False):
 #Assumes with P=0 for immediate decay at top of atmosphere and P=1 for survival to ground
 		
 def runlengths(prob):
-	scale = 8
+	scale = 12.0
 	
 	lengths = -scale*(math.log(1-prob))
 	return lengths
+	
+def runlengthswithh(h, text=False):
+	with open('/nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/positioning/atmospheredata/atmprofile.csv', 'rb') as csvfile:
+		reader = csv.reader(csvfile, delimiter=',', quotechar='|')
+		
+		#Provides starting values to avoid errors in extreme cases
+
+		i=0
+		currenth=0
+		currentt=0
+		t=0
+		
+		for row in reader:
+			i +=1
+			
+			if i > 3:
+				
+				#Finds nearest decay length entry above given decay lengths
+				
+				previoust = currentt
+				currentt = float(row[2])
+				previoush = currenth
+				currenth = float(row[0])*1000
+				
+				if currenth < h:
+					pass
+				else:
+					
+					#Interpolates height given Decay Lengths and Height step size from previous entry
+					
+					gradient =(float(currentt)-float(previoust))/(float(currenth)-float(previoush))
+					deltah = h - previoush
+					
+					t = currentt + (deltah*gradient)
+					
+					if text:
+						print row, h, t, prob, float(h)
+					
+					return t
+		return t
 	
 #Calculates the fraction of Transmitted Light from a given height that will reach the ground
 #Assumes absorbtion fraction at first interaction covers preceding emission too (this is reasonable as f~54% for almost all decay height)

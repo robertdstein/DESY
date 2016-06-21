@@ -150,6 +150,21 @@ class fullevent:
 		else:
 			raise Exception("No full simulation exists")
 	
+	def simulationhillasparameters(self, findBDT):
+		"""Get Hillas parameters for both simulations, and
+		pass the DC parameters to the full pixels, to enable
+		regressor training
+		"""
+		if hasattr(self.simulations, "DC"):
+			DCsim = getattr(self.simulations, "DC")
+			DCsim.extractpixelhillas(findBDT)			
+			if hasattr(self.simulations, "full"):
+				fullsim = getattr(self.simulations, "full")
+				fullsim.extractpixelhillas(findBDT, DCsim)
+		elif hasattr(self.simulations, "full"):
+			fullsim.extractpixelhillas(findBDT)
+		
+	
 class simulation:
 	"""One simulation, which can be either full 
 	or DC (hadron only) simulation
@@ -213,14 +228,21 @@ class simulation:
 			value = float(values[i])
 			setattr(self.shower, writename, value)
 			
-	def extractpixelhillas(self, findBDT):
+	def extractpixelhillas(self, findBDT, DCsim=None):
 		"""Using the general shower azimuth and altitude, the hillas parameters
 		for each image are calculated. 
 		""" 
 		if hasattr(self.shower, 'shower_azimuth_') and hasattr(self.shower, 'shower_altitude_'):
 			for index in self.triggerIDs:
 				tel = self.images[index]
-				tel.generatepixelhillasparameters(self.shower.shower_azimuth_, self.shower.shower_altitude_, findBDT)
+				if DCsim != None:
+					if index in DCsim.triggerIDs:
+						DCtel = DCsim.images[index]
+						tel.generatepixelhillasparameters(self.shower.shower_azimuth_, self.shower.shower_altitude_, findBDT, DCtel)
+					else:
+						tel.generatepixelhillasparameters(self.shower.shower_azimuth_, self.shower.shower_altitude_, findBDT, DCtel=None)
+				else:
+					tel.generatepixelhillasparameters(self.shower.shower_azimuth_, self.shower.shower_altitude_, findBDT, DCtel=None)
 		else:
 			print "No Shower Azimuth and Altitude"
 			
@@ -589,7 +611,7 @@ class telescopeimage:
 		else:
 			raise Exception("No BDT pixel!")
 		
-	def generatepixelhillasparameters(self, showerazimuth, showeraltitude, findBDT):
+	def generatepixelhillasparameters(self, showerazimuth, showeraltitude, findBDT, DCtel=None):
 		"""Uses the general shower azimuth and altitude to form the various Hillas parameters.
 		Firstly the nearest neighbour entries are found. Then the image-specific shower direction is found.
 		This is recorded as self.hillas.showerx/y. In addition the aspect ration is found.
@@ -621,7 +643,18 @@ class telescopeimage:
 		
 		for pixelentry in self.pixels:
 			pixelentry.hillas(cogx, cogy, showerx, showery, sm, sc)
-			pixelentry.image_size_amplitude_=itot
+			pixelentry.hillasparams = container()
+			for variable in vars(self.hillas):
+				value = getattr(self.hillas, variable)
+				setattr(pixelentry.hillasparams, variable, value)
+			pixelentry.dchillasparams = container()
+			if DCtel != None:
+				for variable in vars(DCtel.hillas):
+					value = getattr(DCtel.hillas, variable)
+					setattr(pixelentry.dchillasparams, variable, value)
+			else:
+				for variable in vars(self.hillas):
+					setattr(pixelentry.dchillasparams, variable, None)
 		
 		arg = itot / (math.sin(math.radians(float(self.altitude)))*161)
 		self.qdccut = 0.14 * math.log(arg)

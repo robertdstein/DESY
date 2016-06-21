@@ -12,10 +12,17 @@ D.~B. Kieda, S.~P. Swordy, and S.~P. Wakely.
   10-TeV}.
 \newblock {\em Astropart. Phys.}, 15:287--303, 2001.
 
+\bibitem{ppreview}
+K~Nakamura and Particle~Data Group.
+\newblock Review of particle physics.
+\newblock {\em Journal of Physics G: Nuclear and Particle Physics},
+  37(7A):075021, 2010.
+
 \bibitem{Heck98}
-D.~Heck, G.~Schatz, T.~Thouw, J.~Knapp, and J.~N. Capdevielle.
-\newblock {CORSIKA: A Monte Carlo code to simulate extensive air showers}.
-\newblock 1998.
+D.~{Heck}, J.~{Knapp}, J.~N. {Capdevielle}, G.~{Schatz}, and T.~{Thouw}.
+\newblock {\em {CORSIKA: a Monte Carlo code to simulate extensive air
+  showers.}}
+\newblock February 1998.
 
 \bibitem{Bernlohr08}
 Konrad Bernlohr.
@@ -37,5 +44,11 @@ F.~{Krayzel}, G.~{Maurin}, L.~{Brunetti}, J.-M. {Dubois}, A.~{Fiasson},
 \newblock {Improved sensitivity of H.E.S.S.-II through the fifth telescope
   focus system}.
 \newblock {\em ArXiv e-prints}, July 2013.
+
+\bibitem{Montanus2013}
+Hans Montanus.
+\newblock {An extended Heitler-Matthews model for the full hadronic cascade in
+  cosmic air showers}.
+\newblock 2013.
 
 \end{thebibliography}

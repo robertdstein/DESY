@@ -4,4 +4,7 @@ nnmin
 nnmax
 nnmean
 channel1.intensity
-image_size_amplitude_
+hillasparams.image_size_amplitude_
+hillasparams.energy
+hillasparams.core_distance_to_telescope
+hillasparams.aspect_ratio_

@@ -8,6 +8,7 @@ import cPickle as pickle
 import random
 import os
 from telescopeclasses import *
+import lpdfit as lf
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-jid", "--jobID", default="regressorset")
@@ -30,7 +31,10 @@ def makeBDTentry(pixelentry):
 		suffix = pixelentry
 		if len(varsplit) > 1:
 			for name in varsplit[:-1]:
-				 suffix = getattr(suffix, name)
+				if hasattr(suffix, name):
+					suffix = getattr(suffix, name)
+				else:
+					return None
 			varname = varsplit[-1]
 		else:
 			varname = variable
@@ -42,7 +46,7 @@ def makeBDTentry(pixelentry):
 	return bdtentry
 
 categories = ["hess2","hess1"]
-learningrates = [0.01, 0.005]
+learningrates = [0.2, 0.5]
 
 for i in range(len(categories)):
 	
@@ -71,12 +75,13 @@ for i in range(len(categories)):
 	for i in range(len(trainset)):
 		pix = trainset[i]
 		truesignal = signals[i]
+		fitsignal = lf.run(pix)
 		
 		bdtentry = makeBDTentry(pix)
 		
-		if bdtentry != None:
+		if (bdtentry != None) and (fitsignal != None):
 			full.append(bdtentry)
-			scores.append(truesignal)
+			scores.append(fitsignal)
 
 	
 	print time.asctime(time.localtime()), "Datasets produced!"
@@ -85,7 +90,7 @@ for i in range(len(categories)):
 	
 	#Train the BDT (Gradient Boosting Classifier)  and save
 	
-	rgr = ensemble.GradientBoostingRegressor(n_estimators=1000, max_depth=2, learning_rate=learningrate)
+	rgr = ensemble.GradientBoostingRegressor(n_estimators=1000, max_depth=8, learning_rate=learningrate)
 	rgr.fit(np.array(full), np.array(scores))
 	
 	rgrpicklepath = '/nfs/astrop/d6/rstein/BDTpickle/' + category + 'signalregressor.p'

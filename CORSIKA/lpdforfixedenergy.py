@@ -9,10 +9,11 @@ from matplotlib import rc
 from scipy.optimize import curve_fit
 
 parser = argparse.ArgumentParser()
-parser.add_argument("-jid", "--jobID", default="56tev-lpd")
+parser.add_argument("-jid", "--jobID", default="56tev-lpdfull")
 
 sys.path.append('/nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/positioning/')
 import cherenkovradius as cr
+import lightdensity as ld
 
 cfg = parser.parse_args()
 
@@ -36,7 +37,7 @@ print signalbdtvariables
 
 minmultiplicity=3
 
-def makeBDTentry(pixelentry):
+def makesmearBDTentry(pixelentry):
 	bdtentry =[]
 	for variable in signalbdtvariables:
 		varsplit = variable.split('.')
@@ -49,7 +50,15 @@ def makeBDTentry(pixelentry):
 			varname = variable
 		if hasattr(suffix, varname):
 			newval = getattr(suffix, varname)
-			bdtentry.append(newval)
+			if varname == "energy":
+				randomfrac = np.random.normal(1, 0.11)
+				smearval = randomfrac * newval
+				bdtentry.append(smearval)
+			elif varname == "core_distance_to_telescope":
+				smearval = np.random.normal(newval, 10)
+				bdtentry.append(smearval)
+			else:
+				bdtentry.append(newval)
 		else:
 			return None
 	return bdtentry
@@ -57,7 +66,7 @@ def makeBDTentry(pixelentry):
 
 filepath = "/nfs/astrop/d6/rstein/data/"
 
-j=500
+j=1000
 i=0
 
 accepteddistances=[[],[]]
@@ -70,6 +79,8 @@ truesignals2=[[],[]]
 truedistances=[[],[]]
 rejecteddistances=[[],[]]
 rejectedrgrsignals=[[],[]]
+heights =[[],[]]
+rejectedheights=[[],[]]
 
 cut, ucut, QDCcut, DCcut, signalcut = ic.runforstats()
 arcut = ic.runar()
@@ -86,14 +97,6 @@ custom_options = {
 
 p = ProgressBar(**custom_options)
 print p
-
-hessstatus=[False, False]
-if os.path.isfile(hess1picklepath):
-	hessstatus[0] = True
-if os.path.isfile(hess2picklepath):
-	hessstatus[1] = True
-if not os.path.isfile(hess1picklepath) and not os.path.isfile(hess2picklepath):
-	raise Exception("No BDT saved, so no results to plot!")
 
 while (i < j):
 	targetpath = targetfolder +  "run" + str(i) + "/pickle/eventdata.p"
@@ -118,7 +121,7 @@ while (i < j):
 							if float(fulltel.hillas.aspect_ratio_) > arcut:
 								IDs.append(index)
 			
-			if len(IDs) > 0:
+			if len(IDs) > 3:
 				for index in DCsim.triggerIDs:
 					DCtel = DCsim.images[index]
 					fulltel =  fullsim.images[index]
@@ -137,12 +140,11 @@ while (i < j):
 						fullBDT = fulltel.getBDTpixel()
 									
 						simplecandidatesignal = (fullBDT.channel1.intensity -fullBDT.nnmean)
-	
-						bdtentry = makeBDTentry(fullBDT)
+						bdtentry = makesmearBDTentry(fullBDT)
 						if (fulltel.size=="HESS1") and (bdtentry != None):
-							candidatesignal = hess1rgr.predict([bdtentry])[0]/fulltel.mirrorarea
+							candidatesignal = hess1rgr.predict([bdtentry])[0]
 						elif (fulltel.size=="HESS2") and (bdtentry != None):
-							candidatesignal = hess2rgr.predict([bdtentry])[0]/fulltel.mirrorarea
+							candidatesignal = hess2rgr.predict([bdtentry])[0]
 						elif bdtentry == None:
 							candidatesignal = 0
 													
@@ -153,9 +155,11 @@ while (i < j):
 							accepteddistances[plotindex].append(fulltel.hillas.core_distance_to_telescope)
 							signals[plotindex].append(simplecandidatesignal/fulltel.mirrorarea)
 							rgrsignals[plotindex].append(candidatesignal)
+							heights[plotindex].append(DCtel.hillas.Hmax_)
 						else:
 							rejecteddistances[plotindex].append(fulltel.hillas.core_distance_to_telescope)
 							rejectedrgrsignals[plotindex].append(candidatesignal)
+							rejectedheights[plotindex].append(DCtel.hillas.Hmax_)
 
 
 	if (int(float(i)*100/float(j)) - float(i)*100/float(j)) ==0:
@@ -178,8 +182,6 @@ for i in [0, 1]:
 	epn=1000 * energy/56
 	print energy, "TeV", epn, "GeV per nucleon"
 	print height, "m"
-	rmax , theta = cr.run(epn, height, 1, fit="exp")
-	print rmax, "m"
 	
 	figure = plt.gcf() # get current figure
 	figure.set_size_inches(20, 20)
@@ -187,7 +189,6 @@ for i in [0, 1]:
 	
 	ax1=plt.subplot(5,1,1)
 	
-	plt.scatter(truedistances[i], truesignals1[i])
 	plt.xlabel("Core distance to telescope (m)")
 	plt.ylabel("Photoelectron Density (m^-2)")
 	ax1.set_xlim(left=0)
@@ -197,6 +198,8 @@ for i in [0, 1]:
 	
 	d=[]
 	s=[]
+	logs=[]
+	h=[]
 	
 	expd=[]
 	exps=[]
@@ -204,63 +207,105 @@ for i in [0, 1]:
 	lins=[]
 	extrad = []
 	extras=[]
+	logextras=[]
+	extrah = []
 	
 	for k in range(len(truedistances[i])):
 		value = truedistances[i][k]
 		expval = truesignals1[i][k]
-		if value < rmax:	
+		height=heights[i][k]
+		rmax , theta = cr.run(epn, height, 1, fit="exp")
+		if value < (rmax):	
 			d.append(value)
 			s.append(expval)
-		elif value > rmax:
-			extrad.append(value)
-			extras.append(math.log(expval))
-			
-	extraA, extralogC = np.polyfit(extrad, extras, 1)
-	extraC = math.exp(extralogC)
-	print extraA, extralogC, extraC
-			
-	def f1(x, p1, p2, p3, p4):
-		if x < rmax:
-			return p1*np.exp(p2*x) + p3
+			logs.append(math.log(expval))
+			h.append(height)
 		else:
-			return (p1*np.exp(p2*rmax) + p3)*np.exp(p4*(x-rmax))
+			extrad.append(value)
+			extras.append(expval)
+			logextras.append(math.log(expval))
+			extrah.append(height)
 			
-	vf1 = np.vectorize(f1)
-	p0=[3.8, 0.015, -4.7, -0.06]
+	plt.scatter(d, s, color="k")
+	plt.scatter(extrad, extras, color="red")
+
+			
+	#~ extraA, extralogC = np.polyfit(extrad, logextras, 1)
+	#~ extraC = math.exp(extralogC)
+	#~ print extraA, extralogC, extraC
+			
+	def f1(x, p1, p2, p3):
+		return p1*np.exp(p2*x) + p3
+
+	vf1 =np.vectorize(f1)
+	p0=[3.8, 0.015, -4.7]
 
 	popt, pcov = curve_fit(vf1, np.array(d), np.array(s), p0=np.array(p0), maxfev = 100000000)
 	print popt
 	
+	def fit(x):
+		return popt[0]*np.exp(popt[1]*x) + popt[2]
+	
+	vfit = np.vectorize(fit)
+
+	p4s=[]
+	for k in range(len(truedistances[i])):
+		value = truedistances[i][k]
+		expval = truesignals1[i][k]
+		height=heights[i][k]
+		rmax , theta = cr.run(epn, height, 1, fit="exp")
+		if value > (rmax):
+			deltar = value-rmax
+			expected = math.log(fit(value))
+			deltai = math.log(expval)-expected
+			gradient = deltai/deltar
+			p4s.append(gradient)
+		
+	p4 = np.mean(p4s)	
+	print p4s
+	print "Mean p4", p4
+	
 	Line = "y1(x) =" + str('{0:.3f}'.format(popt[0])) + " e ^ ("+ str('{0:.3f}'.format(popt[1]))+"x) + " + str('{0:.3f}'.format(popt[2])) + "\n"
-	Line += "y2(x) = y1(rmax) * e ^ ("+ str('{0:.3f}'.format(popt[3]))+"(x - rmax))"
+	Line += "y2(x) = y1(rmax) * e ^ ("+ str('{0:.3f}'.format(p4))+"(x - rmax))"
 	print Line
 	plt.annotate(Line, xy=(0.05, 0.8), xycoords="axes fraction",  fontsize=15)
 	
-	def fit(x):
-		return vf1(x, popt[0], popt[1], popt[2], popt[3])
+	def f2(x, rmax):
+		return vfit(rmax)*np.exp(p4*(x-rmax))
+		
+	def fullfit(x, rmax):
+		if x > (rmax):
+			return f2(x, rmax)
+		else:
+			return fit(x)
 	
 	truesigmas=[]
-	datasets = [[d, s], [extrad, extras]]
+	datasets = [[d, s, h], [extrad, extras, extrah]]
+	colors=["green", None]
 	
 	alldistances=[]
-	lpd=[]
-	u=[]
-	l=[]
-	pu =[]
-	pl = []
 	
 	for m in range(len(datasets)): 
 		
 		data = datasets[m]
 		distances = data[0]
 		newsignals=data[1]
+		currentheights=data[2]
+		fillcolor=colors[m]
 	
 		diffs = []
+		lpd=[]
+		u=[]
+		l=[]
+		pu =[]
+		pl = []
 		
 		for n in range(len(newsignals)):
 			sig = newsignals[n]
 			dist = distances[n]
-			fitsig = fit(dist)
+			height = currentheights[n]
+			rmax , theta = cr.run(epn, height, 1, fit="exp")
+			fitsig = fullfit(dist, rmax)
 			if fitsig > mindensity:
 				diff = math.fabs((sig-fitsig)/fitsig)
 				diffs.append(diff)
@@ -299,12 +344,14 @@ for i in [0, 1]:
 			psigmas.sort()
 			psigma = psigmas[integer68]
 			print psigma
+			if fillcolor != None:
+				ax1.fill_between(distances, l, u, color=fillcolor, alpha=0.25)
+				ax1.fill_between(distances, pl, pu, color='r', alpha=0.25)
+				plt.plot(distances, lpd, color='k')
 		else:
 			print "Nentries < 3"
 		
-	plt.plot(alldistances, lpd, color='k')
-	plt.fill_between(alldistances, l, u, color='g', alpha=0.25)
-	ax1.fill_between(alldistances, pl, pu, color='r', alpha=0.25)
+	
 	fd = mpatches.Rectangle((0, 0), 1, 1, fc="g",alpha=0.25)
 	pd = mpatches.Rectangle((0, 0), 1, 1, fc="r",alpha=0.25)
 	
@@ -314,11 +361,9 @@ for i in [0, 1]:
 	if len(truesigmas) > 1:
 		message += "Sigma 2: " + str('{0:.2f}'.format(truesigmas[1])) + " \n"
 	plt.annotate(message, xy=(0.9, 0.6), xycoords="axes fraction",  fontsize=15)
-			
-	truesigma=truesigmas[0]
 	
 	for j in range(0,4):
-		
+		ax=plt.subplot(5,1,j+2, sharex=ax1, sharey=ax1)
 		sigset = [truesignals2, signals, rgrsignals, rejectedrgrsignals][j]
 		diffname = ["True LPD (Max Intensity)", "Simple Estimate LPD", "Regressor Estimate LPD", "REJECTED"][j]
 		
@@ -327,135 +372,247 @@ for i in [0, 1]:
 		if diffname == "REJECTED":
 			pdist=rejecteddistances[i]
 			plot=True
+			h=rejectedheights[i]
 		elif diffname == "True LPD (Max Intensity)":
 			pdist=truedistances[i]
+			h=heights[i]
 			plot=True
 		else:
 			pdist=accepteddistances[i]
+			h=heights[i]
 			plot=True
 			
-		fitdistances=[]
-		fitsignals=[]
+		fitd=[]
+		fits=[]
+		fith=[]
+		fitlogs=[]
+		
+		extrad=[]
+		extras=[]
+		extrah=[]
+			
+		
 		for l in range(len(sigset[i])):
 			dist = pdist[l]
-			if dist < rmax:
-				sig = sigset[i][l]
-				fitdistances.append(dist)
-				fitsignals.append(sig)
-		
-		def vf(x, scale):
-			return fit(x) * scale
-			
-		newpopt, pcov = curve_fit(vf, np.array(fitdistances), np.array(fitsignals), maxfev = 100000000)
-			
-		print "Fitted LPD scale:", newpopt
-		
-		def scaledlpd(x):
-			return vf(x, newpopt[0])
-		
-		alldiffs=[[],[]]
-		allfracdiffs=[[],[]]
-		
-		for l in range(len(sigset[i])):
 			sig = sigset[i][l]
-			dist = pdist[l]
-			fitsig = scaledlpd(dist)
-			truefitsig = fit(dist)
-			if fitsig > mindensity:	
-				diff = (sig-fitsig)
-				fracdiff=math.fabs((sig-fitsig)/fitsig)	
-				if dist < rmax:
-					alldiffs[0].append(diff)
-					allfracdiffs[0].append(fracdiff)
+			height=h[l]
+			rmax , theta = cr.run(epn, height, 1, fit="exp")
+			if sig > mindensity:
+				if dist < rmax:	
+					fitd.append(dist)
+					fits.append(sig)
+					fitlogs.append(math.log(sig))
+					fith.append(height)
 				else:
-					alldiffs[1].append(diff)
-					allfracdiffs[1].append(fracdiff)
+					extrad.append(value)
+					extras.append(expval)
+					extrah.append(height)
+				
+		if len(fitd) > 0:
+			
+			if (diffname != "Regressor Estimate LPD") and (diffname != "REJECTED"):
+			
+				def f1(x, p1, p2, p3):
+					return p1*np.exp(p2*x) + p3
+			
+				vf1 = np.vectorize(f1)
+				p0=[3.8, 0.015, -4.7]
+			
+				popt, pcov = curve_fit(vf1, np.array(fitd), np.array(fits), p0=np.array(p0), maxfev = 100000000)
+				print popt
+				
+				def fit(x):
+					return vf1(x, popt[0], popt[1], popt[2])
+				
+				vfit = np.vectorize(fit)
+			
+				p4s=[]
+				for k in range(len(pdist)):
+					value = pdist[k]
+					expval = sigset[i][k]
+					height=h[k]
+					rmax , theta = cr.run(epn, height, 1, fit="exp")
+					if value > (rmax):
+						deltar = value-rmax
+						expected = math.log(fit(value))
+						deltai = math.log(expval)-expected
+						gradient = deltai/deltar
+						p4s.append(gradient)
 					
-		fracsigmas=[]
-		
-		for m in range (len(alldiffs)):
-			#~ print "Making fracdiff", m,
-			diffs = alldiffs[m]
-			fracdiffs=allfracdiffs[m]
-			diffs.sort()
-			fracdiffs.sort()
-			nentries = len(diffs)
-			if nentries > 3:
-				halfinteger = int(0.5*nentries)
-				lowerinteger = int(0.16*nentries)
-				upperinteger = int(0.84*nentries)
-				integer68 = int(0.68*nentries)
+				p4 = np.mean(p4s)	
+				print p4s
+				print "Mean p4", p4
 				
-				lower = diffs[lowerinteger]
-				upper = diffs[upperinteger]
+				Line = "y1(x) =" + str('{0:.3f}'.format(popt[0])) + " e ^ ("+ str('{0:.3f}'.format(popt[1]))+"x) + " + str('{0:.3f}'.format(popt[2])) + "\n"
+				Line += "y2(x) = y1(rmax) * e ^ ("+ str('{0:.3f}'.format(p4))+"(x - rmax))"
+				print Line
+				plt.annotate(Line, xy=(0.05, 0.8), xycoords="axes fraction",  fontsize=15)
 				
-				sigma = 0.5*(upper-lower)
-				
-				fracsigma=fracdiffs[integer68]
-				fracsigmas.append(fracsigma)
-				
-				#~ print m, diffname, lower, diffs[halfinteger], diffs[integer68], upper, sigma, fracsigma, 
-				
-				if fracsigma > truesigmas[m]:
-					effsigma = math.sqrt(fracsigma**2 - truesigmas[m]**2)
-					#~ print effsigma
-				#~ else:
-					#~ print ""
+				def f2(x, rmax):
+					return vfit(rmax)*np.exp(p4*(x-rmax))
+					
 			else:
-				print "nentries < 3"
-		
-		print fracsigmas
-		
-		if plot:
-			ax=plt.subplot(5,1,j+2, sharex=ax1, sharey=ax1)
-			
-			plt.scatter(pdist, sigset[i])
-			
-			u=[]
-			l=[]
-			pu=[]
-			pl=[]
-			currentlpd=[]
-			currentdistances=[]
-			for m in range(len(lpd)):
-				dist = alldistances[m]
-				sig = lpd[m]
-				sig = scaledlpd(dist)
-				if sig > mindensity:
-					currentlpd.append(sig)
-					currentdistances.append(dist)
-					llpd = sig*(1-fracsigma)
-					ulpd = sig*(1+fracsigma)
-					if llpd < 0:
-						llpd=mindensity
-					if (dist > rmax) and len(fracsigmas)> 1:
-						fracsigma=fracsigmas[1]
+				truep2, truep3, truep4 = ld.pcoeffs()
+				print "true p3 is", truep3
+	
+				def f1(x, p1):
+					val = p1*np.exp(truep2*x) + truep3
+					if val > 0:
+						return math.log(val)
 					else:
-						fracsigma=fracsigmas[0]
-					l.append(llpd)
-					u.append(ulpd)
-					up = sig + (math.sqrt(sig)/sqarea)
-					pu.append(up)
-					lp = sig - (math.sqrt(sig)/sqarea)
-					if lp < 0:
-						lp=mindensity
-					pl.append(lp)
-		
-			plt.plot(currentdistances, currentlpd, color='k')
-			plt.fill_between(currentdistances, l, u, color='g', alpha=0.25)
-			plt.fill_between(currentdistances, pl, pu, color='r', alpha=0.25)
+						return 0.0001
 			
+				#~ vf1 = np.vectorize(f1)
+				#~ p0=[3.8, 6]
+			#~ 
+				#~ popt, pcov = curve_fit(vf1, np.array(fitd), np.array(fitlogs), p0=np.array(p0), maxfev = 100000000)
+				#~ print popt
+				
+				Avals = []
+				
+				for l in range(len(fits)):
+					sig = fits[l]
+					dist = fitd[l]
+					yminusc = sig - truep3
+					Aval = yminusc * np.exp(-truep2 * dist)
+					Avals.append(Aval)
+					print "sig", sig,"dist", dist, "y - c", yminusc,"A", Aval
+					
+				newp1 = np.mean(Avals)
+				
+				print "Aval", newp1
+				
+				def fit(x):
+					return newp1*np.exp(truep2*x) + truep3
+				
+				vfit = np.vectorize(fit)
+				
+				Line = "y1(x) =" + str('{0:.3f}'.format(newp1)) + " e ^ ("+ str('{0:.3f}'.format(truep2))+"x) + " + str('{0:.3f}'.format(truep3)) + "\n"
+				Line += "y2(x) = y1(rmax) * e ^ ("+ str('{0:.3f}'.format(truep4))+"(x - rmax))"
+				print Line
+				plt.annotate(Line, xy=(0.05, 0.8), xycoords="axes fraction",  fontsize=15)
+				
+				def f2(x, rmax):
+					return vfit(rmax)*np.exp(truep4*(x-rmax))
+				
+				
+			def fullfit(x, rmax):
+				if x > (rmax):
+					return f2(x, rmax)
+				else:
+					return fit(x)
+				
+			plt.scatter(fitd, fits, color="k")
+			plt.scatter(extrad, extras, color="red")
+			
+			#~ def vf(x, scale):
+				#~ return np.log(fit(x)) * scale
+				#~ 
+			#~ newpopt, pcov = curve_fit(vf, np.array(fitd), np.array(fitlogs), maxfev = 100000000)
+				#~ 
+			#~ print "Fitted LPD scale:", newpopt
+			#~ 
+			#~ def scaledlpd(x, rmax):
+				#~ return newpopt[0]*fullfit(x,rmax)
+				
+			def scaledfit(x):
+				return fit(x)
+				
+			def scaledlpd(x, rmax):
+				return fullfit(x, rmax)
+				
+			
+			datasets = [[fitd, fits, fith], [extrad, extras, extrah]]
+			colors=["green", None]
+		
+			alldistances=[]
+			truesigmas=[]
+			
+				
+			for m in range(len(datasets)): 
+				data = datasets[m]
+				distances = data[0]
+				newsignals=data[1]
+				currentheights=data[2]
+				fillcolor=colors[m]
+			
+				if len(distances) > 0:
+			
+					diffs = []
+					
+					for n in range(len(newsignals)):
+						sig = newsignals[n]
+						dist = distances[n]
+						height = currentheights[n]
+						rmax , theta = cr.run(epn, height, 1, fit="exp")
+						fitsig = scaledlpd(dist, rmax)
+						if fitsig > mindensity:
+							diff = math.fabs((sig-fitsig)/fitsig)
+							diffs.append(diff)
+				
+					diffs.sort()
+					nentries = len(diffs)
+					if nentries > 3:
+						halfinteger = int(0.5*nentries)
+						lowerinteger = int(0.16*nentries)
+						upperinteger = int(0.84*nentries)
+						integer68 = int(0.68*nentries)
+						
+						lower = diffs[lowerinteger]
+						upper = diffs[upperinteger]
+						truesigma = diffs[integer68]
+						
+						truesigmas.append(truesigma)
+						print "Actual", truesigma, "possonian", 
+						
+						distances.sort()
+						alldistances=[]
+						lpd=[]
+						u=[]
+						l=[]
+						pu =[]
+						pl = []
+						psigmas = []
+						for dist in distances:
+							sig = scaledfit(dist)
+							if sig > mindensity:
+								lpd.append(sig)
+								ulpd = sig*(1+truesigma)
+								u.append(ulpd)
+								llpd = sig*(1-truesigma)
+								if llpd > 0:
+									l.append(llpd)
+								else:
+									l.append(0.01)
+								up = sig + (math.sqrt(sig)/sqarea)
+								pu.append(up)
+								lp = sig - (math.sqrt(sig)/sqarea)
+								pl.append(lp)
+								psigmas.append(1./(sqarea*math.sqrt(sig)))
+								alldistances.append(dist)
+					
+						psigmas.sort()
+						psigma = psigmas[integer68]
+						print psigma
+						if fillcolor != None:
+							ax.fill_between(alldistances, l, u, color=fillcolor, alpha=0.25)
+							ax.fill_between(alldistances, pl, pu, color='r', alpha=0.25)
+							plt.plot(alldistances, lpd, color='k')
+					
 			plt.xlabel("Core distance to telescope (m)")
 			plt.ylabel("Photoelectron Density (m^-2)")
 			ax.set_xlim(left=0)
 			ax.set_ylim(bottom=mindensity)
 			plt.title(diffname)
-			message = "Scale: " + str('{0:.2f}'.format(newpopt[0])) + " \n"
-			message += "Sigma 1: " + str('{0:.2f}'.format(fracsigmas[0])) + " \n"
-			if len(fracsigmas) > 1:
-				message += "Sigma 2: " + str('{0:.2f}'.format(fracsigmas[1])) + " \n"
+			message=""
+			#~ message = "Scale: " + str('{0:.2f}'.format(newpopt[0])) + " \n"
+			if truesigmas != []:
+				message += "Sigma 1: " + str('{0:.2f}'.format(truesigmas[0])) + " \n"
+				if len(truesigmas) > 1:
+					message += "Sigma 2: " + str('{0:.2f}'.format(truesigmas[1])) + " \n"
 			plt.annotate(message, xy=(0.9, 0.7), xycoords="axes fraction",  fontsize=15)
-
+			print truedistances[i]
+			print len(truedistances[0])
 
 	saveto = "/nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/CORSIKA/graphs/lpd" + str(i+1)+ ".pdf"
 	
@@ -466,3 +623,5 @@ for i in [0, 1]:
 	plt.savefig(saveto)
 	plt.savefig("/nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/report/graphs/corsikalpd" + str(i+1)+ ".pdf")
 	plt.close()
+
+

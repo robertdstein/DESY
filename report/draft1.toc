@@ -2,12 +2,10 @@
 \contentsline {section}{\numberline {2}Introduction}{4}
 \contentsline {section}{\numberline {3}Cosmic Ray Event Simulation}{4}
 \contentsline {subsection}{\numberline {3.1}Cherenkov Emission}{4}
-\contentsline {subsection}{\numberline {3.2}First Interaction Height}{7}
-\contentsline {subsection}{\numberline {3.3}Atmospheric Absorption}{7}
-\contentsline {section}{\numberline {4}LPD Event Reconstruction}{7}
-\contentsline {subsection}{\numberline {4.1}Log Likelihood Minimisation}{7}
-\contentsline {subsection}{\numberline {4.2}Extracting Charge Resolution}{7}
-\contentsline {subsection}{\numberline {4.3}Iterative Scanning Minimisation}{9}
+\contentsline {section}{\numberline {4}LPD Event Reconstruction}{5}
+\contentsline {subsection}{\numberline {4.1}Log Likelihood Minimisation}{5}
+\contentsline {subsection}{\numberline {4.2}Extracting Charge Resolution}{8}
+\contentsline {subsection}{\numberline {4.3}Iterative Scanning Minimisation}{8}
 \contentsline {subsection}{\numberline {4.4}Boosted Decision Trees}{9}
 \contentsline {section}{\numberline {5}DC Pixel Identification}{9}
 \contentsline {subsection}{\numberline {5.1}Image Simulation}{10}
@@ -15,18 +13,20 @@
 \contentsline {subsection}{\numberline {5.3}Boosted Decision Tree DC Identification}{12}
 \contentsline {subsection}{\numberline {5.4}HESS-2 BDT}{14}
 \contentsline {subsection}{\numberline {5.5}High Multiplicity Events}{15}
-\contentsline {subsection}{\numberline {5.6}Proton Background}{15}
-\contentsline {subsection}{\numberline {5.7}Determining $True_{DC}$}{16}
-\contentsline {subsection}{\numberline {5.8}Error in calculated $DC_{count}$}{18}
-\contentsline {subsection}{\numberline {5.9}Regression BDT for $DC_{Count}$}{20}
-\contentsline {subsection}{\numberline {5.10}Full-Shower LPD}{22}
-\contentsline {section}{\numberline {6}HESS-type Event Reconstruction}{25}
-\contentsline {subsection}{\numberline {6.1}Iron Flux and Energy}{25}
-\contentsline {subsection}{\numberline {6.2}First Interaction and Energy Saturation}{27}
-\contentsline {subsection}{\numberline {6.3}Extended Air Shower Background}{27}
-\contentsline {subsection}{\numberline {6.4}Reconstructed Charge Resolution}{27}
-\contentsline {section}{\numberline {7}Optimised Telescope Array}{27}
-\contentsline {subsection}{\numberline {7.1}Count Rates}{27}
-\contentsline {subsection}{\numberline {7.2}Saturation Region Energies}{30}
-\contentsline {subsection}{\numberline {7.3}High Speed Telescopes}{30}
-\contentsline {section}{\numberline {8}Conclusion}{30}
+\contentsline {subsection}{\numberline {5.6}Proton Background}{16}
+\contentsline {section}{\numberline {6}HESS-type Event Reconstruction}{17}
+\contentsline {subsection}{\numberline {6.1}Determining $True_{DC}$}{17}
+\contentsline {subsection}{\numberline {6.2}Error in calculated $DC_{count}$}{19}
+\contentsline {subsection}{\numberline {6.3}Regression BDT for $DC_{Count}$}{20}
+\contentsline {subsection}{\numberline {6.4}Full-Shower LPD}{24}
+\contentsline {subsection}{\numberline {6.5}Other Stuff Like}{27}
+\contentsline {subsection}{\numberline {6.6}Iron Flux and Energy}{28}
+\contentsline {subsection}{\numberline {6.7}First Interaction Height}{28}
+\contentsline {subsection}{\numberline {6.8}First Interaction and Energy Saturation}{31}
+\contentsline {subsection}{\numberline {6.9}Extended Air Shower Background}{31}
+\contentsline {subsection}{\numberline {6.10}Reconstructed Charge Resolution}{31}
+\contentsline {section}{\numberline {7}Optimised Telescope Array}{31}
+\contentsline {subsection}{\numberline {7.1}Count Rates}{31}
+\contentsline {subsection}{\numberline {7.2}Saturation Region Energies}{33}
+\contentsline {subsection}{\numberline {7.3}High Speed Telescopes}{33}
+\contentsline {section}{\numberline {8}Conclusion}{33}
