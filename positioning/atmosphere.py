@@ -197,7 +197,7 @@ def runindex(height, fit=False, text=False):
 				if currenth < height:
 					pass
 				else:
-					
+					#~ print "Height", height, currenth, previoush, currentri, previousri
 					#Interpolates refractive Index given Index and Height step size from previous entry
 					#~ print currentri, previousri, previoush, height, currenth, ri
 					gradient = (float(currentri)-float(previousri))/(float(currenth)-float(previoush))

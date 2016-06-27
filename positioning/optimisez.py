@@ -81,7 +81,7 @@ def run(statsset, mindetections):
 				bdtcuts.append(BDTcut)
 				meansigmas.append(meansigma)
 				
-				if float(frac) > float(0.05):
+				if float(frac) > float(0.2):
 					if float(24) < float(meanz) < float(28):
 						if float(meansigma) < float(lowestsigma):
 							lowestsigma=meansigma
@@ -93,8 +93,8 @@ def run(statsset, mindetections):
 		optimumfrac = float(optimumpassing)/float(full)
 		
 		annotation += "Optimum Cut occurs with BDT > " + str(optimumbdt)+ " and with " + str(j) + " detections \n"
-		annotation += "This leaves " + str(optimumpassing) + " events , a fraction of " + str(optimumfrac) + "\n"
-		annotation += "The resultant Sigma is " + str(lowestsigma) + "\n \n"		
+		annotation += "This leaves " + str(optimumpassing) + " events , a fraction of " +  str('{0:.2f}'.format(optimumfrac)) + "\n"
+		annotation += "The resultant Sigma is " +  str('{0:.2f}'.format(lowestsigma)) + "\n \n"		
 		
 		if optimumpassing > 1:
 			optimumcuts.append(optimumbdt)

@@ -50,7 +50,7 @@
 
 for (( i=0; i <= 9; i++ ))
 do 
- python /nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/CORSIKA/extractpixels.py -rn $((($i*200) + $SGE_TASK_ID)) -jid $1 -bdt $2
+ python /nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/CORSIKA/extractpixels.py -rn $((($i*500) + $SGE_TASK_ID)) -jid $1 -bdt $2
 done
 
 

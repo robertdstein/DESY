@@ -51,4 +51,10 @@ Hans Montanus.
   cosmic air showers}.
 \newblock 2013.
 
+\bibitem{James75}
+F.~James and M.~Roos.
+\newblock Minuit - a system for function minimization and analysis of the
+  parameter errors and correlations.
+\newblock {\em Computer Physics Communications}, 10(6):343 -- 367, 1975.
+
 \end{thebibliography}

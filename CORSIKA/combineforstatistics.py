@@ -58,6 +58,11 @@ for sigfit in ["rgr", None]:
 	i = 1
 	j = 1000
 	totalimages = [0, 0]
+	truefour = 0
+	truefive=0
+	reconfour=0
+	reconfive=0
+	wronghighmultiplicity = 0
 	triggeredimages = [0, 0]
 	DCpasstotal = [0, 0]
 	correctimages =[0, 0]
@@ -163,6 +168,25 @@ for sigfit in ["rgr", None]:
 					
 					if fulltel.QDCID != None:
 						l+=1
+						
+				
+				if hasattr(DCsim, "triggerIDs"):		
+					truemultiplicity = len(DCsim.triggerIDs)
+					
+					if int(truemultiplicity) == int(4):
+						truefour +=1
+					elif int(truemultiplicity) == int(5):
+						truefive +=1
+						
+					if (int(truemultiplicity) < int(4)) and (int(kar) > int(3)):
+						wronghighmultiplicity  += 1
+						
+					
+				if int(kar) == int(4):
+					reconfour +=1
+				elif int(kar) == int(5):
+					reconfive +=1
+					
 										
 				mtotal +=1
 				totalimages[0] += 4
@@ -305,6 +329,9 @@ for sigfit in ["rgr", None]:
 			message += "\n \n", 
 			message += "We have", str(mtotal), "events. Of these, there are", str(totalimages[i]), "total images, including", str(triggeredimages[i]), "images triggered with DC light."
 			message += "In total,", str('{0:.2f}'.format(float(100.*triggeredimages[i]/totalimages[i]))), "% of all images have DC light to reconstruct. \n"
+			message += "We have", str(truefour), "true 4-tel events, giving an expected rate of ", str('{0:.2f}'.format(float(100.*truefour/mtotal))), "%. We reconstruct", str(reconfour), "4-tel events, giving an acceptance rate of", str('{0:.2f}'.format(float(100.*reconfour/truefour))), "%.\n"
+			message += "We have", str(truefive), "true 5-tel events, giving an expected rate of ", str('{0:.2f}'.format(float(100.*truefive/mtotal))), "%. We reconstruct", str(reconfive), "5-tel events, giving an acceptance rate of", str('{0:.2f}'.format(float(100.*reconfive/truefive))), "%.\n"
+			message += "There are", str(wronghighmultiplicity), "events which are not really high-multiplicity, a rate of", str('{0:.2f}'.format(float(100.*wronghighmultiplicity/mtotal))), ".\n"
 			
 			message += "In total,", str(oldcorrectimages[i]), "pixels are correctly identified using QDC method."
 			if totalimages[i] > 0:

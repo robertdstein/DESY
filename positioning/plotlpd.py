@@ -38,7 +38,7 @@ def run(statsset):
 					dtel = observed.telescopes[i]
 					
 					coredistance = ttel.coredistance
-					truesignal = ttel.DCphotons/dtel.area
+					truesignal = ttel.DCphotons/ttel.area
 					signal = dtel.DCphotons/dtel.area
 					full = ttel.fullphotons/dtel.area
 					smear = dtel.fullphotons/dtel.area

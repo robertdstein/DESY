@@ -6,7 +6,7 @@ NSHOW   1                            number of showers
 *
 PRMPAR  5627                         Primary particle type: 1 Gamma, 14 proton, 402 Helium
 ESLOPE  -2.7                             slope of primary energy spectrum
-ERANGE  36000   136000                Energy range (GeV)	
+ERANGE  6000   136000                Energy range (GeV)	
 OBSLEV  1800.E2
 
 THETAP  0  0                        range of zenith angle (degree)

@@ -14,7 +14,7 @@ import cPickle as pickle
 class simulationset:
 	"""A container for many full simulations
 	"""
-	def __init__(self, raweff, layout, mincount, hmacceptance=1, gridwidth=300):
+	def __init__(self, raweff, layout, mincount, hmacceptance=[1, 1], gridwidth=300):
 		self.simulations = []
 		self.raweff = raweff
 		self.layout = layout
@@ -57,7 +57,8 @@ class simulationset:
 					self.nonDC += 1
 			else:
 				self.hmcount += 1
-				if random.random() < self.highmultiplicityacceptance:
+				intno = newsimulation.detected.DCmultiplicity - self.mincount
+				if random.random() < self.highmultiplicityacceptance[intno]:
 					self.passcount += 1
 					self.simulations.append(newsimulation)
 				
@@ -207,23 +208,28 @@ class telescope():
 		self.findrecorded(simulatedevent, dangle)
 		
 	def findrecorded(self, simulatedevent, dangle):
-		sigcount, bkgcount, sigerror, bkgerror= cs.run(self, simulatedevent)
+		sigcount, bkgcount, sigerror, bkgerror , reconcount, reconerror = cs.run(self, simulatedevent)
 		if simulatedevent.smear:
-			DCphotons = int(random.gauss(sigcount, sigerror*sigcount))		
+			DCphotons = int(random.gauss(sigcount, sigerror*sigcount))
+			reconphotons = random.gauss(reconcount, reconerror*reconcount)
 			fullphotons = int(random.gauss(bkgcount, bkgerror*bkgcount))
 			dangle = random.gauss(dangle, 0.01)
 		else:
 			DCphotons = sigcount				
 			fullphotons = bkgcount
+			reconphotons = reconcount
 			dangle = dangle
 			
 		self.DCphotons=DCphotons
+		self.reconphotons = reconphotons
 		self.fullphotons = fullphotons
 		self.dangle = dangle
 		self.DCfracerror = sigerror
 		self.fullfracerror = bkgerror
+		self.reconfracerror = reconerror
 		
 		self.DCtrigger = self.checktrigger(self.DCphotons)
+		
 		if simulatedevent.smear and not self.DCtrigger:
 			self.DCphotons = 0
 		
@@ -244,8 +250,13 @@ class telescope():
 		distance = math.sqrt(((corex - self.x)**2) + ((corey - self.y)**2))
 		self.coredistance = distance
 		
+	def finddistancetopoint(self, x, y):
+		distance = math.sqrt(((x - self.x)**2) + ((y - self.y)**2))
+		return distance
+	
 		
-bdtvariables =["epn", "minuslldc", "minusllfull", "fullmultiplicity", "truemultiplicity"]
+		
+bdtvariables =["epn", "minuslldc", "minusllfull", "fullmultiplicity", "truemultiplicity", "rayxpos", "rayypos", "height"]
 
 def makeBDTentry(simevent):
 	bdtentry =[]

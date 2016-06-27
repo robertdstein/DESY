@@ -94,7 +94,7 @@ echo "MAX_PRINT_ARRAY set to 2100"
 
 mkdir -p /nfs/astrop/d6/rstein/data/$JOB_ID
 
-for (( i=0; i <= 9; i++ ))
+for (( i=0; i <= 29; i++ ))
 do 
  python /nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/CORSIKA/runcorsika.py -rn $((($i*500) + $SGE_TASK_ID)) -td $TMPDIR -jid $JOB_ID
 

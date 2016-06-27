@@ -41,7 +41,7 @@ custom_options = {
 	'format': '%(progress)s%% [%(fill)s%(blank)s]'
 }
 
-for k in range(4):
+for k in range(3):
 	
 	Cvalues=[]
 	sigmas=[]
@@ -283,17 +283,17 @@ for k in range(4):
 		
 		def Afit(x):
 			return Am*x + Ac
-		plt.subplot(3,1,1)
+		plt.subplot(2,1,1)
 		plt.errorbar(data, Avalues, yerr=Aerrors, fmt='o')
 		plt.xlabel("Energy (Tev)")
 		plt.ylabel("Fitted Exponent")
 		
 		plt.plot(data, Afit(data), color="k")
 		Line = "y =" + str('{0:.5f}'.format(Am)) + " x + " + str('{0:.5f}'.format(Ac))
-		plt.annotate(Line, xy=(0.85, 0.9), xycoords="axes fraction",  fontsize=15)
+		plt.annotate(Line, xy=(0.75, 0.9), xycoords="axes fraction",  fontsize=15)
 		
 	elif k==1:
-		plt.subplot(3,1,2)
+		plt.subplot(2,1,2)
 		plt.errorbar(data, Cvalues, yerr=sigmas, fmt='o')
 		plt.xlabel("Energy (Tev)")
 		plt.ylabel("Fitted Amplitude")
@@ -317,26 +317,35 @@ for k in range(4):
 		plt.yscale("log")
 		Line = "y =" + str('{0:.1f}'.format(camplitude)) + " e ^ ( " + str('{0:.3f}'.format(cexponent)) + " x)"
 		plt.annotate(Line, xy=(0.05, 0.9), xycoords="axes fraction",  fontsize=15)
+		#~ 
+		saveto = "/nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/CORSIKA/graphs/lpdpowerlaw.pdf"
 		
-	elif k==2:
-		plt.subplot(3,1,3)
-		plt.scatter(hmax, Cdeviation)
-		plt.xlabel("First Interaction Height (m)")
-		plt.ylabel("Fitted Amplitude")
+		print "Saving to", saveto
 		
-		print "Final!", hmax, Cdeviation
+		plt.savefig(saveto)
+		plt.savefig("/nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/report/graphs/lpdpowerlaw.pdf")
 		
-		Chm, Chc = np.polyfit(hmax, Cdeviation, 1)
+		plt.close()
 		
-		print "Fitted", Chm, Chc
-		print "Chm", Chm
-		
-		def Chfit(x):
-			return Chm*x + Chc
-		
-		logcvals=[]
-		for cval in Cvalues:
-			logcvals.append(math.log(cval))
+	#~ elif k==2:
+		#~ plt.subplot(3,1,3)
+		#~ plt.scatter(hmax, Cdeviation)
+		#~ plt.xlabel("First Interaction Height (m)")
+		#~ plt.ylabel("Fitted Amplitude")
+		#~ 
+		#~ print "Final!", hmax, Cdeviation
+		#~ 
+		#~ Chm, Chc = np.polyfit(hmax, Cdeviation, 1)
+		#~ 
+		#~ print "Fitted", Chm, Chc
+		#~ print "Chm", Chm
+		#~ 
+		#~ def Chfit(x):
+			#~ return Chm*x + Chc
+		#~ 
+		#~ logcvals=[]
+		#~ for cval in Cvalues:
+			#~ logcvals.append(math.log(cval))
 		
 		#~ cexponent, logcamplitude = np.polyfit(data, logcvals, 1)
 		#~ camplitude = np.exp(logcamplitude)
@@ -344,27 +353,27 @@ for k in range(4):
 		#~ def Cfit(x):
 			#~ return camplitude*np.exp(x*cexponent)
 			
-		print "Fittted", hmax, Chfit(hmax) 
-		
-		chfitteddata=[]
-		for h in hmax:
-			chfitteddata.append(Chfit(h))
-			
-		plt.plot(hmax,chfitteddata, color="k")
+		#~ print "Fittted", hmax, Chfit(hmax) 
+		#~ 
+		#~ chfitteddata=[]
+		#~ for h in hmax:
+			#~ chfitteddata.append(Chfit(h))
+			#~ 
+		#~ plt.plot(hmax,chfitteddata, color="k")
 		#~ plt.yscale("log")
-		Line = "y =" + str('{0:.5f}'.format(Chm)) + " x + " + str('{0:.5f}'.format(Chc))
-		plt.annotate(Line, xy=(0.05, 0.9), xycoords="axes fraction",  fontsize=15)
+		#~ Line = "y =" + str('{0:.5f}'.format(Chm)) + " x + " + str('{0:.5f}'.format(Chc))
+		#~ plt.annotate(Line, xy=(0.05, 0.9), xycoords="axes fraction",  fontsize=15)
+		#~ 
+		#~ figure = plt.gcf() # get current figure
+		#~ figure.set_size_inches(20, 20)
+		#~ 
+		#~ saveto = "/nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/CORSIKA/graphs/lpdpowerlaw.pdf"
+		#~ 
+		#~ print "Saving to", saveto
+		#~ 
+		#~ plt.savefig(saveto)
+		#~ plt.savefig("/nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/report/graphs/lpdpowerlaw.pdf")
 		
-		figure = plt.gcf() # get current figure
-		figure.set_size_inches(20, 20)
-		
-		saveto = "/nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/CORSIKA/graphs/lpdpowerlaw.pdf"
-		
-		print "Saving to", saveto
-		
-		plt.savefig(saveto)
-		plt.savefig("/nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/report/graphs/lpdpowerlaw.pdf")
-		plt.close()
 		
 	else:
 		saveto = "/nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/CORSIKA/graphs/fullshowerlpd.pdf"

@@ -2,68 +2,49 @@ import argparse, math, random
 import csv
 import numpy as np
 import matplotlib.pyplot as plt
+import cPickle as pickle
+from classes import *
 
-def run(source, detectorcount, mindetections, graph, cuts, allcounts=None):
+def run(statsset, mindetections, cuts):
+	
+	datasimset = pickle.load(open(statsset, 'rb'))
+	detectorcount = datasimset[0].ndetectors
+	
 	fullcount=[]
 	labels=[]
 	info = ""
 	k=0
 	for j in range (detectorcount, mindetections -1, -1):
 		specificcount=[]
-		
-		if allcounts != None:
-			count = allcounts[detectorcount-j]
-			testcount = int(float(count)/4.) 
-					
-		else:
-			testcount = 0
-		
-		with open("/d6/rstein/Hamburg-Cosmic-Rays/positioning/reconstructeddata/"+ str(source) +".csv", 'rb') as csvfile:
-			reader = csv.reader(csvfile, delimiter=',', quotechar='|')
-			specificcount = []
-			
-			full=0
-			passing=0
-			
-			i = -1
-			
-			bdtmin = cuts[k]
 
-			for row in reader:
-				if i < (2*testcount):
-					i += 1
-				else:
-					detections = row[0]
-					reconx = float(row[1])
-					recony = float(row[2])
-					reconEPN = row[3]
-					reconZ = row[4]
-					reconHeight = row[5]
-					truex = float(row[6])
-					truey = float(row[7])
-					trueEPN = row[8]
-					trueZ = row[9]
-					trueHeight = row[10]
-					likelihood = row[13]
-					classifier = float(row[15])
-					BDT = row[16]
-					
-					if int(detections) == int(j):
-						full += 1
-						if float(bdtmin) < float(BDT):
-							if float(classifier) < float(1.5):
-								passing += 1
-								difference= (float(reconHeight) - float(trueHeight))/float(trueHeight)
-								specificcount.append(difference)
+		full=0
+		passing=0
+		bdtmin = cuts[k]
 
-		fullcount.append(specificcount)
+		for simset in datasimset:
+			for sim in simset.simulations:	
+				recon = sim.reconstructed
+				observed = sim.detected
+				true = sim.true
+				
+
+				if int(observed.DCmultiplicity) == int(j):
+					full += 1
+					if recon.BDTscore != None:
+						if float(bdtmin) < float(recon.BDTscore):
+							passing += 1
+							difference= (float(recon.height) - float(true.height))/float(true.height)
+							specificcount.append(difference)
+
+		total = len(specificcount)
 		label = str(j) + " detections"
 		labels.append(label)
 		
-		total = len(specificcount)
-		
 		if float(total) > float(0):
-			
+			fullcount.append(specificcount)
+			label = str(j) + " detections"
+			labels.append(label)
+
 			specificcount.sort()
 		
 			lower = int(total*0.16)
@@ -76,13 +57,13 @@ def run(source, detectorcount, mindetections, graph, cuts, allcounts=None):
 			sigma = (upperz-lowerz) * 0.5
 			
 			fraction = float(passing)/float(full)
-			info += str("For N = " + str(j) + " we require BDT >  " + str(bdtmin) + "\n ")
-			info += str("Fraction passing is " + str(fraction) + "\n")
+			info += str("For N = " + str(j) + " we require BDT >  " + str('{0:.2f}'.format(bdtmin)) + "\n ")
+			info += str("Fraction passing is " + str('{0:.2f}'.format(fraction)) + "\n")
 			
-			info += ('Lower bound = ' + str(lowerz) + " \n")
-			info += ('Upper bound = ' + str(upperz) + " \n")
-			info += ('Mean = ' + str(meanz) + " \n")
-			info += ('Sigma = ' + str(sigma) + "\n \n")
+			info += ('Upper bound = ' + str('{0:.2f}'.format(upperz)) + " \n")
+			info += ('Median = ' + str('{0:.2f}'.format(meanz)) + " \n")
+			info += ('Lower bound = ' + str('{0:.2f}'.format(lowerz)) + " \n")
+			info += ('Sigma = ' + str('{0:.2f}'.format(sigma)) + "\n \n")
 	
 		k +=1
 	
@@ -122,9 +103,4 @@ def run(source, detectorcount, mindetections, graph, cuts, allcounts=None):
 	path = '/d6/rstein/Hamburg-Cosmic-Rays/positioning/graphs/height.pdf'
 	plt.savefig(path)
 	print "saving to", path
-	
-	if graph:
-		plt.show()
-		
-	else:
-		plt.close()
+	plt.close()

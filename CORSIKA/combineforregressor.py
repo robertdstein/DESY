@@ -16,7 +16,7 @@ cfg = parser.parse_args()
 filepath = "/nfs/astrop/d6/rstein/data/"
 
 i = 1
-j = 5000
+j = 15000
 
 targetfolder = filepath + cfg.jobID +"/"
 
@@ -35,6 +35,8 @@ hess1candidatepixels = []
 hess2candidatepixels = []
 hess1DCsignals = []
 hess2DCsignals = []
+hess1trueZ=[]
+hess2trueZ=[]
 
 targetpath = targetfolder +  "run" + str(i) + "/pickle/eventdata.p"
 
@@ -42,6 +44,15 @@ while (i < j):
 	targetpath = targetfolder +  "run" + str(i) + "/pickle/eventdata.p"
 	if (os.path.isfile(targetpath)):
 		event = pickle.load(open(targetpath, 'rb'))
+		
+		if i < 5001:
+			trueZ = 26
+		elif 5000 < i < 10001:
+			trueZ = 25
+		elif 10000< i:
+			trueZ =27
+		
+		
 		for index in event.simulations.DC.triggerIDs:
 			DCtel =  event.simulations.DC.images[index]
 			fulltel = event.simulations.full.images[index]
@@ -51,9 +62,12 @@ while (i < j):
 				if fulltel.size == "HESS1":
 					hess1candidatepixels.append(fullpixel)
 					hess1DCsignals.append(DCtel.hillas.image_size_amplitude_)
+					hess1trueZ.append(trueZ)
+					
 				elif fulltel.size == "HESS2":
 					hess2candidatepixels.append(fullpixel)
 					hess2DCsignals.append(DCtel.hillas.image_size_amplitude_)
+					hess2trueZ.append(trueZ)
 				else:
 					raise Exception("Name error with size " + fulltel.size)
 					
@@ -70,3 +84,5 @@ pickle.dump(hess1candidatepixels,  open(pickle_dump_dir+"/hess1candidatepixels.p
 pickle.dump(hess2candidatepixels,  open(pickle_dump_dir+"/hess2candidatepixels.p", "wb"))
 pickle.dump(hess1DCsignals,  open(pickle_dump_dir+"/hess1DCsignals.p", "wb"))
 pickle.dump(hess2DCsignals,  open(pickle_dump_dir+"/hess2DCsignals.p", "wb"))
+pickle.dump(hess1trueZ,  open(pickle_dump_dir+"/hess1trueZ.p", "wb"))
+pickle.dump(hess2trueZ,  open(pickle_dump_dir+"/hess2trueZ.p", "wb"))

@@ -5,6 +5,12 @@ import matplotlib.pyplot as plt
 import scipy.stats
 import cPickle as pickle
 from classes import *
+import sys
+sys.path.append('/d6/rstein/Hamburg-Cosmic-Rays/clusterinput')
+import initialise as i
+numberofhours, mincount, gridwidth, layout, raweff, flux, area, solidangle, selectionefficiency, hmacceptance = i.run()
+detectedflux = float(flux)*float(area)*float(solidangle)*float(selectionefficiency)
+rateperhour = detectedflux * 60 * 60
 
 def run(statsset, mindetections, cuts=None):
 
@@ -17,10 +23,8 @@ def run(statsset, mindetections, cuts=None):
 	nplots = len(zvalues)
 		
 	if cuts == None:
-		classifiermax=8.5
 		path = '/d6/rstein/Hamburg-Cosmic-Rays/positioning/graphs/rawZ.pdf'
 	else:
-		classifiermax=1.5
 		path = '/d6/rstein/Hamburg-Cosmic-Rays/positioning/graphs/Z.pdf'
 	
 	for val in zvalues:
@@ -40,14 +44,21 @@ def run(statsset, mindetections, cuts=None):
 		
 		hist_fit = 0
 		k=0
+		
+		counts=[]
 	
 		for j in range (detectorcount, mindetections -1, -1):
 			print "Ndetections", j
 		
+			nonDC = 0
+			mT=0
+			bT=0
+			accepted =0
 	
 			specificcount = []
 			differences = []
 			sqvals=[]
+			counts.append(0)
 			
 			full=0
 			passing=0
@@ -59,11 +70,17 @@ def run(statsset, mindetections, cuts=None):
 				bdtmin = cuts[k]
 			
 			for simset in datasimset:
+				nonDC += simset.nonDC
+				mT += simset.hmcount
+				bT += simset.lmcount
+				accepted += simset.passcount
+				
 				for sim in simset.simulations:	
 					recon = sim.reconstructed
 					observed = sim.detected
 					true = sim.true
 					if int(observed.DCmultiplicity) == int(j):
+						counts[k] += 1
 						if recon.BDTscore != None:
 							if int(true.Z) == int(z):
 								full += 1
@@ -75,6 +92,8 @@ def run(statsset, mindetections, cuts=None):
 									differences.append(diff)
 			
 			total = passing
+			
+			totalcount = nonDC+mT+bT
 			
 			if total > 0:
 			
@@ -90,21 +109,30 @@ def run(statsset, mindetections, cuts=None):
 				fullcount.append(specificcount)
 				labels.append(label)
 				
-				info += str("For N = " + str(j) + " we require BDT >  " + str(bdtmin) + "\n ")
-				info += str("Fraction passing is " + str(frac) + "\n")
+				info += str("For N = " + str(j) + "\n ")
+				info += str("There were originally " + str(counts[k]) + " events \n")
+				info += str("This is a rate of " + str('{0:.2f}'.format(float(100.*float(counts[k])/float(totalcount)))) + "% of all events \n")
+				info += str("Fraction of these events passing cuts is " + str('{0:.2f}'.format(frac)) + "\n")
+
 				
 				if float(meansigma) == float(0):
 					differences.append(1)
 					limitsigma = np.mean(differences)
-					info += ('Sigma < ' + str(limitsigma) + "\n")
+					info += ('Sigma < ' + str('{0:.2f}'.format(limitsigma)) + "\n")
 	
 				else:
-					info += ('Sigma = ' + str(meansigma) + "\n")
+					info += ('Sigma = ' + str('{0:.2f}'.format(meansigma)) + "\n")
 				
 				info += "\n"
 				k +=1
 		
 		print info
+		hours = int(float(totalcount)/rateperhour)
+		print "In total there were", totalcount, "events, corresponding to an effective run time of", hours, "hours"
+		print "Of these,", nonDC, "did not emit,", bT, "were low multiplicity, and", mT, "were high multiplicity, and", accepted, "accepted events."
+		
+		
+		
 		zmax = max(max(c) for c in fullcount)
 		zmin = min(min(c) for c in fullcount)
 		gzmin = int(zmin-1)+0.5
@@ -147,8 +175,8 @@ def run(statsset, mindetections, cuts=None):
 	figure = plt.gcf() # get current figure
 	figure.set_size_inches(20, 15)
 	
-	plt.annotate(info, xy=(0.8, 0.8), xycoords="axes fraction",  fontsize=10)
-	plt.suptitle("True Z reconstruction", fontsize=20)
+	plt.annotate(info, xy=(0.8, 0.6), xycoords="axes fraction",  fontsize=10)
+	plt.suptitle("True Z reconstruction for " + str(hours) + " hours", fontsize=20)
 	plt.legend()
 	
 	plt.savefig(path)

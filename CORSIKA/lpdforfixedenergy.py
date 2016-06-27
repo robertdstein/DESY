@@ -44,7 +44,10 @@ def makesmearBDTentry(pixelentry):
 		suffix = pixelentry
 		if len(varsplit) > 1:
 			for name in varsplit[:-1]:
-				 suffix = getattr(suffix, name)
+				if hasattr(suffix, name):
+					suffix = getattr(suffix, name)
+				else:
+					return None
 			varname = varsplit[-1]
 		else:
 			varname = variable
@@ -66,7 +69,7 @@ def makesmearBDTentry(pixelentry):
 
 filepath = "/nfs/astrop/d6/rstein/data/"
 
-j=1000
+j=2000
 i=0
 
 accepteddistances=[[],[]]
@@ -262,7 +265,6 @@ for i in [0, 1]:
 			p4s.append(gradient)
 		
 	p4 = np.mean(p4s)	
-	print p4s
 	print "Mean p4", p4
 	
 	Line = "y1(x) =" + str('{0:.3f}'.format(popt[0])) + " e ^ ("+ str('{0:.3f}'.format(popt[1]))+"x) + " + str('{0:.3f}'.format(popt[2])) + "\n"
@@ -440,7 +442,6 @@ for i in [0, 1]:
 						p4s.append(gradient)
 					
 				p4 = np.mean(p4s)	
-				print p4s
 				print "Mean p4", p4
 				
 				Line = "y1(x) =" + str('{0:.3f}'.format(popt[0])) + " e ^ ("+ str('{0:.3f}'.format(popt[1]))+"x) + " + str('{0:.3f}'.format(popt[2])) + "\n"
@@ -476,7 +477,7 @@ for i in [0, 1]:
 					yminusc = sig - truep3
 					Aval = yminusc * np.exp(-truep2 * dist)
 					Avals.append(Aval)
-					print "sig", sig,"dist", dist, "y - c", yminusc,"A", Aval
+					#~ print "sig", sig,"dist", dist, "y - c", yminusc,"A", Aval
 					
 				newp1 = np.mean(Avals)
 				
@@ -611,8 +612,8 @@ for i in [0, 1]:
 				if len(truesigmas) > 1:
 					message += "Sigma 2: " + str('{0:.2f}'.format(truesigmas[1])) + " \n"
 			plt.annotate(message, xy=(0.9, 0.7), xycoords="axes fraction",  fontsize=15)
-			print truedistances[i]
-			print len(truedistances[0])
+			#~ print truedistances[i]
+			#~ print len(truedistances[0])
 
 	saveto = "/nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/CORSIKA/graphs/lpd" + str(i+1)+ ".pdf"
 	

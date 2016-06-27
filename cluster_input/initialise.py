@@ -13,7 +13,7 @@ if sim == "HESS":
 	area = 300**2
 	solidangle = math.radians(5)
 	selectionefficiency = 0.50
-	hmacceptance = 1.0
+	hmacceptance = [0.35, 0.09]
 
 def run():
 	return numberofhours, mincount, reconstructiongridwidth, layout, raweff, flux, area, solidangle, selectionefficiency, hmacceptance

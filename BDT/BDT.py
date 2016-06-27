@@ -41,7 +41,7 @@ def run(trainingset, statsset, mindetections):
 				
 				if int(observed.DCmultiplicity) == int(k):
 					
-					deltaz = int(math.fabs(float(true.Z)-float(recon.Z)))
+					deltaz = int(2*math.fabs(float(true.Z)-float(recon.Z)))
 					entry = makeBDTentry(recon)
 					
 					if entry != None:			
@@ -64,9 +64,9 @@ def run(trainingset, statsset, mindetections):
 		#~ rgr.fit(full, fullscore)
 		#~ 
 		#~ pickle.dump(rgr, open('/d6/rstein/BDTpickle/regressor'+str(k) +'.p', "wb"))
-		learningrate = [0.2, 0.2][j]
+		learningrate = [0.05, 0.05][j]
 		
-		clf = ensemble.GradientBoostingClassifier(max_depth=15, n_estimators=100, learning_rate=learningrate)
+		clf = ensemble.GradientBoostingClassifier(max_depth=5, n_estimators=100, learning_rate=learningrate)
 		clf.fit(full, fullclassifier)
 		
 		pickle.dump(clf, open('/d6/rstein/BDTpickle/classifier'+str(k) +'.p', 'wb'))

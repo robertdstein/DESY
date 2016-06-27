@@ -46,7 +46,7 @@ def makeBDTentry(pixelentry):
 	return bdtentry
 
 categories = ["hess2","hess1"]
-learningrates = [0.2, 0.5]
+learningrates = [0.2, 0.6]
 
 for i in range(len(categories)):
 	
@@ -57,8 +57,9 @@ for i in range(len(categories)):
 	pickledatafolder = os.path.join(jobfolder, "bdtpickle")
 	filename = pickledatafolder + "/" + category + "candidatepixels.p"
 	signalfilename = pickledatafolder + "/" + category + "DCsignals.p"
+	trueZfilename = pickledatafolder + "/" + category + "trueZ.p"
 
-	if os.path.isfile(filename) and os.path.isfile(signalfilename):
+	if os.path.isfile(filename) and os.path.isfile(signalfilename) and os.path.isfile(trueZfilename):
 		print "Loading training dataset from", filename
 		print "Loading training scores from", signalfilename
 	else:
@@ -69,13 +70,16 @@ for i in range(len(categories)):
 
 	trainset = pickle.load(open(filename, 'rb'))
 	signals= pickle.load(open(signalfilename, 'rb'))
+	trueZ = pickle.load(open(trueZfilename, 'rb'))
 	
 	print category, "training dataset contains", len(trainset), "images"
 	
 	for i in range(len(trainset)):
 		pix = trainset[i]
 		truesignal = signals[i]
-		fitsignal = lf.run(pix)
+		Z = float(trueZ[i])
+		#~ print i, "Z is", Z
+		fitsignal = lf.run(pix, Z)
 		
 		bdtentry = makeBDTentry(pix)
 		
