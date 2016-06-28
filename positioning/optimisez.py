@@ -81,6 +81,8 @@ def run(statsset, mindetections):
 				bdtcuts.append(BDTcut)
 				meansigmas.append(meansigma)
 				
+				
+				
 				if float(frac) > float(0.2):
 					if float(24) < float(meanz) < float(28):
 						if float(meansigma) < float(lowestsigma):

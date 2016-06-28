@@ -93,7 +93,7 @@ def run(eff, rowcount, mincount=4, text=False, graph=False, output="default", la
 	emith = []
 	
 	#Iterate over Energies
-	simset = simulationset(eff, layout, mincount=0)
+	simset = simulationset(eff, layout, mincount=0, hmacceptance = [1,1,1,1,1,1])
 	
 	simset.generate(number)
 	

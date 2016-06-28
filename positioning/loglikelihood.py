@@ -35,15 +35,20 @@ threshold = ld.trigger()
 	#~ return lognfactorial
 	
 def rundc(tel, detectedtel):
-	expectedcount = tel.reconphotons
+	if str(detectedtel.DCtrigger) == str(False):
+		return 0
+		count = detectedtel.altDCphotons
+		expectedcount = tel.altDCphotons
+	else:
+		expectedcount = tel.reconphotons
+		count = math.fabs(detectedtel.reconphotons)
 	dcerror = tel.reconfracerror
-	
-	count = math.fabs(detectedtel.reconphotons)
-	
+
 	if expectedcount < 0:
 		expectedcount = 0
+		
 	
-	dcsigma = 0.5*(dcerror*(expectedcount)) + 1
+	dcsigma = 0.5*(dcerror*(expectedcount))
 		
 	minusll=0
 	

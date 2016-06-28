@@ -6,7 +6,7 @@ import scipy.stats
 import cPickle as pickle
 from classes import *
 import sys
-sys.path.append('/d6/rstein/Hamburg-Cosmic-Rays/clusterinput')
+sys.path.append('/nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/cluster_input')
 import initialise as i
 numberofhours, mincount, gridwidth, layout, raweff, flux, area, solidangle, selectionefficiency, hmacceptance = i.run()
 detectedflux = float(flux)*float(area)*float(solidangle)*float(selectionefficiency)
@@ -109,6 +109,17 @@ def run(statsset, mindetections, cuts=None):
 				fullcount.append(specificcount)
 				labels.append(label)
 				
+				specificcount.sort()
+		
+				lower = int(total*0.16)
+				mid = int(total*0.5)
+				upper = int(total*0.84)
+			
+				lowerz = specificcount[lower]
+				meanz = specificcount[mid]
+				upperz = specificcount[upper]
+				sigma = (upperz-lowerz) * 0.5
+				
 				info += str("For N = " + str(j) + "\n ")
 				info += str("There were originally " + str(counts[k]) + " events \n")
 				info += str("This is a rate of " + str('{0:.2f}'.format(float(100.*float(counts[k])/float(totalcount)))) + "% of all events \n")
@@ -122,6 +133,7 @@ def run(statsset, mindetections, cuts=None):
 	
 				else:
 					info += ('Sigma = ' + str('{0:.2f}'.format(meansigma)) + "\n")
+					info += ('Sigma = ' + str('{0:.2f}'.format(sigma)) + "\n")
 				
 				info += "\n"
 				k +=1
@@ -130,8 +142,6 @@ def run(statsset, mindetections, cuts=None):
 		hours = int(float(totalcount)/rateperhour)
 		print "In total there were", totalcount, "events, corresponding to an effective run time of", hours, "hours"
 		print "Of these,", nonDC, "did not emit,", bT, "were low multiplicity, and", mT, "were high multiplicity, and", accepted, "accepted events."
-		
-		
 		
 		zmax = max(max(c) for c in fullcount)
 		zmin = min(min(c) for c in fullcount)

@@ -74,8 +74,11 @@ def run(statsset, mindetections, cuts):
 			sigma = 0.5*(upperz-lowerz)
 			
 			fraction = float(passing)/float(full)
-			info += str("For N = " + str(j) + " we require BDT >  " + str('{0:.2f}'.format(bdtmin)) + "\n ")
-			info += str("Fraction passing is " + str('{0:.2f}'.format(fraction)) + "\n")
+			if fraction < 1.0:
+				info += str("For N = " + str(j) + " we require BDT >  " + str('{0:.2f}'.format(bdtmin)) + "\n ")
+				info += str("Fraction passing is " + str('{0:.2f}'.format(fraction)) + "\n")
+			else:
+				info += str("For N = " + str(j) + ":\n ")
 			info += ('Lower = ' + str('{0:.2f}'.format(lowerz)) + " \n")
 			info += ('Median = ' + str('{0:.2f}'.format(meanz)) + " \n")
 			info += ('Upper = ' + str('{0:.2f}'.format(upperz)) + " \n")
@@ -123,13 +126,15 @@ def run(statsset, mindetections, cuts):
 	plt.title("Distance Reconstruction")
 	plt.legend()
 	
+	plt.annotate(info, xy=(0.05, 0.6), xycoords="axes fraction",  fontsize=15)
 	if cuts == None:
 		plt.savefig('/d6/rstein/Hamburg-Cosmic-Rays/report/graphs/rawcoredistance.pdf')
 		path = '/d6/rstein/Hamburg-Cosmic-Rays/positioning/graphs/rawcoredistance.pdf'
 	else:
+		plt.savefig('/d6/rstein/Hamburg-Cosmic-Rays/report/graphs/coredistance.pdf')
 		path = '/d6/rstein/Hamburg-Cosmic-Rays/positioning/graphs/coredistance.pdf'
 	
-	plt.annotate(info, xy=(0.05, 0.6), xycoords="axes fraction",  fontsize=15)
+	
 	plt.savefig(path)
 	print "saving to", path
 	plt.close()

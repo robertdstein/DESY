@@ -58,7 +58,7 @@ def makesmearBDTentry(pixelentry):
 				smearval = randomfrac * newval
 				bdtentry.append(smearval)
 			elif varname == "core_distance_to_telescope":
-				smearval = np.random.normal(newval, 10)
+				smearval = np.random.normal(newval, 12)
 				bdtentry.append(smearval)
 			else:
 				bdtentry.append(newval)
@@ -66,10 +66,9 @@ def makesmearBDTentry(pixelentry):
 			return None
 	return bdtentry
 
-
 filepath = "/nfs/astrop/d6/rstein/data/"
 
-j=2000
+j=500
 i=0
 
 accepteddistances=[[],[]]
@@ -124,7 +123,7 @@ while (i < j):
 							if float(fulltel.hillas.aspect_ratio_) > arcut:
 								IDs.append(index)
 			
-			if len(IDs) > 3:
+			if len(IDs) > 0:
 				for index in DCsim.triggerIDs:
 					DCtel = DCsim.images[index]
 					fulltel =  fullsim.images[index]
@@ -153,8 +152,8 @@ while (i < j):
 													
 						if (float(ucut) > float(fullBDT.bdtscore) > float(cut)) and (float(simplecandidatesignal) > float(signalcut)) and (float(fulltel.hillas.aspect_ratio_) > arcut):
 							truedistances[plotindex].append(fulltel.hillas.core_distance_to_telescope)
-							truesignals1[plotindex].append(DCtel.hillas.image_size_amplitude_/fulltel.mirrorarea)
-							truesignals2[plotindex].append(DCpixel.channel1.intensity/fulltel.mirrorarea)						
+							truesignals1[plotindex].append(DCtel.hillas.image_size_amplitude_/DCtel.mirrorarea)
+							truesignals2[plotindex].append(DCpixel.channel1.intensity/DCtel.mirrorarea)						
 							accepteddistances[plotindex].append(fulltel.hillas.core_distance_to_telescope)
 							signals[plotindex].append(simplecandidatesignal/fulltel.mirrorarea)
 							rgrsignals[plotindex].append(candidatesignal)
@@ -176,7 +175,7 @@ import matplotlib.patches as mpatches
 
 areas = [108., 614.]
 
-mindensity = 0.1
+mindensity = 0.0
 height = 25000
 
 for i in [0, 1]:
@@ -195,7 +194,7 @@ for i in [0, 1]:
 	plt.xlabel("Core distance to telescope (m)")
 	plt.ylabel("Photoelectron Density (m^-2)")
 	ax1.set_xlim(left=0)
-	ax1.set_ylim(bottom=mindensity)
+	ax1.set_ylim(bottom=0.01)
 	ax1.set_yscale("log")
 	plt.title("True LPD (Amplitude)")
 	
@@ -231,11 +230,6 @@ for i in [0, 1]:
 			
 	plt.scatter(d, s, color="k")
 	plt.scatter(extrad, extras, color="red")
-
-			
-	#~ extraA, extralogC = np.polyfit(extrad, logextras, 1)
-	#~ extraC = math.exp(extralogC)
-	#~ print extraA, extralogC, extraC
 			
 	def f1(x, p1, p2, p3):
 		return p1*np.exp(p2*x) + p3
@@ -603,17 +597,15 @@ for i in [0, 1]:
 			plt.xlabel("Core distance to telescope (m)")
 			plt.ylabel("Photoelectron Density (m^-2)")
 			ax.set_xlim(left=0)
-			ax.set_ylim(bottom=mindensity)
+			ax.set_ylim(bottom=0.01)
 			plt.title(diffname)
 			message=""
-			#~ message = "Scale: " + str('{0:.2f}'.format(newpopt[0])) + " \n"
 			if truesigmas != []:
 				message += "Sigma 1: " + str('{0:.2f}'.format(truesigmas[0])) + " \n"
 				if len(truesigmas) > 1:
 					message += "Sigma 2: " + str('{0:.2f}'.format(truesigmas[1])) + " \n"
 			plt.annotate(message, xy=(0.9, 0.7), xycoords="axes fraction",  fontsize=15)
-			#~ print truedistances[i]
-			#~ print len(truedistances[0])
+
 
 	saveto = "/nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/CORSIKA/graphs/lpd" + str(i+1)+ ".pdf"
 	

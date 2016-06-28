@@ -232,6 +232,9 @@ class telescope():
 		
 		if simulatedevent.smear and not self.DCtrigger:
 			self.DCphotons = 0
+			
+		altDC = ld.altcount(self.coredistance, simulatedevent.Z)
+		self.altDCphotons = altDC
 		
 		self.fulltrigger = self.checktrigger(self.fullphotons)
 		

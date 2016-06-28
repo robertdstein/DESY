@@ -7,23 +7,25 @@
 \contentsline {subsection}{\numberline {3.4}HESS-2 BDT}{12}
 \contentsline {subsection}{\numberline {3.5}High Multiplicity Events}{13}
 \contentsline {subsection}{\numberline {3.6}Proton Background}{13}
-\contentsline {section}{\numberline {4}HESS-type Event Reconstruction}{14}
+\contentsline {section}{\numberline {4}HESS-type Event Simulation}{14}
 \contentsline {subsection}{\numberline {4.1}Extended Air Shower Background}{14}
 \contentsline {subsection}{\numberline {4.2}Full-Shower LPD}{14}
 \contentsline {subsection}{\numberline {4.3}Determining $True_{DC}$}{18}
 \contentsline {subsection}{\numberline {4.4}Regression BDT for $DC_{Count}$}{20}
-\contentsline {subsection}{\numberline {4.5}Other Stuff Like}{24}
-\contentsline {subsection}{\numberline {4.6}Iron Flux and Energy}{24}
-\contentsline {subsection}{\numberline {4.7}First Interaction Height}{26}
-\contentsline {subsection}{\numberline {4.8}First Interaction and Energy Saturation}{28}
-\contentsline {subsection}{\numberline {4.9}Full-Shower event reconstruction}{28}
-\contentsline {subsection}{\numberline {4.10}Log Likelihood Minimisation}{29}
-\contentsline {subsection}{\numberline {4.11}Extracting Charge Resolution}{32}
-\contentsline {subsection}{\numberline {4.12}Iterative Scanning Minimisation}{32}
-\contentsline {subsection}{\numberline {4.13}Boosted Decision Trees}{32}
-\contentsline {subsection}{\numberline {4.14}Reconstructed Charge Resolution}{32}
-\contentsline {section}{\numberline {5}Optimised Telescope Array}{33}
-\contentsline {subsection}{\numberline {5.1}Count Rates}{33}
-\contentsline {subsection}{\numberline {5.2}Saturation Region Energies}{34}
-\contentsline {subsection}{\numberline {5.3}High Speed Telescopes}{34}
-\contentsline {section}{\numberline {6}Conclusion}{34}
+\contentsline {section}{\numberline {5}Monte Carlo Simulation}{24}
+\contentsline {subsection}{\numberline {5.1}Iron Flux and Energy}{24}
+\contentsline {subsection}{\numberline {5.2}First Interaction Height}{25}
+\contentsline {subsection}{\numberline {5.3}Full-Shower event reconstruction}{27}
+\contentsline {subsection}{\numberline {5.4}Log Likelihood Minimisation}{29}
+\contentsline {subsection}{\numberline {5.5}Variable Resolution}{30}
+\contentsline {subsection}{\numberline {5.6}Extracting Charge Resolution}{30}
+\contentsline {subsection}{\numberline {5.7}Boosted Decision Trees}{31}
+\contentsline {subsection}{\numberline {5.8}Reconstructed Charge Resolution}{31}
+\contentsline {section}{\numberline {6}Optimised Telescope Array}{31}
+\contentsline {subsection}{\numberline {6.1}Count Rates}{31}
+\contentsline {subsection}{\numberline {6.2}Saturation Region Energies}{32}
+\contentsline {subsection}{\numberline {6.3}High Speed Telescopes}{32}
+\contentsline {section}{\numberline {7}Conclusion}{32}
+\contentsline {section}{\numberline {8}Bibliography}{33}
+\contentsline {section}{\numberline {9}Appendix}{35}
+\contentsline {subsection}{\numberline {9.1}Atmospheric Data Table for CORSIKA (Windhoek, Namibia)}{35}

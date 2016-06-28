@@ -45,10 +45,12 @@ plpd.run(statsdata)
 BDT.run(traindata, statsdata, int(mincount))
 llcuts = oz.run(statsdata, int(mincount))
 print "Log Likelihood Cuts", llcuts
+llcuts = [0.0, 0.0]
 
 pz.run(statsdata, int(mincount), cuts=None)
 pe.run(statsdata, int(mincount), cuts=None)
 pd.run(statsdata, int(mincount), cuts=None)
+pd.run(statsdata, int(mincount), cuts=llcuts)
 pz.run(statsdata, int(mincount), cuts=llcuts)
 pl.run(statsdata, int(mincount), cuts=llcuts)
 pp.run(statsdata, int(mincount), cuts=llcuts)

@@ -59,8 +59,11 @@ def run(statsset, mindetections, cuts):
 			sigma = (upperz-lowerz) * 0.5
 			
 			fraction = float(passing)/float(full)
-			info += str("For N = " + str(j) + " we require BDT >  " + str('{0:.2f}'.format(bdtmin)) + "\n ")
-			info += str("Fraction passing is " + str('{0:.2f}'.format(fraction)) + "\n")
+			if fraction < 1.0:
+				info += str("For N = " + str(j) + " we require BDT >  " + str('{0:.2f}'.format(bdtmin)) + "\n ")
+				info += str("Fraction passing is " + str('{0:.2f}'.format(fraction)) + "\n")
+			else:
+				info += str("For N = " + str(j) + ":\n ")
 			
 			info += ('Upper bound = ' + str('{0:.2f}'.format(upperz)) + " \n")
 			info += ('Median = ' + str('{0:.2f}'.format(meanz)) + " \n")
@@ -102,14 +105,16 @@ def run(statsset, mindetections, cuts):
 	figure = plt.gcf() # get current figure
 	figure.set_size_inches(20, 15)
 	
+	plt.annotate(info, xy=(0.75, 0.4), xycoords="axes fraction",  fontsize=10)
 		
 	if cuts == None:
 		plt.savefig('/d6/rstein/Hamburg-Cosmic-Rays/report/graphs/rawepn.pdf')
 		path = '/d6/rstein/Hamburg-Cosmic-Rays/positioning/graphs/rawepn.pdf'
 	else:
+		plt.savefig('/d6/rstein/Hamburg-Cosmic-Rays/report/graphs/epn.pdf')
 		path = '/d6/rstein/Hamburg-Cosmic-Rays/positioning/graphs/epn.pdf'
 	
-	plt.annotate(info, xy=(0.75, 0.4), xycoords="axes fraction",  fontsize=10)
+	
 	plt.savefig(path)
 	print "saving to", path
 	plt.close()

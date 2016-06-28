@@ -32,7 +32,7 @@ def min(fullsimulation, layout, gridwidth, raweff):
 	argumentx = "limit_x = (-300, 300), error_x = 100000, "
 	argumenty = "limit_y = (-300, 300), error_y = 100000, "
 	argumentZ = "limit_Z = (16,36), error_Z = 2, "
-	argumentheight = "limit_height = (17500, 70000), error_height=(100000), "
+	argumentheight = "limit_height = (15000, 65000), error_height=(100000), "
 	argumentE = "limit_Epn = (232, 4000), error_Epn=1000, "
 	argumenterror = "print_level=0, errordef = 100"
 
@@ -50,7 +50,7 @@ def min(fullsimulation, layout, gridwidth, raweff):
 	
 	minangle = 0.0
 	j = 0
-	
+	#~ 
 	while j < 20:
 		coordinates = []
 		j = 0
@@ -69,7 +69,7 @@ def min(fullsimulation, layout, gridwidth, raweff):
 							j+=1
 		if minangle > 20:
 			j=200
-		
+		#~ 
 	for [x, y] in coordinates:							
 			for e in evals:
 				m = eval("Minuit(full,  " + "Epn=" + str(e) + ", " + argumentE + "x="+ str(x) + ", " + argumentx + "y="+ str(y) + ", " + argumenty+ argumenterror + ")")
@@ -125,7 +125,7 @@ def min(fullsimulation, layout, gridwidth, raweff):
 			Ethreshold = float(cr.runemin(ri))
 			if float(Epn) > float(Ethreshold):
 				ehvals.append([Epn, height])
-	
+	#~ 
 	xycount = len(coordinates)			
 	ehcount = len(ehvals)
 	zcount = len(zvalues)
@@ -133,7 +133,8 @@ def min(fullsimulation, layout, gridwidth, raweff):
 	
 	print ehvals
 		
-	print measured.DCmultiplicity, "Detections -> ", xycount, "Valid Core Positions (", minangle, "Degrees from recorded axis)", ehcount, "Valid Height/Epn Combinations", zcount, "Charge Values", xycount*ehcount*zcount, "Total Minimisations"
+	print measured.DCmultiplicity, "Detections -> "
+	print xycount, "Valid Core Positions (", minangle, "Degrees from recorded axis)", ehcount, "Valid Height/Epn Combinations", zcount, "Charge Values", xycount*ehcount*zcount, "Total Minimisations"
 	
 	m = eval("Minuit(dc, x="+ str(fullreconx) + ", " + argumentx + "y="+ str(fullrecony) + ", " + argumenty+  "Z=26," +argumentZ + "height = 20000, " + argumentheight + argumenterror + ")")
 	m.migrad(resume=False)
@@ -142,17 +143,18 @@ def min(fullsimulation, layout, gridwidth, raweff):
 	guessfval = m.fval
 	
 	for z in zvalues:					
-		for [e, h] in ehvals:
-			m = eval("Minuit(dc,  x="+ str(fullreconx) + ", " + argumentx + "y="+ str(fullrecony) + ", " + argumenty+  "height = " + str(h) + ", " + argumentheight + "Z=" + str(z) + "," +argumentZ + argumenterror + ")")
-			m.migrad(resume=False)
-			params = m.values
-			fval = m.fval
-			values = m.get_fmin()
-			if fval < guessfval:
-				if values.is_valid:							
-					if fval < guessfval:
-						guessparams = params
-						guessfval = fval
+		for h in hvals:
+			for [x, y] in coordinates:
+				m = eval("Minuit(dc,  x="+ str(x) + ", " + argumentx + "y="+ str(y) + ", " + argumenty+  "height = " + str(h) + ", " + argumentheight + "Z=" + str(z) + "," +argumentZ + argumenterror + ")")
+				m.migrad(resume=False)
+				params = m.values
+				fval = m.fval
+				values = m.get_fmin()
+				if fval < guessfval:
+					if values.is_valid:							
+						if fval < guessfval:
+							guessparams = params
+							guessfval = fval
 	
 	print "Final guess is", guessparams, math.degrees(measured.phi), math.degrees(measured.epsilon), "(", guessfval, ")"
 	
