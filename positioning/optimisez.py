@@ -78,10 +78,19 @@ def run(statsset, mindetections):
 				
 				meansigma=math.sqrt(var)
 				
+				specificcount.sort()
+		
+				lower = int(total*0.16)
+				mid = int(total*0.5)
+				upper = int(total*0.84)
+			
+				lowerz = specificcount[lower]
+				meanz = specificcount[mid]
+				upperz = specificcount[upper]
+				meansigma = (upperz-lowerz) * 0.5
+				
 				bdtcuts.append(BDTcut)
 				meansigmas.append(meansigma)
-				
-				
 				
 				if float(frac) > float(0.2):
 					if float(24) < float(meanz) < float(28):

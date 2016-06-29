@@ -41,19 +41,18 @@ statsdata = pickle_dir + "stats.p"
 traindata = pickle_dir + "trainingset.p"
 
 plpd.run(statsdata)
-
 BDT.run(traindata, statsdata, int(mincount))
+pd.run(statsdata, int(mincount), cuts=[0.0, 0.0])
 llcuts = oz.run(statsdata, int(mincount))
-print "Log Likelihood Cuts", llcuts
-llcuts = [0.0, 0.0]
 
+print "Log Likelihood Cuts", llcuts
 pz.run(statsdata, int(mincount), cuts=None)
 pe.run(statsdata, int(mincount), cuts=None)
 pd.run(statsdata, int(mincount), cuts=None)
-pd.run(statsdata, int(mincount), cuts=llcuts)
+ph.run(statsdata, int(mincount), cuts=None)
 pz.run(statsdata, int(mincount), cuts=llcuts)
 pl.run(statsdata, int(mincount), cuts=llcuts)
-pp.run(statsdata, int(mincount), cuts=llcuts)
-pd.run(statsdata, int(mincount), cuts=llcuts)
+pp.run(statsdata, int(mincount), cuts=[0.0, 0.0])
+pd.run(statsdata, int(mincount), cuts=[0.0, 0.0])
 pe.run(statsdata, int(mincount), cuts=llcuts)
 ph.run(statsdata, int(mincount), cuts=llcuts)

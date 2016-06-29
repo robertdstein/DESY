@@ -53,10 +53,10 @@ def makeBDTentry(pixelentry):
 			return None
 	return bdtentry
 
-for sigfit in ["rgr", None]:
+for sigfit in ["rgr"]:
 	filepath = "/nfs/astrop/d6/rstein/data/"
 	i = 1
-	j = 1000
+	j = 15000
 	totalimages = [0, 0]
 	truefour = 0
 	truefive=0
@@ -194,6 +194,7 @@ for sigfit in ["rgr", None]:
 				
 				for index in fullsim.triggerIDs:
 					fulltel =  fullsim.images[index]
+					trueID=None
 					
 					if fulltel.size == "HESS1":
 						plotindex = 0
@@ -239,7 +240,7 @@ for sigfit in ["rgr", None]:
 								difference=None
 								absd = None
 
-							if fulltel.BDTID == trueID:
+							if (trueID != None) and (fulltel.BDTID == trueID):
 								result = 1
 								correctimages[plotindex] += 1
 								rightDCcounts[plotindex].append(DCcount)
@@ -329,8 +330,12 @@ for sigfit in ["rgr", None]:
 			message += "\n \n", 
 			message += "We have", str(mtotal), "events. Of these, there are", str(totalimages[i]), "total images, including", str(triggeredimages[i]), "images triggered with DC light."
 			message += "In total,", str('{0:.2f}'.format(float(100.*triggeredimages[i]/totalimages[i]))), "% of all images have DC light to reconstruct. \n"
-			message += "We have", str(truefour), "true 4-tel events, giving an expected rate of ", str('{0:.2f}'.format(float(100.*truefour/mtotal))), "%. We reconstruct", str(reconfour), "4-tel events, giving an acceptance rate of", str('{0:.2f}'.format(float(100.*reconfour/truefour))), "%.\n"
-			message += "We have", str(truefive), "true 5-tel events, giving an expected rate of ", str('{0:.2f}'.format(float(100.*truefive/mtotal))), "%. We reconstruct", str(reconfive), "5-tel events, giving an acceptance rate of", str('{0:.2f}'.format(float(100.*reconfive/truefive))), "%.\n"
+			message += "We have", str(truefour), "true 4-tel events,"
+			if truefour > 0:
+				message += " giving an expected rate of ", str('{0:.2f}'.format(float(100.*truefour/mtotal))), "%. We reconstruct", str(reconfour), "4-tel events, giving an acceptance rate of", str('{0:.2f}'.format(float(100.*reconfour/truefour))), "%.\n"
+			message += "We have", str(truefive), "true 5-tel events, "
+			if truefive > 0:
+				message += "giving an expected rate of ", str('{0:.2f}'.format(float(100.*truefive/mtotal))), "%. We reconstruct", str(reconfive), "5-tel events, giving an acceptance rate of", str('{0:.2f}'.format(float(100.*reconfive/truefive))), "%.\n"
 			message += "There are", str(wronghighmultiplicity), "events which are not really high-multiplicity, a rate of", str('{0:.2f}'.format(float(100.*wronghighmultiplicity/mtotal))), ".\n"
 			
 			message += "In total,", str(oldcorrectimages[i]), "pixels are correctly identified using QDC method."

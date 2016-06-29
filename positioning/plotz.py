@@ -21,11 +21,6 @@ def run(statsset, mindetections, cuts=None):
 
 	zvalues = [26]
 	nplots = len(zvalues)
-		
-	if cuts == None:
-		path = '/d6/rstein/Hamburg-Cosmic-Rays/positioning/graphs/rawZ.pdf'
-	else:
-		path = '/d6/rstein/Hamburg-Cosmic-Rays/positioning/graphs/Z.pdf'
 	
 	for val in zvalues:
 		
@@ -121,10 +116,14 @@ def run(statsset, mindetections, cuts=None):
 				sigma = (upperz-lowerz) * 0.5
 				
 				info += str("For N = " + str(j) + "\n ")
-				info += str("There were originally " + str(counts[k]) + " events \n")
-				info += str("This is a rate of " + str('{0:.2f}'.format(float(100.*float(counts[k])/float(totalcount)))) + "% of all events \n")
-				info += str("Fraction of these events passing cuts is " + str('{0:.2f}'.format(frac)) + "\n")
+				if cuts != None:
+					info += str("There were originally " + str(counts[k]) + " events \n")
+					info += str("This is a rate of " + str('{0:.2f}'.format(float(100.*float(counts[k])/float(totalcount)))) + "% of all events \n")
+					info += str("Fraction of these events passing cuts is " + str('{0:.2f}'.format(frac)) + "\n")
 
+				info += ('Upper bound = ' + str('{0:.2f}'.format(upperz)) + " \n")
+				info += ('Median = ' + str('{0:.2f}'.format(meanz)) + " \n")
+				info += ('Lower bound = ' + str('{0:.2f}'.format(lowerz)) + " \n")
 				
 				if float(meansigma) == float(0):
 					differences.append(1)
@@ -132,7 +131,7 @@ def run(statsset, mindetections, cuts=None):
 					info += ('Sigma < ' + str('{0:.2f}'.format(limitsigma)) + "\n")
 	
 				else:
-					info += ('Sigma = ' + str('{0:.2f}'.format(meansigma)) + "\n")
+					#~ info += ('Sigma = ' + str('{0:.2f}'.format(meansigma)) + "\n")
 					info += ('Sigma = ' + str('{0:.2f}'.format(sigma)) + "\n")
 				
 				info += "\n"
@@ -184,10 +183,19 @@ def run(statsset, mindetections, cuts=None):
 		
 	figure = plt.gcf() # get current figure
 	figure.set_size_inches(20, 15)
-	
 	plt.annotate(info, xy=(0.8, 0.6), xycoords="axes fraction",  fontsize=10)
 	plt.suptitle("True Z reconstruction for " + str(hours) + " hours", fontsize=20)
 	plt.legend()
+	
+	if cuts == None:
+		plt.savefig('/d6/rstein/Hamburg-Cosmic-Rays/report/graphs/rawZ.pdf')
+		path = '/d6/rstein/Hamburg-Cosmic-Rays/positioning/graphs/rawZ.pdf'
+	else:
+		plt.savefig('/d6/rstein/Hamburg-Cosmic-Rays/report/graphs/Z.pdf')
+		path = '/d6/rstein/Hamburg-Cosmic-Rays/positioning/graphs/Z.pdf'
+	
+	
+
 	
 	plt.savefig(path)
 	print "saving to", path

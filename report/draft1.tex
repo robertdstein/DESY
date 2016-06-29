@@ -64,31 +64,49 @@ Between impact with the upper atmosphere and decay into a charged particle showe
 \newpage
 
 \section{Preface}
-I basically just did everything. It was great.
+The basis of this thesis work can be divided into two halves. The first half is the simulation of cosmic ray HESS camera images, and analysis work based on these images. The second half is a Monte Carlo study simulating air shower intensities, based entirely on function fitted from the HESS camera images. 
+
+It is important to note that the simulation of cosmic ray air showers for the first part of my thesis was performed using the CORSIKA software \cite{Heck98}, and the resultant HESS camera images were produced using the Sim\textunderscore Tel array software \cite{Bernlohr08}. I claim no credit for the complex simulations that these packages have enabled me to perform. 
+
+Additionally, a significant portion of this work relies on Supervised machine learning that was performed using the SciKit learn package \cite{scikit-learn}. Although I wrote the relevant Python scripts to facilitate data categorisation and algorithm training, the package acts as a black box to convert training data into a functioning Boosted Decision Tree. I would like to make clear that I am indebted to those who produced this package, without whom this analysis could not have been performed.
+
+Aside from this, all other work in this thesis is my own. I wrote all necessary code for the Monte Carlo simulation, and it was conducted entirely by me. Similarly 
+
+Thank Dieter, and Attilla, and...
 \newpage
 
 \section{Introduction}
-There are numerous Telescope Arrays which image the Cherenkov Light emitted by Cosmic Rays in the atmosphere, including the HESS, MAGIC and VERITAS Experiments. All rely on Hillas Analysis with extracted parameters from each of the camera images being used to reconstruct the events, but heavy atmospheric blurring means that charge resolution is very poor. For Iron Nucleus events, we would expect to reconstruct \[Z \approx 26 \pm 5 \] with a core position resolution of roughly $d \approx 20 m $ \cite{hess07}. 
+Cosmic Rays are abundant in our galaxy, and enter the Earth's upper atmosphere from every direction. Their flux is governed by a well-defined energy power law, which is almost unchanged across more than 10 orders of magnitude \cite{Blasi:2013rva}. Cosmic Rays are in fact not rays but rather charged particles, primarily protons, which have been accelerated by various galactic or stellar processes. The exact cosmic ray composition is energy dependent, and provides information regarding the source of cosmic rays. Heavy cosmic rays, the most common of which is iron, vary substantially in relative abundance for different energy scales.
 
-Cosmic Rays that are imaged by these telescopes have energies between $13 $TeV and $200 $TeV. At present, no study of the relative abundance of different cosmic ray elemental abundances exists at these energies. It could provide important clues regarding the mechanism of Cosmic Ray formation and propagation in the galaxy, but current charge resolution from Hillas Analysis is not small enough to undertake such a study.
+Being highly-energetic charged particles, Cosmic rays will often travel through the atmosphere faster than the local speed of light. Consequently, many Cosmic Rays will emit Cherenkov light over substantial distances, and this light will be visible on the ground. There are numerous Telescope Arrays which image the Cherenkov Light emitted by Cosmic Rays in the atmosphere, including the HESS, MAGIC and VERITAS Experiments. Although the number of emitted photons is comparatively small, the Cherenkov light is still brighter than the night sky background because the telescopes are able to capture images with an exceptionally short recording time, equal to 80ns for the HESS array \cite{Funk:2004ie}. The Cherenkov photons all arrive almost simultaneously, so have a high intensity over the short time window during which the image is formed.
 
-Instead of Hillas Analysis, we consider a new method for event reconstruction, in which we fit the known Direct Cherenkovn (DC) Light observed by each telescope to a characteristic Lateral Photon Distribution (LPD) function. This new technique is valid both for currently running experiments, as well as planned experiments such as the Cherenkov Telescope Array (CTA). It uses only the information from the DC Pixel identified in the shower images.
+All telescope arrays rely on Hillas Analysis with extracted parameters from each of the camera images being used to reconstruct the events, but heavy atmospheric blurring means that charge resolution is very poor. For Iron Nucleus events, we would expect to reconstruct \[Z \approx 26 \pm 5 \] with a core position resolution of roughly $d \approx 20 m $ \cite{hess07}. The Cosmic Rays imaged by these telescopes have energies between $13-200 $TeV, and at present, no study of the relative abundance of different cosmic ray elemental abundances exists at these energies. If the telescope arrays could be used to spectroscopically analyse the Cosmic rays, it could provide important clues regarding the mechanism of Cosmic Ray formation and propagation in the galaxy. However, current charge resolution from Hillas Analysis is not small enough to undertake such a study. The principal goal of this thesis is to enable spectroscopic analysis with Cherenkov Telescope arrays, by improving the charge resolution of reconstructed events.
 
-A theoretical study by Kieda in 2001 \cite{kieda01} suggested that for a core position resolution of $d \approx 5 $ m, we could expect to see a charge resolution of $ \sigma_{Z} \approx 1 $ for elements of $Z = 20$ or higher. In this case the core position resolution would be the limiting value. Thus, if the LPD method can achieve this core position resolution, the precision will be sufficient to extract the abundances of the different Cosmic Ray Elements. This the prime motivation for the new LPD technique.
+A theoretical study by Kieda in 2001 \cite{kieda01} suggested that for a core position resolution of $d \approx 5 $ m, we could expect to see a charge resolution of $ \sigma_{Z} \approx 1 $ for elements of $Z = 20$ or higher. In this case the core position resolution would be the limiting value. Thus, if the LPD method can achieve this core position resolution, the precision will be sufficient to extract the abundances of the different Cosmic Ray Elements. 
 
-In order to reconstruct events using the LPD method, we require saturation of the Cosmic Ray Energy, and that the event can be seen by at least 4 telescopes. 
+Instead of Hillas Analysis, we will consider a new method for event reconstruction, in which we fit the known Direct Cherenkov (DC) Light observed by each telescope to a characteristic Lateral Photon Distribution (LPD) function. This new technique is valid both for currently running experiments, as well as planned experiments such as the Cherenkov Telescope Array (CTA). It uses only the information from the DC Pixel identified in the shower images. Possible improvement in core resolution is the prime motivation for the new LPD technique.
 
-The Cosmic Rays follow a well-defined power law where $ \frac{dN(E)}{dt} \propto E^{-\gamma} $ and experimentally $ \gamma = 2.7 \pm ? $. Consequently higher energy Cosmic Rays are heavily suppressed. The Energy Threshold for Cherenkov Light Emission as a function of height is illustrated in \ref{fig:generalenergy}. Once the Energy of a Cosmic Ray exceeds the local Cherenkov Energy Threshold of the atmosphere, the Nucleus will begin emitting a ring of Cherenkov Light. 
+To understand why an LPD exists, it is important to recall that Cherenkov emission begins when a charged particle passes the local speed of light in a medium.  We know that the refractive index of air is proportional to the density of air. Thus, the minimum velocity needed for Cherenkov Emission is lower for low atmospheric altitudes, because the air is denser. If the velocity is sufficient, we will observe photon emission from the particle at the Cherenkov Angle $\theta_{c}$.
+
+\[ \cos(\theta_{c}) = \frac{1}{\eta \beta}  \Longrightarrow \beta_{min} \geq \frac{1}{\eta}\]
+
+We obviously require that the Cherenkov Angle is real, so then require $\cos(\theta_{c}) \leq 1$. The minimum required velocity $\beta_{min}$ is thus equal to the inverse of the local refractive index $\eta$. The velocity of a particle is a function of its energy, determined with the relations $\gamma = \frac{E}{m_{0} c^{2}}$ and $\beta^{2} = 1 - \frac{1}{\gamma ^{2}}$. Thus, we find that the minimum velocity ultimately leads to an Energy per unit mass threshold. If we assume that the slight difference in proton and neutron mass is negligible here, than we can determine a local energy per nucleon threshold that will be valid for all Cosmic Rays passing a given atmospheric altitude. 
+
+The Energy per Nucleon Threshold for Cherenkov Light Emission as a function of height is illustrated in \ref{fig:generalenergy}. Once the Energy of a Cosmic Ray exceeds the local Cherenkov Energy Threshold of the atmosphere, the Nucleus will begin emitting a ring of Cherenkov Light.  Then for a given Telescope Array altitude above sea level and a given height h, simple trigonometry yields the final radius of emission on the ground:
+\[ Radius(h) = \tan (\theta_{C}(h)) \times (h - altitude_{array})\]
+
+The refractive index as a function of height is shown in as seen in Figure \ref{fig:lpd}, using standard values listed in the appendix. Because the refractive index of air increases very quickly as the height decreases, the Cherenkov Angle $\theta_{C}$ will also increase rapidly with decreasing height. Thus, although the displacement $(h - altitude_{array})$ decreases as the height, the radius on the ground increases as height decreases. Consequently the upper atmosphere emission contributes to the inner LDF, while the lower atmosphere emission contributes to the outer LDF. As the cosmic ray travels down through the atmosphere, Cherenkov Emission continuously illuminates new areas on the ground that were previously unlit, without re-illuminating inner regions. 
+
+Emission continues until the first interaction with the atmosphere, occurring at a randomly distributed height we call $h_{int}$. The maximum radius of the DC light will then be $r_{max} = Radius(h_{int})$. This is extremely useful, because for all distances up to $r_{max}$, the LPD will be completely independent of the emission height. One full parameterisation of the LPD will thus be valid for all heights, provided the maximum radius is known.
 
 Above threshold, Cherenkov Emission is determined by the Frank Tamm formula \cite{ppreview}.  Under the assumption of constant magnetic permittivity and a zenith angle of $90\degree$, and with  the vertical distance travelled in meters $\Delta_{h}$ and the emission energy range in eV $\Delta_{E}$, we can find an approximate Cherenkov Emission formula.
 \[ \frac{d^{2}N_{photons}}{dEdh} = \frac{\alpha Z^{2}}{\hbar c} \sin^{2} \theta_{c}(E) \approx 370 Z^{2} \sin^{2} \theta_{c}(E)\, cm^{-1}eV^{-1} \]
 
 \[ N_{photons} \approx (37000 \times Z^{2} \times \Delta_{h} \times \Delta_{E}(E))\, m^{-1}eV^{-1}\]
  
-
 A full simulation of the LPD was undertaken, with the assumption that $\Delta_{E} \approx 0.7$ independent of Energy. Although this is certainly an oversimplification of the true picture, it will allow us to understand the variation of the LPD with height. A more rigorous LPD parameterisation will be found later to account for the dependence of $\Delta_{E}$ on the Energy. 
 
-If we divide the number of emitted photons by the area of the annulus between the ring radii at $h$ and $h - \Delta_{h}$, we retrieve the LDF shown in \ref{fig:lpd}, which varies with $ \rho_{DC}  = f(r) \times Z^{2}$ . Thus the amplitude of the LDF is proportional to the charge of the Cosmic Ray, enabling the Charge to be determined from the DC emission. This is the basis for charge reconstruction in the LDF method.
+If we divide the number of emitted photons by the area of the annulus between the ring radii at $h$ and $h - \Delta_{h}$, we retrieve the LDF shown in \ref{fig:lpd}, which varies with $ \rho_{DC}  = f(r) \times Z^{2}$ . Thus the amplitude of the LDF is proportional to the square of the Cosmic Ray charge, enabling us to reconstruct this number from the DC emission. This proportionality is the basis for charge reconstruction in the LDF method.
 
 \begin{figure}
 \begin{center}
@@ -101,25 +119,18 @@ If we divide the number of emitted photons by the area of the annulus between th
 \begin{figure}
 \begin{center}
 \includegraphics[height=0.9\textheight]{simulatedlpd}
-\caption{The LPD obtained from simulation of an Iron Nucleus up to a first interaction height of 25km for a range of Core Energies. An altitude of 1.8km for the experimental array is assumed. Atmospheric absorption, although neglected, is broadly constant across the emission range leading to uniform amplitude scaling.}
+\caption{Above, the refractive index is shown with both linear and exponential interpolation between the known values. The LPD obtained from simulation of an Iron Nucleus up to a first interaction height of 25km for a range of Core Energies. An altitude of 1.8km for the experimental array is assumed. Atmospheric absorption, although neglected, is broadly constant across the emission range leading to uniform amplitude scaling.}
 \label{fig:lpd}
 \end{center}
 \end{figure}
 
-The Refractive Index of the atmosphere, and thus the Cherenkov angle $\theta_{C}$, increases as the altitude decreases. The refractive index at a series of heights, based on data from the HESS site, is shown \ref{fig:lpd}. Exponentials are fitted between points to provide interpolation, and a comparison can be made to a linear interpolation that is also plotted. Despite the exponential interpolation, discontinuities in the second derivative of the refractive index prevent the LPD from being smooth in the simulation. This is unimportant, because in reality the variation due to atmospheric conditions and random noise will smear out any discontinuities in the LDF.
+The refractive index at a series of heights, based on data from the HESS site, is shown \ref{fig:lpd}. Exponentials are fitted between points to provide interpolation, and a comparison can be made to a linear interpolation that is also plotted. Despite the exponential interpolation, discontinuities in the second derivative of the refractive index prevent the LPD from being smooth in the simulation. This is unimportant, because in reality the variation due to atmospheric conditions and random noise will smear out any discontinuities in the LDF.
 
-Emission continues until the first interaction with the atmosphere, occurring at a randomly distributed height we call $h$. Then for a given Telescope Array altitude above sea level, simple trigonometry yields the radius of the LDF on the ground:
-\[ Radius(height = altitude_{array}) = \tan [\theta_{C}(h)] \times (h - altitude_{array})\]
+We can also see ground emission radius as a function of height in Figure \ref{fig:generalenergy}. We find that the high-radius emission (occurring near the first interaction region) varies little between different high energies. We deem this to be \textquoteleft Saturated Emission\textquoteright. To accurately quantify Saturated Emission, we can compare the photon density to the theoretical maximum photon density, corresponding to an infinite-energy particle with $\beta =1$ in Figure \ref{fig:lpd}. The illustrated maximum is useful as a reference, although because the atmosphere is not modelled beyond an altitude of 120km, the small-radius emission is not accurately simulated entirely correctly. However, real cosmic rays in the considered energy regime will all cross the emission threshold and begin emission at an altitude much lower than 120km, so can be considered accurately modelled.
 
-Thus the upper atmosphere emission contributes to the inner LDF, while the lower atmosphere emission contributes to the outer LDF. As the cosmic ray travels down through the atmosphere, Cherenkov Emission continuously illuminates new areas on the ground that were previously unlit, without re-illuminating inner regions. This is extremely useful, because it means that for all distances up to the maximum radius, the LPD will be completely independent of the emission height. One full parameterisation of the LPD will thus be valid for all heights, provided the maximum radius is known.
+The salient point is that there is a clear characteristic photon distribution that, for energies above 25 TeV at least, is almost constant except for a varying endpoint. However, we will not be able to directly measure this LPD. Instead, a telescope images containing air showers must be analysed, and from these images, we can infer the quantity of DC light present amongst a large degree of background. Extensive simulations of Camera images will be performed, in order to quantify the resultant LPD extracted from the telescope images. After determining a likely experimental LPD, Monte Carlo events can be simulated, and then reconstructed. 
 
-We can also see ground emission radius as a function of height in \ref{fig:generalenergy}. We find that the high-radius emission (occurring near the first interaction region) varies little between different high energies. We deem this to be \textquoteleft Saturated Emission\textquoteright.
-
-To accurately quantify Saturated Emission, we can compare the photon density to the theoretical maximum photon density, corresponding to an infinite-energy particle with $\beta =1$. The illustrated maximum is useful as a reference, although because the atmosphere is not modelled beyond an altitude of 120km, the small-radius emission is not accurately simulated entirely correctly. However, real cosmic rays in the considered energy regime will all cross the emission threshold and begin emission at an altitude much lower than 120km, so can be considered accurately modelled. Absorption WAS/WAS NOT modelled.
-
-However, in the 4 telescope height region, the Cherenkov Threshold Energy is $ E_{Threshold} \approx 0.35$ TeV per Nucleon as shown in \ref{fig:lpd}! The saturation in for these heights occurs roughly at 0.7 TeV per Nucleon or something...
-
-We need four-telescope events or something.
+To reconstruct an event, we will need to find the \textquoteleft Core position' of the Cosmic Ray, which is defined as the position on the ground through which the Cosmic Ray would pass if it continued in a straight line to the ground. In addition, we will need to determine the Energy, first interaction height, and the charge. We would normally require at least five data points in order to reconstruct these variables. However, it is possible to use the non-observation of light in one telescope to constrain the core position. Thus, we require that an  event was be seen by at least four telescopes for a five-telescope array such as HESS. 
 
 \section{DC Pixel Identification}
 \textbf{Cosmic Rays will emit Direct Cherenkov (DC) light in the upper atmosphere, before generating an Extended Air Shower (EAS) through interaction with the lower atmosphere. }
@@ -498,13 +509,15 @@ Iron nucleii, like all Cosmic Rays, follow a well-defined power law where $\phi(
 
 \[ F(35-135TeV) = \int_{35}^{135} \phi_{0} E^{-2.76} dE = \frac{\phi_{0}}{1.76}[35^{-1.76} - 135^{-1.76}] = 2.86 \times 10^{-5} m^{-2} s^{-1} sr^{-1}\]
 
-Within CORSIKA, a square simulation of 300 x 300m was simulated. We can consider an identical $90000 m^{2}$ target region for core position simulation. The HESS telescope additionally has a solid and field of view of 5 degrees (0.09 rad),meaning an expected telescope array Iron Flux of $F(35-135TeV) = 0.22 s^{-1}$. On the basis of efficiency calculations in DC pixel identification, it is clear that 2.2\% of Iron Ray events will produce high-multiplicity DC pixels accepted by the BDT. Thus, we will ultimately obtain an hourly flux of $F(35-135TeV) = 4.4 \times 10^{-4} s^{-1} = 1.58 h^{-1}$ high-multiplicity Iron events. 
+Within CORSIKA, a square simulation of 300 x 300m was simulated. We can consider an identical $90000 m^{2}$ target region for core position simulation. The HESS telescope additionally has a solid and field of view of 5 degrees (0.09 rad),meaning an expected telescope array Iron Flux of $F(35-135TeV) = 0.22 s^{-1}$. On the basis of efficiency calculations in DC pixel identification, it is clear that 2.2\% of Iron Ray events will produce high-multiplicity DC pixels accepted by the BDT. Thus, we will ultimately obtain an hourly flux of $F(35-135TeV) = 4.84 \times 10^{-3} s^{-1} = 17.4 h^{-1}$ high-multiplicity Iron events. 
 
 The full 5-telescope HESS array has been in operation since 2012 \cite{hessCT5}, and has thus had time to collect several years of data. Due to the requirement of night operation under favourable weather conditions, the HESS phase 2 experiment has collected approximately 5000 hours of data. On the basis of our high-multiplicity flux rate, we can assume that a rough expected event count would be roughly 7900 high-multiplicity iron events. The Monte Carlo simulations will be run with approximately this number of events.
 
 To accurately model the Cosmic Rays, the Energy Power Law must be simulated. To generate the random Energy value En(R) following the power law, a uniformly distributed random number R is generated. The value of R represents a random fraction of the total simulated flux $ F(R) = R \times F(35-135TeV) $, and can thus range from 0-1. Having determined the Integrated Flux corresponding to the random number, the Energy corresponding to this flux can be calculated. The energy E is defined as the lower bound of the integral which would produce the chosen integrated flux F. Thus R=0 corresponds to an Energy of 135TeV yielding no Integrated Flux, while R=1 would correspond to an Energy of 35TeV and the full Integrated Flux. THus the simulated Cosmic Rays will obey the power law, with high-energy events being realistically suppressed.
 
 \[ F(R) = F(En(R)-135TeV) = \int_{En(R)}^{135} \phi_{0} E^{-2.76} dE =\frac{\phi_{0}}{1.76}[En(R)^{-1.76} - 135^{-1.76}]= R \times F(35-135TeV)\] \[\Longrightarrow  En(R) = (\frac{1.76\times R \times F(35-135TeV)}{\phi_{0}} +135^{-1.76})^{\frac{-1}{1.76}} \]
+
+RATES!!!
 
 \subsection{First Interaction Height}
 Cosmic Rays survival in from the top of the atmosphere follows an exponential decay with the number of 'interaction lengths' passed. 
@@ -563,7 +576,7 @@ Using basic Hillas reconstruction techniques we can find a rough estimate of the
 
 In addition, with reference to the energy power law, we consider 50 starting energy values. We again use the energy range 35-135 TeV, and as with the initial simulation of the core energy, we convert probabilities to energys. In this case, the probability range 0-1 is split into 50 evenly-spaced values, and each of these is converted into a corresponding energy coordinate. Thus most of the energy values are found at the lower end of the spectrum, because this is also where the true values for most events will be found.
 
-In combination, we consequently have a total of 1000 minimisations. Having run the minimisation algorithm, we thus acheive a full-shower LPD reconstruction, and obtain a measurement of the core energy and starting position. The resulting fraction error in energy distribution is shown below in Figure \ref{fig:rawepn}. It is clear that the energy reconstruction is fairly good, with a fractional standard deviation of roughly 0.10 when both four and five telescope events are considered. We find that the position is also reconstructed, with an accuracy of . Having now reconstructed the value of the energy with reasonable accuracy, we can make use of this value when attempting to reconstruct the DC LPD. 
+In combination, we consequently have a total of 1000 minimisations. Having run the minimisation algorithm, we thus acheive a full-shower LPD reconstruction, and obtain a measurement of the core energy and starting position. The resulting fraction error in energy distribution is shown below in Figure \ref{fig:rawepn}. Under the assumption of a gaussian distribution, we can calculate the mean fractional deviation as half of the distance between the 16th and 84th centiles of data. We sort each fractional deviation, and expect that 68\% of events will lie between these values. Using this method, it is clear that the energy reconstruction is fairly good, with a fractional standard deviation of roughly 0.10 when both four and five telescope events are considered. We find that the position is also reconstructed, with an accuracy of . Having now reconstructed the value of the energy with reasonable accuracy, we can make use of this value when attempting to reconstruct the DC LPD. 
 
 \begin{figure}
 \begin{center}
@@ -572,7 +585,7 @@ In combination, we consequently have a total of 1000 minimisations. Having run t
 \label{fig:rawepn}
 \end{center}
 \end{figure}  
-A graph showing the difference between the distance from telescope to true core position, and the distance from telescope to this reconstructed core position. The standard deviation from the true core distance  is 10m for 5 telescope events, and 16m for four telescope events. A better estimate for the core position will take into account the DC LPD as well as the full LPD.
+A graph showing the difference between the distance from telescope to true core position, and the distance from telescope to this reconstructed core position. Using the same 68\% method, the standard deviation from the true core distance  is 10m for 5 telescope events, and 16m for four telescope events. A better estimate for the core position will take into account the DC LPD as well as the full LPD.
 
 \begin{figure}
 \begin{center}
@@ -596,8 +609,6 @@ As before, we find that the discontinuous LPD leads to a frequent identification
 \subsection{Variable Resolution}
 If we compare the deviation from true core distance to each telescope, we can quantify the improvcement in core position reconstruction from minimisation based solely on the full-shower LPD. This is shown in Figure \ref{fig:coredistance}, and is directly comparable with the preliminary results in Figure \ref{fig:rawcoredistance}. As expected, the core distance resolution is reduced to X and Ym, and clear improvement over the previous measurements of core position. 
 
-As an alternative metric for assessing reconstruction accuracy, we can calculate the absolute distance from the reconstructed core to the true core. The results of a binning of this distribution are shown in Figure \ref{fig:position}. It is found that, for both four and five telescope events, the core reconstruction is approximately $\sigma_{core} \approx 10m$. Most core positions are reconstructed less than 10m from the true position. This is extremely good, especially in comparison to the Hillas Reconstruction, where a core resolution of Y is more typical AND CITE!.
-
 \begin{figure}
 \begin{center}
 \includegraphics[width=\textwidth]{coredistance}
@@ -605,6 +616,8 @@ As an alternative metric for assessing reconstruction accuracy, we can calculate
 \label{fig:coredistance}
 \end{center}
 \end{figure}
+
+As an alternative metric for assessing reconstruction accuracy, we can calculate the absolute distance from the reconstructed core to the true core. The results of a binning of this distribution are shown in Figure \ref{fig:position}. Because we consider absolute distance, this value can never be negative. Thus, we calculate a one-sided distribution standard deviation, and consider the value of an event in the 68th centile to be equal to the standard deviation. It is found that, for both four and five telescope events, the core reconstruction is approximately $\sigma_{core} \approx 10m$. Most reconstructed core positions thus lie less than 10m from the true position. This is extremely good, especially in comparison to the Hillas Reconstruction, where a core resolution of Y is more typical AND CITE!
 
 \begin{figure}
 \begin{center}
@@ -614,18 +627,30 @@ As an alternative metric for assessing reconstruction accuracy, we can calculate
 \end{center}
 \end{figure}
 
-\subsection{Extracting Charge Resolution}
-Having reconstructed many events, we can then derive the $\sigma_{Z}$ of the dataset, giving us a number to directly compare the quality of event reconstruction. However, a simple Gaussian 68\% method will yield only half integer values of $\sigma_{Z}$ and very frequently 0. This will be unhelpful for comparisons of minor modifications of reconstruction methods.
+We can similarly consider the resolution of reconstructed height.
 
-Instead, we can assume a Gaussian with tails at the highest and lowest reconstructed charge values in the dataset. The size of the dataset can be used to calculate the fraction of events that the extreme values represent, and this probability can be converted into a \textquoteleft number of standard deviations from mean'. Dividing the Gaussian total width by the number of standard deviations gives us a value for $\sigma$. Although this will in most cases tend to overestimate the spread of the data, it will also be sensitive to all increases in the proportion of correctly reconstructed events.
+\begin{figure}
+\begin{center}
+\includegraphics[width=\textwidth]{rawheight}
+\caption{The distance from true core position to the reconstructed core position is shown above. For four-telescope events, the standard deviation from true position is Xm.}
+\label{fig:height}
+\end{center}
+\end{figure}
+
+Having taken into account our various variable uncertainties, we can also consider our most important variable. In Figure \ref{fig:rawZ} the reconstructed charge number is binned in integers, illustrating the element that each reconstructed event would be assigned to. As we would hope, there is a very clear peak centered on Z=26, and the median charge value lies very close to this value. The distributions are broadly symettric, and have a charge resoultion of $\sigma_{Z} = 1.1$ and $\sigma_{Z} = 2.2$ for five and four telescope events respectively. Unsurprisingly, the charge resolution is better for five-telescope events, but both cases represent a significant improvement over the existing charge resolution obtained through Hillas analysis. With the reasonably high event rate, we could certainly expect to see such a peak in the existing HESS data, and the uncertainty well be small enough to enable spectroscopic analysis. Obtaining such a peak is a vindication of the LPD method, and demonstrates its superior performance for event reconstruction.
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=\textwidth]{rawZ}
+\caption{The distance from true core position to the reconstructed core position is shown above. For four-telescope events, the standard deviation from true position is Xm.}
+\label{fig:rawZ}
+\end{center}
+\end{figure} 
 
 \subsection{Boosted Decision Trees}
 Using one quarter of a large sample of Monte Carlo data, we can train a Boosted Decision Tree (BDT) for a given telescope multiplicity, using the reconstructed x/y core position, height and energy, as well as the Log Likelihood. The BDT is told whether each event is \textquoteleft signal' (correctly reconstructed) or \textquoteleft background' (incorrectly reconstructed). 
 
 For every simulated event, this trained BDT can then be used to assign a \textquoteleft Signal Probability'. On a second quarter of the dataset we can optimise a cut on the minimum signal probability, in order to maximise the ratio of signal to background. We find that the $\sigma_{Z}$ of the remaining \textquoteleft Test' Monte Carlo data is reduced when the same BDT cut is applied.
-
-\subsection{Reconstructed Charge Resolution}
-In the preliminary HESS simulation, it was found that the 4 telescope event reconstruction had a charge resolution of $\sigma_{Z} = 1.4$. However, requiring that the BDT signal probability satisfied $P > 0.81$ removed $75 \%$ of events, while reducing the Charge resolution to $\sigma_{Z} = 0.9$ . With this cut, core position resolution was $d \approx 1.4 m $. For 5 telescope events, it was found that the charge resolution was also $\sigma_{Z} = 1.4$. However, requiring that the signal probability satisfied $P > 0.05$ removed $53 \%$ of events, including all wrongly reconstructed ones. This placed an upper limit on the charge resolution of $\sigma_{Z} < 0.35$ . With this cut, core position resolution was $d \approx 0.8 m $.
 
 However, the simulated number of hours for the data was 1200? hours, and comparisons with HESS data show just 12 4-telescope events rather than 600. Thus, although the technique is valid and effective for HESS, the count rate will limit the potential to conduct any statistical analysis from this experiment.
 
@@ -646,6 +671,9 @@ In order to improve the count rate of high-multiplicity events, we can consider 
 \subsection{Saturation Region Energies}
 Hillas reconstruction better
 Combine with Hillas reconstruction
+Apply to HESS data
+calibrate with position of Iron peak
+
 
 \subsection{High Speed Telescopes}
 By definition, the EAS shower will arrive on the ground shortly before the DC light. There are currently several high-speed Cherenkov telescopes capable of distinguishing between these, allowing a background-free LDF to be fitted. Additional study of alternative energy regimes and layouts will also be considered for the case of a high-speed imaging telescope array. 

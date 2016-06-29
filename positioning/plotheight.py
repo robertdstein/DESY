@@ -19,7 +19,10 @@ def run(statsset, mindetections, cuts):
 
 		full=0
 		passing=0
-		bdtmin = cuts[k]
+		if cuts == None:
+			bdtmin = -0.01
+		else:
+			bdtmin = cuts[k]
 
 		for simset in datasimset:
 			for sim in simset.simulations:	
@@ -57,8 +60,11 @@ def run(statsset, mindetections, cuts):
 			sigma = (upperz-lowerz) * 0.5
 			
 			fraction = float(passing)/float(full)
-			info += str("For N = " + str(j) + " we require BDT >  " + str('{0:.2f}'.format(bdtmin)) + "\n ")
-			info += str("Fraction passing is " + str('{0:.2f}'.format(fraction)) + "\n")
+			if fraction < 1.0:
+				info += str("For N = " + str(j) + " we require BDT >  " + str('{0:.2f}'.format(bdtmin)) + "\n ")
+				info += str("Fraction passing is " + str('{0:.2f}'.format(fraction)) + "\n")
+			else:
+				info += str("For N = " + str(j) + ":\n ")
 			
 			info += ('Upper bound = ' + str('{0:.2f}'.format(upperz)) + " \n")
 			info += ('Median = ' + str('{0:.2f}'.format(meanz)) + " \n")
@@ -99,8 +105,12 @@ def run(statsset, mindetections, cuts):
 	
 	figure = plt.gcf() # get current figure
 	figure.set_size_inches(20, 15)
-	
-	path = '/d6/rstein/Hamburg-Cosmic-Rays/positioning/graphs/height.pdf'
+	if cuts == None:
+		plt.savefig('/d6/rstein/Hamburg-Cosmic-Rays/report/graphs/rawheight.pdf')
+		path = '/d6/rstein/Hamburg-Cosmic-Rays/positioning/graphs/rawheight.pdf'
+	else:
+		plt.savefig('/d6/rstein/Hamburg-Cosmic-Rays/report/graphs/height.pdf')
+		path = '/d6/rstein/Hamburg-Cosmic-Rays/positioning/graphs/height.pdf'
 	plt.savefig(path)
 	print "saving to", path
 	plt.close()

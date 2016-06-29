@@ -210,7 +210,7 @@ def run(eff, rowcount, mincount=4, text=False, graph=False, output="default", la
 	
 	if len(mT) > 0:
 	
-		n, bins, _ = plt.hist([mT], bins=10, label=labels)
+		n, bins, _ = plt.hist([mT], bins=20, label=labels)
 		
 		mid = (bins[1:] + bins[:-1])*0.5
 		errors = []
