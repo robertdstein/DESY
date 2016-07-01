@@ -69,13 +69,15 @@ while (i < j):
 	
 print energy
 
-plt.hist(energy, log=True, histtype='bar')
+print cfg.jobID.split("full")[1]
+
+plt.hist(energy, histtype='bar')
 figure = plt.gcf() # get current figure
-figure.set_size_inches(20, 15)
-plt.xlabel("True Energy (TeV)")
-plt.ylabel("Count")
-plt.title("Energy Distribution of Accepted Events")
-plt.ylim(bottom=0.8)
+figure.set_size_inches(20, 10)
+plt.xlabel("True Energy (TeV)", fontsize=20)
+plt.ylabel("Count", fontsize=20)
+plt.title("Energy Distribution of Accepted " + cfg.jobID.split("full")[1], fontsize=25)
 plt.savefig("/nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/CORSIKA/graphs/energy"+str(cfg.jobID)+".pdf")
+plt.savefig("/nfs/astrop/d6/rstein/Hamburg-Cosmic-Rays/report/graphs/energy"+str(cfg.jobID)+".pdf")
 plt.close()
 					

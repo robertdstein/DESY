@@ -8,7 +8,7 @@ from telescopeclasses import *
 from matplotlib import rc
 
 parser = argparse.ArgumentParser()
-parser.add_argument("-jid", "--jobID", default="testdata")
+parser.add_argument("-jid", "--jobID", default="bigtestdata")
 
 cfg = parser.parse_args()
 
@@ -21,7 +21,7 @@ hess2ars =[[],[]]
 for f in range(len(files)):
 	filepath = "/nfs/astrop/d6/rstein/data/"
 	i = 1
-	j = 5000
+	j = 15000
 	
 	folder = files[f]
 	

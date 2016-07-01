@@ -1,5 +1,24 @@
 \begin{thebibliography}{10}
 
+\bibitem{Heck98}
+D.~{Heck}, J.~{Knapp}, J.~N. {Capdevielle}, G.~{Schatz}, and T.~{Thouw}.
+\newblock {\em {CORSIKA: a Monte Carlo code to simulate extensive air
+  showers.}}
+\newblock February 1998.
+
+\bibitem{Bernlohr08}
+Konrad Bernlohr.
+\newblock {Simulation of Imaging Atmospheric Cherenkov Telescopes with CORSIKA
+  and sim\textunderscore telarray}.
+\newblock {\em Astropart. Phys.}, 30:149--158, 2008.
+
+\bibitem{scikit-learn}
+F.~Pedregosa, G.~Varoquaux, A.~Gramfort, V.~Michel, B.~Thirion, O.~Grisel,
+  M.~Blondel, P.~Prettenhofer, R.~Weiss, V.~Dubourg, J.~Vanderplas, A.~Passos,
+  D.~Cournapeau, M.~Brucher, M.~Perrot, and E.~Duchesnay.
+\newblock Scikit-learn: Machine learning in {P}ython.
+\newblock {\em Journal of Machine Learning Research}, 12:2825--2830, 2011.
+
 \bibitem{Blasi:2013rva}
 Pasquale Blasi.
 \newblock {The Origin of Galactic Cosmic Rays}.
@@ -29,24 +48,11 @@ K~Nakamura and Particle~Data Group.
 \newblock {\em Journal of Physics G: Nuclear and Particle Physics},
   37(7A):075021, 2010.
 
-\bibitem{Heck98}
-D.~{Heck}, J.~{Knapp}, J.~N. {Capdevielle}, G.~{Schatz}, and T.~{Thouw}.
-\newblock {\em {CORSIKA: a Monte Carlo code to simulate extensive air
-  showers.}}
-\newblock February 1998.
-
-\bibitem{Bernlohr08}
-Konrad Bernlohr.
-\newblock {Simulation of Imaging Atmospheric Cherenkov Telescopes with CORSIKA
-  and sim\textunderscore telarray}.
-\newblock {\em Astropart. Phys.}, 30:149--158, 2008.
-
-\bibitem{scikit-learn}
-F.~Pedregosa, G.~Varoquaux, A.~Gramfort, V.~Michel, B.~Thirion, O.~Grisel,
-  M.~Blondel, P.~Prettenhofer, R.~Weiss, V.~Dubourg, J.~Vanderplas, A.~Passos,
-  D.~Cournapeau, M.~Brucher, M.~Perrot, and E.~Duchesnay.
-\newblock Scikit-learn: Machine learning in {P}ython.
-\newblock {\em Journal of Machine Learning Research}, 12:2825--2830, 2011.
+\bibitem{Roe:2004na}
+Byron~P. Roe, Hai-Jun Yang, Ji~Zhu, Yong Liu, Ion Stancu, and Gordon McGregor.
+\newblock {Boosted decision trees, an alternative to artificial neural
+  networks}.
+\newblock {\em Nucl. Instrum. Meth.}, A543(2-3):577--584, 2005.
 
 \bibitem{hessCT5}
 F.~{Krayzel}, G.~{Maurin}, L.~{Brunetti}, J.-M. {Dubois}, A.~{Fiasson},

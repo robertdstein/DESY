@@ -7,6 +7,8 @@
 \usepackage{booktabs}
 \usepackage{amsfonts}
 \usepackage{pgfplotstable, booktabs}
+\usepackage{caption}
+\usepackage{subcaption}
 
 \pgfplotstableset{
   	every head row/.style={before row=\toprule,after row=\midrule},
@@ -86,19 +88,27 @@ A theoretical study by Kieda in 2001 \cite{kieda01} suggested that, with a core 
 
 Instead of Hillas Analysis, we will consider a new method for event reconstruction, in which we fit the known Direct Cherenkov (DC) Light observed by each telescope to a characteristic Lateral Photon Distribution (LPD) function. This new technique is valid both for currently running experiments, as well as planned experiments such as the Cherenkov Telescope Array (CTA). It uses only the information from the DC Pixel identified in the shower images. Possible improvement in core resolution is the prime motivation for the new LPD technique.
 
-To fully reconstruct an event, we will need to find the charge, energy and the core position coordinates. In addition, we will need to determine the height of the first atmospheric interaction. We would normally require at least five data points in order to reconstruct these variables. However, it is possible to use the non-observation of light in one telescope to constrain the core position. Thus, we require that an event was be seen by at least four telescopes for a five-telescope array such as HESS. 
+To fully reconstruct an event, we will need to find the charge, energy and the core position coordinates. In addition, we will need to determine the height of the first atmospheric interaction. We would normally require at least five data points in order to reconstruct these variables. However, it is possible to use the non-observation of light in one telescope to constrain the core position. Thus, we require that an event was be seen by at least four telescopes for a five-telescope array such as HESS. An illustration of the HESS array is shown in Figure \ref{fig:hessdiagram}.
+
+\begin{figure}
+\begin{center}
+\includegraphics[height=0.3\textheight]{hessdiagram}
+\caption{A diagram illustrating the HESS array \cite{hess07}. The four small telescopes are shown, but not the larger central telescope. The smaller Cherenkov ring is seen alongside the broader EAS light. A simplified camera image is also shown, and can be compared to a full image seen in Figure \ref{fig:fulltelimage}.}
+\label{fig:hessdiagram}
+\end{center}
+\end{figure}
 
 \section{DC Pixel Identification}
-Cosmic Rays will emit Direct Cherenkov (DC) light in the upper atmosphere, before generating an Extended Air Shower (EAS) through interaction with the lower atmosphere. In telescope images, the DC light is usually concentrated in a single  \textquoteleft DC pixel'. Identifying this pixel is challenging, because the brighter EAS Cherenkov light background often overlaps with the DC pixel. In order to apply the LPD method to data, we must first identify the DC pixel in a shower image, and determine the number of DC photoelectrons present. 
+In a Comsic Ray event, the \textquoteleft Primary Particle' will emit Direct Cherenkov (DC) light in the upper atmosphere, before generating an Extended Air Shower (EAS) through interaction with the lower atmosphere. The primary particle is the Cosmic Ray itself, while the EAS refers to all daughter particle of the primary particle. In telescope images, the DC light is usually concentrated in a single  \textquoteleft DC pixel'. Identifying this pixel is challenging, because the brighter EAS Cherenkov light background often overlaps with the DC pixel. In order to apply the LPD method to data, we must first identify the DC pixel in a shower image, and determine the number of DC photoelectrons present. 
 
 \subsection{Theoretical LPD}
-To understand why DC light has a characteristic distribution, it is important to recall that Cherenkov emission begins when a charged particle passes the local speed of light in a medium.  We know that the refractive index of air is proportional to the density of air. Thus, the minimum velocity needed for Cherenkov Emission is lower for low atmospheric altitudes, because the air is denser. If the velocity is sufficient, we will observe photon emission from the particle at the Cherenkov Angle $\theta_{c}$.
+To understand why DC light has a characteristic distribution, it is important to recall that Cherenkov emission begins when a charged particle passes the local speed of light in a medium.  We know that the refractive index of air is proportional to the density of air. Thus, the minimum velocity needed for Cherenkov Emission is lower for low atmospheric altitudes, because the air is denser. If the velocity is sufficient, we will observe photon emission from the particle at the Cherenkov Angle $\theta_{c}$. We obviously require that the Cherenkov Angle is real, so then require $\cos(\theta_{c}) \leq 1$. The minimum required velocity $\beta_{min}$ is thus equal to the inverse of the local refractive index $\eta$. 
 
 \[ \cos(\theta_{c}) = \frac{1}{\eta \beta}  \Longrightarrow \beta \geq \frac{1}{\eta}\]
 
-We obviously require that the Cherenkov Angle is real, so then require $\cos(\theta_{c}) \leq 1$. The minimum required velocity $\beta_{min}$ is thus equal to the inverse of the local refractive index $\eta$. The velocity of a particle is a function of its energy, determined with the relations $\gamma = \frac{E}{m_{0} c^{2}}$ and $\beta^{2} = 1 - \frac{1}{\gamma ^{2}}$. Thus, we find that the minimum velocity ultimately leads to an Energy per unit mass threshold. If we assume that the slight difference in proton and neutron mass is negligible here, than we can determine a local energy per nucleon threshold that will be valid for all Cosmic Rays passing a given atmospheric altitude. 
+The velocity of a particle is a function of its energy, determined with the relations $\gamma = \frac{E}{m_{0} c^{2}}$ and $\beta^{2} = 1 - \frac{1}{\gamma ^{2}}$. Thus, we find that the minimum velocity ultimately leads to an Energy per unit mass threshold. If we assume that the slight difference in proton and neutron mass is negligible here, than any atmospheric altitude will have a local Energy per Nucleon threshold, and this threshold will be the same for all Cosmic Rays. 
 
-The Energy per Nucleon Threshold for Cherenkov Light Emission as a function of height is illustrated in \ref{fig:generalenergy}. Once the Energy of a Cosmic Ray exceeds the local Cherenkov Energy Threshold of the atmosphere, the Nucleus will begin emitting a ring of Cherenkov Light.  Then for a given Telescope Array altitude above sea level and a given height h, simple trigonometry yields the final radius of emission on the ground:
+The Energy per Nucleon Threshold for Cherenkov Light Emission as a function of height is illustrated in Figure \ref{fig:generalenergy}. Once the Energy of a Cosmic Ray exceeds the local Cherenkov Energy Threshold of the atmosphere, the Nucleus will begin emitting a ring of Cherenkov Light.  Then, for a given Telescope Array altitude above sea level and a given height h, simple trigonometry yields the final radius of emission on the ground:
 \[ Radius(h) = \tan (\theta_{C}(h)) \times (h - altitude_{array})\]
 
 The refractive index as a function of height is shown in as seen in Figure \ref{fig:lpd}, using standard values listed in the appendix. Because the refractive index of air increases very quickly as the height decreases, the Cherenkov Angle $\theta_{C}$ will also increase rapidly with decreasing height. Thus, although the displacement $(h - altitude_{array})$ decreases as the height, the radius on the ground increases as height decreases. Consequently the upper atmosphere emission contributes to the inner LDF, while the lower atmosphere emission contributes to the outer LDF. As the cosmic ray travels down through the atmosphere, Cherenkov Emission continuously illuminates new areas on the ground that were previously unlit, without re-illuminating inner regions. 
@@ -134,33 +144,33 @@ The refractive index at a series of heights, based on data from the HESS site, i
 
 We can also see ground emission radius as a function of height in Figure \ref{fig:generalenergy}. We find that the high-radius emission (occurring near the first interaction region) varies little between different high energies. We deem this to be \textquoteleft Saturated Emission\textquoteright. To accurately quantify Saturated Emission, we can compare the photon density to the theoretical maximum photon density, corresponding to an infinite-energy particle with $\beta =1$ in Figure \ref{fig:lpd}. The illustrated maximum is useful as a reference, although because the atmosphere is not modelled beyond an altitude of 120km, the small-radius emission is not accurately simulated entirely correctly. However, real cosmic rays in the considered energy regime will all cross the emission threshold and begin emission at an altitude much lower than 120km, so can be considered accurately modelled.
 
-We see that there is a clear characteristic photon distribution which, for energies above 25 TeV, is almost constant except for a varying endpoint. However, we will not be able to directly measure this LPD. Instead, a telescope images containing air showers must be analysed, and from these images, we can infer the quantity of DC light present amongst a large degree of background. Extensive simulations of Camera images will be performed, in order to quantify the resultant LPD extracted from the telescope images. After determining a likely experimental LPD, Monte Carlo events can be simulated, and then reconstructed. 
+For energies above 25 TeV, we see that there is a clear characteristic photon distribution which is almost independent of Energy except for a varying endpoint. The LPD displays many discontinuities, which can be explained by the interpolation of Refractive Index. Exponential Interpolation will not provide a function that is smooth for second or third derivatives, and consequently, the LPD is not smooth. In reality, there will be a funtion describing the Refractive Index as a function of height, but it will depend on many variables such as Temperature. This will be the dominant cause of variations to the LPD, and thus, uncertainty in the LPD from Refractive Index Interpolation will be sub-dominant.
+
+In any case, we will not be able to directly measure this LPD. Instead, a telescope images containing air showers must be analysed, and from these images, we can infer the quantity of DC light present amongst a large degree of background. Extensive simulations of Camera images will be performed, in order to quantify the resultant LPD extracted from the telescope images. After determining a likely experimental LPD, Monte Carlo events can be simulated, and then reconstructed. 
 
 \subsection{Image Simulation}
-We can find the DC pixel by defining the variable $Q_{DC} = \frac{Intensity_{N.N.max}}{Intensity}$ as the ratio of the largest neighbouring pixel intensity to the intensity of a given pixel. In previous experiments, the DC pixel candidate was identified by applying a number of cuts to pixels in an image \cite{hess07}, and from the subset of pixels passing the specified cuts, selecting the pixel with the smallest $Q_{DC}$ as the \textquoteleft DC candidate'. Due to the low pass rate for cuts, we obtain a small low-contamination dataset, while the majority of telescope images are left without a DC pixel candidate. An improved method would aim to increase the number of correctly identified DC pixels, while still enabling cuts which discriminate well between correctly and incorrectly identified DC pixels.
+The CORSIKA package \cite{Heck98} was used to generate Cosmic Ray events, and the Sim\textunderscore telarray package  \cite{Bernlohr08} was used to generate corresponding HESS array telescope images.  Simulation with EAS background was used to produce training pixel sets, while corresponding simulation without EAS background was used to find the true DC pixel in each training image.
 
-Classifiers provide an alternative method of identification, making use of supervised machine learning to find rules for categorising pixels. To train a classifier, we require a set of training pixels, as well as the correct class for each pixel. Once trained, a classifier can then be used to predict the class of a pixel.
+The full simulation of air showers was performed using CORSIKA with a standard atmospheric profile derived from measurements conducted at the HESS site in Namibia. This is included in the Appendix. In total, 5000 training events and a further 10000 testing events were simulated. The simulated particles were $Fe^{56}$, within the Energy Range of $35-135$ TeV and a flux spectrum $\phi(E) \propto E^{-2.7}$. For each set of simulated event, 4 unique random number seeds were used to generate the shower. An altitude of 1800m was assumed, again corresponding to the HESS site. The simulated zenith angle ranged from $0\degree < \theta < 2 \degree$, while the simulated azimuth angle ranges from $-2\degree < \phi < 2 \degree$. The four smaller HESS-phase-1 telescopes were arranged in a cross along the x/y axis with the larger HESS-phase-2 \textquoteleft CT5' telescope placed at the center. The length of each cross arm was $85m$. The simulated target region of the cores was chosen to be a square centered on CT5, with each 300m-long side bisecting the x/y axis. Due to hardware differences between CT5 and the original HESS 1 telescopes, we analyse HESS1 and HESS2 images separately. 
 
-The CORSIKA package \cite{Heck98} was used to generate Cosmic Ray events, and the Sim\textunderscore telarray package  \cite{Bernlohr08} was used to generate corresponding HESS array telescope images.  Simulation with EAS background was used to produce training pixel sets, while corresponding simulation without EAS background was used to find the true DC pixel in each training image. As part of a new method developed for this analysis, a Boosted Decision Tree (BDT) classifier was trained with the data to identify DC pixels. Once trained, the BDT was applied to a separate \textquoteleft testing' set of simulated telescope images. As before, the true DC pixel was determined from a second EAS-free simulation. Thus, the accuracy of BDT identification for test telescope images was calculated.
-
-The full simulation of air showers was performed using the CORSIKA package with a standard atmospheric profile derived from measurements conducted at the HESS site in Namibia. This Atmospheric Profile is included in the Appendix. In total, 5000 training events and a further 10000 testing events were simulated. The simulated particles were $Fe^{56}$, within the Energy Range of $35-135$ TeV and a flux spectrum $\phi(E) \propto E^{-2.7}$. For each set of simulated event, 4 unique random number seeds were used to generate the shower. An altitude of 1800m was assumed, again corresponding to the HESS site. The simulated zenith angle ranged from $0\degree < \theta < 2 \degree$, while the simulated azimuth angle ranges from $-2\degree < \phi < 2 \degree$. The four smaller HESS-phase-1 telescopes were arranged in a cross along the x/y axis with the larger HESS-phase-2 \textquoteleft CT5' telescope placed at the center. The length of each cross arm was $85m$. The simulated target region of the cores was chosen to be a square centered on CT5, with each 300m-long side bisecting the x/y axis.Due to hardware differences between CT5 and the original HESS 1 telescopes, we analyse HESS1 and HESS2 images separately. To determine the true class of each pixel, a simulation was initially run with an energy cut of 10 PeV on all muons and electrons. Because this cut exceeded the primary particle energy, neither daughter muons and electrons, nor the photons they would have emitted, were simulated. Thus the hadronic Cherenkov Light from the primary particle and daughter fragments, but not the EAS light, was present in the camera image. A second identical \textquoteleft EAS Simulation' was run including the same random seeds, but without the energy cut on muons and electrons. This gave a complete EAS image including identical DC light.
+To determine the true class of each pixel, a simulation was initially run with an energy cut of 10 PeV on all muons and electrons. Because this cut exceeded the primary particle energy, neither daughter muons and electrons, nor the photons they would have emitted, were simulated. Thus the hadronic Cherenkov Light from the primary particle and daughter fragments, but not the EAS light, was present in the camera image. A second identical \textquoteleft EAS Simulation' was run including the same random seeds, but without the energy cut on muons and electrons. This gave a complete EAS image including identical DC light. The difference is well-illustrated in Figures \ref{fig:DCtelimage} and \ref{fig:fulltelimage}.
 
 With the sim\textunderscore telarray package, the expected HESS hardware response to each air shower was simulated. Among other things, the program accounts for atmospheric transmission and density, mirror positions, sizes and reflectivities, camera shadowing and triggering, quantum efficiency and pulse responses. For the full-shower image, the night sky background was also simulated by sim\textunderscore telarray. Due to the comprehensive and detailed nature of these hardware simulations, the resultant images can be considered \textquoteleft realistic'.  However, sim\textunderscore telarray introduces various sources of random noise to the simulation, leading to some divergence in the DC light between the EAS-free and full-shower images.
 
 \begin{figure}
-\newgeometry{a4paper, portrait, margin=1.5in}
+\newgeometry{a4paper, portrait, margin=1.0in}
 \centering
 \begin{minipage}{0.45\textwidth}
 \centering
 \includegraphics[trim=80 120 80 150,clip,width=\textwidth]{graphDC}
-\caption{A typical camera image without the EAS shower. The DC light is visible in every telescope, indicated by the white arrow. The DC pixel is circled in white. The largest telescope image is from CT5, but was not used in analysis.}
+\caption{An ideal camera image without the EAS shower. The DC light is visible in every telescope, indicated by the white arrow. The DC pixel is circled in white. The largest telescope image is from CT5, and is analysed separately.}
 \label{fig:DCtelimage}
 \end{minipage}\hfill
 \begin{minipage}{0.45\textwidth}
 \centering
 \includegraphics[trim=80 120 80 150,clip,width=\textwidth]{graphfull}
-\caption{The same shower as in \ref{fig:DCtelimage} is shown here with the inclusion of the EAS shower. The DC light is pixels indicated with a white arrow and circle. The shower center of gravity is marked by a white cross.}
-\label{fig:cutdistribution2}
+\caption{This is a typical camera image. The same shower as in Figure \ref{fig:DCtelimage} is shown here with the inclusion of the EAS shower.  The DC light is pixels indicated with a white arrow and circle. The shower center of gravity is marked by a white cross.}
+\label{fig:fulltelimage}
 \end{minipage}
 \restoregeometry
 \end{figure}
@@ -170,12 +180,14 @@ The various pixel entry variables were found from the sim\textunderscore telarra
 For every pixel, in addition to the $Intensity$, its location within the telescope image was determined using the standard HESS layout. The variables $ \Delta_{C.o.G}$, $\Delta_{Direction}$ and $\Delta_{Line}$ were defined as the distance from the pixel to the shower center of gravity, shower direction, and the line joining those two points. Furthermore, the nearest neigbouring pixel IDs were calculated for every pixel position, enabling the $Intensity$ in each neighbouring pixel to be found. The largest neighbouring intensity was identified, and the ratio $Q_{DC} = \frac{Intensity_{N.N.max}}{Intensity}$ was derived. Similarly the largest neighbouring FADC was found, and the ratio $raw_{Q} = \frac{FADC_{N.N.max}}{FADC}$ was calculated. In addition, the Nearest Neighbour Mean Intensity $Mean_{N.N}$ was recorded, as well as the smallest neighbouring pixel intensity $Intensity_{N.N.min}$. The variable $DC_{Signal} = Intensity-Mean_{N.N}$ was defined as an rough guess of the \textquoteleft DC signal' component in the pixel. Lastly the Image Amplitude $I_{tot}$, defined as the total image intensity after the default tail cuts have been applied to the image.
 
 \subsection{Classic HESS1 DC Pixel Identification}
-As a basis for comparison, the original HESS cuts listed in Table \ref{tab:table1} were replicated for the set of test data. For every HESS1 image, the total image amplitude $I_{tot}$ was used alongside the zenith angle $\theta$ to determine a dynamic cut, $Q_{DC} < 0.14 \times \log(\frac{I_{tot}}{161 \times \cos \theta})$. Among those pixels passing all cuts, the one with the smallest $Q_{DC}$ was selected as the DC pixel candidate for the image. Because many images had no pixel that passed all cuts, the $Q_{DC}$ method was frequently unable to identify a DC pixel. In the original analysis, an additional cut $r_{core} \textgreater 40m$ was applied. However, the uncertainty in determining the core position through Hillas Analysis is typically of the order of $\pm 30m$. Consequently, this particular cut was omitted.
+We can find the DC pixel in am image by defining the variable $Q_{DC} = \frac{Intensity_{N.N.max}}{Intensity}$ as the ratio of the largest neighbouring pixel intensity to the intensity of a given pixel. In previous experiments, the DC pixel candidate was identified by applying a number of cuts to pixels in an image \cite{hess07}, and from the subset of pixels passing the specified cuts, selecting the pixel with the smallest $Q_{DC}$ as the \textquoteleft DC candidate'. Due to the low pass rate for cuts, we obtain a small low-contamination dataset, while the majority of telescope images are left without a DC pixel candidate. 
+
+As a basis for comparison, these original HESS cuts listed in Table \ref{tab:qdccuts} were replicated for the set of test data. For every HESS1 image, the total image amplitude $I_{tot}$ was used alongside the zenith angle $\theta$ to determine a dynamic cut, $Q_{DC} < 0.14 \times \log(\frac{I_{tot}}{161 \times \cos \theta})$. Because many images had no pixel that passed all cuts, the $Q_{DC}$ method was frequently unable to identify a DC pixel. In the original analysis, an additional cut $r_{core} \textgreater 40m$ was applied. However, the uncertainty in determining the core position through Hillas Analysis is typically of the order of $\pm 30m$. Consequently, this particular cut was omitted.
 
 \begin{table}[h!]
   \centering
   \caption{Cuts applied to image pixel sets, used by HESS collaboration \cite{hess07}}
-  \label{tab:table1}
+  \label{tab:qdccuts}
   \begin{tabular}{ccc}
     \toprule
     Variable & Cut\\
@@ -190,7 +202,7 @@ As a basis for comparison, the original HESS cuts listed in Table \ref{tab:table
   \end{tabular}
 \end{table}
 
-The candidates were checked against the true DC pixels identified in the EAS-free images. From the testing sample, 1.81\% of all HESS1 images were correctly identified and passed the cuts. Once misidentified events were considered, the post-cuts sample was 77.8\% accurate, as shown in Figure \ref{fig:cutdistribution}. These values will serve as a useful benchmark for BDT performance. Increasing the acceptance rate will be essential for enabling spectroscopic analysis of cosmic rays, by providing more events to analyse.
+The candidates were checked against the true DC pixels identified in the EAS-free images. From the testing sample, 1.81\% of all HESS1 images were correctly identified and passed the cuts. Once misidentified events were considered, the post-cuts sample was 77.8\% accurate, as shown in Figure \ref{fig:cutdistribution}. These values will serve as a useful benchmark for BDT performance. Increasing the acceptance rate will be essential for enabling spectroscopic analysis of cosmic rays, by providing more events to analyse. An improved method would aim to increase the number of correctly identified DC pixels, while still enabling cuts which discriminate well between correctly and incorrectly identified DC pixels.
 
 \begin{figure}
 \begin{center}
@@ -201,7 +213,25 @@ The candidates were checked against the true DC pixels identified in the EAS-fre
 \end{figure}
 
 \subsection{Boosted Decision Tree DC Identification}
-As an alternative to use of $Q_{DC}$, a new method of DC pixel identification was developed as part of this analysis by using a BDT trained with the Scikit Learn Python package \cite{scikit-learn}. Using the training set of 2000 CORSIKA events, and randomly split further, with 90\% in a learning subset and 10\% in a subset to check for overtraining. Within the learning subset, every HESS 1 image was used, provided it was triggered in both EAS-free and full-shower simulations. For each of the triggered image pixels, an entry was formed with the variables listed in table \ref{tab:hess1classifier}. A class of 0 was assigned to every non-DC pixel, and a class of 1 was assigned to every DC pixel. Having created a dataset, the BDT was then trained with a maximum depth of 8, and with 100 trees generated. The data was provided in the form of individual pixel entries, rather than as discrete sets for images or events.
+Classifiers provide an alternative method of DC pixel identification, making use of supervised machine learning to find rules for categorising pixels. To train a classifier, we require a set of training pixels, as well as the correct class for each pixel. Once trained, a classifier can then be used to predict the class of a pixel. As part of a new method developed for this analysis, a Boosted Decision Tree (BDT) classifier was trained to identify DC pixels using the Scikit Learn Python package \cite{scikit-learn}.
+
+A Decision Tree is a simple method of classification, in which a number of branching decisions are used to place events into one of many \textquoteleft leaves'. A leaf lies at the end of every decision chain, and will be associated with one of the possible classes. Any event being assigned to a particular leaf will then be classified as belonging to that leaf's class. Each branch and leaf has a sample, which indicates the number of training events that are placed in there. As part of the machine learning process, branches are constructed to maximise leaf purity. A hypothetical perfect branch would split a mixed sample into two pure leaves. 
+
+It will almost always be possible to construct a tree, such that each event was placed in its own, unique leaf. The performance of a tree would be perfect for the training set. However, if applied to a separate testing sample, the performance would be significantly worse. The tree would not be classifying data, but rather simply remembering the structure of the training data. We describe such a tree as being overtrained.
+
+In general, larger training sets prevent overtraining by making it more difficult to uniquely distinguish the individual events. The maximum depth of a tree is the number of branches a decision chain can pass through before it must end on a leaf. The minimum leaf sample is the minimum number that every leaf has sample must exceed. Either of these quantities can be used to restrict overtraining of a Decision Tree.
+
+A graphical representation of a Decision Tree is given in Figure \ref{fig:decisiontree}. Decision Tree training is highly unpredictable, meaning similar datasets can produce wildly differing trees. Thus Boosted Decision Trees are used to provide a more stable method of classification. The training of a Boosted Decision Tree is in some sense an averaging process, where many different Decision Trees are trained. One starting Decision Tree is produced, with each event having an equal weighting. After each iteration of tree production, any misidentified events in a tree are given a higher weighting for the training of the next tree \cite{Roe:2004na}. Over time, this leads to an improved learning process by focussing more on those events that are more difficult to classify.
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=\textwidth]{decisiontreehess1}
+\caption{An example of a decision tree for the HESS 1 telescope system. The left direction is followed if the branch condition is true, while the right direction is followed if the condition is false. Red leaves contain non-DC pixels, while blue leaves represent DC pixels. The sample of each leaf is listed. Darker boxes have purer samples, while lighter boxes are more mixed.}
+\label{fig:decisiontree}
+\end{center}
+\end{figure}
+
+In this case, the training set consisted of pixels from 5000 CORSIKA events. It was randomly split further, with 90\% in a learning subset and 10\% in a subset to check for overtraining. Within the learning subset, every HESS 1 image was used, provided it was triggered in both EAS-free and full-shower simulations. For each of the triggered image pixels, an entry was formed with the variables listed in table \ref{tab:hess1classifier}. A class of 0 was assigned to every non-DC pixel, and a class of 1 was assigned to every DC pixel. Having created a dataset, the BDT was then trained with a maximum depth of 8, and with 1000 trees generated. The data was provided in the form of individual pixel entries, rather than as discrete sets for images or events.
 
 \begin{table}[h!]
   \centering
@@ -211,7 +241,7 @@ As an alternative to use of $Q_{DC}$, a new method of DC pixel identification wa
     \toprule
     Variable & Relative Importance\\
     \midrule
-    $DC_{Count}$ & 0.33\\
+    $DC_{Signal}$ & 0.33\\
     $Mean_{N.N}$ & 0.24\\
     $Q_{DC}$ & 0.14\\
     $\Delta_{Direction}$ & 0.12\\
@@ -223,9 +253,9 @@ As an alternative to use of $Q_{DC}$, a new method of DC pixel identification wa
   \end{tabular}
 \end{table}
 
-The relative importance of each \textquoteleft feature' is automatically calculated by the Scikit Learn package, and is also recorded in table \ref{tab:hess1classifier}. The variable $DC_{Count}$ was consistently the most importance variable across many combinations of included variables and BDT training parameters. It was found that, under the conditions listed above, the BDT was 99.94 \% accurate for the learning pixel subset, and 99.94 \%  accurate for the overtraining-check pixel subset. This indicates that the BDT was not significantly overtrained, which would otherwise be manifested by a large divergence in accuracy between learning and overtraining-check data.
+The relative importance of each \textquoteleft feature' is automatically calculated by the Scikit Learn package, and is also recorded in table \ref{tab:hess1classifier}. The variable $DC_{Signal}$ was consistently the most importance variable across many combinations of included variables and BDT training parameters. It was found that, under the conditions listed above, the BDT was 99.94 \% accurate for the learning pixel subset, and 99.94 \%  accurate for the overtraining-check pixel subset. This indicates that the BDT was not significantly overtrained, which would otherwise be manifested by a large divergence in accuracy between learning and overtraining-check data.
 
-Having trained the BDT successfully, it was then applied to the same test dataset as for the classic $Q_{DC}$ identification. In each camera image, the event with the largest BDT score was deemed to be \textquoteleft most signal-like', and thus selected as the DC pixel candidate. A cut was applied, requiring $P_{signal} > 0.5$ for the DC candidate to be accepted. A second cut requiring $DC_{Count} > 150$ removed many incorrectly identified events. Application of this combined cut greatly increases the successful identification rate. From the testing sample, 16.01\% of all images were correctly identified and passed the cuts. The BDT was found to be 79.2\% accurate in identifying DC pixels which passed the cuts. This represents a very significant improvement in pixel identification efficiency, as well as a minor increase in accuracy after cuts. 
+Having trained the BDT successfully, it was then applied to the same test dataset as for the classic $Q_{DC}$ identification. In each camera image, the event with the largest BDT score was deemed to be \textquoteleft most signal-like', and thus selected as the DC pixel candidate. A cut was applied, requiring $P_{signal} > 0.5$ for the DC candidate to be accepted. A second cut requiring $DC_{Signal} > 150$ removed many incorrectly identified events. Application of this combined cut greatly increases the successful identification rate. From the testing sample, 16.01\% of all images were correctly identified and passed the cuts. The BDT was found to be 79.2\% accurate in identifying DC pixels which passed the cuts. This represents a very significant improvement in pixel identification efficiency, as well as a minor increase in accuracy after cuts. 
 
 The results are summarised in Table \ref{tab:qdcbdtcomparison1}. The BDT method represents a clear improvement in DC pixel identification over the previous $Q_{DC}$ method, and corresponds to a fifteen-fold increase in identified pixels. 
 
@@ -237,15 +267,15 @@ The results are summarised in Table \ref{tab:qdcbdtcomparison1}. The BDT method 
     \toprule
     & $Q_{DC}$ & BDT\\
     \midrule
-    Pixels Accepted and Correctly Identified (\%)  & 1.81 & 16.01\\
-   Pixels Accepted and Incorrectly Identified (\%)  & 0.52& 4.22\\
+    Accepted Pixels Correctly Identified (\%)  & 1.81 & 16.01\\
+   Accepted Pixels Incorrectly Identified (\%)  & 0.52& 4.22\\
     Sample Purity (\%)  & 77.8 & 79.2 \\
     \bottomrule
   \end{tabular}
 \end{table}
 
 \subsection{HESS-2 BDT}
-The original HESS study predated the construction of the larger CT5 telescope, and thus focused exclusively in the four HESS-1 telescopes. Although the cuts in \ref{tab:qdccuts} were not optimised for the differing pixel size and angular viewing region of CT5, they were replicated to provide a basis for comparison. Based on CT5 images from the training sample, an increased 5.6\% of DC pixels were correctly identified and passed the required cut. A further 11.3 \% of all pixels passed the cuts, despite being misidentified. This represented a very heavy decrease in sample purity to just 33.0\%. We can assume that better optimised CT5 cuts could remove many of these misidentified events, though it is unlikely that any significant improvement in the number of correctly identified DC pixels would be possible. Thus, the number of DC pixels successfully identified using the $Q_{DC}$ method is still a valid benchmark for comparative BDT performance. A true accuracy rate closer to the HESS 1 rate of 90\% could be expected. Due to the distinctiveness of the CT5 telescope, direct application of the HESS1 classifier to the CT5 telescope yields poorer BDT performance. To improve CT5 pixel identification, a separate HESS2 BDT was instead trained with the same variables as above. The relative feature importance is listed in Table \ref{tab:hess2classifier}. 
+The original HESS study predated the construction of the larger CT5 telescope, and thus focused exclusively in the four HESS-1 telescopes. Although the cuts in Table \ref{tab:qdccuts} were not optimised for the differing pixel size and angular viewing region of CT5, they were replicated to provide a basis for comparison. Based on CT5 images from the training sample, an increased 5.6\% of DC pixels were correctly identified and passed the required cut. A further 11.3 \% of all pixels passed the cuts, despite being misidentified. This represented a very heavy decrease in sample purity to just 33.0\%. We can assume that better optimised CT5 cuts could remove many of these misidentified events, though it is unlikely that any significant improvement in the number of correctly identified DC pixels would be possible. Thus, the number of DC pixels successfully identified using the $Q_{DC}$ method is still a valid benchmark for comparative BDT performance. A true accuracy rate closer to the HESS 1 rate of 90\% could be expected, at the expense of a depressed acceptance rate. Due to the distinctiveness of the CT5 telescope hardware, direct application of the HESS1 classifier to the CT5 telescope yields poorer BDT performance. Discrepancies in To improve CT5 pixel identification, a separate HESS2 BDT was instead trained with the same variables as above. The relative feature importance is listed in Table \ref{tab:hess2classifier}. 
 
 \begin{table}[h!]
   \centering
@@ -267,7 +297,7 @@ The original HESS study predated the construction of the larger CT5 telescope, a
   \end{tabular}
 \end{table}
 
-For the training events, the classifier was 99.97\% accurate, while for the overtraining check data, it was 99.96\% accurate. The classifier was thus not significantly overtrained. Applying the new classifier lede to an improvement in CT5 classification, with 17.9 \% of pixels being correctly identified and accepted, and an accuracy of 66.1\%. Despite this improvement, a clear gap emerged between the between the performance of HESS1 classifier on old telescopes, and the performance of the HESS2 classifier on CT5. Part of this discrepancy can be explained by the HESS2 learning dataset, which has just one DC pixel per event rather than the four HESS1 DC pixels. Additionally, HESS 2 images will have roughly 2600 non-DC pixels per event, versus 3600 DC pixels per event for HESS 1 images. The HESS2 classifier was thus trained on significantly fewer DC pixels, so we would expect to see the clear performance gap in comparison to the HESS1 classifier.  
+For the training events, the classifier was 99.97\% accurate, while for the overtraining check data, it was 99.96\% accurate. The classifier was thus not significantly overtrained. Applying the new classifier lede to an improvement in CT5 classification, with 18.52 \% of pixels being correctly identified and accepted, and an accuracy of 80.6\%. With this improvement, there is a no significant gap between the between the performance of HESS1 classifier on old telescopes, and the performance of the HESS2 classifier on CT5.  
 
 \begin{table}[h!]
   \centering
@@ -277,17 +307,21 @@ For the training events, the classifier was 99.97\% accurate, while for the over
     \toprule
     & $Q_{DC}$ & BDT\\
     \midrule
-    Pixels Accepted and Correctly Identified (\%) & 5.59 & 18.52 \\
-   Pixels Accepted and Incorrectly Identified (\%) & 14.75 & 4.44 \\
+    Accepted Pixels Correctly Identified (\%) & 5.59 & 18.52 \\
+    Accepted Pixels Incorrectly Identified (\%) & 14.75 & 4.44 \\
     Sample Purity (\%) & 27.5 & 80.6 \\
     \bottomrule
   \end{tabular}
 \end{table}
 
 \subsection{High Multiplicity Events}
-For LPD event reconstruction, we require at least four measurements of the DC light. We define the telescope multiplicity of an event as the number of DC pixels which are identified and pass all cuts. Telescope multiplicity measures both HESS1 and HESS2 pixels. A \textquoteleft high-multiplicity event' is one in which we have telescope multiplicity $>3$. If we only consider high-multiplicity events, we can determine the $Q_{DC}$ performance for use in LPD reconstruction. After applying this cut, there were was just one single high-multiplicity event found using the $Q_{DC}$ method. This meant that just 0.01\% of all pixels were accepted, although with a sample purity of 100\%. Because the final sample consisted of just three HESS1 pixels, and one HESS2 pixel, the associated Poissonian error in acceptance rates and accuracy rates will be extremely large.
+For LPD event reconstruction, we require at least four measurements of the DC light. We define the telescope multiplicity of an event as the number of DC pixels which are identified and pass all cuts. Telescope multiplicity measures both HESS1 and HESS2 pixels. A \textquoteleft high-multiplicity event' is one in which we have telescope multiplicity $>3$. If we only consider high-multiplicity-$Q_{DC}$ events, we can determine how frequently the $Q_{DC}$ method provides events suitable for LPD reconstruction. After applying the multiplicity cut, there were was just one single high-multiplicity event found using the $Q_{DC}$ method out of the 10000 testing events. This meant that just 0.01\% of all pixels were accepted, albeit with a sample purity of 100\%. Because the final sample consisted of just three HESS1 pixels, and one HESS2 pixel, the associated Poissonian error in acceptance rates and accuracy rates will be extremely large.
 
-Through we application of the two HESS classifiers, we can find the comparative high-multiplicity BDT performance. If we only consider high-multiplicity BDT events, the fraction of correctly identified HESS1 DC pixels falls to 2.2\%, while the fraction of incorrectly identified pixels passing the cuts falls to 0.2\%. The sample purity increases slightly to 91.2\%. In the case of the high-multiplicity HESS2 images, the BDT performance gap narrows somewhat. In total 1.9\% of pixels are correctly identified and accepted, although the accuracy rate is only increased to 80.7\%. The relatively high fraction of passing events is in excess of the random expectation of $0.16^{4}=0.07\%$ and $0.19^{4}=0.13\%$ for HESS1 and HESS2. This suggests that DC pixel identification between different telescope images is strongly correlated. The same is true for the $Q_{DC}$ high multiplicity rates. As well as general BDT accuracy improving after high-multiplicity cuts, the performance gap over the $Q_{DC}$ method is vastly increased for high-multiplicity events. As a result of the two-hundred-fold increase in acceptance rate for high multiplicity events, the expected data sample size will increase dramatically. This should enable spectroscopic analysis of Cosmic Ray Elements to be conducted after a much shorter experimental run time that for the $Q_{DC}$ method.
+Through application of the two HESS classifiers, we can find the comparative high-multiplicity-BDT performance. If we only consider high-multiplicity-BDT events, the fraction of correctly identified HESS 1 DC pixels falls to 2.20\%, while the fraction of incorrectly identified pixels passing the cuts falls to 0.43\%. The sample purity increases slightly to 83.8\%.  In total 1.61\% of the HESS 2 pixels are correctly identified and accepted, although the accuracy rate is increased to 88.0\%. The relatively high fraction of passing events is in excess of the random expectation of $0.16^{4}=0.07\%$ and $0.19^{4}=0.13\%$ for HESS1 and HESS2. This suggests that DC pixel identification between different telescope images is strongly correlated. The same is true for the $Q_{DC}$ high multiplicity rates. 
+
+The minor discrepancy in performance between HESS1 and HESS2 can partially be explained by the geometry of the HESS array. Any event  with a core position near the central CT5 telescope is likely to trigger the four outer telescopes. However, the dim inner LPD is unlikely to be seen in the big central telescope. In the event of a core position near one of the corner telescopes, CT5 and at least three of the other telescopes are likely to have a clear DC signal. Thus the effective area for high multiplicity events including CT5 is smaller than for those involving the HESS1 telescopes.
+
+Despite the minor performance difference, the BDT method is clearly superior in both cases. On top the gains in BDT accuracy when considering only high-multiplicity events high multiplicity events, we also find the relative performance gap over the $Q_{DC}$ method is vastly increased. As a result of the two-hundred-fold increase in acceptance rate for high-multiplicity-BDT events against high-multiplicity-$Q_{DC}$ events, the expected data sample size will increase dramatically. This should enable spectroscopic analysis of Cosmic Ray elements to be conducted after a much shorter experimental run time that for the $Q_{DC}$ method. Use of the BDT identification method will be assumed throughout the rest of this paper, and a high-multiplicity event will be intended to mean a high-multiplicity-BDT event.
 
 \begin{table}[h!]
   \centering
@@ -298,31 +332,31 @@ Through we application of the two HESS classifiers, we can find the comparative 
     & \multicolumn{2}{c|}{HESS 1} & \multicolumn{2}{c}{HESS 2} \\
     & $Q_{DC}$ & BDT & $Q_{DC}$ & BDT\\
     \midrule
-    High Multiplicity Pixels Accepted and Correctly Identified (\%)& 0.01 & 2.20 & 0.01 & 1.61\\
-    High Multiplicity Pixels Accepted and Incorrectly Identified (\%)  & 0.00 & 0.43 & 0.01 & 0.22\\
+    High Multiplicity Accepted Pixels Correctly Identified (\%)& 0.01 & 2.20 & 0.01 & 1.61\\
+    High Multiplicity Accepted Pixels Incorrectly Identified (\%)  & 0.00 & 0.43 & 0.01 & 0.22\\
     Sample Purity (\%)& 100.0 & 83.8 & 100.0 & 88.0\\
     \bottomrule
   \end{tabular}
 \end{table}
 
 \subsection{Proton Background}
-It is important to discriminate between the heavy cosmic ray elements, such as iron, and the much more abundant proton events. Protons tend to emit negligible DC light, so will contaminate any data sample with events that cannot be reconstructed using the LPD method. To determine the acceptance rate for proton events, a simulation was conducted with 5000 proton events in CORSIKA. For HESS1, the raw acceptance rate was 15.1\% while the sample purity of 32.2\%. For HESS2, the raw acceptance rate was 58.6\% while the sample purity of 6.8\%. Although the HESS1 acceptance rate is relatively small, the proton flux is approximately ten times greater than iron flux. A mixed sample would have many more proton images than iron images. Once multiplicity cuts are applied, the acceptance rate falls steeply to just 2.9\%. With the factor 10 discrepancy in flux, the number of proton and iron images will be comparable. Of those passing the cuts, 24.5\% are correctly identified.  For HESS2, the comparable number is 21.7\% with multiplicity cuts. The sample purities are just 24.4\% and 7.7\% respectively. This poor performance motivates our desire to remove protons from our sample for analysis.
+It is important to discriminate between the heavy Cosmic Ray elements, such as Iron, and the much more abundant proton events. Protons tend to emit negligible DC light, so will contaminate any data sample with events that cannot be reconstructed using the LPD method. To determine the acceptance rate for proton events, a simulation was conducted with 5000 proton events in CORSIKA with the same parameters as the Iron train/test data. For HESS1, the raw acceptance rate was 15.1\% while the sample purity of 32.2\%. For HESS2, the raw acceptance rate was 58.6\% while the sample purity of 6.8\%. Although the HESS1 acceptance rate is relatively small, the proton flux is approximately ten times greater than iron flux. A mixed sample would have many more proton images than iron images. Once multiplicity cuts are applied, the acceptance rate falls steeply to just 2.9\%. With the factor 10 discrepancy in flux, the number of proton and iron images would be comparable. Of those passing the cuts, 24.5\% are correctly identified.  For HESS2, the comparable number is 21.7\% with multiplicity cuts. The sample purities are just 24.4\% and 7.7\% respectively. This poor performance motivates our desire to remove protons from our sample for analysis.
 
-We require an additional cut to remove the majority of these proton events. If we can eliminate one or two accepted proton images per event, then the remaining proton pixels will all be rejected by the multiplicity cuts. Hence, loose cuts can sharply reduce the acceptance rate of protons. In this case, as shown in Figure \ref{fig:aspectratio}, there is a fair degree of separation between proton and Iron Aspect Ratio for pixels which pass all cuts. We aim to remove proton pixels but not iron pixels. Applying a cut requiring Aspect Ratio $> 0.35$ eliminated all accepted proton events for HESS1 and HESS2. With 17792 total HESS1 images, just 6195 images were triggered by DC light. Of all 17792 images, there were none passing all of the required cuts. We can place a poissonian upper limit on the acceptance rate of $< 0.02 \%$. Of the for 4448 HESS2 images, just 2169 contained DC light. As no image passed all cuts, we place an upper limit of $< 0.07\%$. 
+We require an additional cut to remove the majority of these proton events. If we can eliminate one or two accepted proton images per event, then the remaining proton pixels will all be rejected by the multiplicity cuts. Hence, loose cuts can sharply reduce the acceptance rate of protons. In this case, as shown in Figure \ref{fig:aspectratio}, there is a fair degree of separation between proton and Iron Aspect Ratio for pixels which pass all cuts. We aim to remove proton pixels but not iron pixels. Applying a cut requiring Aspect Ratio $> 0.40$ eliminated all accepted proton events for HESS1 and HESS2. With 17792 total HESS1 images, just 6195 images were triggered by DC light. Of all 17792 images, there were none passing all of the required cuts. 
 
-Using poissonian statistics, we can place a 95\% confidence upper limit on the rate of accepted, high-multiplicity $Q_{DC}$ events. By virtue of passing a multiplicity cut, the number of accepted pixels must be at least 4, or none. It is thus more appropriate to instead consider the total number of events for calculations of an upper limit. There were 4711 fully triggered events, of which none were \textquoteleft High multiplicity Events'. We find a value for the mean $\lambda$ such that the probability of not observing a high multiplicity event is less than 5\%.
+Using poissonian statistics, we can place a 95\% confidence upper limit on the acceptance rate. By virtue of passing a multiplicity cut, the number of accepted pixels must be at least 4, or none. It is thus more appropriate to instead consider the total number of events for calculations of an upper limit. There were 4711 fully triggered events, of which none was a \textquoteleft High Multiplicity Event'. We find a value for the mean $\lambda$ such that the probability of not observing a high multiplicity event is less than 5\%.
 \[ P(n|\lambda)=\frac{e^{-\lambda}\lambda^{n}}{n!} \Longrightarrow P(0|\lambda)=\frac{e^{-\lambda}\lambda^{0}}{0!}=e^{-\lambda}=0.05
 \Longrightarrow
 \lambda = -\ln(0.05)=3.00\]
 
-Thus, we can conclude that if the mean was greater that if the mean $\lambda>3$, we would have expected to observe at least one event with a 95\% probability. As we did not observe an event, we conclude that the mean high multiplicity event rate is less than $\frac{3}{4711}=0.06\%$. 
+Thus, we can conclude that if the mean $\lambda$ was greater than 3, we would have expected to observe at least one event with a 95\% probability. As we did not observe an event, we conclude that the mean high multiplicity event rate is less than $\frac{3}{4711}=0.06\%$. 
 
-For HESS1 iron events, the total acceptance rate falls slightly from 2.4\% to 2.3\%, while the sample purity decreases slightly to 89.0\%. For HESS2, the total acceptance rate falls slightly from 2.4\% to 2.3 \%, while the sample purity decreases slightly to 79.8\%. Iron images form at least 75\% of a sample, because most proton images are at least one hundred times less likely to be accepted. Use of this BDT method is thus assumed throughout the rest of this analysis.
+For HESS1 iron events, the total acceptance rate falls slightly from 2.4\% to 2.3\%, while the sample purity increases slightly to 84.3\%. For HESS2, the total acceptance rate falls slightly from 2.4\% to 2.3 \%, while the sample purity also increases slightly to 88.2\%. Iron images form at least 80\% of a sample, because most proton images are at least fifty times less likely to be accepted. These results are summarised in Table \ref{tab:protonacceptance}.
 
 \begin{figure}
 \begin{center}
 \includegraphics[width=0.9\textwidth]{aspectratio}
-\caption{The aspect ratio of images in events which pass the multiplicity cut are shown. It is clear that the proton events have a strong tendency towards lower Aspect Ratios. We must remove the white proton pixels passing all other cuts, without removing dark green iron pixels passing all other cuts. A cut requiring Aspect Ratio $> 0.35$ should remove a large proportion of proton images without reducing the pass rate for iron nucleii.}
+\caption{The aspect ratio of images in events which pass the multiplicity cut are shown. It is clear that the proton events have a strong tendency towards lower Aspect Ratios. We must remove the white proton pixels passing all other cuts, without removing dark green iron pixels passing all other cuts. A cut requiring Aspect Ratio $> 0.40$ should remove a large proportion of proton images without reducing the pass rate for iron nucleii.}
 \label{fig:aspectratio}
 \end{center}
 \end{figure}
@@ -335,23 +369,30 @@ For HESS1 iron events, the total acceptance rate falls slightly from 2.4\% to 2.
     \toprule
     & HESS1  & HESS2 \\
     \midrule
-    Proton Pixels Accepted (\%) & 15.10 & 32.68\\
+    Accepted Proton Pixels (\%) & 15.10 & 32.68\\
     Sample Purity (\%) & 10.1 & 5.1 \\
     \midrule
-    High Multiplicity Proton Pixels Accepted (\%) & 0.83 & 1.03\\
+    High Multiplicity Accepted Proton Pixels (\%) & 0.83 & 1.03\\
     Sample Purity (\%) & 6.8 & 4.3 \\
     \midrule
-    Proton Pixels Accepted after All Cuts(\%) & $< 0.06$ & $< 0.06$\\
+    Accepted Proton Pixels after All Cuts(\%) & $< 0.06$ & $< 0.06$\\
     Sample Purity (\%) & / & / \\
     \midrule
-    Iron Pixels Accepted after All Cuts(\%) & 2.44 & 1.66\\
+    Accepted Iron Pixels after All Cuts(\%) & 2.44 & 1.66\\
     Sample Purity (\%) & 84.3 & 88.2 \\
     \bottomrule
   \end{tabular}
 \end{table}
 
 \subsection{Low-Energy Emission}
-In the theoretical simulation of the LPD, we noted that the distribution in Figure \ref{fig:lpd} is only saturated in the region of around 35 TeV. Below this, the LPD is more heavily dependent on Energy, and thus our basic assumption of a characteristic equation will no longer be valid. To account for this, an additional simulation of 15000 Iron events was conducted in the energy range 5-135TeV. The BDT remained the same, and the same initial cuts were replicated as before. The same was also done for Protons in the same energy range. The results are summarised in Table \ref{tab:fullironacceptance}. 
+In the theoretical simulation of the LPD, we noted that the distribution in Figure \ref{fig:lpd} is only saturated in the region of around 35 TeV. Below this, the LPD is more heavily dependent on Energy, and thus our basic assumption of a characteristic equation will no longer be valid. However, we also know that any data sample will be dominated by lower-energy events as a result of the power law $\phi(E) \propto E^{-2.7}$. To account for this, an additional simulation of 15000 Iron events was conducted in the energy range 5-135TeV to give a realistic model for performance. The BDT remained the same, and the same initial cuts were replicated as before. The same was also done for Protons in the same energy range. 
+
+We find that, for Iron Events, the acceptance rate falls by a factor of approximately 15. The relative proportion of HESS 1 to HESS 2 acceptance is broadly maintained at a factor of roughly 1.5, although the sample purity falls somewhat. If we account for the differing intergrated flux rate, we can calculate the ratio of expected high-multiplicity event rate $\Gamma_{HM}(E)$ for the ranges 5-135 TeV and 35-135 TeV.
+
+\[ \frac{\Gamma_{HM}(5-135)}{\Gamma_{HM}(35-135)} = \frac{5^{-1.7} - 135^{-1.7}}{35^{-1.7} - 135^{-1.7}} 
+= 30.3 \]
+
+Thus, if we have thirtyfold increase in event rate, but only one-fifteenth the acceptance rate, we would ultimately expect that we would have twice as many Iron Events if the full energy range of 5-135 TeV was included. However, the low-energy proton acceptance is much higher. Thus, were we to include all events in this energy range, we would again retrieve a sample dominated by protons. The results are summarised in Table \ref{tab:fullironacceptance}. 
 
 \begin{table}[h!]
   \centering
@@ -370,29 +411,32 @@ In the theoretical simulation of the LPD, we noted that the distribution in Figu
   \end{tabular}
 \end{table}
 
-We find that, for Iron Events, the acceptance rate falls by a factor of approximately 15. The relative proportion of HESS 1 to HESS 2 acceptance is broadly maintained at a factor of roughly 1.5, although the sample purity falls somewhat. If we account for the differing intergrated flux rate, we can calculate the ratio of expected high-multiplicity event rate $\Gamma_{HM}(E)$ for the ranges 5-135 TeV and 35-135 TeV.
+Fortunately, there is a large degree of separability for Iron and Proton Events based on their Energy. The energy distribution of the Protons and Iron Events are shown in Figures \ref{fig:protonenergy} and \ref{fig:ironenergy}. The Iron distribution is slightly unusual, in that it is terminated above roughly 13 TeV, although lower energy events are much more frequent. This can be explained by the fact that the Cherenkov Emission Threshold is specified by the Energy per Nucleon, and Iron Nucleii have 56 nucleons. Thus, in almost all cases, Iron Nucleii below this Energy will interact with the atmosphere before they emit Cherenkov Light. The BDT is unlikely to identify 4 DC pixels with a sufficient $P_{signal}$ in an event without any real DC light, and thus no low-Energy High-Multiplicity Iron events are found. 
 
-\[ \frac{\Gamma_{HM}(5-135)}{\Gamma_{HM}(35-135)} = \frac{5^{-1.7} - 135^{-1.7}}{35^{-1.7} - 135^{-1.7}} 
-= 30.3 \]
-
-Thus, if we have thirtyfold increase in event rate, but only one-fifteenth the acceptance rate, we would ultimately expect that we would have twice as many Iron Events if the full energy range of 5-135 TeV was included. However, the low-energy proton acceptance is much higher. Thus, were we to include events in this energy range, we would again retrieve a sample dominated by protons that will not be correctly reconstructed. The energy distribution of the Protons and Iron Events are shown in FIG. To remove this contamination from protons and non-saturated Iron events, we thus apply one additional Energy cut on the data sample. We simply require that the reconstructed Energy is greater than 30TeV. This will, assuming a rough energy resolution of around 15\% in reconstruction, remove the majority of these low-energy events. (WILL CONFIRM ONCE HISTOGRAMS ARE RETRIEVED). 
-
-\section{HESS-type Event Simulation}
-
-\subsection{Extended Air Shower Background}
-Having successfully parameterised the LPD using CORSIKA simulations, we can replicate it for out Monte Carlo simulation. We have found that the DC LPD is broadly independent of both height and Energy. 
-
+To remove the proton contamination from protons and non-saturated Iron events, we thus apply one additional Energy cut on the data sample. The majority of accepted protons have an Energy of less than 10 TeV, and the largest recorded Energy was 21.6 TeV. We can thus require that the reconstructed Energy is greater than 30TeV. This will, assuming a rough energy resolution of around 15\% in reconstruction, easily remove all of the proton background. We will also remove roughly half of the Iron events, but as shown in Figure \ref{fig:lpd}, this low-energy half of events will mostly contain non-saturated DC emission that would be harder to reconstruct.
 
 \begin{figure}
-\begin{center}
-\includegraphics[height=0.9\textheight]{hessheight}
-\caption{The mean first interaction height for all Cherenkov Events is 40km???. Events in blue met the multiplicity threshold, with DC light in four telescopes. The mean first interaction height for four telescope events in the HESS array is 23km}
-\label{fig:Hessheight}
-\end{center}
-\end{figure}
+	\centering
+	\begin{subfigure}[b]{0.9\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{energyfullprotons}
+		\caption{}
+		\label{fig:protonenergy}
+	\end{subfigure}
+	\begin{subfigure}[b]{0.9\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{energyfulliron}
+		\caption{}
+		\label{fig:ironenergy}
+	\end{subfigure}
+	\caption{The Energy of Proton events passing all cuts is shown above in \ref{fig:protonenergy}. It is clear that the majority come from the low energy regime, and none have an energy greater than 22 TeV in. The Energy of Iron events passing all cuts is shown below in \ref{fig:ironenergy}. The majority come from the region above 20 TeV.}
+\end{figure} 
+
+\section{Parameterisation of the LPD}
+Having identified DC pixels in a reliable way without accompanying background events, we can now consider the resultant LPD. We must parameterise this function before we are able to reconstruct events. We can also account for additional information provided in the EAS light.
 
 \subsection{Full-Shower LPD}
-Having restricted ourselves to high-multiplicity events, we reduce our data sample to mostly images in which air shower lies relatively close to the center of the telescope field of view. We can conclude that in many of our images, the air shower will lie mostly within the telescope image. In the same way as for DC light, we can look for the existence of a Characteristic LPD describing the Total Shower Intensity, where we define $I_{tot}$=Image Amplitude. The results for high-multiplicity events at various energies is shown in Figure \ref{fig:fullshowerlpd}.
+Having restricted ourselves to high-multiplicity events, we reduce our data sample to mostly images in which air shower lies relatively close to the center of the telescope field of view. We can conclude that in many of our images, the air shower will lie mostly within the telescope image. In the same way as for DC light, we can firstly look for the existence of a Characteristic LPD describing the EAS Intensity, where we define $I_{tot}$=Image Amplitude. The results for high-multiplicity events at various energies is shown in Figure \ref{fig:fullshowerlpd}.
 
 \begin{figure}
 \begin{center}
@@ -402,19 +446,21 @@ Having restricted ourselves to high-multiplicity events, we reduce our data samp
 \end{center}
 \end{figure}
 
-For each energy, a clear exponential decay in Image Amplitude is observed. The data is fitted with a line of the form $y_{i} (x) =A_{i} \exp (K_{i} x)$. The fractional deviation from the fit is found in an analogous way to the DC LPD found in Figure \ref{fig:corsikalpd1}. Across all Energies, the mean fractional deviation from the fitted exponential was roughly 0.15. For the purposes of reconstruction, an exponential decay with a varying exponent and amplitude will not be particularly useful, because there are two degrees of freedom.
+For each energy, a clear exponential decay in Image Amplitude is observed. The data is fitted with a line of the form $y_{i} (x) =A_{i} \exp (K_{i} x)$. The fractional deviation from the fit is found for each point by calculating $\Delta_{EAS} = \frac{fit_{EAS} - I_{tot}}{fit_{EAS}}$. We can then take the 68\% interval values for fractional deviation to give a fractional uncertainty $\sigma_{EAS}$. Across all Energies, the mean fractional deviation from the fitted exponential was roughly 0.15. For the purposes of reconstruction, an exponential decay with a varying exponent and amplitude will not be particularly useful, because there are two degrees of freedom.
 
-In order to overcome this, we can instead parameterise the exponential fits. Across all energies, a fit is made and the exponent coefficients are recorded. A plot of the $K_{i}$ exponent values is then made, as shown in Figure  \ref{fig:powerlawlpd}. The K coefficients follow a clear linear distribution, to which a line is fitted. We obtain an equation to determine the exponent of each power law. 
+In order to overcome this, we can instead try to parameterise the exponential fits. Across all energies, a fit is made and the exponent coefficients are recorded. A plot of the $K_{i}$ exponent values is then made, as shown in Figure  \ref{fig:powerlawlpd}. The K coefficients follow a clear linear distribution, to which a line is fitted. We obtain an equation to determine the exponent of each power law. 
 
 \[ K_{i} = K(E_{i}) = -0.00004 E_{i} + -0.00692 \]
 
-Having retrieved a law for K, each dataset is then fitted a second time. The exponent is determined by the Energy, leaving only one degree of freedom for the fit. The fitted Amplitudes $A_{i}$ are then recorded, and are also plotted in Figure \ref{fig:powerlawlpd}. A clear exponential relationship is again observed. A straight line is fitted to the logarithm of the data values, and we retrieve a second relationship describing the amplitude as a function of the Energy.
+Having retrieved a law for K, each dataset is then fitted a second time. The exponent is determined by the Energy, leaving only one degree of freedom for the fit. The fitted Amplitudes $A_{i}$ are then recorded, and are also plotted in Figure \ref{fig:powerlawlpd}. A clear relationship is again observed, in this an exponential law. A straight line is fitted to the logarithm of the data values, and we retrieve a second relationship describing the amplitude as a function of the Energy.
 
 \[ A_{i} = A(E_{i}) =y =73.9 \times \exp (0.025 E_{i}) \]
 
 Through combined use of the two equations, we can parameterise the entire Full-Shower LPD using only the Energy. These fitted LPDs are also plotted in Figure \ref{fig:fullshowerlpd}. The fractional deviation bands are also shown in green, with a mean fractional deviation of roughly 0.15 across the energies. The Full Shower LPDs continue to be large enough to trigger telescopes for several hundred meters. It is thus likely that, for high-multiplicity events, we will obtain an additional four or five data points from the Full Shower LPD.
 
-Although the Full Shower LPDs do not depend upon the charge of the primary particle, they will still enable the core position and energy to be effectively constrained. We can use the Full Shower LPD to obtain a rough estimate for the core position, and thus a rough estimate of the distance from each telescope to the core. similarly the core energy can be estimated. Although this reconstruction will be inferior to one accounting for both LPDs, we can make use of the preliminary core position estimate to aid our calculation of $True_{DC}$. This in turn should reduce the uncertainty when determining the charge of the primary particle.
+\[ y (x, E) = 73.9 \times \exp (0.025 E -(0.00004 E + 0.00692)x) \]
+
+Although the Full Shower LPDs do not depend upon the charge of the primary particle, they will still enable the core position and energy to be effectively constrained. We can use the Full Shower LPD to obtain a rough estimate for the core position, and thus a rough estimate of the distance from each telescope to the core. Similarly the core energy can be estimated. Although this reconstruction will be inferior to one accounting for both LPDs, we can make use of the preliminary core position estimate to aid our calculation of $True_{DC}$. This in turn should reduce the uncertainty when determining the charge of the primary particle.
 
 \begin{figure}
 \begin{center}
@@ -425,7 +471,7 @@ Although the Full Shower LPDs do not depend upon the charge of the primary parti
 \end{figure}
 
 \subsection{Determining $True_{DC}$}
-Determining the value of $True_{DC}$ is essential for determining the error in our LPD measurements. However, there are two natural ways of quantifying $True_{DC}$. In the basic case, we can simply consider the EAS-free intensity $Intensity_{max}$ in the DC pixel. An alternative is to take the entire EAS-free image amplitude $I_{tot}$ as our $True_{DC}$ value. The use of Image Amplitude accounts for the fact that the DC light is almost always split between two or more pixels. Although in most cases, one pixel has the majority of the light, in extreme cases the light can be evenly split between two. As a result of the smaller angular region covered by each CT5 pixel, this happens much more frequently for HESS2 than for HESS1. A countervailing argument is the susceptibility of the Image Amplitude measurement to edge effects. A DC pixel lying near the image edge will be unaffected by this fact, but the total image amplitude may decline because dimmer pixels move over the image edge. We hope that, as with the full-shower LPD measurements, restricting ourselves to high-multiplicity events will enable us to remove most images that would otherwise suffer from edge effects.
+Before we can extract the DC LPD from telescope imagesTo determine the value of $True_{DC}$ is essential for determining the error in our LPD measurements. However, there are two natural ways of quantifying $True_{DC}$. In the basic case, we can simply consider the EAS-free intensity $Intensity_{max}$ in the DC pixel. An alternative is to take the entire EAS-free image amplitude $I_{tot}$ as our $True_{DC}$ value. The use of Image Amplitude accounts for the fact that the DC light is almost always split between two or more pixels. Although in most cases, one pixel has the majority of the light, in extreme cases the light can be evenly split between two. As a result of the smaller angular region covered by each CT5 pixel, this happens much more frequently for HESS2 than for HESS1. A countervailing argument is the susceptibility of the Image Amplitude measurement to edge effects. A DC pixel lying near the image edge will be unaffected by this fact, but the total image amplitude may decline because dimmer pixels move over the image edge. We hope that, as with the full-shower LPD measurements, restricting ourselves to high-multiplicity events will enable us to remove most images that would otherwise suffer from edge effects.
 
 To quantitatively compare the two methods, we can measure the error associated with both values of $True_{DC}$. A study of 2000 events was conducted, in which each cosmic ray was simulation without night sky background or EAS background. Each telescope image simulation was conducted twice, and difference between $I_{1}$ and $I_{2}$ was plotted as in \ref{fig:simtelerror}. The fractional difference from the mean Intensity of an image was defined as $\Delta = 2 \times \frac{I_{2} - I_{1}}{{I_{2} + I_{1}}}$. 
 
@@ -448,8 +494,6 @@ We must find the error $\sigma_{LPD}$ in our calculated values for $candidate_{D
 \label{fig:simtelerror}
 \end{center}
 \end{figure} 
-
-REDO STATS
 
 Taking account of $\sigma_{STA}$, we deduce that the true associated error in the LPD is $\sigma_{TrueLPD} = \sqrt{(\sigma_{TrueDC}^{2} - \sigma_{STA}^{2})} = 0.11$. Thus we conclude that, in an ideal case, any LPD measuring pure DC light would always have a minimum error of 11\%. This is reasonably high, and can be partially explained by the random nature of atmospheric conditions, among other things.
 
@@ -579,6 +623,14 @@ Interpolating the value of the height neglects the fact that some cosmic rays wh
 
 As cited by the HESS study, a typical first interaction height is roughly 30km for a Cherenkov-Emitting event \cite{hess07}. With the assumed value of $x_{0}$, a simulation was conducted to determine the expected interaction heights for Cosmic Rays. It is found that the mean first interaction height of 36.9km and a median first interaction height of 35.2km for all cosmic rays. However, when Cherenkov-Emitting events are considered, we have both a median and mean first interaction height of 30.3km, which clearly agrees with our expectations. Considering solely high-multiplicity events, we find that these have a mean height of $h \approx 23 \pm 5$ km, as shown in Figure \ref{fig:Hessheight}.
 
+\begin{figure}
+\begin{center}
+\includegraphics[height=0.9\textheight]{hessheight}
+\caption{The mean first interaction height for all Cherenkov Events is 40km???. Events in blue met the multiplicity threshold, with DC light in four telescopes. The mean first interaction height for four telescope events in the HESS array is 23km}
+\label{fig:Hessheight}
+\end{center}
+\end{figure}
+
 Another parameter exponentially interpolated using the data tables is the optical depth to the surface, $\tau$. The Cherenkov Light, mostly emitted in the visible blue part of the EM spectrum, experiences relatively little atmospheric absorption. The major of Rayleigh scattering-based atmospheric absorption occurs in the lower part of the troposphere, and thus the atmospheric absorption is almost independent of emission up to first interaction height. For a given emitted intensity $I_{0}$ we find that the corresponding I received on the ground decays exponentially with optical depth, so that $\frac{I}{I_{0}}=e^{-\tau}$ with $\tau=\int_{0}^{l}ds$. 
 
 MOAR!!!
@@ -697,6 +749,7 @@ Hillas reconstruction better
 Combine with Hillas reconstruction
 Apply to HESS data
 calibrate with position of Iron peak
+Real data
 
 
 \subsection{High Speed Telescopes}

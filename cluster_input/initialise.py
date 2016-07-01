@@ -11,7 +11,7 @@ if sim == "HESS":
 	flux = 2.0 * (10**-4)
 	flux = 2.86 * (10**-5)
 	area = 300**2
-	solidangle = math.radians(5)
+	solidangle = 0.006
 	selectionefficiency = 0.50
 	hmacceptance = [0.35, 0.09]
 
