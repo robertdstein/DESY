@@ -9,113 +9,115 @@
 \citation{kieda01}
 \@writefile{toc}{\contentsline {section}{\numberline {2}Introduction}{4}}
 \citation{ppreview}
-\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces The Threshold Energy for Cherenkov Emission is marked in blue. With the assumption of $\beta =1$, the maximum emission radius is marked in black. The red and green and magenta line show the emission radius at 3.57 and 0.75 and 0.23 TeV per Nucleon respectively. The Green line is sufficiently close to the background to be saturated at 24km, while the magenta line is not.}}{6}}
-\newlabel{fig:generalenergy}{{1}{6}}
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Above, the refractive index is shown with both linear and exponential interpolation between the known values. The LPD obtained from simulation of an Iron Nucleus up to a first interaction height of 25km for a range of Core Energies. An altitude of 1.8km for the experimental array is assumed. Atmospheric absorption, although neglected, is broadly constant across the emission range leading to uniform amplitude scaling.}}{7}}
-\newlabel{fig:lpd}{{2}{7}}
+\@writefile{toc}{\contentsline {section}{\numberline {3}DC Pixel Identification}{5}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Theoretical LPD}{5}}
 \citation{hess07}
 \citation{Heck98}
 \citation{Bernlohr08}
-\@writefile{toc}{\contentsline {section}{\numberline {3}DC Pixel Identification}{8}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Image Simulation}{8}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces A typical camera image without the EAS shower. The DC light is visible in every telescope, indicated by the white arrow. The DC pixel is circled in white. The largest telescope image is from CT5, but was not used in analysis.}}{9}}
-\newlabel{fig:DCtelimage}{{3}{9}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces The same shower as in 3\hbox {} is shown here with the inclusion of the EAS shower. The DC light is pixels indicated with a white arrow and circle. The shower center of gravity is marked by a white cross.}}{9}}
-\newlabel{fig:cutdistribution2}{{4}{9}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Image Simulation}{6}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces The Threshold Energy for Cherenkov Emission is marked in blue. With the assumption of $\beta =1$, the maximum emission radius is marked in black. The red and green and magenta line show the emission radius at 3.57 and 0.75 and 0.23 TeV per Nucleon respectively. The Green line is sufficiently close to the background to be saturated at 24km, while the magenta line is not.}}{7}}
+\newlabel{fig:generalenergy}{{1}{7}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Above, the refractive index is shown with both linear and exponential interpolation between the known values. The LPD obtained from simulation of an Iron Nucleus up to a first interaction height of 25km for a range of Core Energies. An altitude of 1.8km for the experimental array is assumed. Atmospheric absorption, although neglected, is broadly constant across the emission range leading to uniform amplitude scaling.}}{8}}
+\newlabel{fig:lpd}{{2}{8}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces A typical camera image without the EAS shower. The DC light is visible in every telescope, indicated by the white arrow. The DC pixel is circled in white. The largest telescope image is from CT5, but was not used in analysis.}}{10}}
+\newlabel{fig:DCtelimage}{{3}{10}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces The same shower as in 3\hbox {} is shown here with the inclusion of the EAS shower. The DC light is pixels indicated with a white arrow and circle. The shower center of gravity is marked by a white cross.}}{10}}
+\newlabel{fig:cutdistribution2}{{4}{10}}
 \citation{hess07}
 \citation{scikit-learn}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Classic HESS1 DC Pixel Identification}{10}}
-\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Cuts applied to image pixel sets, used by HESS collaboration \cite  {hess07}}}{10}}
-\newlabel{tab:table1}{{1}{10}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Boosted Decision Tree DC Identification}{10}}
-\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Relative Feature Importance in HESS-1 BDT training}}{10}}
-\newlabel{tab:hess1classifier}{{2}{10}}
-\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces The DC signal in the shower-free pixel is shown in the top left, with a broad gaussian distribution with the tail of the night-sky background extending up to appproximately 5000. Events below this are unlikely to be identified correctly because the DEC light is too faint. In the top right- the distribution of the dataset is shown, once all the non-$Q_{DC}$ cuts have been applied. In the bottom left, the BDT score distribution is shown before any cuts. On the bottom right, we see the same distribution after both signal and BDT score cuts are applied. All green events are ones in which the DC pixel has been correctly identified, while red events are ones that have been incorrectly identified.}}{11}}
-\newlabel{fig:cutdistribution}{{5}{11}}
-\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Comparison of $Q_{DC}$ and HESS 1 BDT Performance}}{12}}
-\newlabel{tab:qdcbdtcomparison1}{{3}{12}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.4}HESS-2 BDT}{12}}
-\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Relative Feature Importance in HESS-2 Classifier BDT training}}{12}}
-\newlabel{tab:hess2classifier}{{4}{12}}
-\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces Comparison of $Q_{DC}$ and HESS 2 BDT Performance}}{13}}
-\newlabel{tab:qdcbdtcomparison2}{{5}{13}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.5}High Multiplicity Events}{13}}
-\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces Comparison of high-multiplicity performance Performance}}{13}}
-\newlabel{tab:highmultiplicitycomparison}{{6}{13}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.6}Proton Background}{13}}
-\@writefile{lot}{\contentsline {table}{\numberline {7}{\ignorespaces Comparison of Proton and Iron Acceptance}}{14}}
-\newlabel{tab:protonacceptance}{{7}{14}}
-\@writefile{toc}{\contentsline {section}{\numberline {4}HESS-type Event Simulation}{14}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Extended Air Shower Background}{14}}
-\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces The aspect ratio of images in events which pass the multiplicity cut are shown. It is clear that the proton events have a strong tendency towards lower Aspect Ratios. We must remove the white proton pixels passing all other cuts, without removing dark green iron pixels passing all other cuts. A cut requiring Aspect Ratio $> 0.35$ should remove a large proportion of proton images without reducing the pass rate for iron nucleii.}}{15}}
-\newlabel{fig:aspectratio}{{6}{15}}
-\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces The mean first interaction height for all Cherenkov Events is 40km???. Events in blue met the multiplicity threshold, with DC light in four telescopes. The mean first interaction height for four telescope events in the HESS array is 23km}}{16}}
-\newlabel{fig:Hessheight}{{7}{16}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Full-Shower LPD}{17}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Determining $True_{DC}$}{17}}
-\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces The distribution of HESS 1 Image Amplitude is shown for various energies in the range 36-96 TeV. In each case, the exponential fit is indicated, along with the fractional deviation band in green.}}{18}}
-\newlabel{fig:fullshowerlpd}{{8}{18}}
-\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces The fitted exponents $K_{i}$ are shown above, along with the equation of the Fitted Exponent Line K(E). Once the fitted exponents are used, the resultant amplitudes $A_{i}$ are shown below, along with the fitted Amplitude Line A(E).}}{19}}
-\newlabel{fig:powerlawlpd}{{9}{19}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}Regression BDT for $DC_{Count}$}{20}}
-\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces The fractional difference in total Image Intensity between the two simulations is shown in the graph above. A clear symmetric Gaussian is observed, with a mean of 0.00, and a standard deviation of 0.06. Below, the two intensities are plotted against one another. The distribution does not deviate significantly from the ideal 1:1 correspondence illustrated with the black line.}}{21}}
-\newlabel{fig:simtelerror}{{10}{21}}
-\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces The two LPDs shown above are estimates of HESS1 $True_{DC}$ calculated via $I_{tot}$, as well as for the maximum pixel $Intensity$. The two full-shower calculated LPDSs are shown underneath, with the simple guess $DC_{Count}$, and the regressor calculated $DC_{rgr}$. An exponential is fit to the $True_{DC}$ distribution, and the 68\% fractional deviation is shown in green. The same curve is shown on the two derived DC values, with the new fractional deviation being much greater.}}{22}}
-\newlabel{fig:corsikalpd1}{{11}{22}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Classic HESS1 DC Pixel Identification}{11}}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Cuts applied to image pixel sets, used by HESS collaboration \cite  {hess07}}}{11}}
+\newlabel{tab:table1}{{1}{11}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Boosted Decision Tree DC Identification}{11}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces The DC signal in the shower-free pixel is shown in the top left, with a broad gaussian distribution with the tail of the night-sky background extending up to appproximately 5000. Events below this are unlikely to be identified correctly because the DEC light is too faint. In the top right- the distribution of the dataset is shown, once all the non-$Q_{DC}$ cuts have been applied. In the bottom left, the BDT score distribution is shown before any cuts. On the bottom right, we see the same distribution after both signal and BDT score cuts are applied. All green events are ones in which the DC pixel has been correctly identified, while red events are ones that have been incorrectly identified.}}{12}}
+\newlabel{fig:cutdistribution}{{5}{12}}
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Relative Feature Importance in HESS-1 BDT training}}{13}}
+\newlabel{tab:hess1classifier}{{2}{13}}
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Comparison of $Q_{DC}$ and HESS 1 BDT Performance}}{13}}
+\newlabel{tab:qdcbdtcomparison1}{{3}{13}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.5}HESS-2 BDT}{13}}
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces Relative Feature Importance in HESS-2 Classifier BDT training}}{14}}
+\newlabel{tab:hess2classifier}{{4}{14}}
+\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces Comparison of $Q_{DC}$ and HESS 2 BDT Performance}}{14}}
+\newlabel{tab:qdcbdtcomparison2}{{5}{14}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.6}High Multiplicity Events}{14}}
+\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces Comparison of high-multiplicity performance Performance}}{15}}
+\newlabel{tab:highmultiplicitycomparison}{{6}{15}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.7}Proton Background}{15}}
+\@writefile{lot}{\contentsline {table}{\numberline {7}{\ignorespaces Comparison of Proton and Iron Acceptance}}{16}}
+\newlabel{tab:protonacceptance}{{7}{16}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.8}Low-Energy Emission}{16}}
+\@writefile{lot}{\contentsline {table}{\numberline {8}{\ignorespaces Comparison of Proton and Iron Acceptance}}{16}}
+\newlabel{tab:fullironacceptance}{{8}{16}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces The aspect ratio of images in events which pass the multiplicity cut are shown. It is clear that the proton events have a strong tendency towards lower Aspect Ratios. We must remove the white proton pixels passing all other cuts, without removing dark green iron pixels passing all other cuts. A cut requiring Aspect Ratio $> 0.35$ should remove a large proportion of proton images without reducing the pass rate for iron nucleii.}}{17}}
+\newlabel{fig:aspectratio}{{6}{17}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}HESS-type Event Simulation}{18}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Extended Air Shower Background}{18}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Full-Shower LPD}{18}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces The mean first interaction height for all Cherenkov Events is 40km???. Events in blue met the multiplicity threshold, with DC light in four telescopes. The mean first interaction height for four telescope events in the HESS array is 23km}}{19}}
+\newlabel{fig:Hessheight}{{7}{19}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces The distribution of HESS 1 Image Amplitude is shown for various energies in the range 36-96 TeV. In each case, the exponential fit is indicated, along with the fractional deviation band in green.}}{20}}
+\newlabel{fig:fullshowerlpd}{{8}{20}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Determining $True_{DC}$}{21}}
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces The fitted exponents $K_{i}$ are shown above, along with the equation of the Fitted Exponent Line K(E). Once the fitted exponents are used, the resultant amplitudes $A_{i}$ are shown below, along with the fitted Amplitude Line A(E).}}{22}}
+\newlabel{fig:powerlawlpd}{{9}{22}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}Regression BDT for $DC_{Count}$}{23}}
+\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces The fractional difference in total Image Intensity between the two simulations is shown in the graph above. A clear symmetric Gaussian is observed, with a mean of 0.00, and a standard deviation of 0.06. Below, the two intensities are plotted against one another. The distribution does not deviate significantly from the ideal 1:1 correspondence illustrated with the black line.}}{24}}
+\newlabel{fig:simtelerror}{{10}{24}}
+\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces The two LPDs shown above are estimates of HESS1 $True_{DC}$ calculated via $I_{tot}$, as well as for the maximum pixel $Intensity$. The two full-shower calculated LPDSs are shown underneath, with the simple guess $DC_{Count}$, and the regressor calculated $DC_{rgr}$. An exponential is fit to the $True_{DC}$ distribution, and the 68\% fractional deviation is shown in green. The same curve is shown on the two derived DC values, with the new fractional deviation being much greater.}}{25}}
+\newlabel{fig:corsikalpd1}{{11}{25}}
 \citation{hess07}
+\@writefile{lot}{\contentsline {table}{\numberline {9}{\ignorespaces Relative Feature Importance in Regressor BDT training}}{27}}
+\newlabel{tab:regressor}{{9}{27}}
+\@writefile{lot}{\contentsline {table}{\numberline {10}{\ignorespaces Fractional error from fitted 56-TeV LPD distribution up to $r_{core}=90$, accounting for $\sigma _{STA}$}}{27}}
+\newlabel{tab:lpderror}{{10}{27}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Monte Carlo Simulation}{27}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Iron Flux and Energy}{27}}
 \citation{hessCT5}
-\@writefile{lot}{\contentsline {table}{\numberline {8}{\ignorespaces Relative Feature Importance in Regressor BDT training}}{24}}
-\newlabel{tab:regressor}{{8}{24}}
-\@writefile{lot}{\contentsline {table}{\numberline {9}{\ignorespaces Fractional error from fitted 56-TeV LPD distribution up to $r_{core}=90$, accounting for $\sigma _{STA}$}}{24}}
-\newlabel{tab:lpderror}{{9}{24}}
-\@writefile{toc}{\contentsline {section}{\numberline {5}Monte Carlo Simulation}{24}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Iron Flux and Energy}{24}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}First Interaction Height}{25}}
-\@writefile{lof}{\contentsline {figure}{\numberline {12}{\ignorespaces The integrated interaction lengths increases as height decreases. Thus the decay probability follows a exponentially increasing distribution. The mean first interaction height for all events is roughly 40km above sea level.}}{26}}
-\newlabel{fig:generalheight}{{12}{26}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}First Interaction Height}{28}}
 \citation{Montanus2013}
 \citation{hess07}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Full-Shower event reconstruction}{27}}
+\@writefile{lof}{\contentsline {figure}{\numberline {12}{\ignorespaces The integrated interaction lengths increases as height decreases. Thus the decay probability follows a exponentially increasing distribution. The mean first interaction height for all events is roughly 40km above sea level.}}{30}}
+\newlabel{fig:generalheight}{{12}{30}}
 \citation{James75}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.4}Log Likelihood Minimisation}{28}}
-\@writefile{lof}{\contentsline {figure}{\numberline {13}{\ignorespaces The fraction deviation from true energy is shown above. For events with five-telescope multiplicity, the fractional error is X but for four-telescope multiplicity, it is Y. The expected poissonian error bars are also shown.}}{29}}
-\newlabel{fig:rawepn}{{13}{29}}
-\@writefile{lof}{\contentsline {figure}{\numberline {14}{\ignorespaces The distance from true core to the core reconstructed with the full-LPD is shown above. For four-telescope events, the standard deviation from true position is Xm. }}{30}}
-\newlabel{fig:rawcoredistance}{{14}{30}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.5}Variable Resolution}{31}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.6}Boosted Decision Trees}{31}}
-\@writefile{lof}{\contentsline {figure}{\numberline {15}{\ignorespaces The distance from true core to the core reconstructed with the full-LPD is shown above. For four-telescope events, the standard deviation from true position is Xm. }}{32}}
-\newlabel{fig:coredistance}{{15}{32}}
-\@writefile{lof}{\contentsline {figure}{\numberline {16}{\ignorespaces The distance from true core position to the reconstructed core position is shown above. For four-telescope events, the standard deviation from true position is Xm.}}{33}}
-\newlabel{fig:position}{{16}{33}}
-\@writefile{lof}{\contentsline {figure}{\numberline {17}{\ignorespaces The distance from true core position to the reconstructed core position is shown above. For four-telescope events, the standard deviation from true position is Xm.}}{34}}
-\newlabel{fig:height}{{17}{34}}
-\@writefile{lof}{\contentsline {figure}{\numberline {18}{\ignorespaces The distance from true core position to the reconstructed core position is shown above. For four-telescope events, the standard deviation from true position is Xm.}}{35}}
-\newlabel{fig:rawZ}{{18}{35}}
-\@writefile{lof}{\contentsline {figure}{\numberline {19}{\ignorespaces A simulation of 50 hours of run time for various grid spacing for a 3x3 telescope array. Although raw count rate increases with increasing grid width, the \textquoteleft good count' rate of events observed by sufficient telescopes falls rapidly with increasing grid width}}{36}}
-\newlabel{fig:optmiselayout}{{19}{36}}
-\@writefile{toc}{\contentsline {section}{\numberline {6}Optimised Telescope Array}{36}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.1}Count Rates}{36}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Full-Shower event reconstruction}{31}}
+\@writefile{lof}{\contentsline {figure}{\numberline {13}{\ignorespaces The fraction deviation from true energy is shown above. For events with five-telescope multiplicity, the fractional error is X but for four-telescope multiplicity, it is Y. The expected poissonian error bars are also shown.}}{32}}
+\newlabel{fig:rawepn}{{13}{32}}
+\@writefile{lof}{\contentsline {figure}{\numberline {14}{\ignorespaces The distance from true core to the core reconstructed with the full-LPD is shown above. For four-telescope events, the standard deviation from true position is Xm. }}{33}}
+\newlabel{fig:rawcoredistance}{{14}{33}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.4}Log Likelihood Minimisation}{33}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.5}Variable Resolution}{34}}
+\@writefile{lof}{\contentsline {figure}{\numberline {15}{\ignorespaces The distance from true core to the core reconstructed with the full-LPD is shown above. For four-telescope events, the standard deviation from true position is Xm. }}{35}}
+\newlabel{fig:coredistance}{{15}{35}}
+\@writefile{lof}{\contentsline {figure}{\numberline {16}{\ignorespaces The distance from true core position to the reconstructed core position is shown above. For four-telescope events, the standard deviation from true position is Xm.}}{36}}
+\newlabel{fig:position}{{16}{36}}
+\@writefile{lof}{\contentsline {figure}{\numberline {17}{\ignorespaces The distance from true core position to the reconstructed core position is shown above. For four-telescope events, the standard deviation from true position is Xm.}}{37}}
+\newlabel{fig:height}{{17}{37}}
+\@writefile{lof}{\contentsline {figure}{\numberline {18}{\ignorespaces The distance from true core position to the reconstructed core position is shown above. For four-telescope events, the standard deviation from true position is Xm.}}{38}}
+\newlabel{fig:rawZ}{{18}{38}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.6}Boosted Decision Trees}{38}}
+\@writefile{lof}{\contentsline {figure}{\numberline {19}{\ignorespaces A simulation of 50 hours of run time for various grid spacing for a 3x3 telescope array. Although raw count rate increases with increasing grid width, the \textquoteleft good count' rate of events observed by sufficient telescopes falls rapidly with increasing grid width}}{39}}
+\newlabel{fig:optmiselayout}{{19}{39}}
+\@writefile{toc}{\contentsline {section}{\numberline {6}Optimised Telescope Array}{39}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.1}Count Rates}{39}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}Saturation Region Energies}{39}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.3}High Speed Telescopes}{39}}
 \bibstyle{unsrt}
 \bibdata{report}
 \bibcite{Blasi:2013rva}{1}
 \bibcite{Funk:2004ie}{2}
 \bibcite{hess07}{3}
 \bibcite{kieda01}{4}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}Saturation Region Energies}{37}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.3}High Speed Telescopes}{37}}
-\@writefile{toc}{\contentsline {section}{\numberline {7}Conclusion}{37}}
-\@writefile{lot}{\contentsline {table}{\numberline {10}{\ignorespaces Fractional error from $True_{DC}$ for all high-multiplicity test pixels}}{37}}
-\newlabel{tab:altlpderror}{{10}{37}}
-\@writefile{toc}{\contentsline {section}{\numberline {8}Bibliography}{37}}
-\@writefile{lof}{\contentsline {figure}{\numberline {20}{\ignorespaces The difference between true and reconstructed DC signal for events passing the cuts is shown in the top left. In the top right the same is shown for events which were rejected. The true DC signals for events which passed the cuts is plotted against the reconstructed signals in the lower left, and for rejected events in the lower right. As in 5\hbox {}, in all plots a green event is one in which the DC pixel has been correctly identified, while a red event is one that has been incorrectly identified.}}{38}}
-\newlabel{fig:dcdiff}{{20}{38}}
 \bibcite{ppreview}{5}
+\@writefile{toc}{\contentsline {section}{\numberline {7}Conclusion}{40}}
+\@writefile{lot}{\contentsline {table}{\numberline {11}{\ignorespaces Fractional error from $True_{DC}$ for all high-multiplicity test pixels}}{40}}
+\newlabel{tab:altlpderror}{{11}{40}}
+\@writefile{toc}{\contentsline {section}{\numberline {8}Bibliography}{40}}
 \bibcite{Heck98}{6}
 \bibcite{Bernlohr08}{7}
 \bibcite{scikit-learn}{8}
 \bibcite{hessCT5}{9}
 \bibcite{Montanus2013}{10}
 \bibcite{James75}{11}
-\@writefile{toc}{\contentsline {section}{\numberline {9}Appendix}{40}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {9.1}Atmospheric Data Table for CORSIKA (Windhoek, Namibia)}{40}}
+\@writefile{toc}{\contentsline {section}{\numberline {9}Appendix}{42}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {9.1}Atmospheric Data Table for CORSIKA (Windhoek, Namibia)}{42}}

@@ -89,12 +89,14 @@ def run(statsset, mindetections):
 				upperz = specificcount[upper]
 				meansigma = (upperz-lowerz) * 0.5
 				
-				bdtcuts.append(BDTcut)
-				meansigmas.append(meansigma)
+
 				
-				if float(frac) > float(0.2):
+				if float(1.0) > float(frac) > float(0.50):
+					bdtcuts.append(BDTcut)
+					meansigmas.append(meansigma)
 					if float(24) < float(meanz) < float(28):
 						if float(meansigma) < float(lowestsigma):
+
 							lowestsigma=meansigma
 							optimumbdt=BDTcut
 							optimumpassing = passing
@@ -122,7 +124,7 @@ def run(statsset, mindetections):
 	plt.gca().set_ylim(bottom=-0.05)
 	plt.gca().set_xlim(left=-0.05)
 	
-	plt.annotate(annotation, xy=(0.0, 0.9), xycoords="axes fraction",  fontsize=10)
+	plt.annotate(annotation, xy=(0.5, 0.8), xycoords="axes fraction",  fontsize=10)
 	
 	plt.legend()
 	plt.savefig('/d6/rstein/Hamburg-Cosmic-Rays/positioning/graphs/Zcuts.pdf')

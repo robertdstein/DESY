@@ -73,7 +73,7 @@ def run(statsset, mindetections, cuts):
 	
 	
 	
-	n, bins, _ = plt.hist(fullcount, bins=20, range=[0,30], label=labels, histtype='bar', stacked=True)
+	n, bins, _ = plt.hist(fullcount, bins=20, label=labels, histtype='bar', stacked=True)
 
 	mid = (bins[1:] + bins[:-1])*0.5
 	

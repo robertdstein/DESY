@@ -259,7 +259,7 @@ class telescope():
 	
 		
 		
-bdtvariables =["epn", "minuslldc", "minusllfull", "fullmultiplicity", "truemultiplicity", "rayxpos", "rayypos", "height"]
+bdtvariables =["epn", "fullmultiplicity", "truemultiplicity", "rayxpos", "rayypos", "height"]
 
 def makeBDTentry(simevent):
 	bdtentry =[]

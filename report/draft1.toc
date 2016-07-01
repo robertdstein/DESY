@@ -1,29 +1,31 @@
 \contentsline {section}{\numberline {1}Preface}{3}
 \contentsline {section}{\numberline {2}Introduction}{4}
-\contentsline {section}{\numberline {3}DC Pixel Identification}{8}
-\contentsline {subsection}{\numberline {3.1}Image Simulation}{8}
-\contentsline {subsection}{\numberline {3.2}Classic HESS1 DC Pixel Identification}{10}
-\contentsline {subsection}{\numberline {3.3}Boosted Decision Tree DC Identification}{10}
-\contentsline {subsection}{\numberline {3.4}HESS-2 BDT}{12}
-\contentsline {subsection}{\numberline {3.5}High Multiplicity Events}{13}
-\contentsline {subsection}{\numberline {3.6}Proton Background}{13}
-\contentsline {section}{\numberline {4}HESS-type Event Simulation}{14}
-\contentsline {subsection}{\numberline {4.1}Extended Air Shower Background}{14}
-\contentsline {subsection}{\numberline {4.2}Full-Shower LPD}{17}
-\contentsline {subsection}{\numberline {4.3}Determining $True_{DC}$}{17}
-\contentsline {subsection}{\numberline {4.4}Regression BDT for $DC_{Count}$}{20}
-\contentsline {section}{\numberline {5}Monte Carlo Simulation}{24}
-\contentsline {subsection}{\numberline {5.1}Iron Flux and Energy}{24}
-\contentsline {subsection}{\numberline {5.2}First Interaction Height}{25}
-\contentsline {subsection}{\numberline {5.3}Full-Shower event reconstruction}{27}
-\contentsline {subsection}{\numberline {5.4}Log Likelihood Minimisation}{28}
-\contentsline {subsection}{\numberline {5.5}Variable Resolution}{31}
-\contentsline {subsection}{\numberline {5.6}Boosted Decision Trees}{31}
-\contentsline {section}{\numberline {6}Optimised Telescope Array}{36}
-\contentsline {subsection}{\numberline {6.1}Count Rates}{36}
-\contentsline {subsection}{\numberline {6.2}Saturation Region Energies}{37}
-\contentsline {subsection}{\numberline {6.3}High Speed Telescopes}{37}
-\contentsline {section}{\numberline {7}Conclusion}{37}
-\contentsline {section}{\numberline {8}Bibliography}{37}
-\contentsline {section}{\numberline {9}Appendix}{40}
-\contentsline {subsection}{\numberline {9.1}Atmospheric Data Table for CORSIKA (Windhoek, Namibia)}{40}
+\contentsline {section}{\numberline {3}DC Pixel Identification}{5}
+\contentsline {subsection}{\numberline {3.1}Theoretical LPD}{5}
+\contentsline {subsection}{\numberline {3.2}Image Simulation}{6}
+\contentsline {subsection}{\numberline {3.3}Classic HESS1 DC Pixel Identification}{11}
+\contentsline {subsection}{\numberline {3.4}Boosted Decision Tree DC Identification}{11}
+\contentsline {subsection}{\numberline {3.5}HESS-2 BDT}{13}
+\contentsline {subsection}{\numberline {3.6}High Multiplicity Events}{14}
+\contentsline {subsection}{\numberline {3.7}Proton Background}{15}
+\contentsline {subsection}{\numberline {3.8}Low-Energy Emission}{16}
+\contentsline {section}{\numberline {4}HESS-type Event Simulation}{18}
+\contentsline {subsection}{\numberline {4.1}Extended Air Shower Background}{18}
+\contentsline {subsection}{\numberline {4.2}Full-Shower LPD}{18}
+\contentsline {subsection}{\numberline {4.3}Determining $True_{DC}$}{21}
+\contentsline {subsection}{\numberline {4.4}Regression BDT for $DC_{Count}$}{23}
+\contentsline {section}{\numberline {5}Monte Carlo Simulation}{27}
+\contentsline {subsection}{\numberline {5.1}Iron Flux and Energy}{27}
+\contentsline {subsection}{\numberline {5.2}First Interaction Height}{28}
+\contentsline {subsection}{\numberline {5.3}Full-Shower event reconstruction}{31}
+\contentsline {subsection}{\numberline {5.4}Log Likelihood Minimisation}{33}
+\contentsline {subsection}{\numberline {5.5}Variable Resolution}{34}
+\contentsline {subsection}{\numberline {5.6}Boosted Decision Trees}{38}
+\contentsline {section}{\numberline {6}Optimised Telescope Array}{39}
+\contentsline {subsection}{\numberline {6.1}Count Rates}{39}
+\contentsline {subsection}{\numberline {6.2}Saturation Region Energies}{39}
+\contentsline {subsection}{\numberline {6.3}High Speed Telescopes}{39}
+\contentsline {section}{\numberline {7}Conclusion}{40}
+\contentsline {section}{\numberline {8}Bibliography}{40}
+\contentsline {section}{\numberline {9}Appendix}{42}
+\contentsline {subsection}{\numberline {9.1}Atmospheric Data Table for CORSIKA (Windhoek, Namibia)}{42}
