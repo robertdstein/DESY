@@ -150,11 +150,11 @@ def run(statsset, mindetections, cuts=None):
 
 		zrange = [gzmin, gzmax]
 		
-		bincount = int(gzmax - gzmin)
+		bincount = int(gzmax - gzmin)*4
 				
 		if fullcount != []:
 			
-			n, bins, _ = plt.hist(fullcount, bins=bincount, range=zrange, histtype='bar', label=labels, stacked=True)
+			n, bins, _ = plt.hist(fullcount, bins=bincount, range=zrange, histtype='stepfilled', label=labels, stacked=True)
 	
 			mid = (bins[1:] + bins[:-1])*0.5
 			if isinstance(n[0], np.ndarray):

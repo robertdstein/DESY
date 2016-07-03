@@ -59,7 +59,7 @@ def run(statsset, mindetections, cuts=None):
 								wrong.append(float(recon.BDTscore))
 			
 		total = len(correct)
-		info += "For BDT > " + str(bdtmin) + " Values \n"
+		info += "For BDT > " + str('{0:.2f}'.format(bdtmin)) + " Values \n"
 		for i in range(0, 3):
 			category = [correct, close, wrong][i]
 			name = ["correct", "close", "wrong"][i]
@@ -77,11 +77,11 @@ def run(statsset, mindetections, cuts=None):
 				plotlabel.append(label)
 			else:
 				passfrac = 0
-			info += ('For ' + str(name) + ' then ' + str(passfrac) + " events pass \n")
+			info += (str(label) + ' - ' + str('{0:.0f}'.format(100*passfrac)) + "% pass \n")
 	
 		if len(plot) > 0:
-			plt.hist(plot, color = plotcolour, bins = 50, stacked=True, label=plotlabel, histtype='bar')
-			plt.axvline(x=bdtmin,  color='r')
+			plt.hist(plot, color = plotcolour, range=[0,1], bins = 25, stacked=True, label=plotlabel, histtype='stepfilled')
+			plt.axvline(x=bdtmin,  color='k', linewidth=4)
 		
 		#~ for val in llcuts:
 			#~ plt.axvline(x=(val+0.01), linestyle='--', color='m', label="LL Cut")
@@ -89,13 +89,13 @@ def run(statsset, mindetections, cuts=None):
 		plt.xlabel('BDT Score')
 		plt.ylabel('Count', labelpad=0)
 		plt.legend()
-		plt.annotate(info, xy=(0.65, 0.45), xycoords="axes fraction",  fontsize=10)
+		plt.annotate(info, xy=(0.65, 0.75), xycoords="axes fraction",  fontsize=10)
 		title = str(j) + " Telescope Detections"
 		plt.title(title)
 	
 	figure = plt.gcf() # get current figure
-	figure.set_size_inches(20, 15)
+	figure.set_size_inches(15, 10)
 	plt.suptitle('BDT prediction of signal probability', fontsize=20)
-	
+	plt.savefig('/d6/rstein/Hamburg-Cosmic-Rays/report/graphs/Likelihood.pdf')
 	plt.savefig('/d6/rstein/Hamburg-Cosmic-Rays/positioning/graphs/Likelihood.pdf')
 	plt.close()

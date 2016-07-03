@@ -7,6 +7,8 @@ from classes import *
 
 def run(statsset, mindetections, cuts):
 	
+	plt.figure()
+	
 	datasimset = pickle.load(open(statsset, 'rb'))
 	detectorcount = datasimset[0].ndetectors
 	
@@ -88,7 +90,7 @@ def run(statsset, mindetections, cuts):
 	
 	
 	
-	n, bins, _ = plt.hist(fullcount, bins=20, label=labels, histtype='bar', stacked=True)
+	n, bins, _ = plt.hist(fullcount, bins=50, label=labels, histtype='stepfilled', stacked=True)
 
 	mid = (bins[1:] + bins[:-1])*0.5
 	

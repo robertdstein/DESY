@@ -20,11 +20,13 @@
 \contentsline {subsection}{\numberline {5.4}Log Likelihood Minimisation}{38}
 \contentsline {subsection}{\numberline {5.5}Variable Resolution}{38}
 \contentsline {subsection}{\numberline {5.6}Boosted Decision Trees}{40}
-\contentsline {section}{\numberline {6}Optimised Telescope Array}{43}
-\contentsline {subsection}{\numberline {6.1}Count Rates}{43}
-\contentsline {subsection}{\numberline {6.2}Saturation Region Energies}{44}
-\contentsline {subsection}{\numberline {6.3}High Speed Telescopes}{44}
-\contentsline {section}{\numberline {7}Conclusion}{44}
-\contentsline {section}{\numberline {8}Bibliography}{45}
-\contentsline {section}{\numberline {9}Appendix}{46}
-\contentsline {subsection}{\numberline {9.1}Atmospheric Data Table for CORSIKA (Windhoek, Namibia)}{46}
+\contentsline {subsection}{\numberline {5.7}Final Variable resolution}{48}
+\contentsline {section}{\numberline {6}Further Improvements}{48}
+\contentsline {subsection}{\numberline {6.1}Hillas Reconstruction}{48}
+\contentsline {subsection}{\numberline {6.2}Actual Data}{53}
+\contentsline {subsection}{\numberline {6.3}High Speed Telescopes}{53}
+\contentsline {subsection}{\numberline {6.4}Optimised Telescope Array}{53}
+\contentsline {section}{\numberline {7}Conclusion}{54}
+\contentsline {section}{\numberline {8}Bibliography}{55}
+\contentsline {section}{\numberline {9}Appendix}{57}
+\contentsline {subsection}{\numberline {9.1}Atmospheric Data Table for CORSIKA (Windhoek, Namibia)}{57}

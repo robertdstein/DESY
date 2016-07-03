@@ -11,7 +11,7 @@ def run(statsset, mindetections):
 	datasimset = pickle.load(open(statsset, 'rb'))
 	detectorcount = datasimset[0].ndetectors
 
-	plt.figure()
+	fig = plt.figure()
 
 	Z = 26
 	
@@ -20,13 +20,18 @@ def run(statsset, mindetections):
 	
 	optimumcuts = []
 	
+	ax1 = plt.subplot(2,1,1)
+	ax2 = plt.subplot(2,1,2)
+	
 	for j in range (detectorcount, mindetections -1, -1):	
 		print "Ndetections", j
 		lowestsigma = 10
+		lowestscalesigma=10
 		optimumbdt = 0.0
 		optimumpassing = 1.0
 		
 		meansigmas=[]
+		scalesigmas=[]
 		
 		bdtcuts =[]
 		
@@ -72,11 +77,11 @@ def run(statsset, mindetections):
 			if total > 0:
 			
 				frac = float(passing)/float(full)					
-				meanz = np.mean(specificcount)
-				meanz2 = np.mean(sqvals)
-				var = meanz2 - (meanz**2)
-				
-				meansigma=math.sqrt(var)
+				#~ meanz = np.mean(specificcount)
+				#~ meanz2 = np.mean(sqvals)
+				#~ var = meanz2 - (meanz**2)
+				#~ 
+				#~ meansigma=math.sqrt(var)
 				
 				specificcount.sort()
 		
@@ -88,46 +93,53 @@ def run(statsset, mindetections):
 				meanz = specificcount[mid]
 				upperz = specificcount[upper]
 				meansigma = (upperz-lowerz) * 0.5
+				scalesigma = meansigma/math.sqrt(frac)
 				
-
-				
-				if float(1.0) > float(frac) > float(0.50):
+				if float(frac) > float(0.01):
 					bdtcuts.append(BDTcut)
 					meansigmas.append(meansigma)
+					scalesigmas.append(scalesigma)
 					if float(24) < float(meanz) < float(28):
-						if float(meansigma) < float(lowestsigma):
-
+						if float(scalesigma) < float(lowestscalesigma):
 							lowestsigma=meansigma
+							lowestscalesigma = scalesigma
 							optimumbdt=BDTcut
 							optimumpassing = passing
-						
-		plt.plot(bdtcuts, meansigmas, label=line)
+					
+		ax1.plot(bdtcuts, meansigmas, label=line)
+		ax2.plot(bdtcuts, scalesigmas, label=line)
 			
 		optimumfrac = float(optimumpassing)/float(full)
 		
-		annotation += "Optimum Cut occurs with BDT > " + str(optimumbdt)+ " and with " + str(j) + " detections \n"
+		annotation += "Optimum Cut occurs with BDT > " + str('{0:.2f}'.format(optimumbdt))+ " and with " + str(j) + " detections \n"
 		annotation += "This leaves " + str(optimumpassing) + " events , a fraction of " +  str('{0:.2f}'.format(optimumfrac)) + "\n"
 		annotation += "The resultant Sigma is " +  str('{0:.2f}'.format(lowestsigma)) + "\n \n"		
 		
 		if optimumpassing > 1:
 			optimumcuts.append(optimumbdt)
+			ax1.scatter(optimumbdt, lowestsigma, color="r", s=10)
+			ax1.scatter(optimumbdt, lowestsigma, color="r", s=100, alpha = 0.25)
+			ax2.scatter(optimumbdt, lowestscalesigma, color="r", s=10)
+			ax2.scatter(optimumbdt, lowestscalesigma, color="r", s=100, alpha = 0.25)
 
 		else:
 			optimumcuts.append(0.0)
 
-	figure = plt.gcf() # get current figure
-	figure.set_size_inches(20, 15)
+	fig.set_size_inches(15, 10)
 	
-	plt.title("Optimisation of Sigma Z")
-	plt.xlabel("Lower BDT Limit")
-	plt.ylabel("Mean Sigma Z")
-	plt.gca().set_ylim(bottom=-0.05)
-	plt.gca().set_xlim(left=-0.05)
-	
-	plt.annotate(annotation, xy=(0.5, 0.8), xycoords="axes fraction",  fontsize=10)
+	plt.suptitle("Optimisation of Sigma Z", fontsize=20)
+	ax1.set_ylabel("Sigma Z")
+	ax2.set_ylabel("Scaled Sigma Z")
+	for ax in [ax1, ax2]:
+		ax.set_xlabel("Lower BDT Limit")
+		ax.set_ylim(bottom=0.00)
+		ax.set_xlim(left=0.00)
+	#~ 
+	plt.annotate(annotation, xy=(0.2, 0.6), xycoords="axes fraction",  fontsize=10)
 	
 	plt.legend()
 	plt.savefig('/d6/rstein/Hamburg-Cosmic-Rays/positioning/graphs/Zcuts.pdf')
+	plt.savefig('/d6/rstein/Hamburg-Cosmic-Rays/report/graphs/Zcuts.pdf')
 	
 	print annotation
 

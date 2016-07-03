@@ -36,11 +36,11 @@ def run(statsset, mindetections, cuts):
 					if recon.BDTscore != None:
 						if float(bdtmin) < float(recon.BDTscore):
 							passing += 1
-							if cuts == None:
-								distance = math.sqrt(((recon.fullrayxpos-true.rayxpos)**2)+(recon.fullrayypos-true.rayypos)**2)
-								
-							else:
-								distance = math.sqrt(((recon.rayxpos-true.rayxpos)**2)+(recon.rayypos-true.rayypos)**2)
+							#~ if cuts == :
+								#~ distance = math.sqrt(((recon.fullrayxpos-true.rayxpos)**2)+(recon.fullrayypos-true.rayypos)**2)
+								#~ 
+							#~ else:
+							distance = math.sqrt(((recon.rayxpos-true.rayxpos)**2)+(recon.rayypos-true.rayypos)**2)
 							specificcount.append(distance)
 
 		total = len(specificcount)
@@ -73,7 +73,7 @@ def run(statsset, mindetections, cuts):
 	
 	
 	
-	n, bins, _ = plt.hist(fullcount, bins=20, label=labels, histtype='bar', stacked=True)
+	n, bins, _ = plt.hist(fullcount, bins=25, label=labels, histtype='stepfilled', stacked=True)
 
 	mid = (bins[1:] + bins[:-1])*0.5
 	

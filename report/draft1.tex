@@ -693,7 +693,108 @@ If we compare the deviation from true core distance to each telescope, we can qu
 \end{center}
 \end{figure}
 
-As an alternative metric for assessing reconstruction accuracy, we can calculate the absolute distance from the reconstructed core to the true core. The results of a binning of this distribution are shown in Figure \ref{fig:position}. Because we consider absolute distance, this value can never be negative. Thus, we calculate a one-sided distribution standard deviation, and consider the value of an event in the 68th centile to be equal to the standard deviation. It is found that, for both four and five telescope events, the core reconstruction is approximately $\sigma_{core} \approx 10m$. Most reconstructed core positions thus lie less than 10m from the true position. This is extremely good, especially in comparison to the Hillas Reconstruction, where a core resolution of Y is more typical AND CITE!
+As an alternative metric for assessing reconstruction accuracy, we can calculate the absolute distance from the reconstructed core to the true core. The results of a binning of this distribution are shown in Figure \ref{fig:position}. Because we consider absolute distance, this value can never be negative. Thus, we calculate a one-sided distribution standard deviation, and consider the value of an event in the 68th centile to be equal to the standard deviation. It is found that, for both four and five telescope events, the core reconstruction is approximately $\sigma_{core} \approx 10m$ and $\sigma_{core} \approx 20m$ respectively. Most reconstructed core positions thus lie less than 10m from the true position. This is extremely good, especially in comparison to the Hillas Reconstruction, where a core resolution of Y is more typical AND CITE!
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=\textwidth]{position}
+\caption{The distance from true core position to the reconstructed core position is shown above. For four-telescope events, the standard deviation from true position is Xm.}
+\label{fig:rawposition}
+\end{center}
+\end{figure}
+
+We can similarly consider the resolution of reconstructed height.
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=\textwidth]{rawheight}
+\caption{The distance from true core position to the reconstructed core position is shown above. For four-telescope events, the standard deviation from true position is Xm.}
+\label{fig:rawheight}
+\end{center}
+\end{figure}
+
+Having taken into account our various variable uncertainties, we can also consider our most important variable. In Figure \ref{fig:rawZ} the reconstructed charge number is binned in integers, illustrating the element that each reconstructed event would be assigned to. As we would hope, there is a very clear peak centered on Z=26, and the median charge value lies very close to this value. The distributions are broadly symmetric, and have a charge resolution of $\sigma_{Z} = 1.1$ and $\sigma_{Z} = 2.2$ for five and four telescope events respectively. Unsurprisingly, the charge resolution is better for five-telescope events, but both cases represent a significant improvement over the existing charge resolution obtained through Hillas analysis. With the reasonably high event rate, we could certainly expect to see such a peak in the existing HESS data, and the uncertainty may be small enough to enable spectroscopic analysis. Obtaining such a peak is a vindication of the LPD method, and demonstrates its superior performance for event reconstruction. However, the value of $\sigma_{Z}$ for 4-telescope events is still large. It is also clear in Figure \ref{fig:rawZ} that the distribution is somewhat truncated by the imposed minimisation reconstruction range of 16-36. 
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=\textwidth]{rawZ}
+\caption{The distance from true core position to the reconstructed core position is shown above. For four-telescope events, the standard deviation from true position is Xm.}
+\label{fig:rawZ}
+\end{center}
+\end{figure} 
+
+\subsection{Boosted Decision Trees}
+There is one additional possibility for improved event reconstruction. We recall that, by virtue of being a high multiplicity event, we will already be restricting ourselves to a fairly limited core position and energy range. We can train a BDT to distinguish between events that are likely to be well constructed, and those that are likely to be poorly constructed. 
+
+Once an event has been reconstructed, we can define the expected multiplicity as the number of telescopes we would expect to see DC light in, given the reconstructed values for Energy per Nucleon, charge and core position. Using this value, alongside the core position coordinates and the energy, we train a BDT for each telescope multiplicity. Using a second set of Monte carlo data, simulated under the same conditions, we train both a 4-tel and a 5-tel BDT. The relative importance of variables is shown in table \ref{tab:reconbdt}.
+
+\begin{table}[h!]
+  \centering
+  \caption{Feature Importances for the reconstruction BDTs, ordered by 4-tel importance}
+  \label{tab:reconbdt}
+  \begin{tabular}{ccc}
+    \toprule
+    Variable & 4-tel & 5-tel\\
+    \midrule
+    Energy per Nucleon & 0.29 & 0.30\\
+    Core y Position & 0.27 & 0.31\\
+    Core x Position & 0.26 & 0.31\\ 
+    Expected Multiplicity & 0.19 & 0.07\\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+It is interesting to note that, although the energy and core position always have similar importance, the expected multiplicity is far more important for the 4-tel BDT. This implies that many poorly reconstructed events have core positions that would lead to an altered multiplicity. If a telescope is not triggered, it is currently ignored for the purpose of reconstruction. Consequently events can be reconstructed with core positions that we know to be false. We apply each BDT to the Monte Carlo data with matching multiplicity, to identify events that are likely to be reconstructed. The BDT score distribution is shown in Figure \ref{fig:reconBDTdistribution}.
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=\textwidth]{Likelihood}
+\caption{The BDT score distribution is shown for the Monte Carlo test data. Events are colour-coded by how well the Charge number was reconstructed. We see that the majority of bad red events have a lower BDT score in the 4-tel graph. In each graph, the think black line indicates the eventual cut made to the data.}
+\label{fig:reconBDTdistribution}
+\end{center}
+\end{figure}
+
+Having obtained a BDT score variables $P_{4tel}$ and $P_{5tel}$, we can then optimise cuts on this variable. The two BDTs will be optimised independently. Our aim is to reduce the value of $\sigma_{Z}$ to provide a narrower reconstructed peak. This should enable more effective spectroscopic analysis. At the same time, we wish to maintain as high a pass rate as possible, to reduce the expected random Poissonian Error in the dataset. We know that the Poissonian Error of a distribution scales with $\frac{1}{\sqrt{N}}$. Ultimately we expect to obtain a spectrum of overlapping Gaussians corresponding to each element, and fit for the relative height of each Gaussian. To balance the competing priorities of large N and small $\sigma_{Z}$ which will enable the Gaussian peaks to be resolved, we can define a new scaled variable $\mathbf{\tilde{\sigma_{Z}}} = \frac{\sigma_{Z}}{\sqrt{(f)}}$. Here, instead of N, we are scaling with the passing fraction of events $f = \frac{N_{passing}}{N_{total}}$. The quantity $\mathbf{\tilde{\sigma_{Z}}}$ is then found for a range of BDT cut values, and the minimum found. The values of $\sigma_{Z}$ and $\mathbf{\tilde{\sigma_{Z}}}$ are shown in Figure \ref{fig:Zcuts}. Ultimately, a cut of $P_{4tel} > 0.15$ and $P_{5tel} > 0.22$ was chosen, corresponding to $\sigma_{Z}=0.88$ and $\sigma_{Z}=1.04$ respectively. The respective passing fraction was 0.92 and 0.53. The improvement for 5 telescope events is minor, but for 4 telescope events there is a significant reduction in charge resolution.
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=\textwidth]{Zcuts}
+\caption{The BDT score distribution is shown for the Monte Carlo test data. Events are colour-coded by how well the Charge number was reconstructed. We see that the majority of bad red events have a lower BDT score in the 4-tel graph. In each graph, the think black line indicates the eventual cut made to the data.}
+\label{fig:Zcuts}
+\end{center}
+\end{figure}
+
+We can plot the distribution of reconstructed core positions, with the BDT score as a color scale. We see that a clear pattern emerges, with distinct differences between 4-tel and 5-tel events. For 4-tel events, the core positions are widely distributed in the simulated region. However, there are many cores clustered around each of the 5 telescopes. This makes sense, as cores close to a telescope are likely to produce negligible DC light in that telescope. However, once the $P_{4tel}$ cut is applied, the majority of events lying outside the square of small telescopes are removed. Also, interestingly, most events lying near one of the smaller telescopes are removed, giving each telescope a noticeable halo containing few or no events. This suggests that, if an event lies close to one telescope, the distance to the opposite diagonal telescope is likely to be too large to produce a DC signal. Thus, we would instead expect a 3-tel event. We know that the first interaction height is reconstructed extremely poorly, and thus the exact $r_{max}$ values for these LPDs is uncertain. It is likely that, given this, the height is being misreconstructed to allow the LPD to extend fare enough to trigger the most distant telescope. 
+
+However, there is a region of high $P_{4tel}$ points lying directly beyond the halo, in the inner region. Events in this location are likely to be too dim to trigger the nearest telescope, while still being close enough to trigger the remaining telescope. This region also encroaches partially on the four telescope halos that would otherwise be completely circular. We are left with a clear square region of high-score events lying within the telescope square. There is then a less distinct halo surrounding the central CT5 telescope. This halo represents events that would be distant enough from the center to trigger the CT5, but central enough to also trigger the outer 4 telescopes. within this halo, there is a dense region of reconstructed events lying very close to the CT5 telescope, where they are close enough to not trigger it but are still able to trigger the outer 4 telescopes.
+
+The distribution of 5-tel events is much easier to explain. As each telescope must be triggered there is a clear halo surrounding each telescope. Certain events are reconstructed with a higher radius from the center, and these are mostly removed by the $P_{5tel}$ cuts. We are left with a ring surrounding CT5 of high scoring events. The relatively loose cut is extremely effective at reducing almost outlying events that are far from the centre, while leaving almost all other events. Future reconstruction techniques could aim to make use of this information by restricting the core position to these regions of expected high-multiplicity. However, this was not done as part of this analysis. 
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=\textwidth]{bdtmap}
+\caption{A geometric representation the reconstructed events is shown. Each coordinate corresponding to a reconstructed position in metres. The 5 HESS telescopes are represented by black rings. Above we see all events, while below we see only events passing their respective BDT cuts. In the left column we see the 4-telescope events, while in the right column, we see 5-telescope events.}
+\label{fig:bdtmap}
+\end{center}
+\end{figure}
+
+We can assess the impact of the $P_{4tel}$ and $P_{5tel}$ cuts on the distribution of reconstructed Energy. We would expect that the true energy distribution would begin at around 10-15 TeV, when Cherenkov Emission becomes possible. The number of events would increase with energy up to a maximum around 25 TeV when Emission becomes saturated, and would then decline in accordance with the $E^{-2.7}$ flux rate. The reconstructed Energy distribution does, as expect, follow this pattern. This suggests that our method for Energy reconstruction is reasonable, and this is further confirmation of the reasonably precise energy resolution shown in Figure \ref{fig:rawepn}. The Energy distribution is shown in Figure \ref{fig:energy}, alongside the post-cuts distribution. As might be expected, the loose $P_{5tel}$ cuts produce little noticeable difference to the distribution. However, there is a clear curtailing of the lower Energy events after the $P_{4tel}$ cut has been applied. This is as might be expected, because events that are not saturated in Energy are unlikely to be reconstructed well. Ultimately, the post cut distributions of 4-tel events appears similar to the 5-tel distribution, albeit with a greater overall frequency. In contrast, the pre-cuts 4-tel events had a noticeable broader distribution extending further into the very low and very high energy regimes. The results broadly vindicate our decision to apply an Energy Cut on reconstructed events that was implemented to remove protons. Were the lower Energy Iron events to have been included in our simulations, we would have needed to remove them through the BDT method because they are unlikely to be reconstructed well. 
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=\textwidth]{energymap}
+\caption{The reconstructed Energy distribution is shown. Above, all events are included. Below, only those events passing the $P_{4tel}$ and $P_{5tel}$ cuts are included}
+\label{fig:energy}
+\end{center}
+\end{figure} 
+
+\subsection{Final Variable resolution}
+After application of the BDT cut to the Monte Carlo datasets, the distributions in Energy, Core Position and
+Charge are repeated. Unsurprisingly, the loose cuts for $P_{5tel}$ mean that 5-tel performance is only slightly improved, while the 4-tel performance is more significantly improved. For 5-tel events, the core position reduces from $\sigma_{core} = 9.2m$ to $\sigma_{core} = 8.6m$, while for 4-tel events, the improvement is a substantial reduction from $\sigma_{core} = 17.0m$ to $\sigma_{core} = 10.0m$. Ultimately our resultant core resolutions are broadly similar for both multiplicities, and represent a significant improvement over previous Hillas-reconstructed core positions.
+
+With regards to energy, the removal of many low-energy events by the 4-tel BDT leads to a clear improvement in resolution. This is evident in Figure \ref{fig:epn}. The 5-tel resolution improves slight from $\frac{\sigma_{E}}{E} = 0.06$ to $\frac{\sigma_{E}}{E} = 0.05$ and the 4-tel resolution improves more noticeably from $\frac{\sigma_{E}}{E} = 0.12$ to $\frac{\sigma_{E}}{E} = 0.06$. We again see that the harsher $P_{4tel}$ cuts leads to a convergence of 4-tel and 5-tel resolution.
+
+This trend continues for the charge resolution, where we see a sharp improvement for 4-tel events. Whereas in Figure \ref{fig:rawZ} the distribution is clearly partially truncated by the imposed range of $16 < Z < 36$, we see no such problem once $P_{4tel}$ cuts have been applied. Ultimately the 5-tel resolution improves from $\sigma_{Z}=0.95$ to $\sigma_{Z}=0.87$, while the 4-tel resolution improves from $\sigma_{Z}=2.11$ to $\sigma_{Z}=1.05$. In doing this, we have achieved our stated aim of obtaining a charge reconstruction method capable of producing large datasets with a charge resolution of roughly  $\sigma_{Z} \approx 1$. The LPD method is this shown to be sufficiently good to enable spectroscopic analysis of Heavy Cosmic Rays.
 
 \begin{figure}
 \begin{center}
@@ -713,28 +814,42 @@ We can similarly consider the resolution of reconstructed height.
 \end{center}
 \end{figure}
 
-Having taken into account our various variable uncertainties, we can also consider our most important variable. In Figure \ref{fig:rawZ} the reconstructed charge number is binned in integers, illustrating the element that each reconstructed event would be assigned to. As we would hope, there is a very clear peak centered on Z=26, and the median charge value lies very close to this value. The distributions are broadly symettric, and have a charge resoultion of $\sigma_{Z} = 1.1$ and $\sigma_{Z} = 2.2$ for five and four telescope events respectively. Unsurprisingly, the charge resolution is better for five-telescope events, but both cases represent a significant improvement over the existing charge resolution obtained through Hillas analysis. With the reasonably high event rate, we could certainly expect to see such a peak in the existing HESS data, and the uncertainty well be small enough to enable spectroscopic analysis. Obtaining such a peak is a vindication of the LPD method, and demonstrates its superior performance for event reconstruction.
+\begin{figure}
+\begin{center}
+\includegraphics[width=\textwidth]{epn}
+\caption{The fraction deviation from true energy is shown above. For events with five-telescope multiplicity, the fractional error is X but for four-telescope multiplicity, it is Y. The expected poissonian error bars are also shown.}
+\label{fig:epn}
+\end{center}
+\end{figure}  
 
 \begin{figure}
 \begin{center}
-\includegraphics[width=\textwidth]{rawZ}
-\caption{The distance from true core position to the reconstructed core position is shown above. For four-telescope events, the standard deviation from true position is Xm.}
-\label{fig:rawZ}
+\includegraphics[width=\textwidth]{Z}
+\caption{The reconstructed charge for the cut dataset is shown, with a clear peak around the true value of Z=26.}
+\label{fig:Z}
 \end{center}
-\end{figure} 
+\end{figure}
 
-\subsection{Boosted Decision Trees}
-Using one quarter of a large sample of Monte Carlo data, we can train a Boosted Decision Tree (BDT) for a given telescope multiplicity, using the reconstructed x/y core position, height and energy, as well as the Log Likelihood. The BDT is told whether each event is \textquoteleft signal' (correctly reconstructed) or \textquoteleft background' (incorrectly reconstructed). 
 
-For every simulated event, this trained BDT can then be used to assign a \textquoteleft Signal Probability'. On a second quarter of the dataset we can optimise a cut on the minimum signal probability, in order to maximise the ratio of signal to background. We find that the $\sigma_{Z}$ of the remaining \textquoteleft Test' Monte Carlo data is reduced when the same BDT cut is applied.
+\section{Further Improvements}
+There are many potential avenues that would improve or expand upon the work conducted as part of this analysis. The development of a new method of DC pixel identification is likely to prove particularly useful, as it performs more accurately and vastly more efficiently that existing methods of DC pixels.  
 
-However, the simulated number of hours for the data was 1200? hours, and comparisons with HESS data show just 12 4-telescope events rather than 600. Thus, although the technique is valid and effective for HESS, the count rate will limit the potential to conduct any statistical analysis from this experiment.
+\subsection{Hillas Reconstruction}
+The LPD reconstruction method was developed to replace the current method of Hillas Reconstruction, owing to the latter's poor position resolution. Rather counter-intuitively, despite the demonstrated superiority of the LPD method, the result of this analysis may well be to strengthen the use of Hillas Analysis. The exact process for Hillas Reconstruction relies on deriving the Major and Minor axis of a shower image, and calculating pairwise intersection points of the major axes between telescopes to find the shower direction. Due to the blurriness of the shower images, there is significant uncertainty in placing of the major axis. However, we know that the major axis will pass through both the shower centre of gravity and the DC light. The shower centre of gravity is much easier to determine despite image blurring, and thus has a much lower uncertainty. Previously, difficulty in identifying DC pixels meant that this centre of gravity was not particularly useful. However, through use of the BDT-identified DC pixels, it should be possible to much more reliable place the major axis in a shower image. We can thus expect that, with the BDT, Hillas reconstruction may have a significantly improved core position resolution. Further analysis in this area will be conducted by other members of our research group. In the reasonable assumption that this does produce much better position resolution, we will have third independent method to determine the core position as well as the two LPDs. We could then conduct a likelihood minimisation encompassing this new information alongside the existing LPDs. We would expect our final core position resolution, and thus charge resolution, to improve even further as a result of these extra measurements.
 
-\section{Optimised Telescope Array}
-NO Background!!!!!
-\subsection{Count Rates}
+\subsection{Actual Data}
+The obvious next step to take as part of this analysis would be to apply the reconstruction Method to real HESS data. We would hope to obtain a distribution similar to that in Figure \ref{fig:Z}, to which we could fit Gaussians centered on each integer value of Charge. In this way, we could calculate the relative abundance of the different Heavy Cosmic rays. Comparing the width of these Gaussians would confirm whether or not our reconstruction method was optimistic in our various assumptions for error. Additionally, on the basis of the calculated expectation rate for Iron Events we could compare to see if this agrees
+with the data. An excessive experimental count rate would likely indicate that additional sources of background, such as protons, are passing the various cuts. To compensate for this, additional cuts would need to be designed and applied, which would likely lead to reductions in expected Iron acceptance rate.
 
-In order to improve the count rate of high-multiplicity events, we can consider a 3x3 array of Cherenkov Telescopes, which we want to use for identifying Cosmic Ray Elements accurately. In \ref{fig:optmiselayout} we see that the \textquoteleft High Multiplicity Count Rate' of events observed by 4 or more telescopes falls with increasing grid separation. We can clearly see that the optimum grid spacing will likely lie in the 20-50m region to provide a reasonable count rate. Competing with this effect is the reliance of LDF reconstruction on sampling the entire lateral distribution. Thus the reconstruction quality will decrease as Grid Width decreases. Further study of $\sigma_{Z}$ in this region is required to determine the optimum layout (not necessarily be a grid) for event reconstruction. 
+In the event that the experimental method proves successful, it should be possible to use the exact position of the iron peak as a method of calibration for atmospheric absorption. An underestimate of the absorption would lead to an iron peak that was shifted to a charge number lower than 26, due to a lower than unexpected photon count. Similarly, the reverse would apply if the modelled atmospheric absorption was an overestimate. As these is much associated uncertainty in the atmospheric properties, this would be a useful measurement to perform.
+
+\subsection{High Speed Telescopes}
+By definition, a Cherenkov-Emitting Cosmic ray will be travelling faster than the light that it emits. The EAS shower will thus arrive on the ground shortly before the DC light. There are currently several ultra-high-speed Cherenkov telescopes capable of resolving the received light into narrow time bands. It should thus be possible for the telescope to directly measure the DC light in one image, and the EAS shower in another image. We can imagine the possible impact that such a telescope array would have on the reconstruction process. Directly measuring this light will provide a direct measurement of $True_{DC}$ for use in shower reconstruction. Although we saw that the value of $True_{DC}$ has a relatively large associated error, it could be used in various ways. Firstly, it could be used as an additional measurement to give a third LPD to be minimised. These extra $True_{DC}$ measurements could be included in any likelihood minimisation. Secondly, we could use the observation or non-observation of DC light to more reliably constrain the core position of DC light. At present, our reconstruction method can have a BDT-identified DC pixel even though there may not actually be DC light in the image. Thirdly, the $True_{DC}$ variable could be passed to the regressor that was trained on the full shower images. It is possible that this information may correlate well to other variables, and enable better regressor LPD reconstruction.
+
+\subsection{Optimised Telescope Array}
+The reconstruction process that was developed is generally applicable to all telescope arrays that image Cherenkov Light. This includes the Cherenkov Telescope Array (CTA), a planned array that is likely to have many more telescopes than HESS. As we have seen, the reconstruction process only works well for high-multiplicity events, but these represent only a small fraction of all HESS events. We can imagine how the expected Iron event rate might increase, were an alternate telescope array used. As the design for CTA has not been agreed, we can imagine what an optimum arrangement for CTA might be, for the purpose measure DC light using the method described here. To this end, we can consider a 3x3 array of Cherenkov Telescopes, which we want to use for identifying Cosmic Ray Elements accurately. We can vary the grid spacing, and determine the effect on expected count rate. In Figure \ref{fig:optmiselayout} we see the expected distribution of event multiplicities for varying grid width. While the overall detected event rate increases as grid width increases, we find that that the \textquoteleft High Multiplicity Count Rate' of events observed by 4 or more telescopes decreases with increasing grid separation. Competing with this effect is the reliance of LPD reconstruction on sampling the entire lateral distribution. Thus the reconstruction quality for a given multiplicity will likely decrease as Grid Width decreases. Nonetheless, it appears that the optimum grid spacing will likely lie in the 20-50m region to provide a reasonable count rate. This is likely to fully sample an LPD of typical radius $r_{max} \approx 100$, while clearly maintaining a reasonably high count rate.
+
+Further study of $\sigma_{Z}$ in this region is required to determine the optimum layout (not necessarily be a grid) for event reconstruction. 
 
 \begin{figure}
 \begin{center}
@@ -743,17 +858,6 @@ In order to improve the count rate of high-multiplicity events, we can consider 
 \label{fig:optmiselayout}
 \end{center}
 \end{figure}
-
-\subsection{Saturation Region Energies}
-Hillas reconstruction better
-Combine with Hillas reconstruction
-Apply to HESS data
-calibrate with position of Iron peak
-Real data
-
-
-\subsection{High Speed Telescopes}
-By definition, the EAS shower will arrive on the ground shortly before the DC light. There are currently several high-speed Cherenkov telescopes capable of distinguishing between these, allowing a background-free LDF to be fitted. Additional study of alternative energy regimes and layouts will also be considered for the case of a high-speed imaging telescope array. 
 
 \section{Conclusion}
 Preliminary results suggest that the LDF reconstruction technique will significantly improve charge reconstruction, to a level sufficient for cosmic ray abundance studies. However, reliance on high-multiplicity events means that although applicable to current experiments such as HESS, a new optimised telescope array would be required for a statistical analysis. Such an array may have a grid spacing of 20-50m, although further study is needed to determine the ideal layout.

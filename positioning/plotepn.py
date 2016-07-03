@@ -74,7 +74,7 @@ def run(statsset, mindetections, cuts):
 	
 	
 			
-	n, bins, _ = plt.hist(fullcount, bins=15, label=labels, histtype='bar', stacked=True)
+	n, bins, _ = plt.hist(fullcount, bins=25, label=labels, histtype='stepfilled',stacked=True)
 	
 	mid = (bins[1:] + bins[:-1])*0.5
 	if isinstance(n[0], np.ndarray):

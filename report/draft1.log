@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2015.11.27)  2 JUL 2016 01:22
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2015.11.27)  3 JUL 2016 21:30
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -673,27 +673,82 @@ Package pdftex.def Info: graphs/hamburglogo.png used on input line 36.
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map} <./graphs/Imperial_College_
 London_logo.jpg> <./graphs/hamburglogo.png>]
-[1] (./draft1.toc
-LaTeX Font Info:    Try loading font information for U+msa on input line 4.
- (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
-File: umsa.fd 2013/01/14 v3.01 AMS symbols A
-)
-LaTeX Font Info:    Try loading font information for U+msb on input line 4.
-
-(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
-File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-))
+[1] (./draft1.toc)
 \tf@toc=\write4
 \openout4 = `draft1.toc'.
 
- [2] [3]
-<graphs/hessdiagram.png, id=29, 958.3303pt x 1081.03876pt>
+ [2]
+
+LaTeX Warning: Citation `Heck98' on page 3 undefined on input line 71.
+
+
+LaTeX Warning: Citation `Bernlohr08' on page 3 undefined on input line 71.
+
+
+LaTeX Warning: Citation `scikit-learn' on page 3 undefined on input line 73.
+
+[3]
+
+LaTeX Warning: Citation `Blasi:2013rva' on page 4 undefined on input line 81.
+
+
+LaTeX Warning: Citation `Funk:2004ie' on page 4 undefined on input line 83.
+
+LaTeX Font Info:    Try loading font information for U+msa on input line 85.
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+)
+LaTeX Font Info:    Try loading font information for U+msb on input line 85.
+
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+)
+
+LaTeX Warning: Citation `hess07' on page 4 undefined on input line 85.
+
+
+LaTeX Warning: Citation `kieda01' on page 4 undefined on input line 87.
+
+
+LaTeX Warning: Reference `fig:hessdiagram' on page 4 undefined on input line 91
+.
+
+<graphs/hessdiagram.png, id=27, 958.3303pt x 1081.03876pt>
 File: graphs/hessdiagram.png Graphic file (type png)
 
 <use graphs/hessdiagram.png>
 Package pdftex.def Info: graphs/hessdiagram.png used on input line 95.
 (pdftex.def)             Requested size: 186.29605pt x 210.15419pt.
- [4] [5 <./graphs/hessdiagram.png>]
+
+
+LaTeX Warning: Citation `hess07' on page 4 undefined on input line 96.
+
+
+LaTeX Warning: Reference `fig:fulltelimage' on page 4 undefined on input line 9
+6.
+
+
+LaTeX Warning: Citation `hess07' on page 4 undefined on input line 96.
+
+
+LaTeX Warning: Reference `fig:fulltelimage' on page 4 undefined on input line 9
+6.
+
+[4]
+
+LaTeX Warning: Reference `fig:generalenergy' on page 5 undefined on input line 
+111.
+
+[5 <./graphs/hessdiagram.png>]
+
+LaTeX Warning: Reference `fig:lpd' on page 6 undefined on input line 114.
+
+
+LaTeX Warning: Citation `ppreview' on page 6 undefined on input line 118.
+
+
+LaTeX Warning: Reference `fig:lpd' on page 6 undefined on input line 125.
+
 <graphs/logenergyradius.png, id=39, 722.7pt x 1084.05pt>
 File: graphs/logenergyradius.png Graphic file (type png)
 
@@ -714,7 +769,31 @@ Package pdftex.def Info: graphs/simulatedlpd.png used on input line 137.
 
 LaTeX Warning: Float too large for page by 19.94504pt on input line 141.
 
+
+LaTeX Warning: Reference `fig:lpd' on page 6 undefined on input line 143.
+
+
+LaTeX Warning: Reference `fig:generalenergy' on page 6 undefined on input line 
+145.
+
+
+LaTeX Warning: Reference `fig:lpd' on page 6 undefined on input line 145.
+
 [6] [7 <./graphs/logenergyradius.png>] [8 <./graphs/simulatedlpd.png>]
+
+LaTeX Warning: Citation `Heck98' on page 9 undefined on input line 152.
+
+
+LaTeX Warning: Citation `Bernlohr08' on page 9 undefined on input line 152.
+
+
+LaTeX Warning: Reference `fig:DCtelimage' on page 9 undefined on input line 156
+.
+
+
+LaTeX Warning: Reference `fig:fulltelimage' on page 9 undefined on input line 1
+56.
+
 
 Package geometry Warning: `a4paper': not available in `\newgeometry'; skipped.
 
@@ -766,7 +845,21 @@ File: graphs/graphfull.pdf Graphic file (type pdf)
 Package pdftex.def Info: graphs/graphfull.pdf used on input line 171.
 (pdftex.def)             Requested size: 203.83417pt x 425.86113pt.
 
+
+LaTeX Warning: Reference `fig:DCtelimage' on page 9 undefined on input line 172
+.
+
+
+LaTeX Warning: Reference `fig:DCtelimage' on page 9 undefined on input line 172
+.
+
 [9]
+
+LaTeX Warning: Citation `hess07' on page 10 undefined on input line 183.
+
+
+LaTeX Warning: Reference `tab:qdccuts' on page 10 undefined on input line 185.
+
 
 LaTeX Warning: Command \textgreater invalid in math mode on input line 185.
 
@@ -781,6 +874,16 @@ LaTeX Font Info:    Font shape `OML/cmr/m/n' in size <10.95> not available
 
 LaTeX Warning: Command \textgreater invalid in math mode on input line 185.
 
+
+LaTeX Warning: Citation `hess07' on page 10 undefined on input line 189.
+
+
+LaTeX Warning: Citation `hess07' on page 10 undefined on input line 189.
+
+
+LaTeX Warning: Reference `fig:cutdistribution' on page 10 undefined on input li
+ne 205.
+
 [10] [11
 
 
@@ -793,6 +896,16 @@ Package pdftex.def Info: graphs/hess1statsbigtestdata.pdf used on input line 20
 9.
 (pdftex.def)             Requested size: 452.9679pt x 452.96558pt.
 
+
+LaTeX Warning: Citation `scikit-learn' on page 12 undefined on input line 216.
+
+
+LaTeX Warning: Reference `fig:decisiontree' on page 12 undefined on input line 
+224.
+
+
+LaTeX Warning: Citation `Roe:2004na' on page 12 undefined on input line 224.
+
 <graphs/decisiontreehess1.pdf, id=86, 1552.80125pt x 1288.815pt>
 File: graphs/decisiontreehess1.pdf Graphic file (type pdf)
 
@@ -801,16 +914,46 @@ Package pdftex.def Info: graphs/decisiontreehess1.pdf used on input line 228.
 (pdftex.def)             Requested size: 452.9679pt x 375.94934pt.
 
 
+LaTeX Warning: Reference `tab:hess1classifier' on page 12 undefined on input li
+ne 234.
+
+
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
+
+LaTeX Warning: Reference `tab:hess1classifier' on page 12 undefined on input li
+ne 256.
+
 [12] [13 <./graphs/hess1statsbigtestdata.pdf>] [14 <./graphs/decisiontreehess1.
-pdf>] [15]
+pdf>]
+
+LaTeX Warning: Reference `tab:qdcbdtcomparison1' on page 15 undefined on input 
+line 260.
+
+
+LaTeX Warning: Reference `tab:qdccuts' on page 15 undefined on input line 278.
+
+
+LaTeX Warning: Reference `tab:hess2classifier' on page 15 undefined on input li
+ne 278.
+
+[15]
 Overfull \hbox (8.17557pt too wide) in paragraph at lines 320--321
 []\OT1/cmr/m/n/10.95 Through ap-pli-ca-tion of the two HESS clas-si-fiers, we c
 an find the com-par-a-tive high-multiplicity-
  []
 
-[16] [17] <graphs/aspectratio.pdf, id=163, 722.7pt x 1084.05pt>
+[16]
+
+LaTeX Warning: Reference `fig:aspectratio' on page 17 undefined on input line 3
+45.
+
+[17]
+
+LaTeX Warning: Reference `tab:protonacceptance' on page 18 undefined on input l
+ine 354.
+
+<graphs/aspectratio.pdf, id=163, 722.7pt x 1084.05pt>
 File: graphs/aspectratio.pdf Graphic file (type pdf)
 
 <use graphs/aspectratio.pdf>
@@ -820,7 +963,25 @@ Package pdftex.def Info: graphs/aspectratio.pdf used on input line 358.
 
 LaTeX Warning: Float too large for page by 0.99007pt on input line 362.
 
+
+LaTeX Warning: Reference `fig:lpd' on page 18 undefined on input line 388.
+
+
+LaTeX Warning: Reference `tab:fullironacceptance' on page 18 undefined on input
+ line 395.
+
 [18] [19 <./graphs/aspectratio.pdf>]
+
+LaTeX Warning: Reference `fig:protonenergy' on page 20 undefined on input line 
+414.
+
+
+LaTeX Warning: Reference `fig:ironenergy' on page 20 undefined on input line 41
+4.
+
+
+LaTeX Warning: Reference `fig:lpd' on page 20 undefined on input line 416.
+
 <graphs/energyfullprotons.pdf, id=210, 1445.4pt x 722.7pt>
 File: graphs/energyfullprotons.pdf Graphic file (type pdf)
 
@@ -835,6 +996,26 @@ File: graphs/energyfulliron.pdf Graphic file (type pdf)
 Package pdftex.def Info: graphs/energyfulliron.pdf used on input line 428.
 (pdftex.def)             Requested size: 407.66833pt x 203.8323pt.
 
+
+LaTeX Warning: Reference `fig:protonenergy' on page 20 undefined on input line 
+432.
+
+
+LaTeX Warning: Reference `fig:ironenergy' on page 20 undefined on input line 43
+2.
+
+
+LaTeX Warning: Reference `fig:protonenergy' on page 20 undefined on input line 
+432.
+
+
+LaTeX Warning: Reference `fig:ironenergy' on page 20 undefined on input line 43
+2.
+
+
+LaTeX Warning: Reference `fig:fullshowerlpd' on page 20 undefined on input line
+ 439.
+
 <graphs/corsikafullshowerlpd.pdf, id=212, 1445.4pt x 1445.4pt>
 File: graphs/corsikafullshowerlpd.pdf Graphic file (type pdf)
 
@@ -847,20 +1028,44 @@ Package pdftex.def Info: graphs/corsikafullshowerlpd.pdf used on input line 443
 pdfTeX warning: pdflatex (file ./graphs/energyfulliron.pdf): PDF inclusion: mul
 tiple pdfs with page group included in a single page
 >] [22 <./graphs/corsikafullshowerlpd.pdf>]
-<graphs/lpdpowerlaw.pdf, id=356, 1445.4pt x 1445.4pt>
+
+LaTeX Warning: Reference `fig:powerlawlpd' on page 23 undefined on input line 4
+51.
+
+
+LaTeX Warning: Reference `fig:powerlawlpd' on page 23 undefined on input line 4
+55.
+
+
+LaTeX Warning: Reference `fig:fullshowerlpd' on page 23 undefined on input line
+ 459.
+
+<graphs/lpdpowerlaw.pdf, id=355, 1445.4pt x 1445.4pt>
 File: graphs/lpdpowerlaw.pdf Graphic file (type pdf)
 
 <use graphs/lpdpowerlaw.pdf>
 Package pdftex.def Info: graphs/lpdpowerlaw.pdf used on input line 467.
 (pdftex.def)             Requested size: 452.9679pt x 452.96558pt.
- [23] [24 <./graphs/lpdpowerlaw.pdf>]
+
+
+LaTeX Warning: Reference `fig:simtelerror' on page 23 undefined on input line 4
+76.
+
+[23] [24 <./graphs/lpdpowerlaw.pdf>]
+
+LaTeX Warning: Reference `fig:corsikalpd1' on page 25 undefined on input line 4
+80.
+
 
 LaTeX Warning: Command \textgreater invalid in math mode on input line 480.
 
 
 LaTeX Warning: Command \textgreater invalid in math mode on input line 480.
 
-<graphs/simtelerror1.pdf, id=411, 722.7pt x 1445.4pt>
+
+LaTeX Warning: Reference `fig:lpd' on page 25 undefined on input line 480.
+
+<graphs/simtelerror1.pdf, id=410, 722.7pt x 1445.4pt>
 File: graphs/simtelerror1.pdf Graphic file (type pdf)
 
 <use graphs/simtelerror1.pdf>
@@ -871,123 +1076,277 @@ Package pdftex.def Info: graphs/simtelerror1.pdf used on input line 492.
 LaTeX Warning: Float too large for page by 19.94504pt on input line 496.
 
 [25] [26 <./graphs/simtelerror1.pdf>]
-<graphs/corsikalpd1.pdf, id=456, 1445.4pt x 1445.4pt>
+<graphs/corsikalpd1.pdf, id=455, 1445.4pt x 1445.4pt>
 File: graphs/corsikalpd1.pdf Graphic file (type pdf)
 
 <use graphs/corsikalpd1.pdf>
 Package pdftex.def Info: graphs/corsikalpd1.pdf used on input line 504.
 (pdftex.def)             Requested size: 452.9679pt x 452.96558pt.
- [27] [28 <./graphs/corsikalpd1.pdf>]
+
+
+LaTeX Warning: Reference `tab:regressor' on page 27 undefined on input line 518
+.
+
+[27] [28 <./graphs/corsikalpd1.pdf>]
+
+LaTeX Warning: Reference `tab:regressor' on page 29 undefined on input line 526
+.
+
+
+LaTeX Warning: Reference `fig:corsikalpd1' on page 29 undefined on input line 5
+52.
+
+
+LaTeX Warning: Reference `tab:lpderror' on page 29 undefined on input line 552.
+
+
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[29] [30] <graphs/generalheight.png, id=540, 722.7pt x 1084.05pt>
+[29]
+
+LaTeX Warning: Citation `hess07' on page 30 undefined on input line 578.
+
+
+LaTeX Warning: Citation `hessCT5' on page 30 undefined on input line 584.
+
+[30]
+
+LaTeX Warning: Reference `fig:generalheight' on page 31 undefined on input line
+ 595.
+
+
+LaTeX Warning: Reference `fig:generalheight' on page 31 undefined on input line
+ 599.
+
+<graphs/generalheight.png, id=539, 722.7pt x 1084.05pt>
 File: graphs/generalheight.png Graphic file (type png)
 
 <use graphs/generalheight.png>
 Package pdftex.def Info: graphs/generalheight.png used on input line 603.
 (pdftex.def)             Requested size: 420.31314pt x 630.45189pt.
- [31] [32 <./graphs/generalheight.png>]
+
+
+LaTeX Warning: Citation `Montanus2013' on page 31 undefined on input line 616.
+
+[31] [32 <./graphs/generalheight.png>]
+
+LaTeX Warning: Citation `hess07' on page 33 undefined on input line 624.
+
+
+LaTeX Warning: Reference `fig:Hessheight' on page 33 undefined on input line 62
+4.
+
+
 Overfull \hbox (1.90979pt too wide) in paragraph at lines 624--625
 []\OT1/cmr/m/n/10.95 As cited by the HESS study, a typ-i-cal first in-ter-ac-ti
 on height is roughly 30km for a Cherenkov-
  []
 
-<graphs/hessheight.png, id=548, 722.7pt x 1084.05pt>
+<graphs/hessheight.png, id=547, 722.7pt x 1084.05pt>
 File: graphs/hessheight.png Graphic file (type png)
 
 <use graphs/hessheight.png>
 Package pdftex.def Info: graphs/hessheight.png used on input line 628.
 (pdftex.def)             Requested size: 420.31314pt x 630.45189pt.
  [33] [34 <./graphs/hessheight.png>]
-<graphs/rawepn.pdf, id=556, 1445.4pt x 1084.05pt>
+
+LaTeX Warning: Citation `James75' on page 35 undefined on input line 649.
+
+
+LaTeX Warning: Reference `fig:rawepn' on page 35 undefined on input line 655.
+
+<graphs/rawepn.pdf, id=555, 1445.4pt x 1084.05pt>
 File: graphs/rawepn.pdf Graphic file (type pdf)
  <use graphs/rawepn.pdf>
 Package pdftex.def Info: graphs/rawepn.pdf used on input line 659.
 (pdftex.def)             Requested size: 452.9679pt x 339.72418pt.
 
-<graphs/rawcoredistance.pdf, id=557, 1445.4pt x 1084.05pt>
+<graphs/rawcoredistance.pdf, id=556, 1445.4pt x 1084.05pt>
 File: graphs/rawcoredistance.pdf Graphic file (type pdf)
 
 <use graphs/rawcoredistance.pdf>
 Package pdftex.def Info: graphs/rawcoredistance.pdf used on input line 668.
 (pdftex.def)             Requested size: 452.9679pt x 339.72418pt.
- [35] [36 <./graphs/rawepn.pdf>] [37 <./graphs/rawcoredistance.pdf>] <graphs/co
-redistance.pdf, id=667, 1445.4pt x 1084.05pt>
+ [35] [36 <./graphs/rawepn.pdf>] [37 <./graphs/rawcoredistance.pdf>]
+
+LaTeX Warning: Reference `fig:coredistance' on page 38 undefined on input line 
+686.
+
+
+LaTeX Warning: Reference `fig:rawcoredistance' on page 38 undefined on input li
+ne 686.
+
+<graphs/coredistance.pdf, id=666, 1445.4pt x 1084.05pt>
 File: graphs/coredistance.pdf Graphic file (type pdf)
 
 <use graphs/coredistance.pdf>
 Package pdftex.def Info: graphs/coredistance.pdf used on input line 690.
 (pdftex.def)             Requested size: 452.9679pt x 339.72418pt.
 
-<graphs/position.pdf, id=668, 1445.4pt x 1084.05pt>
+
+LaTeX Warning: Reference `fig:position' on page 38 undefined on input line 696.
+
+
+<graphs/position.pdf, id=667, 1445.4pt x 1084.05pt>
 File: graphs/position.pdf Graphic file (type pdf)
  <use graphs/position.pdf>
 Package pdftex.def Info: graphs/position.pdf used on input line 700.
 (pdftex.def)             Requested size: 452.9679pt x 339.72418pt.
 
 [38] [39 <./graphs/coredistance.pdf>]
-<graphs/rawheight.pdf, id=725, 1445.4pt x 1084.05pt>
+<graphs/rawheight.pdf, id=724, 1445.4pt x 1084.05pt>
 File: graphs/rawheight.pdf Graphic file (type pdf)
 
 <use graphs/rawheight.pdf>
 Package pdftex.def Info: graphs/rawheight.pdf used on input line 710.
 (pdftex.def)             Requested size: 452.9679pt x 339.72418pt.
- <graphs/rawZ.pdf, id=726, 1445.4pt x 1084.05pt>
-File: graphs/rawZ.pdf Graphic file (type pdf)
 
-<use graphs/rawZ.pdf>
+
+LaTeX Warning: Reference `fig:rawZ' on page 40 undefined on input line 716.
+
+
+LaTeX Warning: Reference `fig:rawZ' on page 40 undefined on input line 716.
+
+<graphs/rawZ.pdf, id=725, 1445.4pt x 1084.05pt>
+File: graphs/rawZ.pdf Graphic file (type pdf)
+ <use graphs/rawZ.pdf>
 Package pdftex.def Info: graphs/rawZ.pdf used on input line 720.
 (pdftex.def)             Requested size: 452.9679pt x 339.72418pt.
- [40 <./graphs/position.pdf>] [41 <./graphs/rawheight.pdf>] [42 <./graphs/rawZ.
-pdf>]
-<graphs/optimiselayout.png, id=880, 1445.4pt x 1084.05pt>
+
+
+LaTeX Warning: Reference `tab:reconbdt' on page 40 undefined on input line 729.
+
+
+[40 <./graphs/position.pdf>] [41 <./graphs/rawheight.pdf>] [42 <./graphs/rawZ.p
+df>]
+
+LaTeX Warning: Reference `fig:reconBDTdistribution' on page 43 undefined on inp
+ut line 747.
+
+<graphs/Likelihood.pdf, id=883, 1084.05pt x 722.7pt>
+File: graphs/Likelihood.pdf Graphic file (type pdf)
+
+<use graphs/Likelihood.pdf>
+Package pdftex.def Info: graphs/Likelihood.pdf used on input line 751.
+(pdftex.def)             Requested size: 452.9679pt x 301.97705pt.
+
+
+LaTeX Warning: Reference `fig:Zcuts' on page 43 undefined on input line 757.
+
+<graphs/Zcuts.pdf, id=884, 1084.05pt x 722.7pt>
+File: graphs/Zcuts.pdf Graphic file (type pdf)
+ <use graphs/Zcuts.pdf>
+Package pdftex.def Info: graphs/Zcuts.pdf used on input line 761.
+(pdftex.def)             Requested size: 452.9679pt x 301.97705pt.
+ [43]
+[44 <./graphs/Likelihood.pdf>] [45 <./graphs/Zcuts.pdf>]
+<graphs/bdtmap.pdf, id=990, 1445.4pt x 1084.05pt>
+File: graphs/bdtmap.pdf Graphic file (type pdf)
+ <use graphs/bdtmap.pdf>
+Package pdftex.def Info: graphs/bdtmap.pdf used on input line 775.
+(pdftex.def)             Requested size: 452.9679pt x 339.72418pt.
+
+
+LaTeX Warning: Reference `fig:rawepn' on page 46 undefined on input line 781.
+
+
+LaTeX Warning: Reference `fig:energy' on page 46 undefined on input line 781.
+
+[46 <./graphs/bdtmap.pdf>]
+<graphs/energymap.pdf, id=1034, 1445.4pt x 1084.05pt>
+File: graphs/energymap.pdf Graphic file (type pdf)
+
+<use graphs/energymap.pdf>
+Package pdftex.def Info: graphs/energymap.pdf used on input line 785.
+(pdftex.def)             Requested size: 452.9679pt x 339.72418pt.
+ [47 <./graphs/energymap.pdf>]
+
+LaTeX Warning: Reference `fig:epn' on page 48 undefined on input line 795.
+
+
+LaTeX Warning: Reference `fig:rawZ' on page 48 undefined on input line 797.
+
+File: graphs/position.pdf Graphic file (type pdf)
+<use graphs/position.pdf>
+Package pdftex.def Info: graphs/position.pdf used on input line 801.
+(pdftex.def)             Requested size: 452.9679pt x 339.72418pt.
+File: graphs/rawheight.pdf Graphic file (type pdf)
+ <use graphs/rawheight.pdf>
+Package pdftex.def Info: graphs/rawheight.pdf used on input line 811.
+(pdftex.def)             Requested size: 452.9679pt x 339.72418pt.
+
+<graphs/epn.pdf, id=1080, 1445.4pt x 1084.05pt>
+File: graphs/epn.pdf Graphic file (type pdf)
+ <use graphs/epn.pdf>
+Package pdftex.def Info: graphs/epn.pdf used on input line 819.
+(pdftex.def)             Requested size: 452.9679pt x 339.72418pt.
+
+<graphs/Z.pdf, id=1081, 1445.4pt x 1084.05pt>
+File: graphs/Z.pdf Graphic file (type pdf)
+ <use graphs/Z.pdf>
+Package pdftex.def Info: graphs/Z.pdf used on input line 827.
+(pdftex.def)             Requested size: 452.9679pt x 339.72418pt.
+
+
+LaTeX Warning: Reference `fig:Z' on page 48 undefined on input line 841.
+
+[48] [49] [50] [51 <./graphs/epn.pdf>] [52 <./graphs/Z.pdf>]
+
+LaTeX Warning: Reference `fig:optmiselayout' on page 53 undefined on input line
+ 850.
+
+[53] <graphs/optimiselayout.png, id=1208, 1445.4pt x 1084.05pt>
 File: graphs/optimiselayout.png Graphic file (type png)
 
 <use graphs/optimiselayout.png>
-Package pdftex.def Info: graphs/optimiselayout.png used on input line 741.
+Package pdftex.def Info: graphs/optimiselayout.png used on input line 856.
 (pdftex.def)             Requested size: 407.66833pt x 305.74846pt.
- [43 <./graphs/optimiselayout.png>]
 
-LaTeX Warning: Reference `fig:dcdiff' on page 44 undefined on input line 761.
 
-(./draft1.bbl [44])
+LaTeX Warning: Reference `fig:dcdiff' on page 54 undefined on input line 865.
+
+[54 <./graphs/optimiselayout.png>] (./draft1.bbl [55])
 PGFPlots: reading {data/atmprof10.dat}
- [45] [46] (./draft1.aux)
+ [56] [57] (./draft1.aux)
 
 LaTeX Warning: There were undefined references.
 
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
  ) 
 Here is how much of TeX's memory you used:
- 19670 strings out of 494976
- 474240 string characters out of 6179136
- 609323 words of memory out of 5000000
- 22467 multiletter control sequences out of 15000+600000
- 14310 words of font info for 55 fonts, out of 8000000 for 9000
+ 19718 strings out of 494976
+ 475026 string characters out of 6179136
+ 605324 words of memory out of 5000000
+ 22505 multiletter control sequences out of 15000+600000
+ 15858 words of font info for 60 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 70i,11n,76p,1477b,609s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 70i,11n,76p,1772b,609s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></us
 r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/shar
-e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texl
-ive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/te
-xmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texlive/texmf-di
-st/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texlive/texmf-dist/font
-s/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/texmf-dist/fonts/type1
-/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public
-/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfon
-ts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/c
-mr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb>
-</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/sh
-are/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/te
-xlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/share/texlive/t
-exmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-di
-st/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texlive/texmf-dist/font
-s/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/texmf-dist/fonts/type
-1/public/amsfonts/symbols/msbm10.pfb>
-Output written on draft1.pdf (47 pages, 1809670 bytes).
+e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb></usr/share/texli
+ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/tex
+mf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dis
+t/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texlive/texmf-dist/font
+s/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texlive/texmf-dist/fonts/type1
+/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public
+/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfon
+ts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/c
+mr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb
+></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/s
+hare/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/tex
+live/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/t
+exmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/share/texlive/texmf-di
+st/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/font
+s/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texlive/texmf-dist/fonts/type1
+/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/texmf-dist/fonts/type1/publi
+c/amsfonts/symbols/msbm10.pfb>
+Output written on draft1.pdf (58 pages, 3916183 bytes).
 PDF statistics:
- 960 PDF objects out of 1000 (max. 8388607)
- 262 compressed objects within 3 object streams
+ 1292 PDF objects out of 1440 (max. 8388607)
+ 325 compressed objects within 4 object streams
  0 named destinations out of 1000 (max. 500000)
- 150 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 180 words of extra memory for PDF output out of 10000 (max. 10000000)
 

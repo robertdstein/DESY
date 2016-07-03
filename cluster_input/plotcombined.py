@@ -16,9 +16,11 @@ import plotangle as pa
 import plotheight as ph
 import plotlikelihood as pl
 import plotcoredistance as pd
+import plotbdtmap as pb
 import plotlpd as plpd
 import optimisez as oz
 import categorycounts as cc
+import plotenergymap as pem
 
 import initialise as i
 numberofhours, mincount, gridwidth, layout, raweff, flux, area, solidangle, selectionefficiency, hmacceptance = i.run()
@@ -44,15 +46,18 @@ plpd.run(statsdata)
 BDT.run(traindata, statsdata, int(mincount))
 pd.run(statsdata, int(mincount), cuts=[0.0, 0.0])
 llcuts = oz.run(statsdata, int(mincount))
-
+pem.run(statsdata, int(mincount), cuts=llcuts)
+pb.run(statsdata, int(mincount), cuts=llcuts)
 print "Log Likelihood Cuts", llcuts
 pz.run(statsdata, int(mincount), cuts=None)
 pe.run(statsdata, int(mincount), cuts=None)
 pd.run(statsdata, int(mincount), cuts=None)
 ph.run(statsdata, int(mincount), cuts=None)
+pp.run(statsdata, int(mincount), cuts=None)
+
 pz.run(statsdata, int(mincount), cuts=llcuts)
 pl.run(statsdata, int(mincount), cuts=llcuts)
-pp.run(statsdata, int(mincount), cuts=[0.0, 0.0])
+pp.run(statsdata, int(mincount), cuts=llcuts)
 pd.run(statsdata, int(mincount), cuts=[0.0, 0.0])
 pe.run(statsdata, int(mincount), cuts=llcuts)
 ph.run(statsdata, int(mincount), cuts=llcuts)
