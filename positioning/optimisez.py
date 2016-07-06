@@ -95,7 +95,7 @@ def run(statsset, mindetections):
 				meansigma = (upperz-lowerz) * 0.5
 				scalesigma = meansigma/math.sqrt(frac)
 				
-				if float(frac) > float(0.01):
+				if float(frac) > float(0.1):
 					bdtcuts.append(BDTcut)
 					meansigmas.append(meansigma)
 					scalesigmas.append(scalesigma)
@@ -112,6 +112,7 @@ def run(statsset, mindetections):
 		optimumfrac = float(optimumpassing)/float(full)
 		
 		annotation += "Optimum Cut occurs with BDT > " + str('{0:.2f}'.format(optimumbdt))+ " and with " + str(j) + " detections \n"
+		annotation += "At this point we have a scaled sigma of " + str('{0:.2f}'.format(lowestscalesigma))+ ". \n"
 		annotation += "This leaves " + str(optimumpassing) + " events , a fraction of " +  str('{0:.2f}'.format(optimumfrac)) + "\n"
 		annotation += "The resultant Sigma is " +  str('{0:.2f}'.format(lowestsigma)) + "\n \n"		
 		
@@ -125,7 +126,7 @@ def run(statsset, mindetections):
 		else:
 			optimumcuts.append(0.0)
 
-	fig.set_size_inches(15, 10)
+	fig.set_size_inches(20, 15)
 	
 	plt.suptitle("Optimisation of Sigma Z", fontsize=20)
 	ax1.set_ylabel("Sigma Z")

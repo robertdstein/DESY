@@ -1,9 +1,9 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2015.11.27)  4 JUL 2016 23:31
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2015.11.27)  5 JUL 2016 00:51
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**draft1.tex
-(./draft1.tex
+**final.tex
+(./final.tex
 LaTeX2e <2011/06/27>
 Babel <3.9h> and hyphenation patterns for 7 languages loaded.
 (/usr/share/texlive/texmf-dist/tex/latex/base/article.cls
@@ -532,35 +532,41 @@ Package: subcaption 2013/02/03 v1.1-62 Sub-captions (AR)
 )
 (/usr/share/texlive/texmf-dist/tex/latex/setspace/setspace.sty
 Package: setspace 2011/12/19 v6.7a set line spacing
-) (./draft1.aux)
-\openout1 = `draft1.aux'.
+)
+(/usr/share/texlive/texmf-dist/tex/latex/tools/afterpage.sty
+Package: afterpage 1995/10/27 v1.08 After-Page Package (DPC)
+\AP@output=\toks34
+\AP@partial=\box39
+\AP@footins=\box40
+) (./final.aux)
+\openout1 = `final.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 20.
-LaTeX Font Info:    ... okay on input line 20.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 20.
-LaTeX Font Info:    ... okay on input line 20.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 20.
-LaTeX Font Info:    ... okay on input line 20.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 20.
-LaTeX Font Info:    ... okay on input line 20.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 20.
-LaTeX Font Info:    ... okay on input line 20.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 20.
-LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 26.
+LaTeX Font Info:    ... okay on input line 26.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 26.
+LaTeX Font Info:    ... okay on input line 26.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 26.
+LaTeX Font Info:    ... okay on input line 26.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 26.
+LaTeX Font Info:    ... okay on input line 26.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 26.
+LaTeX Font Info:    ... okay on input line 26.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 26.
+LaTeX Font Info:    ... okay on input line 26.
 
 (/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count127
 \scratchdimen=\dimen193
-\scratchbox=\box39
+\scratchbox=\box41
 \nofMPsegments=\count128
 \nofMParguments=\count129
-\everyMPshowfont=\toks34
+\everyMPshowfont=\toks35
 \MPscratchCnt=\count130
 \MPscratchDim=\dimen194
 \MPnumerator=\count131
 \makeMPintoPDFobject=\count132
-\everyMPtoPDFconversion=\toks35
+\everyMPtoPDFconversion=\toks36
 ) (/usr/share/texlive/texmf-dist/tex/generic/oberdiek/pdftexcmds.sty
 Package: pdftexcmds 2011/11/29 v0.20 Utility functions of pdfTeX for LuaTeX (HO
 )
@@ -639,14 +645,14 @@ e
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-LaTeX Info: Redefining \celsius on input line 20.
-Package gensymb Info: Faking symbols for \degree and \celsius on input line 20.
+LaTeX Info: Redefining \celsius on input line 26.
+Package gensymb Info: Faking symbols for \degree and \celsius on input line 26.
 
 
 Package gensymb Warning: Not defining \perthousand.
 
-LaTeX Info: Redefining \ohm on input line 20.
-Package gensymb Info: Using \Omega for \ohm on input line 20.
+LaTeX Info: Redefining \ohm on input line 26.
+Package gensymb Info: Using \Omega for \ohm on input line 26.
 
 Package gensymb Warning: Not defining \micro.
 
@@ -655,7 +661,7 @@ ABD: EveryShipout initializing macros
 Package pgfplots Warning: running in backwards compatibility mode (unsuitable t
 ick labels; missing features). Consider writing \pgfplotsset{compat=1.9} into y
 our preamble.
- on input line 20.
+ on input line 26.
 
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: End \AtBeginDocument code.
@@ -664,59 +670,59 @@ File: graphs/Imperial_College_London_logo.jpg Graphic file (type jpg)
 
 <use graphs/Imperial_College_London_logo.jpg>
 Package pdftex.def Info: graphs/Imperial_College_London_logo.jpg used on input 
-line 36.
+line 43.
 (pdftex.def)             Requested size: 181.18439pt x 69.66176pt.
 
 <graphs/hamburglogo.png, id=5, 2007.5pt x 650.43pt>
 File: graphs/hamburglogo.png Graphic file (type png)
 
 <use graphs/hamburglogo.png>
-Package pdftex.def Info: graphs/hamburglogo.png used on input line 38.
+Package pdftex.def Info: graphs/hamburglogo.png used on input line 45.
 (pdftex.def)             Requested size: 181.18439pt x 58.69496pt.
  [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map} <./graphs/Imperial_College_
 London_logo.jpg> <./graphs/hamburglogo.png>]
-LaTeX Font Info:    Try loading font information for U+msa on input line 62.
-
-(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
+[1]
+LaTeX Font Info:    Try loading font information for U+msa on input line 69.
+ (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 62.
+LaTeX Font Info:    Try loading font information for U+msb on input line 69.
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-) [1] (./draft1.toc)
+) [1] (./final.toc)
 \tf@toc=\write4
-\openout4 = `draft1.toc'.
+\openout4 = `final.toc'.
 
 
-[2] [3] [4] <graphs/hessdiagram.png, id=33, 958.3303pt x 1081.03876pt>
+[2] [3] [4] <graphs/hessdiagram.png, id=36, 958.3303pt x 1081.03876pt>
 File: graphs/hessdiagram.png Graphic file (type png)
 
 <use graphs/hessdiagram.png>
-Package pdftex.def Info: graphs/hessdiagram.png used on input line 96.
+Package pdftex.def Info: graphs/hessdiagram.png used on input line 105.
 (pdftex.def)             Requested size: 186.29605pt x 210.15419pt.
  [5 <./graphs/hessdiagram.png>] [6]
-<graphs/logenergyradius.png, id=45, 722.7pt x 1084.05pt>
+<graphs/logenergyradius.png, id=48, 722.7pt x 1084.05pt>
 File: graphs/logenergyradius.png Graphic file (type png)
 
 <use graphs/logenergyradius.png>
-Package pdftex.def Info: graphs/logenergyradius.png used on input line 130.
+Package pdftex.def Info: graphs/logenergyradius.png used on input line 139.
 (pdftex.def)             Requested size: 420.31314pt x 630.45189pt.
 
 
-LaTeX Warning: Float too large for page by 19.94504pt on input line 134.
+LaTeX Warning: Float too large for page by 19.94504pt on input line 143.
 
-<graphs/simulatedlpd.png, id=46, 1084.05pt x 1806.75pt>
+<graphs/simulatedlpd.png, id=49, 1084.05pt x 1806.75pt>
 File: graphs/simulatedlpd.png Graphic file (type png)
 
 <use graphs/simulatedlpd.png>
-Package pdftex.def Info: graphs/simulatedlpd.png used on input line 138.
+Package pdftex.def Info: graphs/simulatedlpd.png used on input line 147.
 (pdftex.def)             Requested size: 378.28185pt x 630.45189pt.
 
 
-LaTeX Warning: Float too large for page by 19.94504pt on input line 142.
+LaTeX Warning: Float too large for page by 19.94504pt on input line 151.
 
 [7] [8 <./graphs/logenergyradius.png>] [9 <./graphs/simulatedlpd.png>]
 
@@ -758,16 +764,16 @@ Package geometry Warning: `portrait': not available in `\newgeometry'; skipped.
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-<graphs/graphDC.pdf, id=58, 722.7pt x 1445.4pt>
+<graphs/graphDC.pdf, id=61, 722.7pt x 1445.4pt>
 File: graphs/graphDC.pdf Graphic file (type pdf)
  <use graphs/graphDC.pdf>
-Package pdftex.def Info: graphs/graphDC.pdf used on input line 166.
+Package pdftex.def Info: graphs/graphDC.pdf used on input line 175.
 (pdftex.def)             Requested size: 203.83417pt x 425.86113pt.
 
-<graphs/graphfull.pdf, id=60, 722.7pt x 1445.4pt>
+<graphs/graphfull.pdf, id=63, 722.7pt x 1445.4pt>
 File: graphs/graphfull.pdf Graphic file (type pdf)
  <use graphs/graphfull.pdf>
-Package pdftex.def Info: graphs/graphfull.pdf used on input line 172.
+Package pdftex.def Info: graphs/graphfull.pdf used on input line 181.
 (pdftex.def)             Requested size: 203.83417pt x 425.86113pt.
 
 [10] [11
@@ -775,36 +781,36 @@ Package pdftex.def Info: graphs/graphfull.pdf used on input line 172.
 
  <./graphs/graphDC.pdf> <./graphs/graphfull.pdf>]
 
-LaTeX Warning: Command \textgreater invalid in math mode on input line 186.
+LaTeX Warning: Command \textgreater invalid in math mode on input line 195.
 
-LaTeX Font Info:    Try loading font information for OML+cmr on input line 186.
+LaTeX Font Info:    Try loading font information for OML+cmr on input line 195.
 
 (/usr/share/texlive/texmf-dist/tex/latex/base/omlcmr.fd
 File: omlcmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OML/cmr/m/n' in size <10.95> not available
-(Font)              Font shape `OML/cmm/m/it' tried instead on input line 186.
+(Font)              Font shape `OML/cmm/m/it' tried instead on input line 195.
 
 
-LaTeX Warning: Command \textgreater invalid in math mode on input line 186.
+LaTeX Warning: Command \textgreater invalid in math mode on input line 195.
 
-[12] <graphs/hess1statsbigtestdata.pdf, id=89, 1084.05pt x 1084.05pt>
+[12] <graphs/hess1statsbigtestdata.pdf, id=92, 1084.05pt x 1084.05pt>
 File: graphs/hess1statsbigtestdata.pdf Graphic file (type pdf)
 
 <use graphs/hess1statsbigtestdata.pdf>
 Package pdftex.def Info: graphs/hess1statsbigtestdata.pdf used on input line 21
-0.
+9.
 (pdftex.def)             Requested size: 452.9679pt x 452.96558pt.
 
-<graphs/decisiontreehess1.pdf, id=90, 1552.80125pt x 1288.815pt>
+<graphs/decisiontreehess1.pdf, id=93, 1552.80125pt x 1288.815pt>
 File: graphs/decisiontreehess1.pdf Graphic file (type pdf)
 
 <use graphs/decisiontreehess1.pdf>
-Package pdftex.def Info: graphs/decisiontreehess1.pdf used on input line 229.
+Package pdftex.def Info: graphs/decisiontreehess1.pdf used on input line 238.
 (pdftex.def)             Requested size: 452.9679pt x 375.94934pt.
  [13] [14 <./graphs/hess1statsbigtestdata.pdf>] [15 <./graphs/decisiontreehess1
 .pdf>] [16] [17]
-Overfull \hbox (8.17557pt too wide) in paragraph at lines 321--322
+Overfull \hbox (8.17557pt too wide) in paragraph at lines 330--331
 []\OT1/cmr/m/n/10.95 Through ap-pli-ca-tion of the two HESS clas-si-fiers, we c
 an find the com-par-a-tive high-multiplicity-
  []
@@ -812,39 +818,39 @@ an find the com-par-a-tive high-multiplicity-
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[18] <graphs/aspectratio.pdf, id=167, 722.7pt x 1084.05pt>
+[18] <graphs/aspectratio.pdf, id=170, 722.7pt x 1084.05pt>
 File: graphs/aspectratio.pdf Graphic file (type pdf)
 
 <use graphs/aspectratio.pdf>
-Package pdftex.def Info: graphs/aspectratio.pdf used on input line 359.
+Package pdftex.def Info: graphs/aspectratio.pdf used on input line 368.
 (pdftex.def)             Requested size: 407.66833pt x 611.49692pt.
 
 
-LaTeX Warning: Float too large for page by 0.99007pt on input line 363.
+LaTeX Warning: Float too large for page by 0.99007pt on input line 372.
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 [19] [20 <./graphs/aspectratio.pdf>] [21]
-<graphs/energyfullprotons.pdf, id=216, 1445.4pt x 722.7pt>
+<graphs/energyfullprotons.pdf, id=219, 1445.4pt x 722.7pt>
 File: graphs/energyfullprotons.pdf Graphic file (type pdf)
 
 <use graphs/energyfullprotons.pdf>
-Package pdftex.def Info: graphs/energyfullprotons.pdf used on input line 423.
+Package pdftex.def Info: graphs/energyfullprotons.pdf used on input line 432.
 (pdftex.def)             Requested size: 407.66833pt x 203.8323pt.
 
-<graphs/energyfulliron.pdf, id=217, 1445.4pt x 722.7pt>
+<graphs/energyfulliron.pdf, id=220, 1445.4pt x 722.7pt>
 File: graphs/energyfulliron.pdf Graphic file (type pdf)
 
 <use graphs/energyfulliron.pdf>
-Package pdftex.def Info: graphs/energyfulliron.pdf used on input line 429.
+Package pdftex.def Info: graphs/energyfulliron.pdf used on input line 438.
 (pdftex.def)             Requested size: 407.66833pt x 203.8323pt.
 
-<graphs/corsikafullshowerlpd.pdf, id=218, 1445.4pt x 1445.4pt>
+<graphs/corsikafullshowerlpd.pdf, id=221, 1445.4pt x 1445.4pt>
 File: graphs/corsikafullshowerlpd.pdf Graphic file (type pdf)
 
 <use graphs/corsikafullshowerlpd.pdf>
-Package pdftex.def Info: graphs/corsikafullshowerlpd.pdf used on input line 444
+Package pdftex.def Info: graphs/corsikafullshowerlpd.pdf used on input line 453
 .
 (pdftex.def)             Requested size: 452.9679pt x 452.96558pt.
  [22] [23 <./graphs/energyfullprotons.pdf> <./graphs/energyfulliron.pdf
@@ -852,179 +858,179 @@ Package pdftex.def Info: graphs/corsikafullshowerlpd.pdf used on input line 444
 pdfTeX warning: pdflatex (file ./graphs/energyfulliron.pdf): PDF inclusion: mul
 tiple pdfs with page group included in a single page
 >] [24 <./graphs/corsikafullshowerlpd.pdf>]
-<graphs/lpdpowerlaw.pdf, id=362, 1445.4pt x 1445.4pt>
+<graphs/lpdpowerlaw.pdf, id=365, 1445.4pt x 1445.4pt>
 File: graphs/lpdpowerlaw.pdf Graphic file (type pdf)
 
 <use graphs/lpdpowerlaw.pdf>
-Package pdftex.def Info: graphs/lpdpowerlaw.pdf used on input line 468.
+Package pdftex.def Info: graphs/lpdpowerlaw.pdf used on input line 477.
 (pdftex.def)             Requested size: 452.9679pt x 452.96558pt.
  [25] [26 <./graphs/lpdpowerlaw.pdf>]
 
-LaTeX Warning: Command \textgreater invalid in math mode on input line 481.
+LaTeX Warning: Command \textgreater invalid in math mode on input line 490.
 
 
-LaTeX Warning: Command \textgreater invalid in math mode on input line 481.
+LaTeX Warning: Command \textgreater invalid in math mode on input line 490.
 
-[27] <graphs/simtelerror1.pdf, id=420, 722.7pt x 1445.4pt>
+[27] <graphs/simtelerror1.pdf, id=423, 722.7pt x 1445.4pt>
 File: graphs/simtelerror1.pdf Graphic file (type pdf)
 
 <use graphs/simtelerror1.pdf>
-Package pdftex.def Info: graphs/simtelerror1.pdf used on input line 493.
+Package pdftex.def Info: graphs/simtelerror1.pdf used on input line 502.
 (pdftex.def)             Requested size: 315.22107pt x 630.45189pt.
 
 
-LaTeX Warning: Float too large for page by 19.94504pt on input line 497.
+LaTeX Warning: Float too large for page by 19.94504pt on input line 506.
 
-<graphs/corsikalpd1.pdf, id=421, 1445.4pt x 1445.4pt>
+<graphs/corsikalpd1.pdf, id=424, 1445.4pt x 1445.4pt>
 File: graphs/corsikalpd1.pdf Graphic file (type pdf)
 
 <use graphs/corsikalpd1.pdf>
-Package pdftex.def Info: graphs/corsikalpd1.pdf used on input line 507.
+Package pdftex.def Info: graphs/corsikalpd1.pdf used on input line 516.
 (pdftex.def)             Requested size: 452.9679pt x 452.96558pt.
  [28] [29 <./graphs/simtelerror1.pdf>] [30 <./graphs/corsikalpd1.pdf>] [31] [32
-] [33]
-<graphs/generalheight.png, id=547, 722.7pt x 1084.05pt>
+] [33] [34]
+<graphs/generalheight.png, id=554, 722.7pt x 1084.05pt>
 File: graphs/generalheight.png Graphic file (type png)
 
 <use graphs/generalheight.png>
-Package pdftex.def Info: graphs/generalheight.png used on input line 602.
+Package pdftex.def Info: graphs/generalheight.png used on input line 611.
 (pdftex.def)             Requested size: 420.31314pt x 630.45189pt.
- [34]
-Overfull \hbox (1.90979pt too wide) in paragraph at lines 623--624
+
+Overfull \hbox (1.90979pt too wide) in paragraph at lines 632--633
 []\OT1/cmr/m/n/10.95 As cited by the HESS study, a typ-i-cal first in-ter-ac-ti
 on height is roughly 30km for a Cherenkov-
  []
 
-<graphs/hessheight.png, id=552, 722.7pt x 1084.05pt>
+<graphs/hessheight.png, id=555, 722.7pt x 1084.05pt>
 File: graphs/hessheight.png Graphic file (type png)
 
 <use graphs/hessheight.png>
-Package pdftex.def Info: graphs/hessheight.png used on input line 627.
+Package pdftex.def Info: graphs/hessheight.png used on input line 636.
 (pdftex.def)             Requested size: 420.31314pt x 630.45189pt.
 
 
-LaTeX Warning: Float too large for page by 6.34503pt on input line 631.
+LaTeX Warning: Float too large for page by 6.34503pt on input line 640.
 
 [35] [36 <./graphs/generalheight.png>] [37 <./graphs/hessheight.png>] [38]
-<graphs/rawepn.pdf, id=568, 1445.4pt x 1084.05pt>
+<graphs/rawepn.pdf, id=571, 1445.4pt x 1084.05pt>
 File: graphs/rawepn.pdf Graphic file (type pdf)
  <use graphs/rawepn.pdf>
-Package pdftex.def Info: graphs/rawepn.pdf used on input line 656.
+Package pdftex.def Info: graphs/rawepn.pdf used on input line 665.
 (pdftex.def)             Requested size: 452.9679pt x 339.72418pt.
 
-<graphs/rawcoredistance.pdf, id=569, 1445.4pt x 1084.05pt>
+<graphs/rawcoredistance.pdf, id=572, 1445.4pt x 1084.05pt>
 File: graphs/rawcoredistance.pdf Graphic file (type pdf)
 
 <use graphs/rawcoredistance.pdf>
-Package pdftex.def Info: graphs/rawcoredistance.pdf used on input line 666.
+Package pdftex.def Info: graphs/rawcoredistance.pdf used on input line 675.
 (pdftex.def)             Requested size: 452.9679pt x 339.72418pt.
  [39] [40 <./graphs/rawepn.pdf>] [41 <./graphs/rawcoredistance.pdf>] <graphs/co
-redistance.pdf, id=678, 1445.4pt x 1084.05pt>
+redistance.pdf, id=682, 1445.4pt x 1084.05pt>
 File: graphs/coredistance.pdf Graphic file (type pdf)
 
 <use graphs/coredistance.pdf>
-Package pdftex.def Info: graphs/coredistance.pdf used on input line 688.
+Package pdftex.def Info: graphs/coredistance.pdf used on input line 697.
 (pdftex.def)             Requested size: 452.9679pt x 339.72418pt.
  [42] [43 <./graphs/coredistance.pdf>]
-<graphs/rawposition.pdf, id=736, 1445.4pt x 1084.05pt>
+<graphs/rawposition.pdf, id=739, 1445.4pt x 1084.05pt>
 File: graphs/rawposition.pdf Graphic file (type pdf)
 
 <use graphs/rawposition.pdf>
-Package pdftex.def Info: graphs/rawposition.pdf used on input line 698.
+Package pdftex.def Info: graphs/rawposition.pdf used on input line 707.
 (pdftex.def)             Requested size: 452.9679pt x 339.72418pt.
  [44 <./graphs/rawposition.pdf>]
-<graphs/rawZ.pdf, id=784, 1445.4pt x 1084.05pt>
+<graphs/rawZ.pdf, id=787, 1445.4pt x 1084.05pt>
 File: graphs/rawZ.pdf Graphic file (type pdf)
  <use graphs/rawZ.pdf>
-Package pdftex.def Info: graphs/rawZ.pdf used on input line 710.
+Package pdftex.def Info: graphs/rawZ.pdf used on input line 719.
 (pdftex.def)             Requested size: 452.9679pt x 339.72418pt.
- [45 <./graphs/rawZ.pdf>] <graphs/Likelihood.pdf, id=835, 1084.05pt x 722.7pt>
+ [45 <./graphs/rawZ.pdf>] <graphs/Likelihood.pdf, id=838, 1084.05pt x 722.7pt>
 File: graphs/Likelihood.pdf Graphic file (type pdf)
 
 <use graphs/Likelihood.pdf>
-Package pdftex.def Info: graphs/Likelihood.pdf used on input line 741.
+Package pdftex.def Info: graphs/Likelihood.pdf used on input line 750.
 (pdftex.def)             Requested size: 452.9679pt x 301.97705pt.
- <graphs/Zcuts.pdf, id=836, 1445.4pt x 1084.05pt>
+ <graphs/Zcuts.pdf, id=839, 1445.4pt x 1084.05pt>
 File: graphs/Zcuts.pdf Graphic file (type pdf)
 
 <use graphs/Zcuts.pdf>
-Package pdftex.def Info: graphs/Zcuts.pdf used on input line 751.
+Package pdftex.def Info: graphs/Zcuts.pdf used on input line 760.
 (pdftex.def)             Requested size: 452.9679pt x 339.72418pt.
  [46] [47 <./graphs/Likelihood.pdf>] [48 <./graphs/Zcuts.pdf>] <graphs/bdtmap.p
-df, id=944, 1445.4pt x 1084.05pt>
+df, id=948, 1445.4pt x 1084.05pt>
 File: graphs/bdtmap.pdf Graphic file (type pdf)
 
 <use graphs/bdtmap.pdf>
-Package pdftex.def Info: graphs/bdtmap.pdf used on input line 767.
+Package pdftex.def Info: graphs/bdtmap.pdf used on input line 776.
 (pdftex.def)             Requested size: 452.9679pt x 339.72418pt.
  [49] [50 <./graphs/bdtmap.pdf>]
-<graphs/energymap.pdf, id=991, 1445.4pt x 1084.05pt>
+<graphs/energymap.pdf, id=994, 1445.4pt x 1084.05pt>
 File: graphs/energymap.pdf Graphic file (type pdf)
 
 <use graphs/energymap.pdf>
-Package pdftex.def Info: graphs/energymap.pdf used on input line 779.
+Package pdftex.def Info: graphs/energymap.pdf used on input line 788.
 (pdftex.def)             Requested size: 452.9679pt x 339.72418pt.
- <graphs/position.pdf, id=992, 1445.4pt x 1084.05pt>
+ <graphs/position.pdf, id=995, 1445.4pt x 1084.05pt>
 File: graphs/position.pdf Graphic file (type pdf)
 
 <use graphs/position.pdf>
-Package pdftex.def Info: graphs/position.pdf used on input line 795.
+Package pdftex.def Info: graphs/position.pdf used on input line 804.
 (pdftex.def)             Requested size: 452.9679pt x 339.72418pt.
  [51] [52 <./graphs/energymap.pdf>]
-<graphs/epn.pdf, id=1049, 1445.4pt x 1084.05pt>
+<graphs/epn.pdf, id=1052, 1445.4pt x 1084.05pt>
 File: graphs/epn.pdf Graphic file (type pdf)
  <use graphs/epn.pdf>
-Package pdftex.def Info: graphs/epn.pdf used on input line 803.
+Package pdftex.def Info: graphs/epn.pdf used on input line 812.
 (pdftex.def)             Requested size: 452.9679pt x 339.72418pt.
 
-<graphs/Z.pdf, id=1050, 1445.4pt x 1084.05pt>
+<graphs/Z.pdf, id=1053, 1445.4pt x 1084.05pt>
 File: graphs/Z.pdf Graphic file (type pdf)
  <use graphs/Z.pdf>
-Package pdftex.def Info: graphs/Z.pdf used on input line 811.
+Package pdftex.def Info: graphs/Z.pdf used on input line 820.
 (pdftex.def)             Requested size: 452.9679pt x 339.72418pt.
  [53 <./graphs/position.pdf>] [54 <./graphs/epn.pdf>] [55 <./graphs/Z.pdf>] [56
 ]
-<graphs/optimiselayout.png, id=1220, 1445.4pt x 1084.05pt>
+<graphs/optimiselayout.png, id=1223, 1445.4pt x 1084.05pt>
 File: graphs/optimiselayout.png Graphic file (type png)
 
 <use graphs/optimiselayout.png>
-Package pdftex.def Info: graphs/optimiselayout.png used on input line 838.
+Package pdftex.def Info: graphs/optimiselayout.png used on input line 847.
 (pdftex.def)             Requested size: 407.66833pt x 305.74846pt.
  [57] [58 <./graphs/optimiselayout.png>]
-[59] [60] [61] (./draft1.bbl)
+[59] [60] [61] (./final.bbl)
 PGFPlots: reading {data/atmprof10.dat}
- [62] [63] (./draft1.aux) ) 
+ [62] [63] (./final.aux) ) 
 Here is how much of TeX's memory you used:
- 19747 strings out of 494976
- 475545 string characters out of 6179136
- 609324 words of memory out of 5000000
- 22530 multiletter control sequences out of 15000+600000
+ 19767 strings out of 494976
+ 475838 string characters out of 6179136
+ 609323 words of memory out of 5000000
+ 22547 multiletter control sequences out of 15000+600000
  15858 words of font info for 60 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 70i,11n,76p,2029b,609s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/share/texlive/texmf-dist/fonts/type1/public/am
-sfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts
-/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cm
-bx8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pf
-b></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></us
-r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/shar
-e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texli
-ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/texm
-f-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/
-fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/t
-ype1/public/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/pu
-blic/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/ams
-fonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm
-/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.
-pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></u
-sr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/shar
-e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texli
-ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/tex
-mf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on draft1.pdf (64 pages, 3952444 bytes).
+ 70i,11n,76p,2028b,609s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/share/texlive/texmf-dist/fonts/type1/public/ams
+fonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/
+cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmb
+x8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb
+></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr
+/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share
+/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texliv
+e/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/texmf
+-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/f
+onts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/ty
+pe1/public/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/pub
+lic/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsf
+onts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/
+cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.p
+fb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></us
+r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share
+/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texliv
+e/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/texm
+f-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on final.pdf (65 pages, 3953247 bytes).
 PDF statistics:
- 1313 PDF objects out of 1440 (max. 8388607)
- 338 compressed objects within 4 object streams
+ 1316 PDF objects out of 1440 (max. 8388607)
+ 340 compressed objects within 4 object streams
  0 named destinations out of 1000 (max. 500000)
  180 words of extra memory for PDF output out of 10000 (max. 10000000)
 
