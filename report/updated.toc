@@ -1,0 +1,33 @@
+\contentsline {section}{\numberline {1}Preface}{3}
+\contentsline {section}{\numberline {2}Introduction}{4}
+\contentsline {section}{\numberline {3}DC Pixel Identification}{5}
+\contentsline {subsection}{\numberline {3.1}Theoretical LPD}{5}
+\contentsline {subsection}{\numberline {3.2}Image Simulation}{10}
+\contentsline {subsection}{\numberline {3.3}Classic HESS1 DC Pixel Identification}{12}
+\contentsline {subsection}{\numberline {3.4}Boosted Decision Tree DC Identification}{13}
+\contentsline {subsection}{\numberline {3.5}HESS-2 BDT}{17}
+\contentsline {subsection}{\numberline {3.6}High Multiplicity Events}{18}
+\contentsline {subsection}{\numberline {3.7}Proton Background}{18}
+\contentsline {subsection}{\numberline {3.8}Low-Energy Emission}{21}
+\contentsline {section}{\numberline {4}Parameterisation of the LPD}{22}
+\contentsline {subsection}{\numberline {4.1}Full-Shower LPD}{22}
+\contentsline {subsection}{\numberline {4.2}Determining $True_{DC}$}{25}
+\contentsline {subsection}{\numberline {4.3}Regression BDT for $DC_{Count}$}{28}
+\contentsline {section}{\numberline {5}Monte Carlo Simulation}{33}
+\contentsline {subsection}{\numberline {5.1}Iron Flux and Energy}{33}
+\contentsline {subsection}{\numberline {5.2}First Interaction Height}{34}
+\contentsline {subsection}{\numberline {5.3}Full-Shower event reconstruction}{38}
+\contentsline {subsection}{\numberline {5.4}Log Likelihood Minimisation}{42}
+\contentsline {subsection}{\numberline {5.5}Variable Resolution}{42}
+\contentsline {subsection}{\numberline {5.6}Boosted Decision Trees}{46}
+\contentsline {subsection}{\numberline {5.7}Final Variable resolution}{51}
+\contentsline {section}{\numberline {6}Further Improvements}{53}
+\contentsline {subsection}{\numberline {6.1}Hillas Reconstruction}{53}
+\contentsline {subsection}{\numberline {6.2}Actual Data}{56}
+\contentsline {subsection}{\numberline {6.3}High Speed Telescopes}{56}
+\contentsline {subsection}{\numberline {6.4}Optimised Telescope Array}{57}
+\contentsline {section}{\numberline {7}Conclusion}{57}
+\contentsline {section}{\numberline {8}Acknowledgements}{61}
+\contentsline {section}{\numberline {9}Bibliography}{62}
+\contentsline {section}{\numberline {10}Appendix}{63}
+\contentsline {subsection}{\numberline {10.1}Atmospheric Data Table for CORSIKA (Windhoek, Namibia)}{63}
